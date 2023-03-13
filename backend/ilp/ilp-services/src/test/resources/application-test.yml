@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    username: ilpuser
+    password: ilpuser
+    url: jdbc:postgresql://localhost:5432/ilp
+  jpa:
+    show-sql: true
+  flyway:
+    enabled: true

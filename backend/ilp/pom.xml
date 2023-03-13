@@ -18,13 +18,17 @@
   <modules>
     <module>ilp-openapi</module>
     <module>ilp-persistence</module>
+    <module>ilp-services</module>
     <module>ilp-server</module>
   </modules>
 
   <properties>
     <java.version>17</java.version>
+    <java.source>17</java.source>
+    <java.target>17</java.target>
     <project.encoding>UTF-8</project.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <postgres.version>42.5.4</postgres.version>
   </properties>
 
 
