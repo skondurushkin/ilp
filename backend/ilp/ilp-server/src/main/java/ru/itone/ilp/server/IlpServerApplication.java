@@ -2,8 +2,14 @@ package ru.itone.ilp.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import ru.itone.ilp.services.configuration.GreetingsConfiguration;
+import ru.itone.ilp.services.configuration.PersistenceConfiguration;
 
 @SpringBootApplication
+@ComponentScan({"ru.itone.ilp.server.controllers"})
+@Import({PersistenceConfiguration.class, GreetingsConfiguration.class})
 public class IlpServerApplication {
 
 	public static void main(String[] args) {
