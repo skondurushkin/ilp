@@ -1,4 +1,4 @@
-FROM node:14.18.1-alpine as builder
+FROM node:16.16.0-alpine as builder
 
 ARG VERSION
 
@@ -23,4 +23,4 @@ COPY --from=builder /work/dist /etc/nginx/html
 COPY --from=builder /work/nginx/nginx.tmpl /etc/nginx/nginx.tmpl
 COPY --from=builder /work/nginx/default.tmpl /etc/nginx/conf.d/default.tmpl
 ENTRYPOINT [ "/bin/sh", "-c" ]
-CMD [ "envsubst < /etc/nginx/nginx.tmpl > /etc/nginx/nginx.conf && envsubst < /etc/nginx/conf.d/default.tmpl > /etc/nginx/conf.d/default.conf && envsubst < /etc/nginx/html/index.tmpl > /etc/nginx/html/index.html && envsubst < /etc/nginx/html/manifest.tmpl > /etc/nginx/html/manifest.webmanifest && nginx -g 'daemon off;'" ]
+CMD [ "envsubst < /etc/nginx/nginx.tmpl > /etc/nginx/nginx.conf && envsubst < /etc/nginx/conf.d/default.tmpl > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'" ]
