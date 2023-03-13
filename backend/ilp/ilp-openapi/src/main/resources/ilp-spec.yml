@@ -24,6 +24,23 @@ paths:
                   greeting: Hi there!
         500:
           description: Internal Server Error
+  /api/ilp/hello2:
+    get:
+      summary: Say hello to the client
+      operationId: sayHello2
+      tags:
+        - ilp
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+                example:
+                  greeting: Hi there!
+        500:
+          description: Internal Server Error
 components:
   schemas:
     Greeting:
