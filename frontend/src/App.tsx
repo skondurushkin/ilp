@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query';
-import { isNil } from 'lodash';
 import './App.css';
 import { ReactComponent as LoadingSVG } from './assets/loading.svg';
 import { api } from './api';

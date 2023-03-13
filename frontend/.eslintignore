@@ -1,4 +1,4 @@
 node_modules/
 dist/
 .prettierrc.yaml
-.eslintrc.js
+.eslintrc.cjs
