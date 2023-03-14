@@ -12,7 +12,7 @@ export const Dashboard = () => {
         isSuccess,
         isFetching,
         refetch,
-    } = useQuery('hello', api.getHello, {
+    } = useQuery('hello', api.IlpApi.sayHello, {
         refetchOnWindowFocus: false,
         enabled: false, // disable this query from automatically running
     });
@@ -25,7 +25,7 @@ export const Dashboard = () => {
             <br />
 
             {!isSuccess && <button onClick={() => refetch()}>Get Hello</button>}
-            <div className="App">{isFetching ? <LoadingSVG /> : hello?.greeting}</div>
+            <div className="App">{isFetching ? <LoadingSVG /> : hello?.data?.greeting}</div>
 
             <br />
             <br />
