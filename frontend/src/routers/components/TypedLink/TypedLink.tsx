@@ -2,6 +2,7 @@ import { HTMLAttributeAnchorTarget } from 'react';
 import { Link, createSearchParams } from 'react-router-dom';
 import { PathParams, RoutesPath } from '../../routes.types';
 import { buildUrl } from '../../routes.utils';
+import type { RouteProps } from 'react-router-dom';
 
 export const TypedLink = <P extends RoutesPath>({
     to,
@@ -29,7 +30,7 @@ export const TypedLink = <P extends RoutesPath>({
     );
 };
 
-interface TypedLinkProps<P extends RoutesPath> extends RouteProps {
+interface TypedLinkProps<P extends RoutesPath> {
     to: P;
     params?: PathParams<P>;
     search?: string;
@@ -40,7 +41,7 @@ interface TypedLinkProps<P extends RoutesPath> extends RouteProps {
     onClick?: () => void;
 }
 
-interface TypedLinkPropsWithParams<P extends RoutesPath> extends RouteProps {
+interface TypedLinkPropsWithParams<P extends RoutesPath> {
     to: P;
     params: PathParams<P>;
     search?: string;
@@ -51,14 +52,6 @@ interface TypedLinkPropsWithParams<P extends RoutesPath> extends RouteProps {
     onClick?: () => void;
 }
 
-export interface RouteProps {
-    caseSensitive?: boolean;
-    children?: React.ReactNode;
-    element?: React.ReactElement | null;
-    index?: boolean;
-    path?: string;
-}
-
 export type LinkProps<P extends RoutesPath> = P extends `${string}:${string}`
-    ? TypedLinkPropsWithParams<P>
-    : TypedLinkProps<P>;
+    ? TypedLinkPropsWithParams<P> & RouteProps
+    : TypedLinkProps<P> & RouteProps;
