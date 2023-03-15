@@ -20,7 +20,7 @@ server {
         proxy_set_header X-Forwarded-For ${ESC}proxy_add_x_forwarded_for;
         proxy_set_header Host ${ESC}http_host;
         proxy_set_header X-NginX-Proxy true;
-        proxy_pass ${BACKEND_ENDPOINT};
+        proxy_pass ${VITE_ILP_BACKEND_ENDPOINT};
         proxy_redirect off;
     }
 

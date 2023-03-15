@@ -2,21 +2,18 @@ FROM node:16.16.0-alpine as builder
 
 ARG VERSION
 
-WORKDIR /ui
-RUN apk add --update --no-cache \
-                                gettext=~0.21 \
-                                python3=~3.9 \
-                                make=~4.3 \
-                                g++=~10.3
+WORKDIR /work
+RUN apk add --update --no-cache gettext
+
 COPY . .
-RUN npm install
-RUN export TEMPLATED=true && npm run build
+RUN yarn install
+RUN yarn build
 
 FROM nginx:alpine
 
 ENV ESC=$
 ENV BASE_PATH=/
-ENV BACKEND_ENDPOINT=http://localhost:8080
+ENV VITE_ILP_BACKEND_ENDPOINT=http://localhost:8191
 
 COPY --from=builder /usr/bin/envsubst /usr/local/bin/envsubst
 COPY --from=builder /work/dist /etc/nginx/html
