@@ -1,7 +1,6 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { SignIn } from '../pages';
-
-import { ROUTES } from './index';
+import { ROUTES } from './routers';
 
 export const GuestRouter = () => {
     return (

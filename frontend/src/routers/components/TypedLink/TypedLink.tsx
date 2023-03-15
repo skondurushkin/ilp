@@ -1,6 +1,7 @@
 import { HTMLAttributeAnchorTarget } from 'react';
 import { Link, createSearchParams } from 'react-router-dom';
-import { buildUrl, PathParams, RoutesPath } from '../..';
+import { PathParams, RoutesPath } from '../../routes.types';
+import { buildUrl } from '../../routes.utils';
 
 export const TypedLink = <P extends RoutesPath>({
     to,
@@ -21,7 +22,8 @@ export const TypedLink = <P extends RoutesPath>({
                 search: typeof search === 'object' ? createSearchParams(search).toString() : search,
             }}
             replace={replace}
-            onClick={onClick}>
+            onClick={onClick}
+        >
             {children}
         </Link>
     );

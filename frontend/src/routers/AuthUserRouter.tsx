@@ -1,7 +1,6 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Dashboard, NotFound, Profile } from '../pages';
-
-import { ROUTES } from './index';
+import { ROUTES } from './routers';
 
 export const AuthUserRouter = () => {
     return (
