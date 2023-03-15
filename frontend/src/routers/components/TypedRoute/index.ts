@@ -1,0 +1,1 @@
+export { TypedRoute } from './TypedRoute';

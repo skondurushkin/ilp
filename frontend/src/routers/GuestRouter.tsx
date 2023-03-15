@@ -1,21 +1,13 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { SignIn } from '../pages';
-import { ROUTES } from './routers';
+import { TypedNavigate } from './components/TypedNavigate';
+import { TypedRoute } from './components/TypedRoute';
 
 export const GuestRouter = () => {
     return (
         <Routes>
-            <Route path={ROUTES['/sign-in']} Component={SignIn} />
-            <Route
-                path="*"
-                element={
-                    <Navigate
-                        to={{
-                            pathname: ROUTES['/sign-in'],
-                        }}
-                    />
-                }
-            />
+            <TypedRoute path="/sign-in" Component={SignIn} />
+            <Route path="*" element={<TypedNavigate to="/sign-in" />} />
         </Routes>
     );
 };

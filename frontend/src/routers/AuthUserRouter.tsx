@@ -1,14 +1,15 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Dashboard, NotFound, Profile } from '../pages';
-import { ROUTES } from './routers';
+import { TypedNavigate } from './components/TypedNavigate';
+import { TypedRoute } from './components/TypedRoute';
 
 export const AuthUserRouter = () => {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to={ROUTES['/dashboard']} replace />} />
-            <Route path={ROUTES['/sign-in']} element={<Navigate to={ROUTES['/dashboard']} replace />} />
-            <Route path={ROUTES['/dashboard']} Component={Dashboard} />
-            <Route path={ROUTES['/profile']} Component={Profile} />
+            <TypedRoute path="/" element={<TypedNavigate to="/dashboard" replace />} />
+            <TypedRoute path="/sign-in" element={<TypedNavigate to="/dashboard" replace />} />
+            <TypedRoute path="/dashboard" Component={Dashboard} />
+            <TypedRoute path="/profile" Component={Profile} />
             <Route path="*" Component={NotFound} />
         </Routes>
     );
