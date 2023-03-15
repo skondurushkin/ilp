@@ -29,6 +29,8 @@
         "vite-svg-loader": "^4.0.0"
     },
     "devDependencies": {
+        "@commitlint/cli": "^17.4.4",
+        "@commitlint/config-conventional": "^17.4.4",
         "@openapitools/openapi-generator-cli": "^2.5.2",
         "@types/node": "^18.15.0",
         "@types/react": "^18.0.27",
