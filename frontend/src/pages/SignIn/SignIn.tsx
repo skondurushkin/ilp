@@ -1,10 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import { UserRole } from '../../config/constants';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useAuthActionsContext } from '../../hooks/useAuthActionsContext';
 
 export const SignIn = () => {
-    const { authContext } = useAuthContext();
-    const navigate = useNavigate();
+    const { signIn } = useAuthActionsContext();
 
     return (
         <div>
@@ -13,9 +11,9 @@ export const SignIn = () => {
             <br />
             <button
                 onClick={() => {
-                    authContext.signIn(UserRole.USER);
-                    navigate('/');
-                }}>
+                    signIn(UserRole.USER);
+                }}
+            >
                 signIn
             </button>
         </div>

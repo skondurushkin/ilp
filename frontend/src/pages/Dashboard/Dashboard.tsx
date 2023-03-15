@@ -1,11 +1,13 @@
 import { useQuery } from 'react-query';
-import { useAuthContext } from '../../hooks/useAuthContext';
 import { TypedLink } from '../../routers/components';
 import { ReactComponent as LoadingSVG } from '../../assets/loading.svg';
 import { api } from '../../api';
+import { useAuthActionsContext } from '../../hooks/useAuthActionsContext';
+import { useAuthDataContext } from '../../hooks/useAuthDataContext';
 
 export const Dashboard = () => {
-    const { authContext } = useAuthContext();
+    const { signOut } = useAuthActionsContext();
+    const { authData } = useAuthDataContext();
 
     const {
         data: hello,
@@ -19,7 +21,7 @@ export const Dashboard = () => {
 
     return (
         <div>
-            <h1>Dashboard</h1>
+            <h1>Dashboard role {authData.me?.role}</h1>
             <TypedLink to="/profile">To profile</TypedLink>
             <br />
             <br />
@@ -32,7 +34,7 @@ export const Dashboard = () => {
 
             <button
                 onClick={() => {
-                    authContext.signOut();
+                    signOut();
                 }}
             >
                 Sign out
