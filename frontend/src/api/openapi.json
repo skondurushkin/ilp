@@ -1,0 +1,80 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "version": "1.0",
+        "title": "ILP API",
+        "description": "Internal Loyalty Program API Specification"
+    },
+    "tags": [
+        {
+            "name": "ilp",
+            "description": "Simple endpoint"
+        }
+    ],
+    "paths": {
+        "/api/ilp/hello": {
+            "get": {
+                "summary": "Say hello to the client",
+                "operationId": "sayHello",
+                "tags": ["ilp"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Greeting",
+                                    "example": {
+                                        "greeting": "Hi there!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/ilp/hello2": {
+            "get": {
+                "summary": "Say hello to the client",
+                "operationId": "sayHello2",
+                "tags": ["ilp"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Greeting",
+                                    "example": {
+                                        "greeting": "Hi there!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Greeting": {
+                "type": "object",
+                "properties": {
+                    "greeting": {
+                        "type": "string",
+                        "description": "greeting message"
+                    }
+                },
+                "required": ["greeting"]
+            }
+        }
+    }
+}
