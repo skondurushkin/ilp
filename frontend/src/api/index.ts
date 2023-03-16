@@ -1,8 +1,11 @@
-import { http } from '../services/http';
-import { IlpApi } from './generated';
+import { IlpApi, Configuration } from './generated';
+
+const config = new Configuration({
+    basePath: '',
+});
 
 export const api = {
-    IlpApi: new IlpApi(undefined, undefined, http.axios),
+    IlpApi: new IlpApi(config),
 };
 
 export * from './generated';
