@@ -7,11 +7,11 @@ export class Http {
     }
 
     setAuthorizationHeader(token: string): void {
-        this._axios.defaults.headers.Authorization = `Bearer ${token}`;
+        this._axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     }
 
     unsetAuthorizationHeader(): void {
-        delete this._axios.defaults.headers.Authorization;
+        delete this._axios.defaults.headers.common.Authorization;
     }
 
     private useInterceptors(): void {
