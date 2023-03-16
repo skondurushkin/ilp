@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 import { TypedLink } from '../../routers/components';
 import { ReactComponent as LoadingSVG } from '../../assets/loading.svg';
-import { api } from '../../api';
 import { useAuthActionsContext } from '../../hooks/useAuthActionsContext';
 import { useAuthDataContext } from '../../hooks/useAuthDataContext';
+import { api } from '../../api';
 
 export const Dashboard = () => {
     const { signOut } = useAuthActionsContext();
@@ -14,10 +14,16 @@ export const Dashboard = () => {
         isSuccess,
         isFetching,
         refetch,
-    } = useQuery('hello', api.IlpApi.sayHello, {
-        refetchOnWindowFocus: false,
-        enabled: false, // disable this query from automatically running
-    });
+    } = useQuery(
+        'hello',
+        () => {
+            return api.IlpApi.sayHello();
+        },
+        {
+            refetchOnWindowFocus: false,
+            enabled: false, // disable this query from automatically running
+        },
+    );
 
     return (
         <div>
@@ -27,7 +33,7 @@ export const Dashboard = () => {
             <br />
 
             {!isSuccess && <button onClick={() => refetch()}>Get Hello</button>}
-            <div className="App">{isFetching ? <LoadingSVG /> : hello?.data?.greeting}</div>
+            <div className="App">{isFetching ? <LoadingSVG /> : hello?.greeting}</div>
 
             <br />
             <br />
