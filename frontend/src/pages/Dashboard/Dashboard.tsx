@@ -1,13 +1,12 @@
 import { useQuery } from 'react-query';
-import { TypedLink } from '../../routers/components';
 import { ReactComponent as LoadingSVG } from '../../assets/loading.svg';
-import { useAuthActionsContext } from '../../hooks/useAuthActionsContext';
-import { useAuthDataContext } from '../../hooks/useAuthDataContext';
 import { api } from '../../api';
+import { TypedLink } from '../../router';
+import { useAuthActions, useAuth } from '../../modules/auth';
 
 export const Dashboard = () => {
-    const { signOut } = useAuthActionsContext();
-    const { authData } = useAuthDataContext();
+    const { signOut } = useAuthActions();
+    const { authData } = useAuth();
 
     const {
         data: hello,

@@ -1,0 +1,1 @@
+export { TypedNavigate } from './TypedNavigate';

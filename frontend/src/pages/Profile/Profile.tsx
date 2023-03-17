@@ -1,4 +1,4 @@
-import { TypedLink } from '../../routers/components';
+import { TypedLink } from '../../router';
 
 export const Profile = () => {
     return (
