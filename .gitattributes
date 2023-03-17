@@ -1,0 +1,12 @@
+# Default behavior, in case core.autocrlf is not set.
+* text=auto
+
+# *nix scripts
+mvnw text eol=lf
+*.sh text eol=lf
+
+# Binaries that should not be modified.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.ico binary

@@ -26,6 +26,7 @@
     <java.version>17</java.version>
     <java.source>17</java.source>
     <java.target>17</java.target>
+    <spring-boot.version>3.0.4</spring-boot.version>
     <project.encoding>UTF-8</project.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <postgres.version>42.5.4</postgres.version>
@@ -50,22 +51,25 @@
     </dependency>
   </dependencies>
 
+  <dependencyManagement>
+    <dependencies>
+      <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-buildpack-platform -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-buildpack-platform</artifactId>
+        <version>${spring-boot.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
-          <configuration>
-            <executable>true</executable>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>repackage</goal>
-              </goals>
-            </execution>
-          </executions>
+          <version>${spring-boot.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

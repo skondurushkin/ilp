@@ -1,9 +1,7 @@
-.gitignore
-.npmignore
 .openapi-generator-ignore
-api.ts
-base.ts
-common.ts
-configuration.ts
-git_push.sh
+apis/IlpApi.ts
+apis/index.ts
 index.ts
+models/Greeting.ts
+models/index.ts
+runtime.ts

@@ -20,4 +20,9 @@ public class GreetingsController implements IlpApi {
 
         return ResponseEntity.ok(new Greeting().greeting(greetingsService.getDefaultGreeting()));
     }
+
+    @Override
+    public ResponseEntity<Greeting> sayHello2() {
+        return ResponseEntity.ok(new Greeting().greeting("Hello2!"));
+    }
 }

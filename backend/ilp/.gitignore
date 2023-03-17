@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/pgdata/
+/scripts/logs/
+/logs/
+/ilp-server/logs/
