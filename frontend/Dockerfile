@@ -13,7 +13,7 @@ FROM nginx:alpine
 
 ENV ESC=$
 ENV BASE_PATH=/
-ENV VITE_ILP_BACKEND_ENDPOINT=http://localhost:8191
+ENV VITE_ILP_BACKEND_ENDPOINT=http://127.0.0.1:8191
 
 COPY --from=builder /usr/bin/envsubst /usr/local/bin/envsubst
 COPY --from=builder /work/dist /etc/nginx/html

@@ -1,7 +1,31 @@
 version: "3.9"
 
+volumes:
+  postgres_data:
+
+networks:
+  ilp_network:
+    driver: brige
+
 services:
+  ilp-frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    image: ilp-frontend:latest
+    depends_on:
+      - ilp-server
+    environment:
+      VITE_ILP_BACKEND_ENDPOINT: http://ilp-server-new:8191
+    networks:
+      - ilp_network
+    ports:
+      - 3000:80
+
   db:
+    build:
+      context: scripts
+      dockerfile: Dockerfile
     image: "postgres:15"
     restart: unless-stopped
     networks:
@@ -9,11 +33,11 @@ services:
     ports:
       - "5436:5432"
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
-      - ./scripts/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: ilp
+      POSTGRES_USER: ilpuser
+      POSTGRES_PASSWORD: ilpuser
 
   ilp-server:
     build: .
@@ -27,14 +51,8 @@ services:
       - 8191:8191
     env_file:
       - app.env
-#    environment:
-#      - DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5436/ilp
     networks:
       - ilp_network
     volumes:
       - ./logs:/workspace/build/ilp-server/logs
     restart: unless-stopped
-
-networks:
-  ilp_network:
-    driver: bridge
