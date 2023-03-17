@@ -1,8 +1,7 @@
-import { UserRole } from '../../config/constants';
-import { useAuthActionsContext } from '../../hooks/useAuthActionsContext';
+import { UserRole, useAuthActions } from '../../modules/auth';
 
 export const SignIn = () => {
-    const { signIn } = useAuthActionsContext();
+    const { signIn } = useAuthActions();
 
     return (
         <div>

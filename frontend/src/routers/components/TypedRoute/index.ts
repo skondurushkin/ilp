@@ -1,1 +1,0 @@
-export { TypedRoute } from './TypedRoute';
