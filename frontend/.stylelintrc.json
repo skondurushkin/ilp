@@ -1,3 +1,29 @@
 {
-    "extends": "stylelint-config-standard"
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "at-rule-no-unknown": [
+            true,
+            {
+                "ignoreAtRules": [
+                    "tailwind",
+                    "apply",
+                    "extends",
+                    "variants",
+                    "components",
+                    "responsive",
+                    "screen",
+                    "layer"
+                ]
+            }
+        ],
+        "declaration-block-trailing-semicolon": null,
+        "no-descending-specificity": null,
+        "selector-pseudo-class-no-unknown": [
+            true,
+            {
+                "ignorePseudoClasses": ["global"]
+            }
+        ],
+        "function-no-unknown": [true, { "ignoreFunctions": ["theme"] }]
+    }
 }

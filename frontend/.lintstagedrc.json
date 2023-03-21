@@ -1,5 +1,5 @@
 {
     "*.{tsx,ts}": ["yarn lint:fix"],
-    "*.css": "yarn lint:css",
+    "*.css": "yarn lint:styles:fix",
     "**/*": "prettier --write --ignore-unknown"
 }
