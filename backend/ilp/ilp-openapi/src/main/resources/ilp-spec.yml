@@ -1,14 +1,23 @@
-openapi: "3.0.2"
+openapi: 3.0.3
+
 info:
-  version: "1.0"
-  title: ILP API
+  version: '1.0.0'
+  title: 'ILP API'
   description: Internal Loyalty Program API Specification
+
+servers:
+  - url: 'http://localhost:8191'
+
 tags:
   - name: ilp
     description: Simple endpoint
+  - name: auth
+    description: Authorization endpoint
+
 paths:
   /api/ilp/hello:
     get:
+      deprecated: true
       summary: Say hello to the client
       operationId: sayHello
       tags:
@@ -26,6 +35,7 @@ paths:
           description: Internal Server Error
   /api/ilp/hello2:
     get:
+      deprecated: true
       summary: Say hello to the client
       operationId: sayHello2
       tags:
@@ -41,13 +51,255 @@ paths:
                   greeting: Hi there!
         500:
           description: Internal Server Error
+
+  /api/ilp/auth/register:
+    post:
+      operationId: registerUser
+      summary: register new user
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        403:
+          description: 'Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /api/ilp/auth/login:
+    post:
+      operationId: authenticateUser
+      summary: obtain JWT
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        401:
+          description: Unauthorized
+        500:
+          description: server error
+
+      security:
+        - NONE: []
+
+  /api/ilp/auth/refreshtoken:
+    post:
+      operationId: refreshToken
+      summary: refresh expired jwt
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefreshResponse'
+
+
+  /api/ilp/auth/logout:
+    post:
+      operationId: logoutUser
+      summary: logout and invalidate jwt and refresh token
+      tags:
+        - auth
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
 components:
   schemas:
+
+    ErrorMessage:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        statusText:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        category:
+          type: string
+          enum:
+            - ERROR
+            - FORM_ERROR
+            - VALIDATION_ERROR
+            - MESSAGE
+            - UNKNOWN
+        message:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+
     Greeting:
       type: object
+      required:
+        - greeting
       properties:
         greeting:
           type: string
           description: greeting message
+
+    SignupRequest:
+      type: object
+      properties:
+        name:
+          type: object
+          $ref: '#/components/schemas/Name'
+        email:
+          type: string
+          description: user email
+        password:
+          type: string
+          description: user password
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ERole'
+            uniqueItems: true
+
+
+    LoginRequest:
+      type: object
       required:
-        - greeting
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: user email
+        password:
+          type: string
+          description: user password
+
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          description: token used to refresh expired jwt
+      required:
+        - refreshToken
+
+    MessageResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: text message
+
+    TokenRefreshResponse:
+      type: object
+      required:
+        - acceptToken
+        - refreshToken
+      properties:
+        acceptToken:
+          type: string
+          description: refreshed authorized jwt token
+        refreshToken:
+          type: string
+          description: token to refresh expired jwt
+
+    JwtResponse:
+      type: object
+      required:
+        - token
+        - refreshToken
+      properties:
+        token:
+          type: string
+          description: authorized jwt token
+        refreshToken:
+          type: string
+          description: token to refresh expired jwt
+        email:
+          type: string
+          description: user email (unique)
+        roles:
+          type: array
+          items:
+            uniqueItems: true
+            $ref: '#/components/schemas/ERole'
+
+    Name:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          type: string
+          maxLength: 30
+        middleName:
+          type: string
+          maxLength: 40
+        lastName:
+          type: string
+          maxLength: 50
+
+    ERole:
+      type: string
+      enum:
+        - USER
+        - MODERATOR
+        - ADMIN
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

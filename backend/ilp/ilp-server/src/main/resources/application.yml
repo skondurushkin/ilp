@@ -18,6 +18,13 @@ spring:
       ddl-auto: validate
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgresPlusDialect
+      jakarta:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: create
+              create-target: ilp-create.sql
     show-sql: true
 
   # Required for jsonb type
@@ -33,3 +40,8 @@ spring:
 logging:
   file:
     path: logs
+
+jwt:
+  secret: Ilp-secret-value
+  tokenDuration: PT12H
+  refreshDuration: P15D

@@ -16,6 +16,11 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>ru.itone</groupId>
+      <artifactId>ilp-openapi</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
@@ -43,11 +48,7 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
+      <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
       <version>6.1.1.Final</version>
     </dependency>
@@ -81,7 +82,7 @@
           <locations>
             <location>classpath:db/migration</location>
           </locations>
-          <url>jdbc:postgresql://localhost:5432/ilp</url>
+          <url>jdbc:postgresql://localhost:5436/ilp</url>
           <user>ilpuser</user>
           <password>ilpuser</password>
           <cleanDisabled>false</cleanDisabled>

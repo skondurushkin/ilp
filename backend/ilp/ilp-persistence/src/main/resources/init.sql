@@ -1,5 +1,5 @@
 -- DROP DATABASE IF EXISTS ilp;
--- DROP ROLE IF EXISTS eosubp;
+-- DROP ROLE IF EXISTS ilpuser;
 
 CREATE ROLE ilpuser WITH
   LOGIN

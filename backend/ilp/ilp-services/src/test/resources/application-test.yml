@@ -7,3 +7,7 @@ spring:
     show-sql: true
   flyway:
     enabled: true
+
+jwt:
+  tokenDuration: PT10M
+  refreshDuration: PT1H
