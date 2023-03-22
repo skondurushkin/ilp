@@ -9,11 +9,12 @@ export const SignIn = () => {
             <br />
             <br />
             <button
+                className="bg-primary px-8 py-4 font-bold"
                 onClick={() => {
                     signIn(UserRole.USER);
                 }}
             >
-                signIn
+                Войти
             </button>
         </div>
     );

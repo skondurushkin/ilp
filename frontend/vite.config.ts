@@ -1,4 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
+
+import Unfonts from 'unplugin-fonts';
 import react from '@vitejs/plugin-react';
 import svgLoader from 'vite-plugin-svgr';
 
@@ -8,7 +10,25 @@ export default ({ mode }) => {
     const VITE_ILP_BACKEND_ENDPOINT = env.VITE_ILP_BACKEND_ENDPOINT || 'http://localhost:8191';
 
     return defineConfig({
-        plugins: [react(), svgLoader()],
+        plugins: [
+            react(),
+            svgLoader(),
+            Unfonts.vite({
+                custom: {
+                    families: [
+                        {
+                            name: 'Lab Grotesque',
+                            local: 'Lab Grotesque',
+                            src: './src/assets/fonts/*.ttf',
+                        },
+                    ],
+                    display: 'auto',
+                    preload: true,
+                    prefetch: false,
+                    injectTo: 'head-prepend',
+                },
+            }),
+        ],
         define: {
             // Some libraries use the global object, even though it doesn't exist in the browser.
             // Alternatively, we could add `<script>window.global = window;</script>` to index.html.
