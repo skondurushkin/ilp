@@ -1,0 +1,3 @@
+jwt:
+  tokenDuration: PT1M
+  refreshDuration: PT5M

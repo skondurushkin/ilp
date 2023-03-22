@@ -58,7 +58,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-buildpack-platform</artifactId>
         <version>${spring-boot.version}</version>
-        <scope>runtime</scope>
       </dependency>
 
     </dependencies>
