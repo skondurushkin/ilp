@@ -52,6 +52,26 @@ paths:
         500:
           description: Internal Server Error
 
+  /api/ilp/profile:
+    get:
+      operationId: getProfile
+      summary: get authenticated user profile
+      tags:
+        - profile
+      responses:
+        200:
+          description: authenticated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
   /api/ilp/auth/register:
     post:
       operationId: registerUser
@@ -258,6 +278,8 @@ components:
       required:
         - token
         - refreshToken
+        - email
+        - roles
       properties:
         token:
           type: string
@@ -273,6 +295,26 @@ components:
           items:
             uniqueItems: true
             $ref: '#/components/schemas/ERole'
+
+    ProfileResponse:
+      type: object
+      properties:
+        fio:
+          $ref: '#/components/schemas/Name'
+        email:
+          type: string
+          format: email
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ERole'
+          uniqueItems: true
+        avatarUrl:
+          type: string
+      required:
+        - fio
+        - email
+        - roles
 
     Name:
       type: object
