@@ -194,7 +194,6 @@ components:
       type: object
       properties:
         name:
-          type: object
           $ref: '#/components/schemas/Name'
         email:
           type: string
