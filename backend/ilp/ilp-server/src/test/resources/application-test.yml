@@ -1,3 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:15.0://localhost:5437/postgres
+    username: postgres
+    password: postgres
+
 jwt:
   tokenDuration: PT1M
   refreshDuration: PT5M
