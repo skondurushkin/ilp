@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,19 +96,17 @@ public class AuthController implements AuthApi {
                 encoder.encode(signUpRequest.getPassword()));
 
         List<ERole> strRoles = signUpRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                    Role adminRole = roleRepository.findByName(ERole.ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(adminRole);
-                });
+        if (CollectionUtils.isEmpty(strRoles)) {
+            strRoles.add(ERole.USER);
         }
+
+        Set<Role> roles = new HashSet<>();
+        strRoles.forEach(roleName -> {
+                Role role = roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(role);
+            });
 
         user.setRoles(roles);
         userRepository.save(user);

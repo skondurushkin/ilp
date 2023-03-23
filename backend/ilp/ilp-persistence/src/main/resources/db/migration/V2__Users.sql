@@ -42,13 +42,13 @@ alter table if exists users
     add constraint UK_users_email unique (email);
 
 alter table if exists refresh_tokens
-    add constraint FK_refresh_tokens__users foreign key (user_id) references users;
+    add constraint FK_refresh_tokens__users foreign key (user_id) references users ON DELETE CASCADE;
 
 alter table if exists user_roles
     add constraint FK_user_roles__roles foreign key (role_id) references roles;
 
 alter table if exists user_roles
-    add constraint FK_user_roles__users foreign key (user_id) references users;
+    add constraint FK_user_roles__users foreign key (user_id) references users ON DELETE CASCADE;
 
 insert into roles (name)
     values ('USER');
