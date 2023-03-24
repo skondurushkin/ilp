@@ -10,6 +10,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.itone.ilp.openapi.api.AuthApi;
 import ru.itone.ilp.openapi.common.ApiHelper;
-import ru.itone.ilp.openapi.exception.TokenRefreshException;
+import ru.itone.ilp.openapi.exception.ApiExceptions.TokenRefreshException;
 import ru.itone.ilp.openapi.model.ERole;
 import ru.itone.ilp.openapi.model.JwtResponse;
 import ru.itone.ilp.openapi.model.LoginRequest;
@@ -85,6 +86,7 @@ public class AuthController implements AuthApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         if (Boolean.TRUE.equals(userRepository.existsByEmail(signUpRequest.getEmail()))) {
@@ -97,7 +99,7 @@ public class AuthController implements AuthApi {
 
         List<ERole> strRoles = signUpRequest.getRoles();
 
-        if (CollectionUtils.isEmpty(strRoles)) {
+        if (CollectionUtils.isEmpty(strRoles) || !strRoles.contains(ERole.USER)) {
             strRoles.add(ERole.USER);
         }
 

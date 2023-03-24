@@ -1,5 +1,6 @@
 package ru.itone.ilp.persistence.entities;
 
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,6 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.TypeDef;
 import ru.itone.ilp.openapi.model.Name;
 
 @Entity
@@ -33,6 +35,7 @@ import ru.itone.ilp.openapi.model.Name;
 @Setter
 @Getter
 @NoArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonStringType.class)
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +66,14 @@ public class User implements Serializable {
     @Column(name="password", nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @Size(max = 512)
+    @Column(name="avatar_url", length=512)
+    private String avatarUrl;
+
+    @Column(columnDefinition = "jsonb")
+    private String extension;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
