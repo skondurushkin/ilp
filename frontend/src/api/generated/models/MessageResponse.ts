@@ -16,41 +16,41 @@ import { exists, mapValues } from '../runtime';
 /**
  *
  * @export
- * @interface Greeting
+ * @interface MessageResponse
  */
-export interface Greeting {
+export interface MessageResponse {
     /**
-     * greeting message
+     * text message
      * @type {string}
-     * @memberof Greeting
+     * @memberof MessageResponse
      */
-    greeting: string;
+    message: string;
 }
 
 /**
- * Check if a given object implements the Greeting interface.
+ * Check if a given object implements the MessageResponse interface.
  */
-export function instanceOfGreeting(value: object): boolean {
+export function instanceOfMessageResponse(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && 'greeting' in value;
+    isInstance = isInstance && 'message' in value;
 
     return isInstance;
 }
 
-export function GreetingFromJSON(json: any): Greeting {
-    return GreetingFromJSONTyped(json, false);
+export function MessageResponseFromJSON(json: any): MessageResponse {
+    return MessageResponseFromJSONTyped(json, false);
 }
 
-export function GreetingFromJSONTyped(json: any, ignoreDiscriminator: boolean): Greeting {
+export function MessageResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): MessageResponse {
     if (json === undefined || json === null) {
         return json;
     }
     return {
-        greeting: json['greeting'],
+        message: json['message'],
     };
 }
 
-export function GreetingToJSON(value?: Greeting | null): any {
+export function MessageResponseToJSON(value?: MessageResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -58,6 +58,6 @@ export function GreetingToJSON(value?: Greeting | null): any {
         return null;
     }
     return {
-        greeting: value.greeting,
+        message: value.message,
     };
 }

@@ -1,13 +1,8 @@
-import { useMemo } from 'react';
-import useLocalStorageState from 'use-local-storage-state';
-import { AuthActions } from './AuthActionsContext';
-import { Auth } from './AuthContext';
-import { UserRole, GUEST } from './User';
+import { GUEST, UserRole } from './User';
 
-export interface AuthBackend {
-    auth: Auth;
-    authActions: AuthActions;
-}
+import { AuthBackend } from './AuthBackend';
+import useLocalStorageState from 'use-local-storage-state';
+import { useMemo } from 'react';
 
 export const useLocalStorageAuthBackend = (): AuthBackend => {
     const [authData, setAuthData] = useLocalStorageState('auth-state', {
@@ -15,26 +10,24 @@ export const useLocalStorageAuthBackend = (): AuthBackend => {
         storageSync: true,
     });
 
-    const auth = {
-        authData,
-        isAuthenticated: Boolean(authData.me.role),
-    };
-
     const authActions = useMemo(
         () => ({
-            signIn: (role: UserRole) => {
+            signIn: (): Promise<void> => {
                 setAuthData({
                     me: {
-                        role,
+                        email: 'user',
+                        roles: [UserRole.USER],
                     },
                 });
+                return Promise.resolve();
             },
             signOut: () => {
                 setAuthData({ me: GUEST });
+                return Promise.resolve();
             },
         }),
         [setAuthData],
     );
 
-    return { auth, authActions };
+    return { authData, authActions };
 };

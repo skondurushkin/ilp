@@ -1,12 +1,11 @@
 export interface User {
-    role: UserRole | null;
+    email: string;
+    roles?: string[];
 }
 
 export enum UserRole {
-    USER = 'user',
-    ADMIN = 'admin',
+    USER = 'USER',
+    ADMIN = 'ADMIN',
 }
 
-export const GUEST: User = {
-    role: null,
-};
+export const GUEST: User = { email: 'guest' };

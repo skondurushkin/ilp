@@ -1,12 +1,13 @@
-import { useQuery } from 'react-query';
+import { useAuth, useAuthActions } from '../../modules/auth';
+
 import { ReactComponent as LoadingSVG } from '../../assets/loading.svg';
-import { api } from '../../api';
 import { TypedLink } from '../../router';
-import { useAuthActions, useAuth } from '../../modules/auth';
+import { api } from '../../api';
+import { useQuery } from 'react-query';
 
 export const Dashboard = () => {
     const { signOut } = useAuthActions();
-    const { authData } = useAuth();
+    const authData = useAuth();
 
     const {
         data: hello,
@@ -26,7 +27,7 @@ export const Dashboard = () => {
 
     return (
         <div>
-            <h1>Dashboard role {authData.me?.role}</h1>
+            <h1>Dashboard role {authData.me.roles?.join(', ')}</h1>
             <TypedLink to="/profile">To profile</TypedLink>
             <br />
             <br />

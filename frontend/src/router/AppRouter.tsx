@@ -1,23 +1,19 @@
-import { ReactElement } from 'react';
+import { AuthActionsContext, AuthContext, UserRole, hasRole, useHttpAuthBackend } from '../modules/auth';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { UserRole, AuthContext, AuthActionsContext, useLocalStorageAuthBackend } from '../modules/auth';
-import { guestRoutes } from './guestRoutes';
+
 import { authUserRoutes } from './authUserRoutes';
+import { guestRoutes } from './guestRoutes';
 
 const guestRouter = <RouterProvider router={createBrowserRouter([...guestRoutes])} />;
-
-const routers: Record<UserRole, ReactElement> = {
-    [UserRole.USER]: <RouterProvider router={createBrowserRouter([...authUserRoutes])} />,
-    [UserRole.ADMIN]: <RouterProvider router={createBrowserRouter([...authUserRoutes])} />,
-};
+const userRouter = <RouterProvider router={createBrowserRouter([...authUserRoutes])} />;
 
 export const AppRouter = () => {
-    const { auth, authActions } = useLocalStorageAuthBackend();
+    const { authData, authActions } = useHttpAuthBackend();
 
-    const router = auth.authData.me.role ? routers[auth.authData.me.role] : guestRouter;
+    const router = hasRole(authData, UserRole.USER) ? userRouter : guestRouter;
 
     return (
-        <AuthContext.Provider value={auth}>
+        <AuthContext.Provider value={authData}>
             <AuthActionsContext.Provider value={authActions}>{router}</AuthActionsContext.Provider>
         </AuthContext.Provider>
     );
