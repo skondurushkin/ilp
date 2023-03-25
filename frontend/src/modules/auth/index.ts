@@ -7,3 +7,4 @@ export * from './useAuth';
 export * from './useLocalStorageAuthBackend';
 export * from './useHttpAuthBackend';
 export * from './auth-utils';
+export * from './auth-errors';

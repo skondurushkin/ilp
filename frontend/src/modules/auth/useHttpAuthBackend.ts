@@ -2,6 +2,7 @@ import { GUEST, User } from './User';
 import { useEffect, useMemo } from 'react';
 
 import { AuthBackend } from './AuthBackend';
+import { ERR_UNAUTHORIZED } from './auth-errors';
 import { api } from '../../api';
 import useLocalStorageState from 'use-local-storage-state';
 
@@ -37,6 +38,10 @@ export const useHttpAuthBackend = (): AuthBackend => {
                     })
                     .catch((err) => {
                         console.error('failed to authenticate user', err);
+                        if ('status' in err && typeof err.status === 'number') {
+                            return Promise.reject(ERR_UNAUTHORIZED);
+                        }
+                        return Promise.reject(err);
                     });
             },
             signOut: () => {
