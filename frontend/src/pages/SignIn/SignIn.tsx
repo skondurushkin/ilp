@@ -21,6 +21,7 @@ export const SignIn = () => {
     const eyeViewCallback = useCallback(() => {
         setPasswordVisible(!passwordVisible);
     }, [passwordVisible]);
+
     return (
         <div className="">
             <div className="flex h-screen flex-col-reverse justify-end gap-4 sm:flex-row xl:justify-center">
@@ -40,7 +41,9 @@ export const SignIn = () => {
                                 id="email"
                                 value={email}
                                 onChange={({ target }) => setEmail(target.value)}
-                                className="focus:green h-[50px] border px-3 focus:border-success focus:outline-none"
+                                className={`focus:green h-[50px] border px-3 focus:border-success focus:outline-none
+                                ${errors?.password ? 'border-error' : ''}
+                                `}
                             />
                             {errors?.email && <div className="text-left text-error">{errors.email}</div>}
                         </div>
@@ -55,7 +58,9 @@ export const SignIn = () => {
                                     onChange={({ target }) => setPassword(target.value)}
                                     id="password"
                                     value={password}
-                                    className="focus:green relative h-[50px] w-full border px-3 focus:border-success focus:outline-none"
+                                    className={`focus:green relative h-[50px] w-full border px-3 focus:border-success ${
+                                        errors?.password ? 'border-error' : ''
+                                    } focus:outline-none`}
                                 />
                                 {passwordVisible ? (
                                     <CrossedEyeSVG className="absolute bottom-3 right-3 " onClick={eyeViewCallback} />
@@ -76,7 +81,7 @@ export const SignIn = () => {
                                 Войти
                             </button>
                             <button
-                                className="border px-8 py-4"
+                                className="py- 4 border  px-8"
                                 onClick={() => {
                                     setErrors({
                                         email: 'Email не найден',
