@@ -38,7 +38,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                     })
                     .catch((err) => {
                         console.error('failed to authenticate user', err);
-                        if ('status' in err && typeof err.status === 'number') {
+                        if ('status' in err && typeof err.status === 'number' && err.status === 401) {
                             return Promise.reject(ERR_UNAUTHORIZED);
                         }
                         return Promise.reject(err);
