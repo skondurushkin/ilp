@@ -1,10 +1,11 @@
 import { UserRole, useAuthActions } from '../../modules/auth';
-import { useCallback, useState } from 'react';
 
 import { ReactComponent as CrossedEyeSVG } from '../../assets/crossed-eye.svg';
 import { ReactComponent as EyeSVG } from '../../assets/eye.svg';
 import LoginImageURL from '../../assets/login-image.svg';
 import { ReactComponent as LogoSVG } from '../../assets/logo.svg';
+import { ReactComponent as LogoWhiteSVG } from '../../assets/logo-white.svg';
+import { useState } from 'react';
 
 export interface FormErrors {
     email?: string;
@@ -18,12 +19,8 @@ export const SignIn = () => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<FormErrors>();
 
-    const eyeViewCallback = useCallback(() => {
-        setPasswordVisible(!passwordVisible);
-    }, [passwordVisible]);
-
     return (
-        <div className="">
+        <div>
             <div className="flex h-screen flex-col-reverse justify-end gap-4 sm:flex-row xl:justify-center">
                 <div className="p-6">
                     <LogoSVG className="hidden sm:block" />
@@ -63,9 +60,15 @@ export const SignIn = () => {
                                     } focus:outline-none`}
                                 />
                                 {passwordVisible ? (
-                                    <CrossedEyeSVG className="absolute bottom-3 right-3 " onClick={eyeViewCallback} />
+                                    <CrossedEyeSVG
+                                        className="absolute bottom-3 right-3 "
+                                        onClick={() => setPasswordVisible((v) => !v)}
+                                    />
                                 ) : (
-                                    <EyeSVG className="absolute bottom-3 right-3" onClick={eyeViewCallback} />
+                                    <EyeSVG
+                                        className="absolute bottom-3 right-3"
+                                        onClick={() => setPasswordVisible((v) => !v)}
+                                    />
                                 )}
                             </div>
                             {errors?.password && <div className="text-left text-error">{errors.password}</div>}
@@ -98,7 +101,9 @@ export const SignIn = () => {
                 <div
                     className="h-[50vh] bg-cover sm:h-full sm:w-[50vw]"
                     style={{ backgroundImage: `url(${LoginImageURL})` }}
-                />
+                >
+                    <LogoWhiteSVG className="relative top-6 left-6 block sm:hidden" />
+                </div>
             </div>
         </div>
     );
