@@ -1,8 +1,12 @@
 #root {
     max-width: 100vw;
+    min-height: 100vh;
     margin: 0 auto;
-    padding: 2rem;
     text-align: center;
+    scroll-behavior: smooth;
+    text-rendering: optimizespeed;
+    line-height: 1.5;
+    overflow: hidden;
 }
 
 .logo {
@@ -11,9 +15,11 @@
     will-change: filter;
     transition: filter 300ms;
 }
+
 .logo:hover {
     filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
     filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +28,7 @@
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
