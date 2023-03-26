@@ -1,29 +1,23 @@
 package ru.itone.ilp.persistence.entities;
 
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.TypeDef;
+import ru.itone.ilp.openapi.common.ApiHelper;
 import ru.itone.ilp.openapi.model.Name;
+
+import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(	name = "users",
@@ -70,6 +64,12 @@ public class User implements Serializable {
     @Column(name="avatar_url", length=512)
     private String avatarUrl;
 
+    @Column(name="start_date", nullable = false, columnDefinition = "date default now()")
+    private LocalDate startDate = LocalDate.now();
+
+    @Column(name="end_date", nullable = false, columnDefinition = "date default '3000-01-01'")
+    private LocalDate endDate = ApiHelper.virtualDate;
+
     @Column(columnDefinition = "jsonb")
     private String extension;
 
@@ -78,6 +78,11 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @Transient
+    public boolean isActive() {
+        return Instant.now().compareTo(Instant.from(endDate)) <= 0;
+    }
 
     public User(Name name, String email, String password) {
         this.firstName = name.getFirstName();

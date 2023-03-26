@@ -35,3 +35,7 @@ build/
 /scripts/logs/
 /logs/
 /ilp-server/logs/
+
+
+### ILP generated ###
+ilp-create.sql

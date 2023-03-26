@@ -1,16 +1,6 @@
 package ru.itone.ilp.server;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
-import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +17,20 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import ru.itone.ilp.openapi.model.ERole;
-import ru.itone.ilp.openapi.model.Greeting;
-import ru.itone.ilp.openapi.model.JwtResponse;
-import ru.itone.ilp.openapi.model.LoginRequest;
-import ru.itone.ilp.openapi.model.Name;
-import ru.itone.ilp.openapi.model.SignupRequest;
+import ru.itone.ilp.openapi.model.*;
 import ru.itone.ilp.persistence.repositories.RefreshTokenRepository;
 import ru.itone.ilp.server.configuration.WebSecurityConfig;
 import ru.itone.ilp.server.controllers.AuthController;
 import ru.itone.ilp.server.controllers.GreetingsController;
 import ru.itone.ilp.services.configuration.GreetingsConfiguration;
 import ru.itone.ilp.services.configuration.PersistenceConfiguration;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
 @ActiveProfiles("test")
@@ -102,7 +94,7 @@ class IlpServerApplicationTests {
 				)
 				.email("iivanov@mail.ru")
 				.password("12345")
-				.roles(Collections.emptyList());
+				.roles(Collections.emptySet());
 		register(signup, jwtAdmin.getToken());
 		JwtResponse jwtUser = login("iivanov@mail.ru", "12345");
 		assertTrue(jwtUser.getRoles().contains(ERole.USER));

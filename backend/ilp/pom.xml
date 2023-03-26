@@ -30,6 +30,8 @@
     <project.encoding>UTF-8</project.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <postgres.version>42.5.4</postgres.version>
+    <org.projectlombok.version>1.18.26</org.projectlombok.version>
+    <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
   </properties>
 
 
@@ -37,6 +39,17 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>2.0</version>
     </dependency>
 
     <dependency>

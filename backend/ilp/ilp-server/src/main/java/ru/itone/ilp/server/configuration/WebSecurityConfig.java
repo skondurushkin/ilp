@@ -25,7 +25,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ru.itone.ilp.persistence.repositories.UserRepository;
 import ru.itone.ilp.server.jwt.JwtHelper;
 import ru.itone.ilp.server.jwt.security.AuthEntryPointJwt;
+import ru.itone.ilp.services.configuration.ActivityConfiguration;
 import ru.itone.ilp.services.configuration.PersistenceConfiguration;
+import ru.itone.ilp.services.configuration.ProfileConfiguration;
 import ru.itone.ilp.services.jwt.UserDetailsServiceImpl;
 
 @Slf4j
@@ -33,7 +35,10 @@ import ru.itone.ilp.services.jwt.UserDetailsServiceImpl;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-@Import({AuthenticationConfiguration.class, PersistenceConfiguration.class})
+@Import({AuthenticationConfiguration.class,
+        ProfileConfiguration.class,
+        ActivityConfiguration.class,
+        PersistenceConfiguration.class})
 public class WebSecurityConfig {
 
     static final String LOGIN_URL = "/api/ilp/auth/login";

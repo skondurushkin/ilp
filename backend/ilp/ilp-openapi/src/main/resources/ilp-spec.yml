@@ -29,8 +29,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Greeting'
-                example:
-                  greeting: Hi there!
         500:
           description: Internal Server Error
   /api/ilp/hello2:
@@ -47,8 +45,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Greeting'
-                example:
-                  greeting: Hi there!
+
         500:
           description: Internal Server Error
 
@@ -72,6 +69,58 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
 
+  /api/ilp/profiles:
+    post:
+      operationId: browseProfiles
+      summary: paginated profiles view
+      tags:
+        - profile
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: page loaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProfileResponse'
+
+
+
+  /api/ilp/profile/{user_id}:
+    get:
+      operationId: getProfileById
+      summary: get user profile by user id
+      tags:
+        - profile
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+
+      responses:
+        200:
+          description: authenticated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
   /api/ilp/auth/register:
     post:
       operationId: registerUser
@@ -85,7 +134,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SignupRequest'
       responses:
-        200:
+        201:
           description: 'OK'
           content:
             application/json:
@@ -158,7 +207,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenRefreshResponse'
 
-
   /api/ilp/auth/logout:
     post:
       operationId: logoutUser
@@ -173,8 +221,171 @@ paths:
               schema:
                 $ref: '#/components/schemas/MessageResponse'
 
+  /api/ilp/activity/{activity_id}:
+    get:
+      operationId: getActivityById
+      summary: get activity by identifier
+      tags:
+        - activity
+      parameters:
+        - $ref: '#/components/parameters/activity_id'
+
+      responses:
+        200:
+          description: single activity record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /api/ilp/activity:
+    post:
+      operationId: createActivity
+      summary: create new activity record
+      tags:
+        - activity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityRequest'
+      responses:
+        201:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+
+
+
+  /api/ilp/activities:
+    post:
+      operationId: browseActivities
+      summary: paginated activities view
+      tags:
+        - activity
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: page loaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedActivityResponse'
+
 components:
+  parameters:
+    user_id:
+      in: query
+      name: userId
+      required: false
+      schema:
+        $ref: '#/components/schemas/Identifier'
+      description:  user identifier
+
+    activity_id:
+      in: query
+      name: activityId
+      required: false
+      schema:
+        $ref: '#/components/schemas/Identifier'
+      description:  activity identifier
+
+    article_id:
+      in: query
+      name: articleId
+      required: false
+      schema:
+        $ref: '#/components/schemas/Identifier'
+      description:  article identifier
+
   schemas:
+    Identifier:
+      type: integer
+      format: int32
+      minimum: 1
+      description:  generic identifier
+
+    PaginatedResult:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        page:
+          type: integer
+          minimum: 0
+          default: 0
+        per_page:
+          type: integer
+          minimum: 1
+        has_next:
+          type: boolean
+        has_prev:
+          type: boolean
+        results:
+          type: array
+          items:
+            type: object #  any type of items
+
+    PageRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          default: 0
+        pageSize:
+          type: integer
+          minimum: 1
+          default: 5
+        config:
+          type: object
+          properties:
+            sort:
+              type: array
+              items:
+                type: object
+                required:
+                  - colName
+                properties:
+                  colName:
+                    type: string
+                  sortType:
+                    type: string
+                    enum: [ASC, DESC]
+                    default: ASC
+
+            filter:
+              type: array
+              items:
+                type: object
+                required:
+                  - colName
+                properties:
+                  colName:
+                    type: string
+                  condition:
+                    type: string
 
     ErrorMessage:
       type: object
@@ -217,16 +428,16 @@ components:
           $ref: '#/components/schemas/Name'
         email:
           type: string
+          format: email
           description: user email
         password:
           type: string
           description: user password
         roles:
           type: array
+          uniqueItems: true
           items:
             $ref: '#/components/schemas/ERole'
-            uniqueItems: true
-
 
     LoginRequest:
       type: object
@@ -236,6 +447,7 @@ components:
       properties:
         email:
           type: string
+          format: email
           description: user email
         password:
           type: string
@@ -288,16 +500,19 @@ components:
           description: token to refresh expired jwt
         email:
           type: string
+          format: email
           description: user email (unique)
         roles:
           type: array
+          uniqueItems: true
           items:
-            uniqueItems: true
             $ref: '#/components/schemas/ERole'
 
     ProfileResponse:
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
         fio:
           $ref: '#/components/schemas/Name'
         email:
@@ -305,15 +520,30 @@ components:
           format: email
         roles:
           type: array
+          uniqueItems: true
           items:
             $ref: '#/components/schemas/ERole'
-          uniqueItems: true
         avatarUrl:
           type: string
+        active:
+          type: boolean
+          readOnly: true
+          nullable: false
+          default: false
+        startDate:
+          type: string
+          format: date
+          example: '2023-03-25'
+        endDate:
+          type: string
+          format: date
+          example: '2023-04-10'
       required:
+        - id
         - fio
         - email
         - roles
+        - active
 
     Name:
       type: object
@@ -337,6 +567,68 @@ components:
         - USER
         - MODERATOR
         - ADMIN
+
+    PaginatedProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+        - type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProfileResponse'
+
+    ActivityRequest:
+      type: object
+      required:
+        - name
+        - startDate
+      properties:
+        name:
+          type: string
+          nullable: false
+          maxLength: 50
+        description:
+          type: string
+          maxLength: 500
+        startDate:
+          type: string
+          format: date
+
+    ActivityResponse:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          type: string
+          nullable: false
+        description:
+          type: string
+        price:
+          type: integer
+          minimum: 0
+          nullable: true
+        logoUrl:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    PaginatedActivityResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+        - type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActivityResponse'
 
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme

@@ -26,11 +26,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>ru.itone</groupId>
       <artifactId>ilp-persistence</artifactId>
       <version>${project.parent.version}</version>
