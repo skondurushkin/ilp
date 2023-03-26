@@ -13,6 +13,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import ru.itone.ilp.openapi.model.ERole;
 
@@ -23,6 +24,7 @@ import ru.itone.ilp.openapi.model.ERole;
         })
 @Setter
 @Getter
+@ToString
 @Accessors(chain = true)
 @NoArgsConstructor
 public class Role implements Serializable {

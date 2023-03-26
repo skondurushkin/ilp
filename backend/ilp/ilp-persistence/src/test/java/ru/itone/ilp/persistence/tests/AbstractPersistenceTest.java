@@ -1,15 +1,22 @@
 package ru.itone.ilp.persistence.tests;
 
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import ru.itone.ilp.persistence.TestConfiguration;
 
-@SpringBootTest(properties = {
-        "spring.config.location=classpath:persistence-test.yml"
-})
+@SpringBootTest(
+        webEnvironment = WebEnvironment.NONE,
+        properties = {
+            "spring.config.location=classpath:persistence-test.yml"
+        }
+)
+@EntityScan(basePackages = "ru.itone.ilp.persistence.entities")
+@EnableJpaRepositories(basePackages = "ru.itone.ilp.persistence.repositories")
+@EnableTransactionManagement
 @Testcontainers
-@ImportAutoConfiguration(TestConfiguration.class)
 public abstract class AbstractPersistenceTest {
 
 }

@@ -3,7 +3,15 @@ spring:
     url: jdbc:tc:postgresql:15.0://localhost:5437/postgres
     username: postgres
     password: postgres
+  jpa:
+    show-sql: true
+  flyway:
+    enabled: true
 
 jwt:
   tokenDuration: PT1M
   refreshDuration: PT5M
+
+testcontainers:
+  reuse:
+    enable: true

@@ -1,21 +1,26 @@
 package ru.itone.ilp.persistence.entities;
 
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import jakarta.persistence.*;
+import static ru.itone.ilp.openapi.common.ApiHelper.virtualDate;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.vladmihalcea.hibernate.type.json.JsonType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.TypeDef;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-
-import static ru.itone.ilp.openapi.common.ApiHelper.virtualDate;
+import org.hibernate.annotations.Type;
 
 @Setter
 @Getter
@@ -24,7 +29,6 @@ import static ru.itone.ilp.openapi.common.ApiHelper.virtualDate;
 @Entity
 @Table(name = "activities")
 @NoArgsConstructor
-@TypeDef(name = "jsonb", typeClass = JsonStringType.class)
 public class Activity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,11 +46,9 @@ public class Activity implements Serializable {
     @Column
     private Integer price;
 
-    @NotBlank
     @Column(nullable = false, columnDefinition = "date default '3000-01-01'")
     private LocalDate startDate = virtualDate;
 
-    @NotBlank
     @Column(nullable = false, columnDefinition = "date default '3000-01-01'")
     private LocalDate endDate = virtualDate;
 
@@ -54,7 +56,8 @@ public class Activity implements Serializable {
     @Column(name="logo_url", length = 512)
     private String logoUrl;
 
-    @Column(columnDefinition = "jsonb default '{}'")
-    private String extension;
+    @Column(columnDefinition = "jsonb")
+    @Type(JsonType.class)
+    private ObjectNode extension;
 
 }

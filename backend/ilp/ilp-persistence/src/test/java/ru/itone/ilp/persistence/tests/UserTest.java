@@ -17,11 +17,11 @@ public class UserTest extends AbstractPersistenceTest {
 
 
     @Test
-    void testAvatar() {
+    public void testAvatar() {
         User user = userRepository.findById(1L).orElse(null);
         assertNotNull(user);
         assertTrue(StringUtils.hasLength(user.getAvatarUrl()));
-        assertTrue(StringUtils.hasLength(user.getExtension()));
+        assertTrue(user.getExtension().path("moreInfo").isObject());
         log.info("avatar: {}", user.getAvatarUrl());
         log.info("extension: {}", user.getExtension());
     }
