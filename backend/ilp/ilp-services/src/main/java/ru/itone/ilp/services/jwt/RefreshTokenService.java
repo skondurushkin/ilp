@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.itone.ilp.openapi.exception.TokenRefreshException;
+import ru.itone.ilp.openapi.exception.ApiExceptions.TokenRefreshException;
 import ru.itone.ilp.persistence.entities.RefreshToken;
 import ru.itone.ilp.persistence.entities.User;
 import ru.itone.ilp.persistence.repositories.RefreshTokenRepository;

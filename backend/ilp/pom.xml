@@ -30,13 +30,27 @@
     <project.encoding>UTF-8</project.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <postgres.version>42.5.4</postgres.version>
+    <org.hibernate.version>6.1.7.Final</org.hibernate.version>
+    <org.projectlombok.version>1.18.26</org.projectlombok.version>
+    <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+    <org.testcontainers.version>1.17.6</org.testcontainers.version>
   </properties>
-
 
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>2.0</version>
     </dependency>
 
     <dependency>
@@ -60,6 +74,13 @@
         <version>${spring-boot.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${org.testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>

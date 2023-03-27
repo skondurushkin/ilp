@@ -1,15 +1,10 @@
 package ru.itone.ilp.server.controllers;
 
 import jakarta.validation.Valid;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.itone.ilp.openapi.api.AuthApi;
 import ru.itone.ilp.openapi.common.ApiHelper;
-import ru.itone.ilp.openapi.exception.TokenRefreshException;
-import ru.itone.ilp.openapi.model.ERole;
-import ru.itone.ilp.openapi.model.JwtResponse;
-import ru.itone.ilp.openapi.model.LoginRequest;
-import ru.itone.ilp.openapi.model.MessageResponse;
-import ru.itone.ilp.openapi.model.SignupRequest;
-import ru.itone.ilp.openapi.model.TokenRefreshRequest;
-import ru.itone.ilp.openapi.model.TokenRefreshResponse;
+import ru.itone.ilp.openapi.exception.ApiExceptions.TokenRefreshException;
+import ru.itone.ilp.openapi.model.*;
 import ru.itone.ilp.persistence.entities.RefreshToken;
 import ru.itone.ilp.persistence.entities.Role;
 import ru.itone.ilp.persistence.entities.User;
@@ -40,6 +29,13 @@ import ru.itone.ilp.server.configuration.WebSecurityConfig;
 import ru.itone.ilp.server.jwt.JwtHelper;
 import ru.itone.ilp.services.jwt.RefreshTokenService;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -68,10 +64,10 @@ public class AuthController implements AuthApi {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         try {
-            List<ERole> roles = userDetails.getAuthorities().stream()
+            Set<ERole> roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .map(ApiHelper::toERole)
-                    .toList();
+                    .collect(Collectors.toSet());
             TokenRefreshResponse tokens = createTokens(null, userDetails.getEmail());
 
             return ResponseEntity.ok(
@@ -85,6 +81,7 @@ public class AuthController implements AuthApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         if (Boolean.TRUE.equals(userRepository.existsByEmail(signUpRequest.getEmail()))) {
@@ -95,9 +92,9 @@ public class AuthController implements AuthApi {
         User user = new User(signUpRequest.getName(), signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-        List<ERole> strRoles = signUpRequest.getRoles();
+        Set<ERole> strRoles = signUpRequest.getRoles();
 
-        if (CollectionUtils.isEmpty(strRoles)) {
+        if (CollectionUtils.isEmpty(strRoles) || !strRoles.contains(ERole.USER)) {
             strRoles.add(ERole.USER);
         }
 

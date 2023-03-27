@@ -1,14 +1,21 @@
 package ru.itone.ilp.openapi.common;
 
-import java.util.Optional;
-import java.util.StringJoiner;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
 import ru.itone.ilp.openapi.model.ERole;
 import ru.itone.ilp.openapi.model.Name;
 
+import java.time.LocalDate;
+import java.util.StringJoiner;
+
 @UtilityClass
 public class ApiHelper {
+
+    public static final LocalDate virtualDate;
+
+    static {
+        virtualDate = LocalDate.of(3000, 1, 1);
+    }
 
     public String fullName(Name name) {
         return new StringJoiner(" ")
@@ -16,10 +23,6 @@ public class ApiHelper {
                 .add(name.getMiddleName())
                 .add(name.getLastName())
                 .toString();
-    }
-
-    public String toRoleName(ERole role) {
-        return Optional.ofNullable(role).map(e -> "ROLE_" + e.getValue()).orElse(null);
     }
 
     public ERole toERole(String role) {

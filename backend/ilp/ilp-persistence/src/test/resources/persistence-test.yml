@@ -1,13 +1,4 @@
-server:
-  port: ${SERVER_PORT:8191}
-
 spring:
-  application:
-    name: ${APPLICATION_NAME:ILP Server}
-
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
 
   flyway:
     enabled: true
@@ -30,18 +21,13 @@ spring:
   # Required for jsonb type
   datasource:
     hikari:
-      maximumPoolSize: ${DATASOURCE_MAX_POOL_SIZE:20}
+      maximumPoolSize: 20
       data-source-properties:
         stringtype: unspecified
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5436/ilp}
-    username: ${DATASOURCE_USERNAME:ilpuser}
-    password: ${DATASOURCE_PASSWORD:ilpuser}
+    url: jdbc:tc:postgresql:15.0://localhost:5437/postgres
+    username: postgres
+    password: postgres
 
-logging:
-  file:
-    path: logs
-
-jwt:
-  secret: Ilp-secret-value
-  tokenDuration: PT12H
-  refreshDuration: P15D
+testcontainers:
+  reuse:
+    enable: true
