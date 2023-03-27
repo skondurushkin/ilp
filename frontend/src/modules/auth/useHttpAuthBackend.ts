@@ -1,18 +1,29 @@
 import { GUEST, User } from './User';
-import { useEffect, useMemo } from 'react';
 
 import { AuthBackend } from './AuthBackend';
 import { ERR_UNAUTHORIZED } from './auth-errors';
 import { api } from '../../api';
 import useLocalStorageState from 'use-local-storage-state';
+import { useMemo } from 'react';
 
 interface StoredUser extends User {
     token: string;
     refreshToken: string;
 }
 
+const STORAGE_KEY = 'auth-state';
+
+export function restoreAuthFromLocalStorage(): void {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw == undefined) {
+        return;
+    }
+    const user = JSON.parse(raw) as StoredUser;
+    api.setAuthToken(user.token);
+}
+
 export const useHttpAuthBackend = (): AuthBackend => {
-    const [storedUser, setStoredUser] = useLocalStorageState<StoredUser | undefined>('auth-state', {
+    const [storedUser, setStoredUser] = useLocalStorageState<StoredUser | undefined>(STORAGE_KEY, {
         storageSync: true,
     });
 
@@ -29,6 +40,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                     .then((res) => {
                         const { token, refreshToken, email, roles } = res;
 
+                        api.setAuthToken(token);
                         setStoredUser({
                             email,
                             roles,
@@ -48,6 +60,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                 return api.auth
                     .logoutUser()
                     .then(() => {
+                        api.setAuthToken(undefined);
                         setStoredUser(undefined);
                     })
                     .catch((err) => {
@@ -57,10 +70,6 @@ export const useHttpAuthBackend = (): AuthBackend => {
         }),
         [setStoredUser],
     );
-
-    useEffect(() => {
-        api.setAuthToken(storedUser !== undefined ? storedUser.token : undefined);
-    }, [storedUser]);
 
     return { authData, authActions };
 };

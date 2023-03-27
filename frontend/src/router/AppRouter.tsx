@@ -1,4 +1,11 @@
-import { AuthActionsContext, AuthContext, UserRole, hasRole, useHttpAuthBackend } from '../modules/auth';
+import {
+    AuthActionsContext,
+    AuthContext,
+    UserRole,
+    hasRole,
+    restoreAuthFromLocalStorage,
+    useHttpAuthBackend,
+} from '../modules/auth';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { authUserRoutes } from './authUserRoutes';
@@ -6,6 +13,8 @@ import { guestRoutes } from './guestRoutes';
 
 const guestRouter = <RouterProvider router={createBrowserRouter([...guestRoutes])} />;
 const userRouter = <RouterProvider router={createBrowserRouter([...authUserRoutes])} />;
+
+restoreAuthFromLocalStorage();
 
 export const AppRouter = () => {
     const { authData, authActions } = useHttpAuthBackend();
