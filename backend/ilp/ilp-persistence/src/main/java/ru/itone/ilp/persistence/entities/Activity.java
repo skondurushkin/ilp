@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,7 +28,9 @@ import org.hibernate.annotations.Type;
 @ToString
 @Accessors(chain = true)
 @Entity
-@Table(name = "activities")
+@Table(name = "activities", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+})
 @NoArgsConstructor
 public class Activity implements Serializable {
     @Id
@@ -36,9 +39,10 @@ public class Activity implements Serializable {
 
     @Size(max= 50)
     @NotBlank
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 50, nullable = false, unique = true)
     private String name;
 
+    @Size(max= 500)
     @Column(length = 500)
     private String description;
 
@@ -53,8 +57,8 @@ public class Activity implements Serializable {
     private LocalDate endDate = virtualDate;
 
     @Size(max = 512)
-    @Column(name="logo_url", length = 512)
-    private String logoUrl;
+    @Column(name="logo_link", length = 512)
+    private String logoLink;
 
     @Column(columnDefinition = "jsonb")
     @Type(JsonType.class)

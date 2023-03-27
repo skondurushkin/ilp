@@ -1,5 +1,7 @@
 package ru.itone.ilp.persistence.tests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -18,5 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @EnableTransactionManagement
 @Testcontainers
 public abstract class AbstractPersistenceTest {
+        @Autowired
+        ObjectMapper objectMapper;
 
 }

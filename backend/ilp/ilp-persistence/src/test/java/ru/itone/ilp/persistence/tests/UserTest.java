@@ -11,18 +11,16 @@ import ru.itone.ilp.persistence.entities.User;
 import ru.itone.ilp.persistence.repositories.UserRepository;
 
 @Slf4j
-public class UserTest extends AbstractPersistenceTest {
+class UserTest extends AbstractPersistenceTest {
     @Autowired
     UserRepository userRepository;
 
 
     @Test
-    public void testAvatar() {
+    void testAvatar() {
         User user = userRepository.findById(1L).orElse(null);
         assertNotNull(user);
-        assertTrue(StringUtils.hasLength(user.getAvatarUrl()));
-        assertTrue(user.getExtension().path("moreInfo").isObject());
-        log.info("avatar: {}", user.getAvatarUrl());
-        log.info("extension: {}", user.getExtension());
+        assertTrue(StringUtils.hasLength(user.getAvatarLink()));
+        log.info("avatar: {}", user.getAvatarLink());
     }
 }

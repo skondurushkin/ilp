@@ -44,9 +44,7 @@ public class WebSecurityConfig {
     static final String LOGIN_URL = "/api/ilp/auth/login";
 
     protected static final String[] ENDPOINTS_WHITELIST = {
-            LOGIN_URL,
-            "/api/ilp/hello",
-            "/api/ilp/hello2"
+            LOGIN_URL
     };
     @Value("${jwt.secret}")
     String secret;

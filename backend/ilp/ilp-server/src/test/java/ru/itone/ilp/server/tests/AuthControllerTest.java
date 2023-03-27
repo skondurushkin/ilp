@@ -1,9 +1,7 @@
 package ru.itone.ilp.server.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.openapi.model.ERole;
-import ru.itone.ilp.openapi.model.Greeting;
 import ru.itone.ilp.openapi.model.JwtResponse;
 import ru.itone.ilp.openapi.model.LoginRequest;
 import ru.itone.ilp.openapi.model.Name;
@@ -22,20 +19,10 @@ import ru.itone.ilp.openapi.model.SignupRequest;
 import ru.itone.ilp.persistence.repositories.RefreshTokenRepository;
 
 @Slf4j
-public class AuthControllerTest extends AbstractServerTest {
+class AuthControllerTest extends AbstractServerTest {
 
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
-
-
-    @Test
-    void testGET_sayHello() throws Exception {
-        String contentAsString = mockMvc.perform(get("/api/ilp/hello")).andExpect(status().isOk()).andReturn().getResponse()
-                .getContentAsString();
-
-        Greeting greeting = objectMapper.readValue(contentAsString, Greeting.class);
-        assertEquals("Hello client!", greeting.getGreeting());
-    }
 
     @Test
     @Transactional

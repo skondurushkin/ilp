@@ -71,8 +71,8 @@ public class User implements Serializable {
     private String password;
 
     @Size(max = 512)
-    @Column(name="avatar_url", length=512)
-    private String avatarUrl;
+    @Column(name="avatar_link", length=512)
+    private String avatarLink;
 
     @Column(name="start_date", nullable = false, columnDefinition = "date default now()")
     private LocalDate startDate = LocalDate.now();
@@ -109,6 +109,4 @@ public class User implements Serializable {
                 .middleName(middleName)
                 .lastName(lastName);
     }
-
-
 }

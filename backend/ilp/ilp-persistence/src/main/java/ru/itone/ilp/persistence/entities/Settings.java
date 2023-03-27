@@ -4,17 +4,22 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import java.io.Serializable;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
-@Table(name = "settings")
+@Table(name = "settings", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "prop_key")
+})
 @Data
-public class Settings {
-
+@Accessors(chain = true)
+public class Settings implements Serializable {
     @Id
-    @Column(name = "PROP_KEY", length = 100)
+    @Column(name = "prop_key", nullable = false, length = 100)
     String  key;
 
-    @Column(name = "PROP_VALUE", length = 1000)
+    @Column(name = "prop_value", columnDefinition = "text")
     String value;
 }

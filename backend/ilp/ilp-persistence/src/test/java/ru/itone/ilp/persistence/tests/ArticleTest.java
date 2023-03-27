@@ -1,5 +1,7 @@
 package ru.itone.ilp.persistence.tests;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -22,18 +24,19 @@ class ArticleTest extends AbstractPersistenceTest {
 
     @Test
     @Order(1)
-    void testCreateArticle() {
+    void testCreateArticle() throws JsonProcessingException {
         Article article = new Article()
+                .setCode("t-shirt-black")
             .setName("Футболка")
-            .setPrice(10L)
-            .setExists(true)
+            .setPrice(10)
+            .setAvailable(true)
             .setDescription("Футболка черная с принтом")
-            .setImgLink("/img/thirt_black/1.img")
-            .setAttribute("""
+            .setImageLink("/img/t-shirt_black/1.img")
+            .setExtension(objectMapper.readValue("""
                 {
-                    "images": ["/img/thirt_black/2.img", "/img/thirt_black/3.img", "/img/thirt_black/4.img"]
+                    "images": ["/img/t-shirt_black/2.img", "/img/t-shirt_black/3.img", "/img/t-shirt_black/4.img"]
                 }
-                """);
+                """, ObjectNode.class));
 
         Article save = articleRepository.save(article);
         assertNotNull(save);
@@ -46,15 +49,15 @@ class ArticleTest extends AbstractPersistenceTest {
         var articles = articleRepository.findAll();
         assertEquals(1L, articles.size());
         assertEquals(1L, articles.get(0).getId());
-        log.info(articles.get(0).getAttribute());
+        log.info(articles.get(0).getExtension().toString());
     }
 
     @Test
     @Order(3)
     void testUpdateArticle() {
         var article = articleRepository.findById(1L).orElseThrow();
-        article.setExists(false);
+        article.setAvailable(false);
         Article save = articleRepository.save(article);
-        assertFalse(save.getExists());
+        assertFalse(save.getAvailable());
     }
 }

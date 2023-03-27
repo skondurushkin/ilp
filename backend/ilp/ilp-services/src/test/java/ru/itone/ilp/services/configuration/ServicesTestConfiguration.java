@@ -18,7 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
         PersistenceConfiguration.class,
         ActivityConfiguration.class,
         ProfileConfiguration.class,
-        GreetingsConfiguration.class,})
+        ArticleConfiguration.class,})
 @Testcontainers
 public abstract class ServicesTestConfiguration {
 }
