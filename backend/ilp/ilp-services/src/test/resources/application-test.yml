@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: ilpuser
-    password: ilpuser
-    url: jdbc:postgresql://localhost:5436/ilp
+    url: jdbc:tc:postgresql:15.0://localhost:5437/postgres
+    username: postgres
+    password: postgres
   jpa:
     show-sql: true
   flyway:
@@ -11,3 +11,7 @@ spring:
 jwt:
   tokenDuration: PT10M
   refreshDuration: PT1H
+
+testcontainers:
+  reuse:
+    enable: true

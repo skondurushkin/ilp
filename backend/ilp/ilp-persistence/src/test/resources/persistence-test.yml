@@ -14,7 +14,7 @@ spring:
           schema-generation:
             create-source: metadata
             scripts:
-              action: create
+              action: none
               create-target: ilp-create.sql
     show-sql: true
 
@@ -27,3 +27,7 @@ spring:
     url: jdbc:tc:postgresql:15.0://localhost:5437/postgres
     username: postgres
     password: postgres
+
+testcontainers:
+  reuse:
+    enable: true
