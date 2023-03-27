@@ -1,9 +1,10 @@
-import { AuthApi, Configuration, ConfigurationParameters, IlpApi } from './generated';
+import { AuthApi, Configuration, ConfigurationParameters, IlpApi, ProfileApi } from './generated';
 
 function createInternalApi(config: ConfigurationParameters) {
     const cnf = new Configuration(config);
     return {
         auth: new AuthApi(cnf),
+        profile: new ProfileApi(cnf),
         IlpApi: new IlpApi(cnf),
     };
 }
