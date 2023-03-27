@@ -23,7 +23,7 @@ spring:
           schema-generation:
             create-source: metadata
             scripts:
-              action: create
+              action: none
               create-target: ilp-create.sql
     show-sql: true
 

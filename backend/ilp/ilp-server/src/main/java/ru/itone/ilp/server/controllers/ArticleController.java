@@ -25,7 +25,7 @@ public class ArticleController implements ArticleApi {
 
     @Override
     public ResponseEntity<PaginatedArticleResponse> browseArticles(PageRequest pageRequest) {
-        return null;
+        return ResponseEntity.ok(articleService.paginate(pageRequest));
     }
 
     @Override

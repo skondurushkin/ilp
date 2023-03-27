@@ -14,6 +14,7 @@ import ru.itone.ilp.persistence.repositories.ArticleRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -40,24 +41,24 @@ class ArticleTest extends AbstractPersistenceTest {
 
         Article save = articleRepository.save(article);
         assertNotNull(save);
-        assertEquals(1L, save.getId());
     }
 
     @Test
     @Order(2)
     void testFindAllArticle() {
-        var articles = articleRepository.findAll();
-        assertEquals(1L, articles.size());
-        assertEquals(1L, articles.get(0).getId());
-        log.info(articles.get(0).getExtension().toString());
+        var articles = articleRepository.findByCode("t-shirt-black");
+        assertTrue(articles.isPresent());
+        assertEquals("Футболка", articles.get().getName());
+        log.info(articles.get().getExtension().toString());
     }
 
     @Test
     @Order(3)
     void testUpdateArticle() {
-        var article = articleRepository.findById(1L).orElseThrow();
+        var article = articleRepository.findByCode("t-shirt-black").orElseThrow();
         article.setAvailable(false);
-        Article save = articleRepository.save(article);
-        assertFalse(save.getAvailable());
+        articleRepository.save(article);
+        article = articleRepository.findByCode("t-shirt-black").orElseThrow();
+        assertFalse(article.getAvailable());
     }
 }
