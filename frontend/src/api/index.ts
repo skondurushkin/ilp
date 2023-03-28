@@ -5,3 +5,4 @@ export const api = createAPI({
 });
 
 export * from './generated';
+export * from './fetchAll';

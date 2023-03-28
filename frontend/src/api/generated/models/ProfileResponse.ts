@@ -26,6 +26,12 @@ import type { Name } from './Name';
  */
 export interface ProfileResponse {
     /**
+     * generic identifier
+     * @type {number}
+     * @memberof ProfileResponse
+     */
+    id: number;
+    /**
      *
      * @type {Name}
      * @memberof ProfileResponse
@@ -48,7 +54,25 @@ export interface ProfileResponse {
      * @type {string}
      * @memberof ProfileResponse
      */
-    avatarUrl?: string;
+    avatarLink?: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof ProfileResponse
+     */
+    readonly active: boolean;
+    /**
+     *
+     * @type {Date}
+     * @memberof ProfileResponse
+     */
+    startDate?: Date;
+    /**
+     *
+     * @type {Date}
+     * @memberof ProfileResponse
+     */
+    endDate?: Date;
 }
 
 /**
@@ -56,9 +80,11 @@ export interface ProfileResponse {
  */
 export function instanceOfProfileResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'fio' in value;
     isInstance = isInstance && 'email' in value;
     isInstance = isInstance && 'roles' in value;
+    isInstance = isInstance && 'active' in value;
 
     return isInstance;
 }
@@ -72,10 +98,14 @@ export function ProfileResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
+        id: json['id'],
         fio: NameFromJSON(json['fio']),
         email: json['email'],
         roles: new Set((json['roles'] as Array<any>).map(ERoleFromJSON)),
-        avatarUrl: !exists(json, 'avatarUrl') ? undefined : json['avatarUrl'],
+        avatarLink: !exists(json, 'avatarLink') ? undefined : json['avatarLink'],
+        active: json['active'],
+        startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
+        endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
     };
 }
 
@@ -87,9 +117,12 @@ export function ProfileResponseToJSON(value?: ProfileResponse | null): any {
         return null;
     }
     return {
+        id: value.id,
         fio: NameToJSON(value.fio),
         email: value.email,
         roles: Array.from(value.roles as Set<any>).map(ERoleToJSON),
-        avatarUrl: value.avatarUrl,
+        avatarLink: value.avatarLink,
+        startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
+        endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
     };
 }

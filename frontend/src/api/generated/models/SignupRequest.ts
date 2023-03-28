@@ -45,10 +45,10 @@ export interface SignupRequest {
     password?: string;
     /**
      *
-     * @type {Array<ERole>}
+     * @type {Set<ERole>}
      * @memberof SignupRequest
      */
-    roles?: Array<ERole>;
+    roles?: Set<ERole>;
 }
 
 /**
@@ -72,7 +72,7 @@ export function SignupRequestFromJSONTyped(json: any, ignoreDiscriminator: boole
         name: !exists(json, 'name') ? undefined : NameFromJSON(json['name']),
         email: !exists(json, 'email') ? undefined : json['email'],
         password: !exists(json, 'password') ? undefined : json['password'],
-        roles: !exists(json, 'roles') ? undefined : (json['roles'] as Array<any>).map(ERoleFromJSON),
+        roles: !exists(json, 'roles') ? undefined : new Set((json['roles'] as Array<any>).map(ERoleFromJSON)),
     };
 }
 
@@ -87,6 +87,6 @@ export function SignupRequestToJSON(value?: SignupRequest | null): any {
         name: NameToJSON(value.name),
         email: value.email,
         password: value.password,
-        roles: value.roles === undefined ? undefined : (value.roles as Array<any>).map(ERoleToJSON),
+        roles: value.roles === undefined ? undefined : Array.from(value.roles as Set<any>).map(ERoleToJSON),
     };
 }

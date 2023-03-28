@@ -43,10 +43,10 @@ export interface JwtResponse {
     email: string;
     /**
      *
-     * @type {Array<ERole>}
+     * @type {Set<ERole>}
      * @memberof JwtResponse
      */
-    roles: Array<ERole>;
+    roles: Set<ERole>;
 }
 
 /**
@@ -74,7 +74,7 @@ export function JwtResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean
         token: json['token'],
         refreshToken: json['refreshToken'],
         email: json['email'],
-        roles: (json['roles'] as Array<any>).map(ERoleFromJSON),
+        roles: new Set((json['roles'] as Array<any>).map(ERoleFromJSON)),
     };
 }
 
@@ -89,6 +89,6 @@ export function JwtResponseToJSON(value?: JwtResponse | null): any {
         token: value.token,
         refreshToken: value.refreshToken,
         email: value.email,
-        roles: (value.roles as Array<any>).map(ERoleToJSON),
+        roles: Array.from(value.roles as Set<any>).map(ERoleToJSON),
     };
 }

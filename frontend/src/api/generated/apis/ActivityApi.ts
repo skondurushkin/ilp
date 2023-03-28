@@ -14,37 +14,49 @@
 
 import * as runtime from '../runtime';
 
-import type { ErrorMessage, PageRequest, PaginatedProfileResponse, ProfileResponse } from '../models';
+import type {
+    ActivityRequest,
+    ActivityResponse,
+    ErrorMessage,
+    PageRequest,
+    PaginatedActivityResponse,
+} from '../models';
 import {
+    ActivityRequestFromJSON,
+    ActivityRequestToJSON,
+    ActivityResponseFromJSON,
+    ActivityResponseToJSON,
     ErrorMessageFromJSON,
     ErrorMessageToJSON,
     PageRequestFromJSON,
     PageRequestToJSON,
-    PaginatedProfileResponseFromJSON,
-    PaginatedProfileResponseToJSON,
-    ProfileResponseFromJSON,
-    ProfileResponseToJSON,
+    PaginatedActivityResponseFromJSON,
+    PaginatedActivityResponseToJSON,
 } from '../models';
 
-export interface BrowseProfilesRequest {
+export interface BrowseActivitiesRequest {
     pageRequest?: PageRequest;
 }
 
-export interface GetProfileByIdRequest {
-    userId: number;
+export interface CreateActivityRequest {
+    activityRequest: ActivityRequest;
+}
+
+export interface GetActivityByIdRequest {
+    activityId: number;
 }
 
 /**
  *
  */
-export class ProfileApi extends runtime.BaseAPI {
+export class ActivityApi extends runtime.BaseAPI {
     /**
-     * paginated profiles view
+     * paginated activities view
      */
-    async browseProfilesRaw(
-        requestParameters: BrowseProfilesRequest,
+    async browseActivitiesRaw(
+        requestParameters: BrowseActivitiesRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<PaginatedProfileResponse>> {
+    ): Promise<runtime.ApiResponse<PaginatedActivityResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -61,7 +73,7 @@ export class ProfileApi extends runtime.BaseAPI {
         }
         const response = await this.request(
             {
-                path: `/api/ilp/profiles`,
+                path: `/api/ilp/activities`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
@@ -70,29 +82,39 @@ export class ProfileApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedProfileResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedActivityResponseFromJSON(jsonValue));
     }
 
     /**
-     * paginated profiles view
+     * paginated activities view
      */
-    async browseProfiles(
-        requestParameters: BrowseProfilesRequest = {},
+    async browseActivities(
+        requestParameters: BrowseActivitiesRequest = {},
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<PaginatedProfileResponse> {
-        const response = await this.browseProfilesRaw(requestParameters, initOverrides);
+    ): Promise<PaginatedActivityResponse> {
+        const response = await this.browseActivitiesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * get authenticated user profile
+     * create new activity record
      */
-    async getProfileRaw(
+    async createActivityRaw(
+        requestParameters: CreateActivityRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<ProfileResponse>> {
+    ): Promise<runtime.ApiResponse<ActivityResponse>> {
+        if (requestParameters.activityRequest === null || requestParameters.activityRequest === undefined) {
+            throw new runtime.RequiredError(
+                'activityRequest',
+                'Required parameter requestParameters.activityRequest was null or undefined when calling createActivity.',
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -104,36 +126,40 @@ export class ProfileApi extends runtime.BaseAPI {
         }
         const response = await this.request(
             {
-                path: `/api/ilp/profile`,
-                method: 'GET',
+                path: `/api/ilp/activity`,
+                method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
+                body: ActivityRequestToJSON(requestParameters.activityRequest),
             },
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ActivityResponseFromJSON(jsonValue));
     }
 
     /**
-     * get authenticated user profile
+     * create new activity record
      */
-    async getProfile(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileResponse> {
-        const response = await this.getProfileRaw(initOverrides);
+    async createActivity(
+        requestParameters: CreateActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<ActivityResponse> {
+        const response = await this.createActivityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * get user profile by user id
+     * get activity by identifier
      */
-    async getProfileByIdRaw(
-        requestParameters: GetProfileByIdRequest,
+    async getActivityByIdRaw(
+        requestParameters: GetActivityByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<ProfileResponse>> {
-        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+    ): Promise<runtime.ApiResponse<ActivityResponse>> {
+        if (requestParameters.activityId === null || requestParameters.activityId === undefined) {
             throw new runtime.RequiredError(
-                'userId',
-                'Required parameter requestParameters.userId was null or undefined when calling getProfileById.',
+                'activityId',
+                'Required parameter requestParameters.activityId was null or undefined when calling getActivityById.',
             );
         }
 
@@ -151,9 +177,9 @@ export class ProfileApi extends runtime.BaseAPI {
         }
         const response = await this.request(
             {
-                path: `/api/ilp/profile/{user_id}`.replace(
-                    `{${'user_id'}}`,
-                    encodeURIComponent(String(requestParameters.userId)),
+                path: `/api/ilp/activity/{activity_id}`.replace(
+                    `{${'activity_id'}}`,
+                    encodeURIComponent(String(requestParameters.activityId)),
                 ),
                 method: 'GET',
                 headers: headerParameters,
@@ -162,17 +188,17 @@ export class ProfileApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ActivityResponseFromJSON(jsonValue));
     }
 
     /**
-     * get user profile by user id
+     * get activity by identifier
      */
-    async getProfileById(
-        requestParameters: GetProfileByIdRequest,
+    async getActivityById(
+        requestParameters: GetActivityByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<ProfileResponse> {
-        const response = await this.getProfileByIdRaw(requestParameters, initOverrides);
+    ): Promise<ActivityResponse> {
+        const response = await this.getActivityByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }
