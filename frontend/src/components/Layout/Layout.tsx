@@ -3,7 +3,7 @@ import { ReactElement, ReactNode } from 'react';
 import { ReactComponent as Logo } from '../../assets/logo-light.svg';
 import { Nav } from './Nav';
 import { Profile } from './Profile';
-import { ThemeSelector } from '../../theme';
+import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
 
 export interface LayoutProps {
@@ -24,7 +24,7 @@ export function Layout(props: LayoutProps): ReactElement {
                         </TypedLink>
                     </div>
                     <div className="flex grow pl-8">{menu}</div>
-                    <ThemeSelector />
+                    <ThemeToggle />
                 </div>
             </header>
             <div className="flex grow flex-col bg-white text-black dark:bg-gray-dark dark:text-white">

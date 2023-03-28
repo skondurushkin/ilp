@@ -24,45 +24,42 @@ function isDarkTheme(theme: Theme | undefined): boolean {
     return theme === 'dark' || (theme === undefined && window.matchMedia('(prefers-color-scheme: dark)').matches);
 }
 
-export function ThemeSelector(): ReactElement {
+export function ThemeToggle(): ReactElement {
     const [themeOrUndefined, setTheme] = useThemeManager();
     const theme = normalizeTheme(themeOrUndefined);
 
     useEffect(activateCurrentTheme, [themeOrUndefined]);
 
     return (
-        <div className="flex items-center gap-2 rounded-full border-2 border-white bg-black p-2">
-            <button
-                title="Включить темную тему"
-                type="button"
+        <button
+            className="flex items-center gap-2 rounded-full border-2 border-white bg-black p-2"
+            type="button"
+            title={theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}
+            onClick={() => {
+                setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+            }}
+        >
+            <div
                 className={classnames(
                     'flex-inline items-center justify-center rounded-full p-1',
                     theme === 'dark' && 'bg-white',
                     theme === 'light' && 'bg-black',
                 )}
-                onClick={() => {
-                    setTheme('dark');
-                }}
             >
                 {theme === 'dark' && <MoonLightIcon />}
                 {theme === 'light' && <MoonDarkIcon />}
-            </button>
-            <button
-                title="Включить светлую тему"
-                type="button"
+            </div>
+            <div
                 className={classnames(
                     'flex-inline items-center justify-center rounded-full p-1',
                     theme === 'dark' && 'bg-black',
                     theme === 'light' && 'bg-white',
                 )}
-                onClick={() => {
-                    setTheme('light');
-                }}
             >
                 {theme === 'dark' && <SunDarkIcon />}
                 {theme === 'light' && <SunLightIcon />}
-            </button>
-        </div>
+            </div>
+        </button>
     );
 }
 
