@@ -28,7 +28,7 @@ export function Layout(props: LayoutProps): ReactElement {
                 </div>
             </header>
             <div className="flex grow flex-col bg-white text-black dark:bg-gray-dark dark:text-white">
-                <div className="flex grow xl:mx-auto xl:max-w-[1280px]">
+                <div className="flex w-full grow xl:mx-auto xl:max-w-[1280px]">
                     <aside className="flex min-w-[312px] flex-col border-r border-r-gray px-8 pt-8 pb-10">
                         <Profile />
                         <Nav className="mt-8 grow" />
