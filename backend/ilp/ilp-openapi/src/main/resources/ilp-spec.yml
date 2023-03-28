@@ -19,6 +19,13 @@ tags:
     description: Article API
   - name: wallet
     description: Wallet API
+  - name: files
+    description: FileStore API
+  - name: admin
+    description: Administrator API
+
+security:
+  - bearerAuth: []
 
 paths:
 
@@ -320,7 +327,7 @@ paths:
       tags:
         - article
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
@@ -334,29 +341,129 @@ paths:
                 $ref: '#/components/schemas/PaginatedArticleResponse'
 
 # wallet
+  /api/ilp/wallet/overview:
+    get:
+      operationId: getWalletOverview
+      summary: get overview of the wallet state of currently logged in user
+      tags:
+        - wallet
+      responses:
+        200:
+          description: 'ОК'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResponse'
+
+
+#  /api/ilp/wallet/write-offs/{user_id}:
+#    post:
+#      operationId: browseWriteOffs
+#      summary: paginated view of write-offs
+#      tags:
+#        - wallet
+#
+#  /api/ilp/wallet/accruals/{user_id}:
+#    post:
+#      operationId: browseWriteOffs
+#      summary: paginated view of write-offs
+#      tags:
+#        - wallet
+
+
+# files
+  /api/ilp/file/upload/{scope}:
+    post:
+      operationId: uploadFile
+      summary: upload file to ILP file store
+      tags:
+        - files
+      parameters:
+        - name: scope
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [global, activity, article, profile]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - id
+                - filename
+              properties:
+                id:
+                  $ref: '#/components/schemas/Identifier'
+                  description: in-scope identifier (ignored for scope 'global')
+                filename:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  link:
+                    type: string
+        409:
+          description: already exists
+
+  /api/ilp/file/download:
+    get:
+      operationId: downloadFile
+      summary: fetch file from ILP file store
+      tags:
+        - files
+      parameters:
+        - name: link
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: 'Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
 
 components:
   parameters:
     user_id:
-      in: query
-      name: userId
-      required: false
+      in: path
+      name: user_id
+      required: true
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  user identifier
 
     activity_id:
-      in: query
-      name: activityId
-      required: false
+      in: path
+      name: activity_id
+      required: true
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  activity identifier
 
     article_id:
-      in: query
-      name: articleId
-      required: false
+      in: path
+      name: article_id
+      required: true
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  article identifier
@@ -368,8 +475,21 @@ components:
       minimum: 1
       description:  generic identifier
 
+    Amount:
+      type: integer
+      format: int32
+      minimum: 0
+      description:  generic amount
+
     PaginatedResult:
       type: object
+      required:
+        - total
+        - page
+        - pageSize
+        - hasNext
+        - hasPrev
+        - results
       properties:
         total:
           type: integer
@@ -392,16 +512,22 @@ components:
 
     PageRequest:
       type: object
+      required:
+        - page
+        - pageSize
       properties:
         page:
+          description: index of the page to load
           type: integer
           minimum: 0
           default: 0
         pageSize:
+          description: max number of result rows per page
           type: integer
           minimum: 1
           default: 5
         config:
+          description: data extraction parameters
           type: object
           properties:
             sort:
@@ -424,6 +550,7 @@ components:
                 type: object
                 required:
                   - colName
+                  - condition
                 properties:
                   colName:
                     type: string
@@ -567,6 +694,7 @@ components:
         startDate:
           type: string
           format: date
+          pattern: 'yyyy-MM-dd'
           example: '2023-03-25'
         endDate:
           type: string
@@ -729,9 +857,54 @@ components:
               items:
                 $ref: '#/components/schemas/ArticleResponse'
 
+    AccrualResponse:
+      type: object
+      required:
+        - date
+        - activityName
+        - amount
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
+        activityId:
+          $ref: '#/components/schemas/Identifier'
+        date:
+          type: string
+          format: date
+        activityName:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Amount'
+        logoLink:
+          type: string
+          nullable: true
+
+    WalletResponse:
+      type: object
+      required:
+        - balance
+        - totalEarned
+        - totalSpent
+        - accruals
+      properties:
+        balance:
+          type: integer
+          format: int32
+          minimum: 0
+        totalEarned:
+          $ref: '#/components/schemas/Amount'
+        totalSpent:
+          $ref: '#/components/schemas/Amount'
+        accruals:
+          type: array
+          description: up to 5 recent accruals
+          maxLength: 5
+          items:
+            $ref: '#/components/schemas/AccrualResponse'
+
+
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT
-

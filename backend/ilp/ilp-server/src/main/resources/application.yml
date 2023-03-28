@@ -45,3 +45,6 @@ jwt:
   secret: Ilp-secret-value
   tokenDuration: PT12H
   refreshDuration: P15D
+
+application:
+  root-store-path: store

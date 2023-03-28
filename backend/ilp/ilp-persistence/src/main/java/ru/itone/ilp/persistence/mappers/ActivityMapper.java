@@ -1,14 +1,16 @@
 package ru.itone.ilp.persistence.mappers;
 
+import java.time.LocalDate;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import ru.itone.ilp.openapi.common.ApiHelper;
+import org.springframework.data.domain.Page;
+import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
+import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.persistence.entities.Activity;
-
-import java.time.LocalDate;
 
 @Mapper
 public interface ActivityMapper {
@@ -26,4 +28,16 @@ public interface ActivityMapper {
                 ? null
                 : date;
     }
+
+    default PaginatedActivityResponse toPaginatedResponse(Page<Activity> page) {
+        List<ActivityResponse> results = page.getContent().stream().map(this::activityToResponse).toList();
+        return new PaginatedActivityResponse()
+                .total(page.getTotalPages())
+                .page(page.getNumber())
+                .pageSize(page.getSize())
+                .hasNext(page.hasNext())
+                .hasPrev(page.hasPrevious())
+                .results(results);
+    }
+
 }

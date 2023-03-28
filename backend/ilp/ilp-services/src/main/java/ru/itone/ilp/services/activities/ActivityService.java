@@ -1,17 +1,27 @@
 package ru.itone.ilp.services.activities;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
+import ru.itone.ilp.openapi.model.PageRequest;
+import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.persistence.entities.Activity;
 import ru.itone.ilp.persistence.mappers.ActivityMapper;
+import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.repositories.ActivityRepository;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ActivityService {
     private final ActivityRepository activityRepository;
+
+    public PaginatedActivityResponse paginate(PageRequest request) {
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request);
+        Page<Activity> page = activityRepository.findAll(pageable);
+        return toPaginatedResponse(page);
+    }
 
     public Optional<ActivityResponse> getActivityById(Integer id) {
         return activityRepository.findById(id.longValue())
@@ -29,4 +39,7 @@ public class ActivityService {
         return ActivityMapper.INSTANCE.activityToResponse(activity);
     }
 
+    public static PaginatedActivityResponse toPaginatedResponse(Page<Activity> page) {
+        return ActivityMapper.INSTANCE.toPaginatedResponse(page);
+    }
 }

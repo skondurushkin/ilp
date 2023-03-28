@@ -1,6 +1,6 @@
 package ru.itone.ilp.persistence.entities;
 
-import static ru.itone.ilp.openapi.common.ApiHelper.virtualDate;
+import static ru.itone.ilp.common.ApiHelper.virtualDate;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vladmihalcea.hibernate.type.json.JsonType;

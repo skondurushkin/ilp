@@ -8,7 +8,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 import ru.itone.ilp.openapi.api.ActivityApi;
-import ru.itone.ilp.openapi.exception.ApiExceptions;
+import ru.itone.ilp.exception.ApiExceptions;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.PageRequest;
@@ -26,7 +26,7 @@ public class ActivityController implements ActivityApi {
     private final ActivityService activityService;
     @Override
     public ResponseEntity<PaginatedActivityResponse> browseActivities(PageRequest pageRequest) {
-        return null;
+        return ResponseEntity.ok(activityService.paginate(pageRequest));
     }
 
     @Override

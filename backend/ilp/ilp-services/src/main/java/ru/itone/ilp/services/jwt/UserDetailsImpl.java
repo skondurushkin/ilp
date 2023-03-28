@@ -1,18 +1,20 @@
 package ru.itone.ilp.services.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.itone.ilp.openapi.common.ApiHelper;
+import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.persistence.entities.User;
 
 
 @EqualsAndHashCode
 public class UserDetailsImpl implements UserDetails {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Long id;
