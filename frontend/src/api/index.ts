@@ -1,11 +1,7 @@
-import { IlpApi, Configuration } from './generated';
+import { createAPI } from './api';
 
-const config = new Configuration({
+export const api = createAPI({
     basePath: '',
 });
-
-export const api = {
-    IlpApi: new IlpApi(config),
-};
 
 export * from './generated';
