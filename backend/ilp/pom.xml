@@ -34,6 +34,10 @@
     <org.projectlombok.version>1.18.26</org.projectlombok.version>
     <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
     <org.testcontainers.version>1.17.6</org.testcontainers.version>
+
+    <apache-commons-lang.version>3.12.0</apache-commons-lang.version>
+    <apache-commons-codec.version>1.15</apache-commons-codec.version>
+
   </properties>
 
   <dependencies>
@@ -51,6 +55,16 @@
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${apache-commons-lang.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>${apache-commons-codec.version}</version>
     </dependency>
 
     <dependency>

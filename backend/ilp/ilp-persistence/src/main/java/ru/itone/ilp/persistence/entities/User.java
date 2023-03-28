@@ -18,7 +18,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Type;
-import ru.itone.ilp.openapi.common.ApiHelper;
+import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.openapi.model.Name;
 
 @Entity
@@ -92,7 +91,7 @@ public class User implements Serializable {
 
     @Transient
     public boolean isActive() {
-        return Instant.now().compareTo(Instant.from(endDate)) <= 0;
+        return LocalDate.now().compareTo(endDate) <= 0;
     }
 
     public User(Name name, String email, String password) {

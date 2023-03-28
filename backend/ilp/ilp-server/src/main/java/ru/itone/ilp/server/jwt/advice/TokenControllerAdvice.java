@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
-import ru.itone.ilp.openapi.exception.ApiExceptions.ResourceNotFoundException;
-import ru.itone.ilp.openapi.exception.ApiExceptions.TokenRefreshException;
+import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
+import ru.itone.ilp.exception.ApiExceptions.TokenRefreshException;
 import ru.itone.ilp.openapi.model.ErrorMessage;
 import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 

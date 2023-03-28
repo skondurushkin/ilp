@@ -1,4 +1,4 @@
-package ru.itone.ilp.openapi.exception;
+package ru.itone.ilp.exception;
 
 
 import lombok.experimental.UtilityClass;

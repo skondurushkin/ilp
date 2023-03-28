@@ -55,4 +55,5 @@ services:
       - ilp_network
     volumes:
       - ./logs:/workspace/build/ilp-server/logs
+      - ./store:/workspace/build/ilp-server/store
     restart: unless-stopped

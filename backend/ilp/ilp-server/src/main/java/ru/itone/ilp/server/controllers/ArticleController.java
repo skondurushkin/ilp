@@ -9,7 +9,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 import ru.itone.ilp.openapi.api.ArticleApi;
-import ru.itone.ilp.openapi.exception.ApiExceptions;
+import ru.itone.ilp.exception.ApiExceptions;
 import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.PageRequest;
