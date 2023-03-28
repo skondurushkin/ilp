@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 import ru.itone.ilp.openapi.api.ProfileApi;
-import ru.itone.ilp.openapi.exception.ApiExceptions.ResourceNotFoundException;
+import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedProfileResponse;
 import ru.itone.ilp.openapi.model.ProfileResponse;
@@ -27,7 +27,7 @@ public class ProfileController implements ProfileApi {
 
     @Override
     public ResponseEntity<PaginatedProfileResponse> browseProfiles(PageRequest pageRequest) {
-        return null;
+        return ResponseEntity.ok(profileService.paginate(pageRequest));
     }
 
     @Override

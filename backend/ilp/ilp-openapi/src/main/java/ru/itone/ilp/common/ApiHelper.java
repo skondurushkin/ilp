@@ -1,4 +1,4 @@
-package ru.itone.ilp.openapi.common;
+package ru.itone.ilp.common;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
