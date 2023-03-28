@@ -33,16 +33,3 @@ yarn dev
 # production build
 yarn build
 ```
-
-## FAQ
-
-1. Run the backend for development:
-    ```
-    docker network create frontend_ilp_network -d bridge
-    docker-compose build
-    docker-compose up
-    ```
-1. Connect to the db using psql:
-    ```
-    docker run -it --rm --network frontend_ilp_network postgres psql -h ilp_db_1 -d ilp -U ilpuser
-    ```
