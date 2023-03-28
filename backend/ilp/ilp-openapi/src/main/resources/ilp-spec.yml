@@ -760,6 +760,7 @@ components:
     ActivityResponse:
       type: object
       required:
+        - id
         - name
       properties:
         id:
@@ -819,6 +820,7 @@ components:
     ArticleResponse:
       type: object
       required:
+        - id
         - code
         - name
       properties:
@@ -860,6 +862,7 @@ components:
     AccrualResponse:
       type: object
       required:
+        - id
         - date
         - activityName
         - amount

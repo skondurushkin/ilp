@@ -45,6 +45,8 @@ services:
     container_name: ilp-server-new
     depends_on:
       - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     expose:
       - 8191
     ports:
