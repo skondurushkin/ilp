@@ -1,5 +1,6 @@
 package ru.itone.ilp.server.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,10 @@ public class ArticleController implements ArticleApi {
         return articleService.getArticleById(articleId)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ApiExceptions.ResourceNotFoundException("Article record not found."));
+    }
+
+    @Override
+    public ResponseEntity<List<ArticleResponse>> searchArticles(String searchKey) {
+        return ResponseEntity.ok(articleService.searchArticleByText(searchKey));
     }
 }
