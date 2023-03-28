@@ -50,7 +50,7 @@ services:
     ports:
       - 8191:8191
     env_file:
-      - app.env
+      - ./app.env
     networks:
       - ilp_network
     volumes:

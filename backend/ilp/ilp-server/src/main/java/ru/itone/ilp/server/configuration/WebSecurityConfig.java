@@ -31,6 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.itone.ilp.persistence.repositories.UserRepository;
 import ru.itone.ilp.server.jwt.JwtHelper;
+import ru.itone.ilp.server.jwt.advice.TokenControllerAdvice;
 import ru.itone.ilp.server.jwt.security.AuthEntryPointJwt;
 import ru.itone.ilp.services.configuration.ActivityConfiguration;
 import ru.itone.ilp.services.configuration.PersistenceConfiguration;
@@ -57,6 +58,11 @@ public class WebSecurityConfig {
     String secret;
 
     private final UserRepository userRepository;
+
+    @Bean
+    public TokenControllerAdvice controllerAdvice() {
+        return new TokenControllerAdvice();
+    }
 
     @Bean
     @Primary
@@ -95,6 +101,7 @@ public class WebSecurityConfig {
     public AuthEntryPointJwt unauthorizedHandler() {
         return new AuthEntryPointJwt(objectMapper());
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

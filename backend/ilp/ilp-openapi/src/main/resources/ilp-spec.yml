@@ -24,6 +24,9 @@ tags:
   - name: admin
     description: Administrator API
 
+security:
+  - bearerAuth: []
+
 paths:
 
 # profiles
@@ -324,7 +327,7 @@ paths:
       tags:
         - article
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
@@ -442,25 +445,25 @@ paths:
 components:
   parameters:
     user_id:
-      in: query
-      name: userId
-      required: false
+      in: path
+      name: user_id
+      required: true
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  user identifier
 
     activity_id:
-      in: query
-      name: activityId
-      required: false
+      in: path
+      name: activity_id
+      required: true
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  activity identifier
 
     article_id:
-      in: query
-      name: articleId
-      required: false
+      in: path
+      name: article_id
+      required: true
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  article identifier
@@ -905,4 +908,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-

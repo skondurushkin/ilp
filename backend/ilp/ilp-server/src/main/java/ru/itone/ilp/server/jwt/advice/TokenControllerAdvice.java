@@ -1,6 +1,7 @@
 package ru.itone.ilp.server.jwt.advice;
 
 import java.time.OffsetDateTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,9 +13,13 @@ import ru.itone.ilp.exception.ApiExceptions.TokenRefreshException;
 import ru.itone.ilp.openapi.model.ErrorMessage;
 import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 
+@Slf4j
 @RestControllerAdvice
 public class TokenControllerAdvice {
 
+    public TokenControllerAdvice() {
+        // TODO document why this constructor is empty
+    }
     @ExceptionHandler(value = HttpStatusCodeException.class)
     public ErrorMessage handleStatusCodeException(HttpStatusCodeException ex, WebRequest request) {
         return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
@@ -25,7 +30,6 @@ public class TokenControllerAdvice {
     public ErrorMessage handleStatusCodeException(ResourceNotFoundException ex, WebRequest request) {
         return buildErrorMessage(HttpStatus.NOT_FOUND, ex, request);
     }
-
 
     @ExceptionHandler(value = TokenRefreshException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
