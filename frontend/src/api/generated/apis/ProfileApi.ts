@@ -14,13 +14,68 @@
 
 import * as runtime from '../runtime';
 
-import type { ErrorMessage, ProfileResponse } from '../models';
-import { ErrorMessageFromJSON, ErrorMessageToJSON, ProfileResponseFromJSON, ProfileResponseToJSON } from '../models';
+import type { ErrorMessage, PageRequest, PaginatedProfileResponse, ProfileResponse } from '../models';
+import {
+    ErrorMessageFromJSON,
+    ErrorMessageToJSON,
+    PageRequestFromJSON,
+    PageRequestToJSON,
+    PaginatedProfileResponseFromJSON,
+    PaginatedProfileResponseToJSON,
+    ProfileResponseFromJSON,
+    ProfileResponseToJSON,
+} from '../models';
+
+export interface BrowseProfilesRequest {
+    pageRequest?: PageRequest;
+}
+
+export interface GetProfileByIdRequest {
+    userId?: number;
+}
 
 /**
  *
  */
 export class ProfileApi extends runtime.BaseAPI {
+    /**
+     * paginated profiles view
+     */
+    async browseProfilesRaw(
+        requestParameters: BrowseProfilesRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedProfileResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request(
+            {
+                path: `/api/ilp/profiles`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: PageRequestToJSON(requestParameters.pageRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedProfileResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * paginated profiles view
+     */
+    async browseProfiles(
+        requestParameters: BrowseProfilesRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedProfileResponse> {
+        const response = await this.browseProfilesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
     /**
      * get authenticated user profile
      */
@@ -49,6 +104,45 @@ export class ProfileApi extends runtime.BaseAPI {
      */
     async getProfile(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileResponse> {
         const response = await this.getProfileRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * get user profile by user id
+     */
+    async getProfileByIdRaw(
+        requestParameters: GetProfileByIdRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<ProfileResponse>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.userId !== undefined) {
+            queryParameters['userId'] = requestParameters.userId;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request(
+            {
+                path: `/api/ilp/profile/{user_id}`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get user profile by user id
+     */
+    async getProfileById(
+        requestParameters: GetProfileByIdRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<ProfileResponse> {
+        const response = await this.getProfileByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }
