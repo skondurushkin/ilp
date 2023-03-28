@@ -17,7 +17,7 @@ export function Profile(props: ProfileProps): ReactElement {
 
     const query = useProfileQuery();
 
-    const avatarUrl = query.status === 'success' ? query.data.avatarUrl : undefined;
+    const avatarUrl = query.status === 'success' ? query.data.avatarLink : undefined;
     const initials =
         query.status === 'success'
             ? `${query.data.fio.firstName.charAt(1).toUpperCase()}${query.data.fio.lastName.charAt(1).toUpperCase()}`

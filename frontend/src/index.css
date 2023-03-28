@@ -12,3 +12,13 @@ html {
     margin: 0;
     padding: 0;
 }
+
+@layer components {
+    .btn {
+        @apply border border-gray bg-white py-2 px-3 leading-[18px] text-black focus:shadow-[0_4px_4px_rgba(0,0,0,0.25)] disabled:text-gray;
+    }
+
+    .btn-primary {
+        @apply border-0 bg-green;
+    }
+}
