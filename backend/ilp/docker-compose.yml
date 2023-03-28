@@ -5,7 +5,7 @@ volumes:
 
 networks:
   ilp_network:
-    driver: brige
+    driver: bridge
 
 services:
   ilp-frontend:
