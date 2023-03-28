@@ -1,25 +1,20 @@
-import { PageRequest } from './generated';
+import { PageRequest, PaginatedResult } from './generated';
+
 import { range } from '../utils/range';
 
-export interface PaginatedResponse<T> {
-    total?: number;
-    page?: number;
-    pageSize?: number;
-    hasNext?: boolean;
-    hasPrev?: boolean;
-    results?: Array<T>;
+export interface TypedPaginatedResult<T> extends Omit<PaginatedResult, 'results'> {
+    results: Array<T>;
 }
 
 export function fetchAll<T>(
-    loader: (requestParameter: { pageRequest: PageRequest }) => Promise<PaginatedResponse<T>>,
+    loader: (requestParameter: { pageRequest: PageRequest }) => Promise<TypedPaginatedResult<T>>,
 ): Promise<T[]> {
     const pageSize = 30;
     return loader({ pageRequest: { pageSize, page: 0, config: {} } }).then((res) => {
-        if (res.total === undefined || res.total === 0) {
+        if (res.total === 0) {
             return [];
         }
-        // const pageCount = Math.floor(res.total / pageSize) + (res.total % pageSize) === 0 ? 0 : 1;
-        const firstPage = res.results || [];
+        const firstPage = res.results;
         if (res.total === 1) {
             return firstPage;
         }
