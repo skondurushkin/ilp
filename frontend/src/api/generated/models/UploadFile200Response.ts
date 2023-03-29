@@ -16,41 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  *
  * @export
- * @interface Greeting
+ * @interface UploadFile200Response
  */
-export interface Greeting {
+export interface UploadFile200Response {
     /**
-     * greeting message
+     *
      * @type {string}
-     * @memberof Greeting
+     * @memberof UploadFile200Response
      */
-    greeting: string;
+    link?: string;
 }
 
 /**
- * Check if a given object implements the Greeting interface.
+ * Check if a given object implements the UploadFile200Response interface.
  */
-export function instanceOfGreeting(value: object): boolean {
+export function instanceOfUploadFile200Response(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && 'greeting' in value;
 
     return isInstance;
 }
 
-export function GreetingFromJSON(json: any): Greeting {
-    return GreetingFromJSONTyped(json, false);
+export function UploadFile200ResponseFromJSON(json: any): UploadFile200Response {
+    return UploadFile200ResponseFromJSONTyped(json, false);
 }
 
-export function GreetingFromJSONTyped(json: any, ignoreDiscriminator: boolean): Greeting {
+export function UploadFile200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): UploadFile200Response {
     if (json === undefined || json === null) {
         return json;
     }
     return {
-        greeting: json['greeting'],
+        link: !exists(json, 'link') ? undefined : json['link'],
     };
 }
 
-export function GreetingToJSON(value?: Greeting | null): any {
+export function UploadFile200ResponseToJSON(value?: UploadFile200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -58,6 +57,6 @@ export function GreetingToJSON(value?: Greeting | null): any {
         return null;
     }
     return {
-        greeting: value.greeting,
+        link: value.link,
     };
 }

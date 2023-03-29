@@ -29,7 +29,7 @@ import {
 } from '../models';
 
 export interface BrowseArticlesRequest {
-    pageRequest?: PageRequest;
+    pageRequest: PageRequest;
 }
 
 export interface CreateArticleRequest {
@@ -37,7 +37,7 @@ export interface CreateArticleRequest {
 }
 
 export interface GetArticleByIdRequest {
-    articleId?: number;
+    articleId: number;
 }
 
 /**
@@ -51,12 +51,27 @@ export class ArticleApi extends runtime.BaseAPI {
         requestParameters: BrowseArticlesRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<PaginatedArticleResponse>> {
+        if (requestParameters.pageRequest === null || requestParameters.pageRequest === undefined) {
+            throw new runtime.RequiredError(
+                'pageRequest',
+                'Required parameter requestParameters.pageRequest was null or undefined when calling browseArticles.',
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
                 path: `/api/ilp/articles`,
@@ -75,7 +90,7 @@ export class ArticleApi extends runtime.BaseAPI {
      * paginated articles view
      */
     async browseArticles(
-        requestParameters: BrowseArticlesRequest = {},
+        requestParameters: BrowseArticlesRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedArticleResponse> {
         const response = await this.browseArticlesRaw(requestParameters, initOverrides);
@@ -102,6 +117,14 @@ export class ArticleApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
                 path: `/api/ilp/article`,
@@ -134,17 +157,31 @@ export class ArticleApi extends runtime.BaseAPI {
         requestParameters: GetArticleByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<ArticleResponse>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.articleId !== undefined) {
-            queryParameters['articleId'] = requestParameters.articleId;
+        if (requestParameters.articleId === null || requestParameters.articleId === undefined) {
+            throw new runtime.RequiredError(
+                'articleId',
+                'Required parameter requestParameters.articleId was null or undefined when calling getArticleById.',
+            );
         }
+
+        const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
-                path: `/api/ilp/article/{article_id}`,
+                path: `/api/ilp/article/{article_id}`.replace(
+                    `{${'article_id'}}`,
+                    encodeURIComponent(String(requestParameters.articleId)),
+                ),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
@@ -159,7 +196,7 @@ export class ArticleApi extends runtime.BaseAPI {
      * get article by identifier
      */
     async getArticleById(
-        requestParameters: GetArticleByIdRequest = {},
+        requestParameters: GetArticleByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<ArticleResponse> {
         const response = await this.getArticleByIdRaw(requestParameters, initOverrides);

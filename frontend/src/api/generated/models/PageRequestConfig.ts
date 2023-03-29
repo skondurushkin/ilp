@@ -28,7 +28,7 @@ import type { PageRequestConfigFilterInner } from './PageRequestConfigFilterInne
 import type { PageRequestConfigSortInner } from './PageRequestConfigSortInner';
 
 /**
- *
+ * data extraction parameters
  * @export
  * @interface PageRequestConfig
  */

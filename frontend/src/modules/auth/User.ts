@@ -1,6 +1,8 @@
+import { ERole } from '../../api';
+
 export interface User {
     email: string;
-    roles?: string[];
+    roles?: Set<ERole>;
 }
 
 export enum UserRole {

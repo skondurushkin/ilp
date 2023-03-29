@@ -43,7 +43,7 @@ export interface CreateActivityRequest {
 }
 
 export interface GetActivityByIdRequest {
-    activityId?: number;
+    activityId: number;
 }
 
 /**
@@ -63,6 +63,14 @@ export class ActivityApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
                 path: `/api/ilp/activities`,
@@ -108,6 +116,14 @@ export class ActivityApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
                 path: `/api/ilp/activity`,
@@ -140,17 +156,31 @@ export class ActivityApi extends runtime.BaseAPI {
         requestParameters: GetActivityByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<ActivityResponse>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.activityId !== undefined) {
-            queryParameters['activityId'] = requestParameters.activityId;
+        if (requestParameters.activityId === null || requestParameters.activityId === undefined) {
+            throw new runtime.RequiredError(
+                'activityId',
+                'Required parameter requestParameters.activityId was null or undefined when calling getActivityById.',
+            );
         }
+
+        const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
-                path: `/api/ilp/activity/{activity_id}`,
+                path: `/api/ilp/activity/{activity_id}`.replace(
+                    `{${'activity_id'}}`,
+                    encodeURIComponent(String(requestParameters.activityId)),
+                ),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
@@ -165,7 +195,7 @@ export class ActivityApi extends runtime.BaseAPI {
      * get activity by identifier
      */
     async getActivityById(
-        requestParameters: GetActivityByIdRequest = {},
+        requestParameters: GetActivityByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<ActivityResponse> {
         const response = await this.getActivityByIdRaw(requestParameters, initOverrides);
