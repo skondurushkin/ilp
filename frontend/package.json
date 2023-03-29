@@ -23,6 +23,7 @@
         "react-dom": "^18.2.0",
         "react-query": "^3.39.3",
         "react-router-dom": "^6.9.0",
+        "use-click-outside": "^2.0.0",
         "use-local-storage-state": "^18.2.1",
         "vite-plugin-svgr": "^2.4.0",
         "vite-svg-loader": "^4.0.0"
