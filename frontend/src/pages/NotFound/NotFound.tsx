@@ -4,7 +4,7 @@ export const NotFound = () => {
     return (
         <div>
             <h1>NotFound</h1>
-            <TypedLink to="/dashboard">Go to dashboard</TypedLink>
+            <TypedLink to="/">Go to main page</TypedLink>
         </div>
     );
 };
