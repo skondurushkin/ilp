@@ -1,9 +1,12 @@
-import { AuthApi, Configuration, ConfigurationParameters } from './generated';
+import { ActivityApi, ArticleApi, AuthApi, Configuration, ConfigurationParameters, ProfileApi } from './generated';
 
 function createInternalApi(config: ConfigurationParameters) {
     const cnf = new Configuration(config);
     return {
         auth: new AuthApi(cnf),
+        profile: new ProfileApi(cnf),
+        activity: new ActivityApi(cnf),
+        article: new ArticleApi(cnf),
     };
 }
 

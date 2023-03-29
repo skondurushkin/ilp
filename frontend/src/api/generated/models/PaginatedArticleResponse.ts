@@ -28,37 +28,37 @@ export interface PaginatedArticleResponse {
      * @type {number}
      * @memberof PaginatedArticleResponse
      */
-    total?: number;
+    total: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedArticleResponse
      */
-    page?: number;
+    page: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedArticleResponse
      */
-    pageSize?: number;
+    pageSize: number;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedArticleResponse
      */
-    hasNext?: boolean;
+    hasNext: boolean;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedArticleResponse
      */
-    hasPrev?: boolean;
+    hasPrev: boolean;
     /**
      *
      * @type {Array<ArticleResponse>}
      * @memberof PaginatedArticleResponse
      */
-    results?: Array<ArticleResponse>;
+    results: Array<ArticleResponse>;
 }
 
 /**
@@ -66,6 +66,12 @@ export interface PaginatedArticleResponse {
  */
 export function instanceOfPaginatedArticleResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'total' in value;
+    isInstance = isInstance && 'page' in value;
+    isInstance = isInstance && 'pageSize' in value;
+    isInstance = isInstance && 'hasNext' in value;
+    isInstance = isInstance && 'hasPrev' in value;
+    isInstance = isInstance && 'results' in value;
 
     return isInstance;
 }
@@ -82,12 +88,12 @@ export function PaginatedArticleResponseFromJSONTyped(
         return json;
     }
     return {
-        total: !exists(json, 'total') ? undefined : json['total'],
-        page: !exists(json, 'page') ? undefined : json['page'],
-        pageSize: !exists(json, 'pageSize') ? undefined : json['pageSize'],
-        hasNext: !exists(json, 'hasNext') ? undefined : json['hasNext'],
-        hasPrev: !exists(json, 'hasPrev') ? undefined : json['hasPrev'],
-        results: !exists(json, 'results') ? undefined : (json['results'] as Array<any>).map(ArticleResponseFromJSON),
+        total: json['total'],
+        page: json['page'],
+        pageSize: json['pageSize'],
+        hasNext: json['hasNext'],
+        hasPrev: json['hasPrev'],
+        results: (json['results'] as Array<any>).map(ArticleResponseFromJSON),
     };
 }
 
@@ -104,6 +110,6 @@ export function PaginatedArticleResponseToJSON(value?: PaginatedArticleResponse 
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: value.results === undefined ? undefined : (value.results as Array<any>).map(ArticleResponseToJSON),
+        results: (value.results as Array<any>).map(ArticleResponseToJSON),
     };
 }

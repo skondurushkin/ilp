@@ -28,37 +28,37 @@ export interface PaginatedProfileResponse {
      * @type {number}
      * @memberof PaginatedProfileResponse
      */
-    total?: number;
+    total: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedProfileResponse
      */
-    page?: number;
+    page: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedProfileResponse
      */
-    pageSize?: number;
+    pageSize: number;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedProfileResponse
      */
-    hasNext?: boolean;
+    hasNext: boolean;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedProfileResponse
      */
-    hasPrev?: boolean;
+    hasPrev: boolean;
     /**
      *
      * @type {Array<ProfileResponse>}
      * @memberof PaginatedProfileResponse
      */
-    results?: Array<ProfileResponse>;
+    results: Array<ProfileResponse>;
 }
 
 /**
@@ -66,6 +66,12 @@ export interface PaginatedProfileResponse {
  */
 export function instanceOfPaginatedProfileResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'total' in value;
+    isInstance = isInstance && 'page' in value;
+    isInstance = isInstance && 'pageSize' in value;
+    isInstance = isInstance && 'hasNext' in value;
+    isInstance = isInstance && 'hasPrev' in value;
+    isInstance = isInstance && 'results' in value;
 
     return isInstance;
 }
@@ -82,12 +88,12 @@ export function PaginatedProfileResponseFromJSONTyped(
         return json;
     }
     return {
-        total: !exists(json, 'total') ? undefined : json['total'],
-        page: !exists(json, 'page') ? undefined : json['page'],
-        pageSize: !exists(json, 'pageSize') ? undefined : json['pageSize'],
-        hasNext: !exists(json, 'hasNext') ? undefined : json['hasNext'],
-        hasPrev: !exists(json, 'hasPrev') ? undefined : json['hasPrev'],
-        results: !exists(json, 'results') ? undefined : (json['results'] as Array<any>).map(ProfileResponseFromJSON),
+        total: json['total'],
+        page: json['page'],
+        pageSize: json['pageSize'],
+        hasNext: json['hasNext'],
+        hasPrev: json['hasPrev'],
+        results: (json['results'] as Array<any>).map(ProfileResponseFromJSON),
     };
 }
 
@@ -104,6 +110,6 @@ export function PaginatedProfileResponseToJSON(value?: PaginatedProfileResponse 
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: value.results === undefined ? undefined : (value.results as Array<any>).map(ProfileResponseToJSON),
+        results: (value.results as Array<any>).map(ProfileResponseToJSON),
     };
 }

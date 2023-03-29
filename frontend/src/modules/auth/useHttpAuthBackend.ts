@@ -43,7 +43,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                         api.setAuthToken(token);
                         setStoredUser({
                             email,
-                            roles,
+                            roles: Array.from(roles),
                             token,
                             refreshToken,
                         });

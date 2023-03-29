@@ -28,37 +28,37 @@ export interface PaginatedActivityResponse {
      * @type {number}
      * @memberof PaginatedActivityResponse
      */
-    total?: number;
+    total: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedActivityResponse
      */
-    page?: number;
+    page: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedActivityResponse
      */
-    pageSize?: number;
+    pageSize: number;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedActivityResponse
      */
-    hasNext?: boolean;
+    hasNext: boolean;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedActivityResponse
      */
-    hasPrev?: boolean;
+    hasPrev: boolean;
     /**
      *
      * @type {Array<ActivityResponse>}
      * @memberof PaginatedActivityResponse
      */
-    results?: Array<ActivityResponse>;
+    results: Array<ActivityResponse>;
 }
 
 /**
@@ -66,6 +66,12 @@ export interface PaginatedActivityResponse {
  */
 export function instanceOfPaginatedActivityResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'total' in value;
+    isInstance = isInstance && 'page' in value;
+    isInstance = isInstance && 'pageSize' in value;
+    isInstance = isInstance && 'hasNext' in value;
+    isInstance = isInstance && 'hasPrev' in value;
+    isInstance = isInstance && 'results' in value;
 
     return isInstance;
 }
@@ -82,12 +88,12 @@ export function PaginatedActivityResponseFromJSONTyped(
         return json;
     }
     return {
-        total: !exists(json, 'total') ? undefined : json['total'],
-        page: !exists(json, 'page') ? undefined : json['page'],
-        pageSize: !exists(json, 'pageSize') ? undefined : json['pageSize'],
-        hasNext: !exists(json, 'hasNext') ? undefined : json['hasNext'],
-        hasPrev: !exists(json, 'hasPrev') ? undefined : json['hasPrev'],
-        results: !exists(json, 'results') ? undefined : (json['results'] as Array<any>).map(ActivityResponseFromJSON),
+        total: json['total'],
+        page: json['page'],
+        pageSize: json['pageSize'],
+        hasNext: json['hasNext'],
+        hasPrev: json['hasPrev'],
+        results: (json['results'] as Array<any>).map(ActivityResponseFromJSON),
     };
 }
 
@@ -104,6 +110,6 @@ export function PaginatedActivityResponseToJSON(value?: PaginatedActivityRespons
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: value.results === undefined ? undefined : (value.results as Array<any>).map(ActivityResponseToJSON),
+        results: (value.results as Array<any>).map(ActivityResponseToJSON),
     };
 }

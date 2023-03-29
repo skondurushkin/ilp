@@ -24,37 +24,37 @@ export interface PaginatedResult {
      * @type {number}
      * @memberof PaginatedResult
      */
-    total?: number;
+    total: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedResult
      */
-    page?: number;
+    page: number;
     /**
      *
      * @type {number}
      * @memberof PaginatedResult
      */
-    pageSize?: number;
+    pageSize: number;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedResult
      */
-    hasNext?: boolean;
+    hasNext: boolean;
     /**
      *
      * @type {boolean}
      * @memberof PaginatedResult
      */
-    hasPrev?: boolean;
+    hasPrev: boolean;
     /**
      *
      * @type {Array<object>}
      * @memberof PaginatedResult
      */
-    results?: Array<object>;
+    results: Array<object>;
 }
 
 /**
@@ -62,6 +62,12 @@ export interface PaginatedResult {
  */
 export function instanceOfPaginatedResult(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'total' in value;
+    isInstance = isInstance && 'page' in value;
+    isInstance = isInstance && 'pageSize' in value;
+    isInstance = isInstance && 'hasNext' in value;
+    isInstance = isInstance && 'hasPrev' in value;
+    isInstance = isInstance && 'results' in value;
 
     return isInstance;
 }
@@ -75,12 +81,12 @@ export function PaginatedResultFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-        total: !exists(json, 'total') ? undefined : json['total'],
-        page: !exists(json, 'page') ? undefined : json['page'],
-        pageSize: !exists(json, 'pageSize') ? undefined : json['pageSize'],
-        hasNext: !exists(json, 'hasNext') ? undefined : json['hasNext'],
-        hasPrev: !exists(json, 'hasPrev') ? undefined : json['hasPrev'],
-        results: !exists(json, 'results') ? undefined : json['results'],
+        total: json['total'],
+        page: json['page'],
+        pageSize: json['pageSize'],
+        hasNext: json['hasNext'],
+        hasPrev: json['hasPrev'],
+        results: json['results'],
     };
 }
 

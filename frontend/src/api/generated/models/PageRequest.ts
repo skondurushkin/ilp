@@ -28,17 +28,17 @@ import type { PageRequestConfig } from './PageRequestConfig';
  */
 export interface PageRequest {
     /**
-     *
+     * index of the page to load
      * @type {number}
      * @memberof PageRequest
      */
-    page?: number;
+    page: number;
     /**
-     *
+     * max number of result rows per page
      * @type {number}
      * @memberof PageRequest
      */
-    pageSize?: number;
+    pageSize: number;
     /**
      *
      * @type {PageRequestConfig}
@@ -52,6 +52,8 @@ export interface PageRequest {
  */
 export function instanceOfPageRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'page' in value;
+    isInstance = isInstance && 'pageSize' in value;
 
     return isInstance;
 }
@@ -65,8 +67,8 @@ export function PageRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean
         return json;
     }
     return {
-        page: !exists(json, 'page') ? undefined : json['page'],
-        pageSize: !exists(json, 'pageSize') ? undefined : json['pageSize'],
+        page: json['page'],
+        pageSize: json['pageSize'],
         config: !exists(json, 'config') ? undefined : PageRequestConfigFromJSON(json['config']),
     };
 }

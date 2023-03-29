@@ -30,7 +30,7 @@ export interface PageRequestConfigFilterInner {
      * @type {string}
      * @memberof PageRequestConfigFilterInner
      */
-    condition?: string;
+    condition: string;
 }
 
 /**
@@ -39,6 +39,7 @@ export interface PageRequestConfigFilterInner {
 export function instanceOfPageRequestConfigFilterInner(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'colName' in value;
+    isInstance = isInstance && 'condition' in value;
 
     return isInstance;
 }
@@ -56,7 +57,7 @@ export function PageRequestConfigFilterInnerFromJSONTyped(
     }
     return {
         colName: json['colName'],
-        condition: !exists(json, 'condition') ? undefined : json['condition'],
+        condition: json['condition'],
     };
 }
 

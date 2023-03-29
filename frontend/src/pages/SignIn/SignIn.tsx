@@ -4,8 +4,8 @@ import { FormEvent, useState } from 'react';
 import { ReactComponent as CrossedEyeSVG } from '../../assets/crossed-eye.svg';
 import { ReactComponent as EyeSVG } from '../../assets/eye.svg';
 import LoginImageURL from '../../assets/login-image.svg';
-import { ReactComponent as LogoSVG } from '../../assets/logo.svg';
-import { ReactComponent as LogoWhiteSVG } from '../../assets/logo-white.svg';
+import { ReactComponent as LogoDark } from '../../assets/logo-dark.svg';
+import { ReactComponent as LogoLight } from '../../assets/logo-light.svg';
 
 export interface FormErrors {
     credentials?: string;
@@ -34,7 +34,7 @@ export const SignIn = () => {
     return (
         <div className="flex h-screen flex-col-reverse justify-end gap-4 sm:flex-row xl:justify-center">
             <div className="p-6">
-                <LogoSVG className="hidden sm:block" />
+                <LogoDark className="hidden sm:block" />
                 <form
                     className="flex h-full max-w-[640px] flex-col justify-center self-center sm:mt-8 sm:w-[50vw]"
                     onSubmit={submit}
@@ -99,7 +99,7 @@ export const SignIn = () => {
                 className="h-[50vh] bg-cover sm:h-full sm:w-[50vw]"
                 style={{ backgroundImage: `url(${LoginImageURL})` }}
             >
-                <LogoWhiteSVG className="relative top-6 left-6 block sm:hidden" />
+                <LogoLight className="relative top-6 left-6 block sm:hidden" />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
-import './App.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
+
 import { AppRouter } from './router';
 
 const queryClient = new QueryClient();

@@ -1,4 +1,4 @@
 export { SignIn } from './SignIn';
-export { Dashboard } from './Dashboard';
+export { MainPage } from './MainPage';
 export { Profile } from './Profile';
 export { NotFound } from './NotFound';

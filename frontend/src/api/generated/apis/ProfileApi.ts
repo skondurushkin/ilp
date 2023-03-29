@@ -31,7 +31,7 @@ export interface BrowseProfilesRequest {
 }
 
 export interface GetProfileByIdRequest {
-    userId?: number;
+    userId: number;
 }
 
 /**
@@ -51,6 +51,14 @@ export class ProfileApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
                 path: `/api/ilp/profiles`,
@@ -86,6 +94,14 @@ export class ProfileApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
                 path: `/api/ilp/profile`,
@@ -114,17 +130,31 @@ export class ProfileApi extends runtime.BaseAPI {
         requestParameters: GetProfileByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<ProfileResponse>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.userId !== undefined) {
-            queryParameters['userId'] = requestParameters.userId;
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling getProfileById.',
+            );
         }
+
+        const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request(
             {
-                path: `/api/ilp/profile/{user_id}`,
+                path: `/api/ilp/profile/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
@@ -139,7 +169,7 @@ export class ProfileApi extends runtime.BaseAPI {
      * get user profile by user id
      */
     async getProfileById(
-        requestParameters: GetProfileByIdRequest = {},
+        requestParameters: GetProfileByIdRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<ProfileResponse> {
         const response = await this.getProfileByIdRaw(requestParameters, initOverrides);
