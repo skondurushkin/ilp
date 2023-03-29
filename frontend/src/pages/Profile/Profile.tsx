@@ -4,7 +4,7 @@ export const Profile = () => {
     return (
         <div>
             <h1>Profile</h1>
-            <TypedLink to="/dashboard">Go to dashboard</TypedLink>
+            <TypedLink to="/">Go to main page</TypedLink>
         </div>
     );
 };
