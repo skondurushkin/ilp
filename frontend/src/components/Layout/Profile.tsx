@@ -17,12 +17,11 @@ export function Profile(props: ProfileProps): ReactElement {
 
     const query = useProfileQuery();
 
-    const avatarUrl = query.status === 'success' ? query.data.avatarLink : undefined;
-    const initials =
-        query.status === 'success'
-            ? `${query.data.fio.firstName.charAt(1).toUpperCase()}${query.data.fio.lastName.charAt(1).toUpperCase()}`
-            : '';
-    const fullName = query.status === 'success' ? `${query.data.fio.firstName} ${query.data.fio.lastName}` : '';
+    const avatarUrl = query.isSuccess ? query.data.avatarLink : undefined;
+    const initials = query.isSuccess
+        ? `${query.data.fio.firstName.charAt(1).toUpperCase()}${query.data.fio.lastName.charAt(1).toUpperCase()}`
+        : '';
+    const fullName = query.isSuccess ? `${query.data.fio.firstName} ${query.data.fio.lastName}` : '';
 
     return (
         <div className={classnames('flex flex-col items-center', className)}>
