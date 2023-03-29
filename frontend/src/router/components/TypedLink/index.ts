@@ -1,1 +1,0 @@
-export { TypedLink } from './TypedLink';
