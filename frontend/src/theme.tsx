@@ -24,42 +24,49 @@ function isDarkTheme(theme: Theme | undefined): boolean {
     return theme === 'dark' || (theme === undefined && window.matchMedia('(prefers-color-scheme: dark)').matches);
 }
 
-export function ThemeToggle(): ReactElement {
+export interface ThemeToggleProps {
+    className?: string;
+}
+
+export function ThemeToggle(props: ThemeToggleProps): ReactElement {
+    const { className } = props;
     const [themeOrUndefined, setTheme] = useThemeManager();
     const theme = normalizeTheme(themeOrUndefined);
 
     useEffect(activateCurrentTheme, [themeOrUndefined]);
 
     return (
-        <button
-            className="flex items-center gap-2 rounded-full border-2 border-white bg-black p-2"
-            type="button"
-            title={theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}
-            onClick={() => {
-                setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
-            }}
-        >
-            <div
-                className={classnames(
-                    'flex-inline items-center justify-center rounded-full p-1',
-                    theme === 'dark' && 'bg-white',
-                    theme === 'light' && 'bg-black',
-                )}
+        <div className={className}>
+            <button
+                className="flex items-center gap-2 rounded-full border-2 border-white bg-black p-2"
+                type="button"
+                title={theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}
+                onClick={() => {
+                    setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+                }}
             >
-                {theme === 'dark' && <MoonLightIcon />}
-                {theme === 'light' && <MoonDarkIcon />}
-            </div>
-            <div
-                className={classnames(
-                    'flex-inline items-center justify-center rounded-full p-1',
-                    theme === 'dark' && 'bg-black',
-                    theme === 'light' && 'bg-white',
-                )}
-            >
-                {theme === 'dark' && <SunDarkIcon />}
-                {theme === 'light' && <SunLightIcon />}
-            </div>
-        </button>
+                <div
+                    className={classnames(
+                        'flex-inline items-center justify-center rounded-full p-1',
+                        theme === 'dark' && 'bg-white',
+                        theme === 'light' && 'bg-black',
+                    )}
+                >
+                    {theme === 'dark' && <MoonLightIcon />}
+                    {theme === 'light' && <MoonDarkIcon />}
+                </div>
+                <div
+                    className={classnames(
+                        'flex-inline items-center justify-center rounded-full p-1',
+                        theme === 'dark' && 'bg-black',
+                        theme === 'light' && 'bg-white',
+                    )}
+                >
+                    {theme === 'dark' && <SunDarkIcon />}
+                    {theme === 'light' && <SunLightIcon />}
+                </div>
+            </button>
+        </div>
     );
 }
 

@@ -25,8 +25,8 @@ export function Profile(props: ProfileProps): ReactElement {
 
     return (
         <div className={classnames('flex flex-col items-center', className)}>
-            <div className="h-[128px] w-[128px] overflow-hidden rounded-full bg-black dark:bg-white">
-                {avatarUrl && <img className="h-full w-full" src={avatarUrl} alt="Аватар" />}
+            <div className="h-[128px] w-[128px] overflow-hidden rounded-full bg-black leading-[128px] dark:bg-white">
+                {avatarUrl && <img className="h-full w-full text-center" src={avatarUrl} alt="Аватар" />}
                 {!avatarUrl && (
                     <div className="flex h-full w-full items-center justify-center text-6xl text-white dark:text-black">
                         {initials}

@@ -22,6 +22,7 @@ export const TypedLink = <P extends RoutePath>(props: TypedLinkProps<P>) => {
     }
 
     const classes = classnames(
+        presentation === 'link' && 'link',
         presentation === 'button' && 'btn',
         presentation === 'button' && primary && 'btn-primary',
         className,
