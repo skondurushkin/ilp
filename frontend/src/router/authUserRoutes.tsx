@@ -1,4 +1,4 @@
-import { MainPage, NotFound, Profile } from '../pages';
+import { MainPage, NotFoundPage, Profile } from '../pages';
 
 import { TypedNavigate } from './components/TypedNavigate';
 
@@ -9,5 +9,5 @@ export const authUserRoutes = [
     { path: '/admin', element: <div>Admin page</div> },
     { path: '/rules', element: <div>Program rules page</div> },
     { path: '/support', element: <div>Support page</div> },
-    { path: '*', element: <NotFound /> },
+    { path: '*', element: <NotFoundPage /> },
 ] as const;
