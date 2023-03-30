@@ -26,4 +26,20 @@ html {
     .link {
         @apply text-sm leading-[110%] md:text-base;
     }
+
+    .text {
+        @apply text-sm leading-[110%] md:text-base;
+    }
+
+    .text-small {
+        @apply text-xs leading-[110%];
+    }
+
+    .text-h1 {
+        @apply text-2xl leading-[110%] md:text-3xl;
+    }
+
+    .text-h2 {
+        @apply text-xl leading-[110%] md:text-2xl;
+    }
 }
