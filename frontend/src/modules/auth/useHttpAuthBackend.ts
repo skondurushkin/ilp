@@ -23,7 +23,7 @@ export function restoreAuthFromLocalStorage(): void {
 }
 
 export const useHttpAuthBackend = (): AuthBackend => {
-    const [storedUser, setStoredUser] = useLocalStorageState<StoredUser | undefined>(STORAGE_KEY, {
+    const [storedUser, setStoredUser, { removeItem }] = useLocalStorageState<StoredUser | undefined>(STORAGE_KEY, {
         storageSync: true,
     });
 
@@ -61,7 +61,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                     .logoutUser()
                     .then(() => {
                         api.setAuthToken(undefined);
-                        setStoredUser(undefined);
+                        removeItem();
                     })
                     .catch((err) => {
                         console.error('failed to logout user', err);
