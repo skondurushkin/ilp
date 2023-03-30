@@ -1,0 +1,1 @@
+export { AdminProducts } from './AdminProducts';
