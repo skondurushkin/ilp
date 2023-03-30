@@ -3,6 +3,7 @@ import { UserRole, hasRole, useAuth, useAuthActions } from '../../modules/auth';
 
 import { ReactComponent as HomeDarkIcon } from '../../assets/home-dark.svg';
 import { ReactComponent as HomeLightIcon } from '../../assets/home-light.svg';
+import { Link } from 'react-router-dom';
 import { ReactComponent as LogoutDarkIcon } from '../../assets/logout-dark.svg';
 import { ReactComponent as LogoutLightIcon } from '../../assets/logout-light.svg';
 import { ReactComponent as MessageDarkIcon } from '../../assets/message-dark.svg';
@@ -44,6 +45,8 @@ export function Nav(props: NavProps): ReactElement {
             );
         };
 
+    const support = { to: 'loyalty-admin@it-one.ru', subject: 'test', body: 'test' };
+
     return (
         <nav className={classnames('flex flex-col', className)}>
             <ul className="flex grow flex-col">
@@ -57,6 +60,18 @@ export function Nav(props: NavProps): ReactElement {
                         {navItemFn('Личный кабинет', UserLightIcon, UserDarkIcon)}
                     </TypedNavLink>
                 </li>
+                <li>
+                    <TypedNavLink to="/rules" className={navItemClassNameFn}>
+                        {navItemFn('Правила программы', TextFileLightIcon, TextFileDarkIcon)}
+                    </TypedNavLink>
+                </li>
+                <li>
+                    <Link to={`mailto:${support.to}?subject=${support.subject}&body=${support.body}`}>
+                        <NavItem lightIcon={MessageLightIcon} darkIcon={MessageDarkIcon}>
+                            Написать в поддержку
+                        </NavItem>
+                    </Link>
+                </li>
                 {hasRole(auth, UserRole.ADMIN) && (
                     <li>
                         <TypedNavLink to="/admin" className={navItemClassNameFn}>
@@ -64,16 +79,6 @@ export function Nav(props: NavProps): ReactElement {
                         </TypedNavLink>
                     </li>
                 )}
-                <li>
-                    <TypedNavLink to="/rules" className={navItemClassNameFn}>
-                        {navItemFn('Правила программы', TextFileLightIcon, TextFileDarkIcon)}
-                    </TypedNavLink>
-                </li>
-                <li>
-                    <TypedNavLink to="/support" className={navItemClassNameFn}>
-                        {navItemFn('Написать в поддержку', MessageLightIcon, MessageDarkIcon)}
-                    </TypedNavLink>
-                </li>
                 <li className="grow"></li>
                 <li>
                     <button onClick={() => signOut()}>
