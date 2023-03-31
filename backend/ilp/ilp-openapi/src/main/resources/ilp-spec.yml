@@ -23,13 +23,116 @@ tags:
     description: FileStore API
   - name: admin
     description: Administrator API
+  - name: settings
+    description: Settings API
 
 security:
   - bearerAuth: []
 
 paths:
 
-# profiles
+# settings
+  /api/ilp/setting:
+    get:
+      operationId: getProperty
+      summary: get property by name
+      tags:
+        - settings
+      parameters:
+        - in: query
+          name: name
+          description: property name
+          required: true
+          schema:
+            type: string
+            nullable: false
+
+      responses:
+        200:
+          description: 'ОК'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingResponse'
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+    post:
+      operationId: setProperty
+      summary: update or create property
+      tags:
+        - settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingRequest'
+      responses:
+        200:
+          description: 'ОК'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingResponse'
+
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+        406:
+          description: 'Not Acceptable'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+    delete:
+      operationId: deleteProperty
+      summary: delete property by name
+      tags:
+        - settings
+      parameters:
+        - in: query
+          name: name
+          description: property name
+          required: true
+          schema:
+            type: string
+            nullable: false
+
+      responses:
+        200:
+          description: 'OK'
+
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+  # profiles
   /api/ilp/profile:
     get:
       operationId: getProfile
@@ -411,19 +514,39 @@ paths:
                 $ref: '#/components/schemas/WalletResponse'
 
 
-#  /api/ilp/wallet/write-offs/{user_id}:
-#    post:
-#      operationId: browseWriteOffs
-#      summary: paginated view of write-offs
-#      tags:
-#        - wallet
-#
-#  /api/ilp/wallet/accruals/{user_id}:
-#    post:
-#      operationId: browseWriteOffs
-#      summary: paginated view of write-offs
-#      tags:
-#        - wallet
+  /api/ilp/wallet/write-offs/{user_id}:
+    get:
+      operationId: browseWriteOffs
+      summary: paginated view of user's write-offs
+      tags:
+        - wallet
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+
+      responses:
+        200:
+          description: 'OK'
+          content:
+            applications/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedWriteOffResponse"
+
+  /api/ilp/wallet/accruals/{user_id}:
+    get:
+      operationId: browseAccruals
+      summary: paginated view of user's accruals
+      tags:
+        - wallet
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+
+      responses:
+        200:
+          description: 'OK'
+          content:
+            applications/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedAccrualResponse"
 
 
 # files
@@ -544,6 +667,19 @@ components:
       format: int32
       minimum: 0
       description:  generic amount
+
+    PropertyRequest:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          nullable: false
+        value:
+          type: string
+
 
     PaginatedResult:
       type: object
@@ -733,6 +869,32 @@ components:
           items:
             $ref: '#/components/schemas/ERole'
 
+    SettingRequest:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          nullable: false
+        value:
+          type: string
+          nullable: true
+
+    SettingResponse:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          nullable: false
+        value:
+          type: string
+          nullable: false
+
     ProfileResponse:
       type: object
       properties:
@@ -838,7 +1000,7 @@ components:
           type: integer
           minimum: 0
           nullable: true
-        logoLink:
+        infoLink:
           type: string
         startDate:
           type: string
@@ -846,6 +1008,8 @@ components:
         endDate:
           type: string
           format: date
+        extension:
+          type: object
 
     PaginatedActivityResponse:
       allOf:
@@ -942,9 +1106,52 @@ components:
           type: string
         amount:
           $ref: '#/components/schemas/Amount'
-        logoLink:
+        infoLink:
           type: string
           nullable: true
+
+    PaginatedAccrualResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+        - type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/AccrualResponse'
+
+    WriteOffResponse:
+      type: object
+      required:
+        - id
+        - date
+        - articleName
+        - amount
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
+        articleId:
+          $ref: '#/components/schemas/Identifier'
+        date:
+          type: string
+          format: date
+        articleName:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Amount'
+        imageLink:
+          type: string
+          nullable: true
+
+    PaginatedWriteOffResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+        - type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/WriteOffResponse'
 
     WalletResponse:
       type: object

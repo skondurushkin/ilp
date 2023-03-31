@@ -50,8 +50,7 @@ public class Article implements Serializable {
     @Column
     private Integer price;
 
-    @Size(max = 512)
-    @Column(name="image_link", length = 512)
+    @Column(name="image_link")
     private String imageLink;
 
     private Boolean available;

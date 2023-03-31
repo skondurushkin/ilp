@@ -24,6 +24,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Type;
 import ru.itone.ilp.common.ApiHelper;
@@ -38,6 +39,7 @@ import ru.itone.ilp.openapi.model.Name;
 @Accessors(chain = true)
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 public class User implements Serializable {
     @Id
@@ -69,8 +71,7 @@ public class User implements Serializable {
     @Column(name="password", nullable = false)
     private String password;
 
-    @Size(max = 512)
-    @Column(name="avatar_link", length=512)
+    @Column(name="avatar_link")
     private String avatarLink;
 
     @Column(name="start_date", nullable = false, columnDefinition = "date default now()")

@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -15,7 +14,7 @@ import lombok.experimental.Accessors;
 @Table(name = "settings")
 @Data
 @Accessors(chain = true)
-public class Settings implements Serializable {
+public class Setting implements Serializable {
     @NotBlank
     @Size(max = 100)
     @Id

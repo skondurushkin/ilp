@@ -28,7 +28,7 @@ class ActivityTest extends AbstractPersistenceTest {
             .setName("Менторство")
             .setDescription("Передача знаний своим коллегам")
             .setPrice(25)
-            .setLogoLink("/link/logo")
+            .setInfoLink("/link/info.docx")
             .setStartDate(LocalDate.now());
 
         Activity save = activityRepository.save(activity);
