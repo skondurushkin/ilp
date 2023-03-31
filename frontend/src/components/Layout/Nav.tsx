@@ -31,7 +31,7 @@ export function Nav(props: NavProps): ReactElement {
 
     const navItemClassNameFn = (state: { isActive: boolean }): string | undefined => {
         // return classnames('btn block', state.isActive && 'btn-primary');
-        return state.isActive ? 'block bg-green text-black' : undefined;
+        return state.isActive ? 'block bg-primary text-black' : undefined;
     };
 
     const navItemFn =
