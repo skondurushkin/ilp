@@ -25,7 +25,7 @@ export function Layout(props: LayoutProps): ReactElement {
     return (
         <div className="relative flex min-h-[100vh] w-full flex-col">
             <header className="sticky top-0 z-40 bg-black text-white">
-                <div className="flex justify-between py-4 px-4 sm:px-8 md:px-14 xl:mx-auto xl:max-w-[1280px] xl:py-6 xl:pr-8 xl:pl-0">
+                <div className="flex justify-between py-4 px-4 xl:container sm:px-8 md:px-14 xl:mx-auto xl:py-6 xl:pr-8 xl:pl-0">
                     <div className="flex items-center xl:w-sidebar xl:pl-8">
                         <TypedLink to="/">
                             <Logo />
