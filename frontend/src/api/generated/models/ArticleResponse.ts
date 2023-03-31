@@ -24,7 +24,7 @@ export interface ArticleResponse {
      * @type {number}
      * @memberof ArticleResponse
      */
-    id?: number;
+    id: number;
     /**
      *
      * @type {string}
@@ -74,6 +74,7 @@ export interface ArticleResponse {
  */
 export function instanceOfArticleResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'code' in value;
     isInstance = isInstance && 'name' in value;
 
@@ -89,7 +90,7 @@ export function ArticleResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-        id: !exists(json, 'id') ? undefined : json['id'],
+        id: json['id'],
         code: json['code'],
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
