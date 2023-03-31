@@ -24,7 +24,7 @@ export interface AccrualResponse {
      * @type {number}
      * @memberof AccrualResponse
      */
-    id?: number;
+    id: number;
     /**
      * generic identifier
      * @type {number}
@@ -62,6 +62,7 @@ export interface AccrualResponse {
  */
 export function instanceOfAccrualResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'date' in value;
     isInstance = isInstance && 'activityName' in value;
     isInstance = isInstance && 'amount' in value;
@@ -78,7 +79,7 @@ export function AccrualResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-        id: !exists(json, 'id') ? undefined : json['id'],
+        id: json['id'],
         activityId: !exists(json, 'activityId') ? undefined : json['activityId'],
         date: new Date(json['date']),
         activityName: json['activityName'],

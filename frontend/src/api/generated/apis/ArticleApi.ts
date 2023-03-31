@@ -40,6 +40,10 @@ export interface GetArticleByIdRequest {
     articleId: number;
 }
 
+export interface SearchArticlesRequest {
+    searchKey: string;
+}
+
 /**
  *
  */
@@ -200,6 +204,60 @@ export class ArticleApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<ArticleResponse> {
         const response = await this.getArticleByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * search for articles
+     */
+    async searchArticlesRaw(
+        requestParameters: SearchArticlesRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<Array<ArticleResponse>>> {
+        if (requestParameters.searchKey === null || requestParameters.searchKey === undefined) {
+            throw new runtime.RequiredError(
+                'searchKey',
+                'Required parameter requestParameters.searchKey was null or undefined when calling searchArticles.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.searchKey !== undefined) {
+            queryParameters['search_key'] = requestParameters.searchKey;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/article/search`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ArticleResponseFromJSON));
+    }
+
+    /**
+     * search for articles
+     */
+    async searchArticles(
+        requestParameters: SearchArticlesRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<Array<ArticleResponse>> {
+        const response = await this.searchArticlesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }

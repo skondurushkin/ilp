@@ -24,7 +24,7 @@ export interface ActivityResponse {
      * @type {number}
      * @memberof ActivityResponse
      */
-    id?: number;
+    id: number;
     /**
      *
      * @type {string}
@@ -68,6 +68,7 @@ export interface ActivityResponse {
  */
 export function instanceOfActivityResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'name' in value;
 
     return isInstance;
@@ -82,7 +83,7 @@ export function ActivityResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
         return json;
     }
     return {
-        id: !exists(json, 'id') ? undefined : json['id'],
+        id: json['id'],
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
         price: !exists(json, 'price') ? undefined : json['price'],
