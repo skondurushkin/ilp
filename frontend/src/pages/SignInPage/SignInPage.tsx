@@ -7,7 +7,7 @@ import { ReactComponent as EyeSVG } from '../../assets/eye.svg';
 import LoginImageURL from '../../assets/login-image.svg';
 import { ReactComponent as LogoDark } from '../../assets/logo-dark.svg';
 import { ReactComponent as LogoLight } from '../../assets/logo-light.svg';
-import { classnames } from '../../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 
 export interface FormErrors {
     credentials?: string;
@@ -38,7 +38,7 @@ export const SignInPage = () => {
             <LogoDark className="absolute left-16 top-6 hidden md:block xl:left-8" />
             <LogoLight className="absolute top-6 left-4 sm:left-8 md:hidden" />
             <form
-                className={classnames(
+                className={twMerge(
                     // common
                     'flex h-full flex-1 flex-col justify-start px-3 pb-8',
                     // xl

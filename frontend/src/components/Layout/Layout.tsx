@@ -7,7 +7,7 @@ import { Nav } from './Nav';
 import { Profile } from './Profile';
 import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
-import { classnames } from '../../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 import useClickOutside from 'use-click-outside';
 
 export interface LayoutProps {
@@ -58,7 +58,7 @@ export function Layout(props: LayoutProps): ReactElement {
                 <div className="relative flex w-full w-full grow xl:mx-auto xl:max-w-[1280px]">
                     <aside
                         ref={sidebarRef}
-                        className={classnames(
+                        className={twMerge(
                             //common
                             'bg-gray-dark text-white dark:bg-gray-dark dark:text-white xl:bg-white xl:text-black',
                             'flex flex-col border-r border-r-gray ',

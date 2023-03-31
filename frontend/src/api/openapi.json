@@ -499,6 +499,33 @@
                 }
             }
         },
+        "/api/ilp/article/search": {
+            "get": {
+                "operationId": "searchArticles",
+                "summary": "search for articles",
+                "tags": ["article"],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/search_key"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "list of found articles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ArticleResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/ilp/wallet/overview": {
             "get": {
                 "operationId": "getWalletOverview",
@@ -646,6 +673,16 @@
                     "$ref": "#/components/schemas/Identifier"
                 },
                 "description": "article identifier"
+            },
+            "search_key": {
+                "in": "query",
+                "name": "search_key",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "description": "value for search"
             }
         },
         "schemas": {
@@ -979,7 +1016,7 @@
             },
             "ActivityResponse": {
                 "type": "object",
-                "required": ["name"],
+                "required": ["id", "name"],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"
@@ -1057,7 +1094,7 @@
             },
             "ArticleResponse": {
                 "type": "object",
-                "required": ["code", "name"],
+                "required": ["id", "code", "name"],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"
@@ -1113,7 +1150,7 @@
             },
             "AccrualResponse": {
                 "type": "object",
-                "required": ["date", "activityName", "amount"],
+                "required": ["id", "date", "activityName", "amount"],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"

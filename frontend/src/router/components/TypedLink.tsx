@@ -4,7 +4,7 @@ import type { LinkProps } from 'react-router-dom';
 import { RoutePath } from '../AppRouter';
 import { TypedRouterComponentProps } from './TypedRouterComponent';
 import { buildUrl } from '../url-builder';
-import { classnames } from '../../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 
 export type TypedLinkProps<P extends RoutePath> = TypedRouterComponentProps<LinkProps, P> & PresentationProps;
 
@@ -21,7 +21,7 @@ export const TypedLink = <P extends RoutePath>(props: TypedLinkProps<P>) => {
         searchStr = typeof search === 'string' ? search : createSearchParams(search).toString();
     }
 
-    const classes = classnames(
+    const classes = twMerge(
         presentation === 'link' && 'link',
         presentation === 'button' && 'btn',
         presentation === 'button' && primary && 'btn-primary',

@@ -12,11 +12,12 @@ import { ReactComponent as SlidersDarkIcon } from '../../assets/sliders-dark.svg
 import { ReactComponent as SlidersLightIcon } from '../../assets/sliders-light.svg';
 import { ReactComponent as TextFileDarkIcon } from '../../assets/text-file-dark.svg';
 import { ReactComponent as TextFileLightIcon } from '../../assets/text-file-light.svg';
+import { ThemedIcon } from '../ThemedIcon';
 import { TypedNavLink } from '../../router';
 import { ReactComponent as UserDarkIcon } from '../../assets/user-dark.svg';
 import { ReactComponent as UserLightIcon } from '../../assets/user-light.svg';
-import { classnames } from '../../utils/classnames';
-import { useTheme } from '../../theme';
+import { twMerge } from 'tailwind-merge';
+import { useConfig } from '../../modules/config';
 
 export interface NavProps {
     className?: string;
@@ -30,7 +31,6 @@ export function Nav(props: NavProps): ReactElement {
     const auth = useAuth();
 
     const navItemClassNameFn = (state: { isActive: boolean }): string | undefined => {
-        // return classnames('btn block', state.isActive && 'btn-primary');
         return state.isActive ? 'block bg-primary text-black' : undefined;
     };
 
@@ -45,10 +45,11 @@ export function Nav(props: NavProps): ReactElement {
             );
         };
 
-    const support = { to: 'loyalty-admin@it-one.ru', subject: 'test', body: 'test' };
+    const config = useConfig();
+    const supportUrl = config ? `mailto:${config.adminEmail}?subject=${config.supportSubject}` : '#';
 
     return (
-        <nav className={classnames('flex flex-col', className)}>
+        <nav className={twMerge('flex flex-col', className)}>
             <ul className="flex grow flex-col">
                 <li>
                     <TypedNavLink to="/" className={navItemClassNameFn}>
@@ -66,7 +67,7 @@ export function Nav(props: NavProps): ReactElement {
                     </TypedNavLink>
                 </li>
                 <li>
-                    <Link to={`mailto:${support.to}?subject=${support.subject}&body=${support.body}`}>
+                    <Link to={supportUrl}>
                         <NavItem lightIcon={MessageLightIcon} darkIcon={MessageDarkIcon}>
                             Написать в поддержку
                         </NavItem>
@@ -100,11 +101,9 @@ interface NavItemProps {
 
 function NavItem(props: NavItemProps): ReactElement {
     const { children, lightIcon, darkIcon } = props;
-    const theme = useTheme();
-    const Icon = theme === 'light' ? lightIcon : darkIcon;
     return (
         <div className="flex items-center gap-4 whitespace-nowrap py-2 px-4 text-left leading-[18px]">
-            <Icon />
+            <ThemedIcon light={lightIcon} dark={darkIcon} />
             {children}
         </div>
     );
