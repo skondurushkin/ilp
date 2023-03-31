@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { classnames } from '../../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 import { useProfileQuery } from '../../modules/loyalty';
 
 export interface ProfileProps {
@@ -24,7 +24,7 @@ export function Profile(props: ProfileProps): ReactElement {
     const fullName = query.isSuccess ? `${query.data.fio.firstName} ${query.data.fio.lastName}` : '';
 
     return (
-        <div className={classnames('flex flex-col items-center', className)}>
+        <div className={twMerge('flex flex-col items-center', className)}>
             <div className="h-[128px] w-[128px] overflow-hidden rounded-full bg-black leading-[128px] dark:bg-white">
                 {avatarUrl && <img className="h-full w-full text-center" src={avatarUrl} alt="Аватар" />}
                 {!avatarUrl && (

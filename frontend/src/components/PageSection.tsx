@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
 
-import { classnames } from '../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 
 export interface PageSectionProps {
     id?: string;
@@ -16,7 +16,7 @@ export function PageSection(props: PageSectionProps): ReactElement {
     //
     // 120 = 88 + 32, where 88 is the header height and 32 is the padding of the content area (<main>).
     return (
-        <section className={classnames('relative', className)}>
+        <section className={twMerge('relative', className)}>
             <div id={id} className="absolute -top-[120px]"></div>
             {caption && <h2 className="mb-3 text-xl md:mb-8 md:text-2xl">{caption}</h2>}
             {children}

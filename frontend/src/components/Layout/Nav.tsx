@@ -16,7 +16,7 @@ import { ThemedIcon } from '../ThemedIcon';
 import { TypedNavLink } from '../../router';
 import { ReactComponent as UserDarkIcon } from '../../assets/user-dark.svg';
 import { ReactComponent as UserLightIcon } from '../../assets/user-light.svg';
-import { classnames } from '../../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 import { useConfig } from '../../modules/config';
 
 export interface NavProps {
@@ -31,7 +31,6 @@ export function Nav(props: NavProps): ReactElement {
     const auth = useAuth();
 
     const navItemClassNameFn = (state: { isActive: boolean }): string | undefined => {
-        // return classnames('btn block', state.isActive && 'btn-primary');
         return state.isActive ? 'block bg-primary text-black' : undefined;
     };
 
@@ -50,7 +49,7 @@ export function Nav(props: NavProps): ReactElement {
     const supportUrl = config ? `mailto:${config.adminEmail}?subject=${config.supportSubject}` : '#';
 
     return (
-        <nav className={classnames('flex flex-col', className)}>
+        <nav className={twMerge('flex flex-col', className)}>
             <ul className="flex grow flex-col">
                 <li>
                     <TypedNavLink to="/" className={navItemClassNameFn}>

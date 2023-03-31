@@ -4,8 +4,8 @@ import { ReactElement } from 'react';
 import { ReactComponent as TokenIcon } from '../assets/token.svg';
 import { TypedLink } from '../router';
 import { WalletResponse } from '../api';
-import { classnames } from '../utils/classnames';
 import loyaltyProgramCardUrl from '../assets/loyalty-program-card.png';
+import { twMerge } from 'tailwind-merge';
 
 export interface WalletCardProps extends WalletViewProps {
     className?: string;
@@ -29,7 +29,7 @@ export function WalletCard(props: WalletCardProps | WalletCardSkeletonProps): Re
     }
     return (
         <div
-            className={classnames(
+            className={twMerge(
                 'flex flex-col-reverse justify-between gap-3 overflow-hidden bg-black p-3 text-gray sm:flex-row sm:gap-0 sm:p-6',
                 className,
             )}

@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
 
-import { classnames } from '../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 
 export interface SkeletonContainerProps {
     className?: string;
@@ -9,7 +9,7 @@ export interface SkeletonContainerProps {
 
 export function SkeletonContainer(props: SkeletonContainerProps): ReactElement {
     const { className, children } = props;
-    return <div className={classnames('animate-pulse', className)}>{children}</div>;
+    return <div className={twMerge('animate-pulse', className)}>{children}</div>;
 }
 
 export interface SkeletonProps {
@@ -18,7 +18,7 @@ export interface SkeletonProps {
 
 export function Skeleton(props: SkeletonProps): ReactElement {
     const { className } = props;
-    return <div className={classnames('rounded-full bg-gray', className)} />;
+    return <div className={twMerge('rounded-full bg-gray', className)} />;
 }
 export interface ImageSkeletonProps {
     className?: string;
@@ -27,7 +27,7 @@ export interface ImageSkeletonProps {
 export function ImageSkeleton(props: ImageSkeletonProps): ReactElement {
     const { className } = props;
     return (
-        <div className={classnames('flex items-center justify-center rounded bg-gray', className)}>
+        <div className={twMerge('flex items-center justify-center rounded bg-gray', className)}>
             <svg
                 className="text-gray-200 h-12 w-12"
                 xmlns="http://www.w3.org/2000/svg"
@@ -47,5 +47,5 @@ export interface ButtonSkeletonProps {
 
 export function ButtonSkeleton(props: ButtonSkeletonProps): ReactElement {
     const { className } = props;
-    return <Skeleton className={classnames('h-8 md:h-10', className)} />;
+    return <Skeleton className={twMerge('h-8 md:h-10', className)} />;
 }

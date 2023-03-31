@@ -6,7 +6,7 @@ import { Button } from '../../components/Button';
 import { ReactElement } from 'react';
 import { ReactComponent as TokenIcon } from '../../assets/token.svg';
 import { VerticalBrackets } from '../../components/VerticalBrackets';
-import { classnames } from '../../utils/classnames';
+import { twMerge } from 'tailwind-merge';
 
 export interface ActivityCardProps extends ActivityViewProps {
     className?: string;
@@ -22,7 +22,7 @@ export interface ActivityCardSkeletonProps {
 export function ActivityCard(props: ActivityCardProps | ActivityCardSkeletonProps): ReactElement {
     const { className, ...rest } = props;
     return (
-        <Box className={classnames('text-white', className)}>
+        <Box className={twMerge('text-white', className)}>
             {rest.skeleton && <SkeletonView />}
             {rest.activity && <ActivityView {...rest} />}
         </Box>

@@ -4,7 +4,7 @@ import { ReactComponent as MoonDarkIcon } from './assets/moon-dark.svg';
 import { ReactComponent as MoonLightIcon } from './assets/moon-light.svg';
 import { ReactComponent as SunDarkIcon } from './assets/sun-dark.svg';
 import { ReactComponent as SunLightIcon } from './assets/sun-light.svg';
-import { classnames } from './utils/classnames';
+import { twMerge } from 'tailwind-merge';
 import useLocalStorageState from 'use-local-storage-state';
 
 export type Theme = 'light' | 'dark';
@@ -46,7 +46,7 @@ export function ThemeToggle(props: ThemeToggleProps): ReactElement {
                 }}
             >
                 <div
-                    className={classnames(
+                    className={twMerge(
                         'flex-inline items-center justify-center rounded-full p-1',
                         theme === 'dark' && 'bg-white',
                         theme === 'light' && 'bg-black',
@@ -56,7 +56,7 @@ export function ThemeToggle(props: ThemeToggleProps): ReactElement {
                     {theme === 'light' && <MoonDarkIcon />}
                 </div>
                 <div
-                    className={classnames(
+                    className={twMerge(
                         'flex-inline items-center justify-center rounded-full p-1',
                         theme === 'dark' && 'bg-black',
                         theme === 'light' && 'bg-white',
