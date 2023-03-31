@@ -16,6 +16,7 @@ import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.server.configuration.WebSecurityConfig;
 import ru.itone.ilp.services.activities.ActivityService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class ActivityController implements ActivityApi {
 
     private final ActivityService activityService;
+
     @Override
     public ResponseEntity<PaginatedActivityResponse> browseActivities(PageRequest pageRequest) {
         return ResponseEntity.ok(activityService.paginate(pageRequest));
@@ -42,5 +44,10 @@ public class ActivityController implements ActivityApi {
         return activityService.getActivityById(activityId)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ApiExceptions.ResourceNotFoundException("Activity record not found."));
+    }
+
+    @Override
+    public ResponseEntity<List<ActivityResponse>> searchActivity(String searchKey) {
+        return ResponseEntity.ok(activityService.searchActivity(searchKey));
     }
 }

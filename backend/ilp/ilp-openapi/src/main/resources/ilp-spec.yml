@@ -373,6 +373,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedActivityResponse'
 
+  /api/ilp/activity/search:
+    get:
+      operationId: searchActivity
+      summary: search for activity
+      tags:
+        - activity
+      parameters:
+        - $ref: '#/components/parameters/search_key'
+
+      responses:
+        200:
+          description: list activities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityResponse'
+
 # articles
   /api/ilp/article/{article_id}:
     get:
@@ -442,6 +461,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedArticleResponse'
+
+  /api/ilp/article/search:
+    get:
+      operationId: searchArticles
+      summary: search for articles
+      tags:
+        - article
+      parameters:
+        - $ref: '#/components/parameters/search_key'
+
+      responses:
+        200:
+          description: list of found articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleResponse'
 
 # wallet
   /api/ilp/wallet/overview:
@@ -590,6 +628,15 @@ components:
       schema:
         $ref: '#/components/schemas/Identifier'
       description:  article identifier
+
+    search_key:
+      in: query
+      name: search_key
+      required: true
+      schema:
+        type: string
+        minLength: 3
+      description: value for search
 
   schemas:
     Identifier:

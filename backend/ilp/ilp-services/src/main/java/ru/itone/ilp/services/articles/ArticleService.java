@@ -1,5 +1,6 @@
 package ru.itone.ilp.services.articles;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,12 @@ public class ArticleService {
     public Optional<ArticleResponse> getArticleByCode(String code) {
         return articleRepository.findByCode(code)
                 .map(ArticleService::toResponse);
+    }
+
+    public List<ArticleResponse> searchArticleByText(String text) {
+        return articleRepository.searchByText(text).stream()
+            .map(ArticleService::toResponse)
+            .toList();
     }
 
     public static ArticleResponse toResponse(Article article) {
