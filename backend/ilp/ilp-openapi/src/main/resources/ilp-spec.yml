@@ -270,6 +270,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedActivityResponse'
 
+  /api/ilp/activity/search:
+    get:
+      operationId: searchActivity
+      summary: search for activity
+      tags:
+        - activity
+      parameters:
+        - $ref: '#/components/parameters/search_key'
+
+      responses:
+        200:
+          description: list activities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityResponse'
+
 # articles
   /api/ilp/article/{article_id}:
     get:
