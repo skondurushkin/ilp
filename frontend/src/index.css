@@ -50,4 +50,20 @@ html {
     .text-h2 {
         @apply text-xl leading-[110%] md:text-2xl;
     }
+
+    .outlined-icon-light path {
+        @apply stroke-black;
+    }
+
+    .outlined-icon-dark path {
+        @apply stroke-white;
+    }
+
+    .icon-light path {
+        @apply fill-black;
+    }
+
+    .icon-dark path {
+        @apply fill-white;
+    }
 }

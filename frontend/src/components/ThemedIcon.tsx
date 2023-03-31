@@ -12,6 +12,7 @@ type SvgProps = JSX.IntrinsicElements['svg'];
 export function ThemedIcon(props: ThemedIconProps): ReactElement {
     const { className, light, dark } = props;
     const theme = useTheme();
+    console.log('theme', theme);
     const Icon = theme === 'light' ? light : dark;
     return <Icon className={className} />;
 }

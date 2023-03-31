@@ -1,10 +1,7 @@
 import { ReactElement, useEffect } from 'react';
 
-import { ReactComponent as MoonDarkIcon } from './assets/moon-dark.svg';
-import { ReactComponent as MoonLightIcon } from './assets/moon-light.svg';
-import { ReactComponent as SunDarkIcon } from './assets/sun-dark.svg';
-import { ReactComponent as SunLightIcon } from './assets/sun-light.svg';
-import { twMerge } from 'tailwind-merge';
+import { ReactComponent as MoonIcon } from './assets/moon.svg';
+import { ReactComponent as SunIcon } from './assets/sun.svg';
 import useLocalStorageState from 'use-local-storage-state';
 
 export type Theme = 'light' | 'dark';
@@ -45,25 +42,11 @@ export function ThemeToggle(props: ThemeToggleProps): ReactElement {
                     setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
                 }}
             >
-                <div
-                    className={twMerge(
-                        'flex-inline items-center justify-center rounded-full p-1',
-                        theme === 'dark' && 'bg-white',
-                        theme === 'light' && 'bg-black',
-                    )}
-                >
-                    {theme === 'dark' && <MoonLightIcon />}
-                    {theme === 'light' && <MoonDarkIcon />}
+                <div className="flex-inline items-center justify-center rounded-full bg-black p-1 dark:bg-white">
+                    <MoonIcon className="icon-dark dark:icon-light" />
                 </div>
-                <div
-                    className={twMerge(
-                        'flex-inline items-center justify-center rounded-full p-1',
-                        theme === 'dark' && 'bg-black',
-                        theme === 'light' && 'bg-white',
-                    )}
-                >
-                    {theme === 'dark' && <SunDarkIcon />}
-                    {theme === 'light' && <SunLightIcon />}
+                <div className="flex-inline items-center justify-center rounded-full bg-white p-1 dark:bg-black">
+                    <SunIcon className="icon-light dark:icon-dark" />
                 </div>
             </button>
         </div>
