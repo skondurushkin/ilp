@@ -56,9 +56,8 @@ public class Activity implements Serializable {
     @Column(nullable = false, columnDefinition = "date default '3000-01-01'")
     private LocalDate endDate = virtualDate;
 
-    @Size(max = 512)
-    @Column(name="logo_link", length = 512)
-    private String logoLink;
+    @Column(name="info_link")
+    private String infoLink;
 
     @Column(columnDefinition = "jsonb")
     @Type(JsonType.class)

@@ -14,7 +14,7 @@ create table users
     password    varchar(255)                not null,
     start_date  date                        not null default now(),
     end_date    date                        not null default '3000-01-01',
-    avatar_link varchar(512),
+    avatar_link text,
     extension   jsonb,
     primary key (id)
 );
@@ -70,7 +70,7 @@ create table activities
     price       integer,
     start_date  date not null default '3000-01-01',
     end_date    date not null default '3000-01-01',
-    logo_link   varchar(512),
+    info_link   text,
     extension   jsonb,
     primary key (id)
 );
@@ -85,7 +85,7 @@ create table articles
     name        varchar(50) not null,
     description varchar(500),
     price       integer,
-    image_link  varchar(512),
+    image_link  text,
     available   boolean default false,
     extension   jsonb,
     primary key (id)
@@ -111,7 +111,12 @@ alter table if exists accruals
     add constraint FK_accruals__activities foreign key (activity_id) references activities ON DELETE CASCADE;
 
 
-create type order_status as enum ('new', 'completed', 'cancelled');
+create type order_status as enum (
+    'created',
+    'processing',
+    'delivering',
+    'completed',
+    'cancelled');
 
 -- Списания
 create table write_offs
@@ -121,7 +126,7 @@ create table write_offs
     user_id     int         not null,
     article_id  int         not null,
     amount      int         not null,
-    status  order_status not null default 'new',
+    status  order_status not null default 'created',
     primary key (id)
 );
 
@@ -131,7 +136,8 @@ alter table if exists write_offs
     add constraint FK_write_offs__articles foreign key (article_id) references articles ON DELETE CASCADE;
 
 insert into settings (prop_key, prop_value)
-values ('db.version', '1.0');
+values ('db.version', '1.0'),
+       ('admin.email', 'skondurushkin@gmail.com');
 
 insert into roles (name)
 values ('USER');
@@ -183,13 +189,13 @@ VALUES (
 insert into user_roles (user_id, role_id)
 values  (3, 1);
 
-insert into activities (name, description, start_date, price, logo_link)
+insert into activities (name, description, start_date, price)
 values
-    ('Работа в компании', 'Мы награждаем наших сотрудников за стабильную трудовую деятельность на благо компании', '2020-01-01', 20, '/logo/1.jpg'),
-    ('Юбилей сотрудника', 'Мы ценим ваш возраст и опыт', '2020-01-01', 25, '/logo/2.jpg'),
-    ('Выступление', 'Публичное выступление на мероприятиях компании', '2020-01-01', 30, '/logo/3.jpg'),
-    ('Наставничество', 'Участие в обучении новых сотрудников', '2020-01-01', 50, '/logo/4.jpg'),
-    ('Собеседование', 'Собеседование с кандидатами', '2020-01-01', 40, '/logo/5.jpg')
+    ('Работа в компании', 'Мы награждаем наших сотрудников за стабильную трудовую деятельность на благо компании', '2020-01-01', 20),
+    ('Юбилей сотрудника', 'Мы ценим ваш возраст и опыт', '2020-01-01', 25),
+    ('Выступление', 'Публичное выступление на мероприятиях компании', '2020-01-01', 30),
+    ('Наставничество', 'Участие в обучении новых сотрудников', '2020-01-01', 50),
+    ('Собеседование', 'Собеседование с кандидатами', '2020-01-01', 40)
 ;
 
 insert into articles (code, name, description, price, image_link, available)
@@ -208,8 +214,9 @@ values
 
 insert into write_offs (date, user_id, article_id, amount, status)
 values
-    ('2023-03-25', 2, 2, 25, 'new'::order_status),
-    ('2023-03-25', 3, 3, 10, 'completed'::order_status)
+    ('2023-03-25', 2, 2, 25, 'created'::order_status),
+    ('2023-03-25', 3, 3, 10, 'completed'::order_status),
+    ('2023-03-25', 2, 1, 5, 'delivering'::order_status)
 ;
 
 
