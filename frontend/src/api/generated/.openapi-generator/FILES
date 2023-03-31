@@ -20,7 +20,6 @@ models/MessageResponse.ts
 models/Name.ts
 models/PageRequest.ts
 models/PageRequestConfig.ts
-models/PageRequestConfigFilterInner.ts
 models/PageRequestConfigSortInner.ts
 models/PaginatedAccrualResponse.ts
 models/PaginatedAccrualResponseAllOf.ts

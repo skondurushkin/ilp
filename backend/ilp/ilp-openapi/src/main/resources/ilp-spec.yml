@@ -694,10 +694,12 @@ components:
         total:
           type: integer
           minimum: 0
+          description: total page count
         page:
           type: integer
           minimum: 0
           default: 0
+          description: current page
         pageSize:
           type: integer
           minimum: 1
@@ -743,19 +745,6 @@ components:
                     type: string
                     enum: [ASC, DESC]
                     default: ASC
-
-            filter:
-              type: array
-              items:
-                type: object
-                required:
-                  - colName
-                  - condition
-                properties:
-                  colName:
-                    type: string
-                  condition:
-                    type: string
 
             globalFilter:
               type: string
@@ -973,36 +962,39 @@ components:
       type: object
       required:
         - name
-        - startDate
+        - amount
+        - infoLink
       properties:
         name:
           type: string
-          nullable: false
           maxLength: 50
         description:
           type: string
           maxLength: 500
-        startDate:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        infoLink:
           type: string
-          format: date
 
     ActivityResponse:
       type: object
       required:
         - id
         - name
+        - active
+        - infoLink
+        - amount
       properties:
         id:
           $ref: '#/components/schemas/Identifier'
         name:
           type: string
-          nullable: false
+          maxLength: 50
         description:
           type: string
-        price:
-          type: integer
-          minimum: 0
-          nullable: true
+          maxLength: 200
+        amount:
+          $ref: '#/components/schemas/Amount'
         infoLink:
           type: string
         startDate:
@@ -1013,6 +1005,8 @@ components:
           format: date
         extension:
           type: object
+        active:
+          type: boolean
 
     PaginatedActivityResponse:
       allOf:

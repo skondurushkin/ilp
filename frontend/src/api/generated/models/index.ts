@@ -13,7 +13,6 @@ export * from './MessageResponse';
 export * from './Name';
 export * from './PageRequest';
 export * from './PageRequestConfig';
-export * from './PageRequestConfigFilterInner';
 export * from './PageRequestConfigSortInner';
 export * from './PaginatedAccrualResponse';
 export * from './PaginatedAccrualResponseAllOf';

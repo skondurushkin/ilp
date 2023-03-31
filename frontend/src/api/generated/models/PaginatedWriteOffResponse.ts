@@ -24,13 +24,13 @@ import type { WriteOffResponse } from './WriteOffResponse';
  */
 export interface PaginatedWriteOffResponse {
     /**
-     *
+     * total page count
      * @type {number}
      * @memberof PaginatedWriteOffResponse
      */
     total: number;
     /**
-     *
+     * current page
      * @type {number}
      * @memberof PaginatedWriteOffResponse
      */

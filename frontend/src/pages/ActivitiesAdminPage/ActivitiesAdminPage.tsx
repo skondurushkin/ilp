@@ -5,6 +5,7 @@ import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
+import { TypedLink } from '../../router';
 
 export const ActivitiesAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
@@ -18,27 +19,36 @@ export const ActivitiesAdminPage = () => {
             {
                 accessorKey: 'name',
                 header: () => <span>Название</span>,
-                cell: (info) => info.getValue(),
+                cell: (info) => {
+                    const { description, name } = info.row.original;
+                    return (
+                        <div className="flex flex-col gap-2">
+                            <p>{name}</p>
+                            <p className="text-small text-ellipsis">{description}</p>
+                        </div>
+                    );
+                },
             },
             {
-                accessorKey: 'price',
+                accessorKey: 'amount',
                 header: () => <span>Стоимость</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'infoLink',
-                header: () => <span>Ссылка на описание</span>,
+                header: () => <span>Дата</span>,
                 cell: (info) => {
-                    const { description } = info.row.original;
+                    const { startDate, endDate } = info.row.original;
                     return (
-                        <a className="underline" href={(info.cell.getValue() as string).toString()}>
-                            {description}
-                        </a>
+                        <div className="flex flex-col gap-1">
+                            {startDate && <span>{new Date(startDate).toLocaleDateString('ru-RU')}</span>}
+                            {endDate && <span>{new Date(endDate).toLocaleDateString()}</span>}
+                        </div>
                     );
                 },
             },
             {
-                accessorKey: 'lastName2',
+                accessorKey: 'actions',
                 header: () => <span>Действия</span>,
                 cell: () => (
                     <div className="flex gap-2">
@@ -59,9 +69,16 @@ export const ActivitiesAdminPage = () => {
         <div className="flex flex-col gap-4">
             <h1 className="text-h1">Активности</h1>
             <div>
-                <button className="btn btn-primary">Добавить активность</button>
+                <TypedLink to="/admin/activities/create">
+                    <button className="btn btn-primary">Добавить активность</button>
+                </TypedLink>
             </div>
-            <AdminTable columns={columns} queryData={queryData} queryKey="browseActivities" />
+            <AdminTable
+                globalFilterPlaceholder="Поиск по названию и описанию"
+                columns={columns}
+                queryData={queryData}
+                queryKey="browseActivities"
+            />
         </div>
     );
 };

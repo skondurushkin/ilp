@@ -38,17 +38,17 @@ export interface ActivityResponse {
      */
     description?: string;
     /**
-     *
+     * generic amount
      * @type {number}
      * @memberof ActivityResponse
      */
-    price?: number | null;
+    amount: number;
     /**
      *
      * @type {string}
      * @memberof ActivityResponse
      */
-    infoLink?: string;
+    infoLink: string;
     /**
      *
      * @type {Date}
@@ -67,6 +67,12 @@ export interface ActivityResponse {
      * @memberof ActivityResponse
      */
     extension?: object;
+    /**
+     *
+     * @type {boolean}
+     * @memberof ActivityResponse
+     */
+    active: boolean;
 }
 
 /**
@@ -76,6 +82,9 @@ export function instanceOfActivityResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'name' in value;
+    isInstance = isInstance && 'amount' in value;
+    isInstance = isInstance && 'infoLink' in value;
+    isInstance = isInstance && 'active' in value;
 
     return isInstance;
 }
@@ -92,11 +101,12 @@ export function ActivityResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
         id: json['id'],
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
-        price: !exists(json, 'price') ? undefined : json['price'],
-        infoLink: !exists(json, 'infoLink') ? undefined : json['infoLink'],
+        amount: json['amount'],
+        infoLink: json['infoLink'],
         startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
         endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
         extension: !exists(json, 'extension') ? undefined : json['extension'],
+        active: json['active'],
     };
 }
 
@@ -111,10 +121,11 @@ export function ActivityResponseToJSON(value?: ActivityResponse | null): any {
         id: value.id,
         name: value.name,
         description: value.description,
-        price: value.price,
+        amount: value.amount,
         infoLink: value.infoLink,
         startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
         endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
         extension: value.extension,
+        active: value.active,
     };
 }

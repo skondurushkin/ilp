@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { DebouncedInput } from './DebouncedInput';
 import { ReactComponent as SearchSVG } from '../assets/search.svg';
+import { twMerge } from 'tailwind-merge';
 import { useQuery } from 'react-query';
 
 const DEFAULT_PAGINATION_STATE = { pageIndex: 0, pageSize: 10 };
@@ -97,11 +98,16 @@ export const AdminTable = <TData extends RowData>({
             <div className="flex flex-col gap-6 bg-black p-6">
                 <div className="relative overflow-y-hidden overflow-x-scroll">
                     {dataQuery.isFetching && (
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-black p-4 text-white">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-primary p-4 text-black">
                             Загрузка ...
                         </div>
                     )}
-                    <table className="w-full overflow-y-hidden overflow-x-scroll">
+                    <table
+                        className={twMerge(
+                            'w-full overflow-y-hidden overflow-x-scroll',
+                            dataQuery.isFetching && 'opacity-50',
+                        )}
+                    >
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>

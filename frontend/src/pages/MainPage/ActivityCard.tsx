@@ -39,7 +39,7 @@ function ActivityView(props: ActivityViewProps): ReactElement {
         <>
             <VerticalBrackets size="2" className="self-center">
                 <div className="flex items-center gap-1 text-2xl md:text-3xl">
-                    +{activity.price}
+                    +{activity.amount}
                     <TokenIcon className="h-5 w-5" />
                 </div>
             </VerticalBrackets>

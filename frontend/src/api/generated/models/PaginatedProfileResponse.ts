@@ -24,13 +24,13 @@ import type { ProfileResponse } from './ProfileResponse';
  */
 export interface PaginatedProfileResponse {
     /**
-     *
+     * total page count
      * @type {number}
      * @memberof PaginatedProfileResponse
      */
     total: number;
     /**
-     *
+     * current page
      * @type {number}
      * @memberof PaginatedProfileResponse
      */

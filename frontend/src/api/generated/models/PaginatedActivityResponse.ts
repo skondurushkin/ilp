@@ -24,13 +24,13 @@ import type { ActivityResponse } from './ActivityResponse';
  */
 export interface PaginatedActivityResponse {
     /**
-     *
+     * total page count
      * @type {number}
      * @memberof PaginatedActivityResponse
      */
     total: number;
     /**
-     *
+     * current page
      * @type {number}
      * @memberof PaginatedActivityResponse
      */

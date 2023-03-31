@@ -16,11 +16,11 @@ html {
 
 @layer components {
     .input {
-        @apply h-[50px] border px-3 focus:outline-none;
+        @apply h-[50px] border-2 px-3 text-black focus:border-success focus:outline-none;
     }
 
     .input-error {
-        @apply border-error;
+        @apply border-error focus:border-error focus:outline-none;
     }
 
     .btn {
@@ -49,13 +49,5 @@ html {
 
     .text-h2 {
         @apply text-xl leading-[110%] md:text-2xl;
-    }
-
-    .input {
-        @apply h-[50px] border px-3 text-black focus:border-success focus:outline-none;
-    }
-
-    .input-error {
-        @apply border-error;
     }
 }

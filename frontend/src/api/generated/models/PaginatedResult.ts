@@ -20,13 +20,13 @@ import { exists, mapValues } from '../runtime';
  */
 export interface PaginatedResult {
     /**
-     *
+     * total page count
      * @type {number}
      * @memberof PaginatedResult
      */
     total: number;
     /**
-     *
+     * current page
      * @type {number}
      * @memberof PaginatedResult
      */

@@ -24,13 +24,13 @@ import type { AccrualResponse } from './AccrualResponse';
  */
 export interface PaginatedAccrualResponse {
     /**
-     *
+     * total page count
      * @type {number}
      * @memberof PaginatedAccrualResponse
      */
     total: number;
     /**
-     *
+     * current page
      * @type {number}
      * @memberof PaginatedAccrualResponse
      */

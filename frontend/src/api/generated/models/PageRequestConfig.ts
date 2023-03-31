@@ -13,18 +13,12 @@
  */
 
 import {
-    PageRequestConfigFilterInnerFromJSON,
-    PageRequestConfigFilterInnerFromJSONTyped,
-    PageRequestConfigFilterInnerToJSON,
-} from './PageRequestConfigFilterInner';
-import {
     PageRequestConfigSortInnerFromJSON,
     PageRequestConfigSortInnerFromJSONTyped,
     PageRequestConfigSortInnerToJSON,
 } from './PageRequestConfigSortInner';
 import { exists, mapValues } from '../runtime';
 
-import type { PageRequestConfigFilterInner } from './PageRequestConfigFilterInner';
 import type { PageRequestConfigSortInner } from './PageRequestConfigSortInner';
 
 /**
@@ -39,12 +33,6 @@ export interface PageRequestConfig {
      * @memberof PageRequestConfig
      */
     sort?: Array<PageRequestConfigSortInner>;
-    /**
-     *
-     * @type {Array<PageRequestConfigFilterInner>}
-     * @memberof PageRequestConfig
-     */
-    filter?: Array<PageRequestConfigFilterInner>;
     /**
      *
      * @type {string}
@@ -72,9 +60,6 @@ export function PageRequestConfigFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         sort: !exists(json, 'sort') ? undefined : (json['sort'] as Array<any>).map(PageRequestConfigSortInnerFromJSON),
-        filter: !exists(json, 'filter')
-            ? undefined
-            : (json['filter'] as Array<any>).map(PageRequestConfigFilterInnerFromJSON),
         globalFilter: !exists(json, 'globalFilter') ? undefined : json['globalFilter'],
     };
 }
@@ -88,10 +73,6 @@ export function PageRequestConfigToJSON(value?: PageRequestConfig | null): any {
     }
     return {
         sort: value.sort === undefined ? undefined : (value.sort as Array<any>).map(PageRequestConfigSortInnerToJSON),
-        filter:
-            value.filter === undefined
-                ? undefined
-                : (value.filter as Array<any>).map(PageRequestConfigFilterInnerToJSON),
         globalFilter: value.globalFilter,
     };
 }

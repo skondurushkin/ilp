@@ -24,13 +24,13 @@ import type { ArticleResponse } from './ArticleResponse';
  */
 export interface PaginatedArticleResponse {
     /**
-     *
+     * total page count
      * @type {number}
      * @memberof PaginatedArticleResponse
      */
     total: number;
     /**
-     *
+     * current page
      * @type {number}
      * @memberof PaginatedArticleResponse
      */
