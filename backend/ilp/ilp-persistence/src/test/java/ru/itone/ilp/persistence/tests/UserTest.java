@@ -1,5 +1,6 @@
 package ru.itone.ilp.persistence.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import ru.itone.ilp.persistence.entities.User;
 import ru.itone.ilp.persistence.repositories.UserRepository;
+
+import java.util.List;
 
 @Slf4j
 class UserTest extends AbstractPersistenceTest {
@@ -22,5 +25,11 @@ class UserTest extends AbstractPersistenceTest {
         assertNotNull(user);
         assertTrue(StringUtils.hasLength(user.getAvatarLink()));
         log.info("avatar: {}", user.getAvatarLink());
+    }
+
+    @Test
+    void testSearch() {
+        List<User> users = userRepository.searchByText("иван");
+        assertEquals(2, users.size());
     }
 }
