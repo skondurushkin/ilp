@@ -10,7 +10,7 @@ export const authAdminRoutes = [
     {
         path: '/admin/products',
         element: (
-            <Layout>
+            <Layout className="overflow-y-hidden overflow-x-scroll">
                 <AdminProducts />
             </Layout>
         ),

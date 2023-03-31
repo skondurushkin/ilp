@@ -52,7 +52,7 @@ html {
     }
 
     .input {
-        @apply mt-2 h-[50px] border px-3 focus:border-success focus:outline-none;
+        @apply h-[50px] border px-3 text-black focus:border-success focus:outline-none;
     }
 
     .input-error {

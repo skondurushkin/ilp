@@ -13,10 +13,11 @@ import useClickOutside from 'use-click-outside';
 export interface LayoutProps {
     menu?: ReactNode;
     children?: ReactNode;
+    className?: string;
 }
 
 export function Layout(props: LayoutProps): ReactElement {
-    const { menu, children } = props;
+    const { menu, children, className } = props;
 
     const [mobileSidebarVisible, setMobileSidebarVisible] = useState(false);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
@@ -80,7 +81,12 @@ export function Layout(props: LayoutProps): ReactElement {
                         <Profile className="mt-14 sm:mt-8 xl:mt-8" />
                         <Nav className="mt-8 grow px-9 pb-3 sm:px-8 sm:pb-6 md:pb-10" />
                     </aside>
-                    <main className="grow px-4 pt-6 pb-10 sm:py-8 sm:px-8 md:px-14 md:pb-10 md:pt-8 xl:ml-[312px] xl:px-8 xl:pt-8 xl:pb-10">
+                    <main
+                        className={classnames(
+                            'grow px-4 pt-6 pb-10 sm:py-8 sm:px-8 md:px-14 md:pb-10 md:pt-8 xl:ml-[312px] xl:px-8 xl:pt-8 xl:pb-10',
+                            className,
+                        )}
+                    >
                         {children}
                     </main>
                 </div>

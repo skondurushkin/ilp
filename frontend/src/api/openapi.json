@@ -1,1294 +1,1214 @@
 {
-  "openapi": "3.0.3",
-  "info": {
-    "version": "1.0.0",
-    "title": "ILP API",
-    "description": "Internal Loyalty Program API Specification"
-  },
-  "servers": [
-    {
-      "url": "http://localhost:8191"
-    }
-  ],
-  "tags": [
-    {
-      "name": "auth",
-      "description": "Authorization API"
+    "openapi": "3.0.3",
+    "info": {
+        "version": "1.0.0",
+        "title": "ILP API",
+        "description": "Internal Loyalty Program API Specification"
     },
-    {
-      "name": "profile",
-      "description": "User Profile API"
-    },
-    {
-      "name": "activity",
-      "description": "Activity API"
-    },
-    {
-      "name": "article",
-      "description": "Article API"
-    },
-    {
-      "name": "wallet",
-      "description": "Wallet API"
-    },
-    {
-      "name": "files",
-      "description": "FileStore API"
-    },
-    {
-      "name": "admin",
-      "description": "Administrator API"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
-  "paths": {
-    "/api/ilp/profile": {
-      "get": {
-        "operationId": "getProfile",
-        "summary": "get authenticated user profile",
-        "tags": [
-          "profile"
-        ],
-        "responses": {
-          "200": {
-            "description": "authenticated user profile",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfileResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
+    "servers": [
+        {
+            "url": "http://localhost:8191"
         }
-      }
-    },
-    "/api/ilp/profiles": {
-      "post": {
-        "operationId": "browseProfiles",
-        "summary": "paginated profiles view",
-        "tags": [
-          "profile"
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PageRequest"
-              }
-            }
-          }
+    ],
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Authorization API"
         },
-        "responses": {
-          "200": {
-            "description": "page loaded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedProfileResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/profile/{user_id}": {
-      "get": {
-        "operationId": "getProfileById",
-        "summary": "get user profile by user id",
-        "tags": [
-          "profile"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/user_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "authenticated user profile",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfileResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/auth/register": {
-      "post": {
-        "operationId": "registerUser",
-        "summary": "register new user",
-        "tags": [
-          "auth"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SignupRequest"
-              }
-            }
-          }
+        {
+            "name": "profile",
+            "description": "User Profile API"
         },
-        "responses": {
-          "201": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MessageResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/auth/login": {
-      "post": {
-        "operationId": "authenticateUser",
-        "summary": "obtain JWT",
-        "tags": [
-          "auth"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            }
-          }
+        {
+            "name": "activity",
+            "description": "Activity API"
         },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JwtResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "server error"
-          }
+        {
+            "name": "article",
+            "description": "Article API"
         },
-        "security": [
-          {
-            "NONE": []
-          }
-        ]
-      }
-    },
-    "/api/ilp/auth/refreshtoken": {
-      "post": {
-        "operationId": "refreshToken",
-        "summary": "refresh expired jwt",
-        "tags": [
-          "auth"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenRefreshRequest"
-              }
-            }
-          }
+        {
+            "name": "wallet",
+            "description": "Wallet API"
         },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TokenRefreshResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/auth/logout": {
-      "post": {
-        "operationId": "logoutUser",
-        "summary": "logout and invalidate jwt and refresh token",
-        "tags": [
-          "auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MessageResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/activity/{activity_id}": {
-      "get": {
-        "operationId": "getActivityById",
-        "summary": "get activity by identifier",
-        "tags": [
-          "activity"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/activity_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "single activity record",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ActivityResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/activity": {
-      "post": {
-        "operationId": "createActivity",
-        "summary": "create new activity record",
-        "tags": [
-          "activity"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ActivityRequest"
-              }
-            }
-          }
+        {
+            "name": "files",
+            "description": "FileStore API"
         },
-        "responses": {
-          "201": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ActivityResponse"
-                }
-              }
-            }
-          }
+        {
+            "name": "admin",
+            "description": "Administrator API"
         }
-      }
-    },
-    "/api/ilp/activities": {
-      "post": {
-        "operationId": "browseActivities",
-        "summary": "paginated activities view",
-        "tags": [
-          "activity"
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PageRequest"
-              }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "paths": {
+        "/api/ilp/profile": {
+            "get": {
+                "operationId": "getProfile",
+                "summary": "get authenticated user profile",
+                "tags": ["profile"],
+                "responses": {
+                    "200": {
+                        "description": "authenticated user profile",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "description": "page loaded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedActivityResponse"
+        "/api/ilp/profiles": {
+            "post": {
+                "operationId": "browseProfiles",
+                "summary": "paginated profiles view",
+                "tags": ["profile"],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "page loaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedProfileResponse"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
-        }
-      }
-    },
-    "/api/ilp/article/{article_id}": {
-      "get": {
-        "operationId": "getArticleById",
-        "summary": "get article by identifier",
-        "tags": [
-          "article"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/article_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "single article record",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArticleResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/article": {
-      "post": {
-        "operationId": "createArticle",
-        "summary": "create new article record",
-        "tags": [
-          "article"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ArticleRequest"
-              }
-            }
-          }
         },
-        "responses": {
-          "201": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArticleResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/articles": {
-      "post": {
-        "operationId": "browseArticles",
-        "summary": "paginated articles view",
-        "tags": [
-          "article"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PageRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "page loaded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedArticleResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/wallet/overview": {
-      "get": {
-        "operationId": "getWalletOverview",
-        "summary": "get overview of the wallet state of currently logged in user",
-        "tags": [
-          "wallet"
-        ],
-        "responses": {
-          "200": {
-            "description": "ОК",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WalletResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ilp/file/upload/{scope}": {
-      "post": {
-        "operationId": "uploadFile",
-        "summary": "upload file to ILP file store",
-        "tags": [
-          "files"
-        ],
-        "parameters": [
-          {
-            "name": "scope",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "global",
-                "activity",
-                "article",
-                "profile"
-              ]
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "filename"
+        "/api/ilp/profile/{user_id}": {
+            "get": {
+                "operationId": "getProfileById",
+                "summary": "get user profile by user id",
+                "tags": ["profile"],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/user_id"
+                    }
                 ],
-                "properties": {
-                  "id": {
-                    "$ref": "#/components/schemas/Identifier",
-                    "description": "in-scope identifier (ignored for scope 'global')"
-                  },
-                  "filename": {
+                "responses": {
+                    "200": {
+                        "description": "authenticated user profile",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/auth/register": {
+            "post": {
+                "operationId": "registerUser",
+                "summary": "register new user",
+                "tags": ["auth"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignupRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/auth/login": {
+            "post": {
+                "operationId": "authenticateUser",
+                "summary": "obtain JWT",
+                "tags": ["auth"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JwtResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "server error"
+                    }
+                },
+                "security": [
+                    {
+                        "NONE": []
+                    }
+                ]
+            }
+        },
+        "/api/ilp/auth/refreshtoken": {
+            "post": {
+                "operationId": "refreshToken",
+                "summary": "refresh expired jwt",
+                "tags": ["auth"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRefreshRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenRefreshResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/auth/logout": {
+            "post": {
+                "operationId": "logoutUser",
+                "summary": "logout and invalidate jwt and refresh token",
+                "tags": ["auth"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/activity/{activity_id}": {
+            "get": {
+                "operationId": "getActivityById",
+                "summary": "get activity by identifier",
+                "tags": ["activity"],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/activity_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "single activity record",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActivityResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/activity": {
+            "post": {
+                "operationId": "createActivity",
+                "summary": "create new activity record",
+                "tags": ["activity"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActivityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActivityResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/activities": {
+            "post": {
+                "operationId": "browseActivities",
+                "summary": "paginated activities view",
+                "tags": ["activity"],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "page loaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedActivityResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/article/{article_id}": {
+            "get": {
+                "operationId": "getArticleById",
+                "summary": "get article by identifier",
+                "tags": ["article"],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/article_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "single article record",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArticleResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/article": {
+            "post": {
+                "operationId": "createArticle",
+                "summary": "create new article record",
+                "tags": ["article"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ArticleRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArticleResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/articles": {
+            "post": {
+                "operationId": "browseArticles",
+                "summary": "paginated articles view",
+                "tags": ["article"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "page loaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedArticleResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/article/search": {
+            "get": {
+                "operationId": "searchArticles",
+                "summary": "search for articles",
+                "tags": ["article"],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/search_key"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "list of found articles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ArticleResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/wallet/overview": {
+            "get": {
+                "operationId": "getWalletOverview",
+                "summary": "get overview of the wallet state of currently logged in user",
+                "tags": ["wallet"],
+                "responses": {
+                    "200": {
+                        "description": "ОК",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WalletResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/file/upload/{scope}": {
+            "post": {
+                "operationId": "uploadFile",
+                "summary": "upload file to ILP file store",
+                "tags": ["files"],
+                "parameters": [
+                    {
+                        "name": "scope",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["global", "activity", "article", "profile"]
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["id", "filename"],
+                                "properties": {
+                                    "id": {
+                                        "$ref": "#/components/schemas/Identifier",
+                                        "description": "in-scope identifier (ignored for scope 'global')"
+                                    },
+                                    "filename": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "link": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "already exists"
+                    }
+                }
+            }
+        },
+        "/api/ilp/file/download": {
+            "get": {
+                "operationId": "downloadFile",
+                "summary": "fetch file from ILP file store",
+                "tags": ["files"],
+                "parameters": [
+                    {
+                        "name": "link",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "user_id": {
+                "in": "path",
+                "name": "user_id",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/Identifier"
+                },
+                "description": "user identifier"
+            },
+            "activity_id": {
+                "in": "path",
+                "name": "activity_id",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/Identifier"
+                },
+                "description": "activity identifier"
+            },
+            "article_id": {
+                "in": "path",
+                "name": "article_id",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/Identifier"
+                },
+                "description": "article identifier"
+            },
+            "search_key": {
+                "in": "query",
+                "name": "search_key",
+                "required": true,
+                "schema": {
                     "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
+                    "minLength": 3
+                },
+                "description": "value for search"
             }
-          }
         },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "link": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "already exists"
-          }
-        }
-      }
-    },
-    "/api/ilp/file/download": {
-      "get": {
-        "operationId": "downloadFile",
-        "summary": "fetch file from ILP file store",
-        "tags": [
-          "files"
-        ],
-        "parameters": [
-          {
-            "name": "link",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "parameters": {
-      "user_id": {
-        "in": "path",
-        "name": "user_id",
-        "required": true,
-        "schema": {
-          "$ref": "#/components/schemas/Identifier"
-        },
-        "description": "user identifier"
-      },
-      "activity_id": {
-        "in": "path",
-        "name": "activity_id",
-        "required": true,
-        "schema": {
-          "$ref": "#/components/schemas/Identifier"
-        },
-        "description": "activity identifier"
-      },
-      "article_id": {
-        "in": "path",
-        "name": "article_id",
-        "required": true,
-        "schema": {
-          "$ref": "#/components/schemas/Identifier"
-        },
-        "description": "article identifier"
-      }
-    },
-    "schemas": {
-      "Identifier": {
-        "type": "integer",
-        "format": "int32",
-        "minimum": 1,
-        "description": "generic identifier"
-      },
-      "Amount": {
-        "type": "integer",
-        "format": "int32",
-        "minimum": 0,
-        "description": "generic amount"
-      },
-      "PaginatedResult": {
-        "type": "object",
-        "required": [
-          "total",
-          "page",
-          "pageSize",
-          "pageCount",
-          "hasNext",
-          "hasPrev",
-          "results"
-        ],
-        "properties": {
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "page": {
-            "type": "integer",
-            "minimum": 0,
-            "default": 0
-          },
-          "pageSize": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "pageCount": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "hasNext": {
-            "type": "boolean"
-          },
-          "hasPrev": {
-            "type": "boolean"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          }
-        }
-      },
-      "PageRequest": {
-        "type": "object",
-        "required": [
-          "page",
-          "pageSize"
-        ],
-        "properties": {
-          "page": {
-            "description": "index of the page to load",
-            "type": "integer",
-            "minimum": 0,
-            "default": 0
-          },
-          "pageSize": {
-            "description": "max number of result rows per page",
-            "type": "integer",
-            "minimum": 1,
-            "default": 5
-          },
-          "config": {
-            "description": "data extraction parameters",
-            "type": "object",
-            "properties": {
-              "sort": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "colName"
-                  ],
-                  "properties": {
-                    "colName": {
-                      "type": "string"
+        "schemas": {
+            "Identifier": {
+                "type": "integer",
+                "format": "int32",
+                "minimum": 1,
+                "description": "generic identifier"
+            },
+            "Amount": {
+                "type": "integer",
+                "format": "int32",
+                "minimum": 0,
+                "description": "generic amount"
+            },
+            "PaginatedResult": {
+                "type": "object",
+                "required": ["total", "page", "pageSize", "hasNext", "hasPrev", "results"],
+                "properties": {
+                    "total": {
+                        "type": "integer",
+                        "minimum": 0
                     },
-                    "sortType": {
-                      "type": "string",
-                      "enum": [
-                        "ASC",
-                        "DESC"
-                      ],
-                      "default": "ASC"
-                    }
-                  }
-                }
-              },
-              "filter": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "colName",
-                    "condition"
-                  ],
-                  "properties": {
-                    "colName": {
-                      "type": "string"
+                    "page": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 0
                     },
-                    "condition": {
-                      "type": "string"
+                    "pageSize": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "hasNext": {
+                        "type": "boolean"
+                    },
+                    "hasPrev": {
+                        "type": "boolean"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
                     }
-                  }
                 }
-              }
+            },
+            "PageRequest": {
+                "type": "object",
+                "required": ["page", "pageSize"],
+                "properties": {
+                    "page": {
+                        "description": "index of the page to load",
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "pageSize": {
+                        "description": "max number of result rows per page",
+                        "type": "integer",
+                        "minimum": 1,
+                        "default": 5
+                    },
+                    "config": {
+                        "description": "data extraction parameters",
+                        "type": "object",
+                        "properties": {
+                            "sort": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "required": ["colName"],
+                                    "properties": {
+                                        "colName": {
+                                            "type": "string"
+                                        },
+                                        "sortType": {
+                                            "type": "string",
+                                            "enum": ["ASC", "DESC"],
+                                            "default": "ASC"
+                                        }
+                                    }
+                                }
+                            },
+                            "filter": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "required": ["colName", "condition"],
+                                    "properties": {
+                                        "colName": {
+                                            "type": "string"
+                                        },
+                                        "condition": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "globalFilter": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "ErrorMessage": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "integer"
+                    },
+                    "statusText": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "category": {
+                        "type": "string",
+                        "enum": ["ERROR", "FORM_ERROR", "VALIDATION_ERROR", "MESSAGE", "UNKNOWN"]
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SignupRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/components/schemas/Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "user email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "user password"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "$ref": "#/components/schemas/ERole"
+                        }
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "user email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "user password"
+                    }
+                }
+            },
+            "TokenRefreshRequest": {
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string",
+                        "description": "token used to refresh expired jwt"
+                    }
+                },
+                "required": ["refreshToken"]
+            },
+            "MessageResponse": {
+                "type": "object",
+                "required": ["message"],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "text message"
+                    }
+                }
+            },
+            "TokenRefreshResponse": {
+                "type": "object",
+                "required": ["acceptToken", "refreshToken"],
+                "properties": {
+                    "acceptToken": {
+                        "type": "string",
+                        "description": "refreshed authorized jwt token"
+                    },
+                    "refreshToken": {
+                        "type": "string",
+                        "description": "token to refresh expired jwt"
+                    }
+                }
+            },
+            "JwtResponse": {
+                "type": "object",
+                "required": ["token", "refreshToken", "email", "roles"],
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "description": "authorized jwt token"
+                    },
+                    "refreshToken": {
+                        "type": "string",
+                        "description": "token to refresh expired jwt"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "user email (unique)"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "$ref": "#/components/schemas/ERole"
+                        }
+                    }
+                }
+            },
+            "ProfileResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "fio": {
+                        "$ref": "#/components/schemas/Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "$ref": "#/components/schemas/ERole"
+                        }
+                    },
+                    "avatarLink": {
+                        "type": "string"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "readOnly": true,
+                        "nullable": false,
+                        "default": false
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "yyyy-MM-dd",
+                        "example": "2023-03-25"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-04-10"
+                    }
+                },
+                "required": ["id", "fio", "email", "roles", "active"]
+            },
+            "Name": {
+                "type": "object",
+                "required": ["firstName", "lastName"],
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "maxLength": 30
+                    },
+                    "middleName": {
+                        "type": "string",
+                        "maxLength": 40
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "maxLength": 50
+                    }
+                }
+            },
+            "ERole": {
+                "type": "string",
+                "enum": ["USER", "MODERATOR", "ADMIN"]
+            },
+            "PaginatedProfileResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginatedResult"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProfileResponse"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "ActivityRequest": {
+                "type": "object",
+                "required": ["name", "startDate"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "nullable": false,
+                        "maxLength": 50
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 500
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ActivityResponse": {
+                "type": "object",
+                "required": ["id", "name"],
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "name": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": true
+                    },
+                    "logoLink": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "PaginatedActivityResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginatedResult"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ActivityResponse"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "ArticleRequest": {
+                "type": "object",
+                "required": ["code", "name"],
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 500,
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": true
+                    },
+                    "available": {
+                        "type": "boolean",
+                        "default": true
+                    }
+                }
+            },
+            "ArticleResponse": {
+                "type": "object",
+                "required": ["id", "code", "name"],
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 500,
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": true
+                    },
+                    "available": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "imageLink": {
+                        "type": "string"
+                    },
+                    "extension": {
+                        "type": "object",
+                        "nullable": true
+                    }
+                }
+            },
+            "PaginatedArticleResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginatedResult"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ArticleResponse"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "AccrualResponse": {
+                "type": "object",
+                "required": ["id", "date", "activityName", "amount"],
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "activityId": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "activityName": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "$ref": "#/components/schemas/Amount"
+                    },
+                    "logoLink": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "WalletResponse": {
+                "type": "object",
+                "required": ["balance", "totalEarned", "totalSpent", "accruals"],
+                "properties": {
+                    "balance": {
+                        "type": "integer",
+                        "format": "int32",
+                        "minimum": 0
+                    },
+                    "totalEarned": {
+                        "$ref": "#/components/schemas/Amount"
+                    },
+                    "totalSpent": {
+                        "$ref": "#/components/schemas/Amount"
+                    },
+                    "accruals": {
+                        "type": "array",
+                        "description": "up to 5 recent accruals",
+                        "maxLength": 5,
+                        "items": {
+                            "$ref": "#/components/schemas/AccrualResponse"
+                        }
+                    }
+                }
             }
-          }
-        }
-      },
-      "ErrorMessage": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "integer"
-          },
-          "statusText": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "category": {
-            "type": "string",
-            "enum": [
-              "ERROR",
-              "FORM_ERROR",
-              "VALIDATION_ERROR",
-              "MESSAGE",
-              "UNKNOWN"
-            ]
-          },
-          "message": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          }
-        }
-      },
-      "SignupRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "$ref": "#/components/schemas/Name"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "user email"
-          },
-          "password": {
-            "type": "string",
-            "description": "user password"
-          },
-          "roles": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "$ref": "#/components/schemas/ERole"
-            }
-          }
-        }
-      },
-      "LoginRequest": {
-        "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "user email"
-          },
-          "password": {
-            "type": "string",
-            "description": "user password"
-          }
-        }
-      },
-      "TokenRefreshRequest": {
-        "type": "object",
-        "properties": {
-          "refreshToken": {
-            "type": "string",
-            "description": "token used to refresh expired jwt"
-          }
         },
-        "required": [
-          "refreshToken"
-        ]
-      },
-      "MessageResponse": {
-        "type": "object",
-        "required": [
-          "message"
-        ],
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "text message"
-          }
-        }
-      },
-      "TokenRefreshResponse": {
-        "type": "object",
-        "required": [
-          "acceptToken",
-          "refreshToken"
-        ],
-        "properties": {
-          "acceptToken": {
-            "type": "string",
-            "description": "refreshed authorized jwt token"
-          },
-          "refreshToken": {
-            "type": "string",
-            "description": "token to refresh expired jwt"
-          }
-        }
-      },
-      "JwtResponse": {
-        "type": "object",
-        "required": [
-          "token",
-          "refreshToken",
-          "email",
-          "roles"
-        ],
-        "properties": {
-          "token": {
-            "type": "string",
-            "description": "authorized jwt token"
-          },
-          "refreshToken": {
-            "type": "string",
-            "description": "token to refresh expired jwt"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "user email (unique)"
-          },
-          "roles": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "$ref": "#/components/schemas/ERole"
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
-          }
         }
-      },
-      "ProfileResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/Identifier"
-          },
-          "fio": {
-            "$ref": "#/components/schemas/Name"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "roles": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "$ref": "#/components/schemas/ERole"
-            }
-          },
-          "avatarLink": {
-            "type": "string"
-          },
-          "active": {
-            "type": "boolean",
-            "readOnly": true,
-            "nullable": false,
-            "default": false
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date",
-            "pattern": "yyyy-MM-dd",
-            "example": "2023-03-25"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date",
-            "example": "2023-04-10"
-          }
-        },
-        "required": [
-          "id",
-          "fio",
-          "email",
-          "roles",
-          "active"
-        ]
-      },
-      "Name": {
-        "type": "object",
-        "required": [
-          "firstName",
-          "lastName"
-        ],
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "maxLength": 30
-          },
-          "middleName": {
-            "type": "string",
-            "maxLength": 40
-          },
-          "lastName": {
-            "type": "string",
-            "maxLength": 50
-          }
-        }
-      },
-      "ERole": {
-        "type": "string",
-        "enum": [
-          "USER",
-          "MODERATOR",
-          "ADMIN"
-        ]
-      },
-      "PaginatedProfileResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PaginatedResult"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "results": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ProfileResponse"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "ActivityRequest": {
-        "type": "object",
-        "required": [
-          "name",
-          "startDate"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": false,
-            "maxLength": 50
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 500
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      },
-      "ActivityResponse": {
-        "type": "object",
-        "required": [
-          "id",
-          "name"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/Identifier"
-          },
-          "name": {
-            "type": "string",
-            "nullable": false
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "integer",
-            "minimum": 0,
-            "nullable": true
-          },
-          "logoLink": {
-            "type": "string"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      },
-      "PaginatedActivityResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PaginatedResult"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "results": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ActivityResponse"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "ArticleRequest": {
-        "type": "object",
-        "required": [
-          "code",
-          "name"
-        ],
-        "properties": {
-          "code": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 500,
-            "nullable": true
-          },
-          "price": {
-            "type": "integer",
-            "minimum": 0,
-            "nullable": true
-          },
-          "available": {
-            "type": "boolean",
-            "default": true
-          }
-        }
-      },
-      "ArticleResponse": {
-        "type": "object",
-        "required": [
-          "id",
-          "code",
-          "name"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/Identifier"
-          },
-          "code": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 500,
-            "nullable": true
-          },
-          "price": {
-            "type": "integer",
-            "minimum": 0,
-            "nullable": true
-          },
-          "available": {
-            "type": "boolean",
-            "default": false
-          },
-          "imageLink": {
-            "type": "string"
-          },
-          "extension": {
-            "type": "object",
-            "nullable": true
-          }
-        }
-      },
-      "PaginatedArticleResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PaginatedResult"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "results": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ArticleResponse"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "AccrualResponse": {
-        "type": "object",
-        "required": [
-          "id",
-          "date",
-          "activityName",
-          "amount"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/Identifier"
-          },
-          "activityId": {
-            "$ref": "#/components/schemas/Identifier"
-          },
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "activityName": {
-            "type": "string"
-          },
-          "amount": {
-            "$ref": "#/components/schemas/Amount"
-          },
-          "logoLink": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "WalletResponse": {
-        "type": "object",
-        "required": [
-          "balance",
-          "totalEarned",
-          "totalSpent",
-          "accruals"
-        ],
-        "properties": {
-          "balance": {
-            "type": "integer",
-            "format": "int32",
-            "minimum": 0
-          },
-          "totalEarned": {
-            "$ref": "#/components/schemas/Amount"
-          },
-          "totalSpent": {
-            "$ref": "#/components/schemas/Amount"
-          },
-          "accruals": {
-            "type": "array",
-            "description": "up to 5 recent accruals",
-            "maxLength": 5,
-            "items": {
-              "$ref": "#/components/schemas/AccrualResponse"
-            }
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
     }
-  }
 }

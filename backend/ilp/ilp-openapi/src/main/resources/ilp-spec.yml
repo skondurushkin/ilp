@@ -687,7 +687,6 @@ components:
         - total
         - page
         - pageSize
-        - pageCount
         - hasNext
         - hasPrev
         - results
@@ -700,9 +699,6 @@ components:
           minimum: 0
           default: 0
         pageSize:
-          type: integer
-          minimum: 1
-        pageCount:
           type: integer
           minimum: 1
         hasNext:
@@ -760,6 +756,9 @@ components:
                     type: string
                   condition:
                     type: string
+
+            globalFilter:
+              type: string
 
     ErrorMessage:
       type: object
