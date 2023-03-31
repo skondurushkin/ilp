@@ -8,6 +8,7 @@ import {
 } from '../modules/auth';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import { ConfigProvider } from '../modules/config';
 import { authUserRoutes } from './authUserRoutes';
 import { guestRoutes } from './guestRoutes';
 
@@ -22,9 +23,11 @@ export const AppRouter = () => {
     const router = hasRole(authData, UserRole.USER) ? userRouter : guestRouter;
 
     return (
-        <AuthContext.Provider value={authData}>
-            <AuthActionsContext.Provider value={authActions}>{router}</AuthActionsContext.Provider>
-        </AuthContext.Provider>
+        <ConfigProvider>
+            <AuthContext.Provider value={authData}>
+                <AuthActionsContext.Provider value={authActions}>{router}</AuthActionsContext.Provider>
+            </AuthContext.Provider>
+        </ConfigProvider>
     );
 };
 
