@@ -76,7 +76,6 @@ export const AdminProducts = () => {
 
     return (
         <div>
-            <h1>AdminProducts</h1>
             <AdminTable columns={columns} fetchData={fetchData} />
         </div>
     );

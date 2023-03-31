@@ -20,7 +20,7 @@ restoreAuthFromLocalStorage();
 
 export const AppRouter = () => {
     const { authData, authActions } = useHttpAuthBackend();
-    console.log(authData)
+    console.log(authData);
 
     // const router = hasRole(authData, UserRole.USER)
     //     ? hasRole(authData, UserRole.ADMIN)
@@ -40,7 +40,10 @@ export const AppRouter = () => {
     );
 };
 
-export type RoutePath = InferRoutesPaths<typeof guestRoutes> | InferRoutesPaths<typeof authUserRoutes>;
+export type RoutePath =
+    | InferRoutesPaths<typeof guestRoutes>
+    | InferRoutesPaths<typeof authUserRoutes>
+    | InferRoutesPaths<typeof authAdminRoutes>;
 
 type InferRoutesPaths<T> = T extends ReadonlyArray<infer Route>
     ? Route extends { path: infer Path }

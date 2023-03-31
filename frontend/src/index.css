@@ -50,4 +50,12 @@ html {
     .text-h2 {
         @apply text-xl leading-[110%] md:text-2xl;
     }
+
+    .input {
+        @apply mt-2 h-[50px] border px-3 focus:border-success focus:outline-none;
+    }
+
+    .input-error {
+        @apply border-error;
+    }
 }

@@ -1,14 +1,8 @@
-import type {
-    ColumnDef,
-    PaginationState,
-    RowData,
-    SortingState,
-    SortingTableState,
-    Updater,
-} from '@tanstack/react-table';
+import type { ColumnDef, PaginationState, RowData, SortingState, Updater } from '@tanstack/react-table';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useCallback, useMemo, useState } from 'react';
 
+import { ReactComponent as CrossedEyeSVG } from '../assets/crossed-eye.svg';
 import { DebouncedInput } from './DebouncedInput';
 import { PaginatedResult } from '../api';
 import { useQuery } from 'react-query';
@@ -60,6 +54,8 @@ export const AdminTable = <TData extends RowData>({ columns, fetchData }: AdminT
         [pageIndex, pageSize],
     );
 
+    console.log(dataQuery.data?.pageCount);
+
     const table = useReactTable({
         columns,
         data: dataQuery.data?.results ?? defaultData,
@@ -81,14 +77,16 @@ export const AdminTable = <TData extends RowData>({ columns, fetchData }: AdminT
     });
 
     return (
-        <div className="block max-w-full overflow-y-hidden overflow-x-scroll">
-            <div className="h-2" />
-            <DebouncedInput
-                value={globalFilter ?? ''}
-                onChange={(value) => handleGlobalFilter(String(value))}
-                className="font-lg border-block border p-2 shadow"
-                placeholder="Search all columns..."
-            />
+        <div className="flex max-w-full flex-col gap-6 overflow-y-hidden overflow-x-scroll">
+            <div className="relative mt-2 inline-flex text-left">
+                <DebouncedInput
+                    value={globalFilter ?? ''}
+                    onChange={(value) => handleGlobalFilter(String(value))}
+                    className="input w-full pl-12"
+                    placeholder="Поиск по всем колонкам"
+                />
+                <CrossedEyeSVG className="absolute bottom-3 left-3" />
+            </div>
             <table className="w-full">
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
