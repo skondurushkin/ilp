@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.itone.ilp.persistence.entities.Article;
 import ru.itone.ilp.persistence.repositories.ArticleRepository;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -60,5 +62,27 @@ class ArticleTest extends AbstractPersistenceTest {
         articleRepository.save(article);
         article = articleRepository.findByCode("t-shirt-black").orElseThrow();
         assertFalse(article.getAvailable());
+    }
+
+    @Test
+    @Order(4)
+    void testContextSearch() throws JsonProcessingException {
+        Article article = new Article()
+            .setCode("t-shirt-red")
+            .setName("Футболка")
+            .setPrice(10)
+            .setAvailable(true)
+            .setDescription("Футболка красная с принтом")
+            .setImageLink("/img/t-shirt_red/1.img")
+            .setExtension(objectMapper.readValue("""
+                {
+                    "images": ["/img/t-shirt_red/2.img", "/img/t-shirt_red/3.img", "/img/t-shirt_red/4.img"]
+                }
+                """, ObjectNode.class));
+        articleRepository.save(article);
+
+        var text = "фу";
+        List<Article> articles = articleRepository.searchByText(text);
+        assertEquals(3, articles.size());  //3, т.к. в миграциях добавили 1 футболку
     }
 }
