@@ -1,5 +1,6 @@
 package ru.itone.ilp.services.activities;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,10 @@ public class ActivityService {
         Activity activity = ActivityMapper.INSTANCE.activityFromRequest(request);
         activity = activityRepository.save(activity);
         return toResponse(activity);
+    }
+
+    public List<ActivityResponse> searchActivity(String text) {
+        return activityRepository.searchByText(text).stream().map(ActivityService::toResponse).toList();
     }
 
 
