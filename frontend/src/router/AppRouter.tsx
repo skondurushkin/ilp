@@ -20,8 +20,8 @@ restoreAuthFromLocalStorage();
 
 export const AppRouter = () => {
     const { authData, authActions } = useHttpAuthBackend();
-    console.log(authData);
 
+    // TODO: uncomment
     // const router = hasRole(authData, UserRole.USER)
     //     ? hasRole(authData, UserRole.ADMIN)
     //         ? adminRouter

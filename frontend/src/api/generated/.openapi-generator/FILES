@@ -3,6 +3,7 @@ apis/ArticleApi.ts
 apis/AuthApi.ts
 apis/FilesApi.ts
 apis/ProfileApi.ts
+apis/SettingsApi.ts
 apis/WalletApi.ts
 apis/index.ts
 index.ts
@@ -21,6 +22,8 @@ models/PageRequest.ts
 models/PageRequestConfig.ts
 models/PageRequestConfigFilterInner.ts
 models/PageRequestConfigSortInner.ts
+models/PaginatedAccrualResponse.ts
+models/PaginatedAccrualResponseAllOf.ts
 models/PaginatedActivityResponse.ts
 models/PaginatedActivityResponseAllOf.ts
 models/PaginatedArticleResponse.ts
@@ -28,11 +31,17 @@ models/PaginatedArticleResponseAllOf.ts
 models/PaginatedProfileResponse.ts
 models/PaginatedProfileResponseAllOf.ts
 models/PaginatedResult.ts
+models/PaginatedWriteOffResponse.ts
+models/PaginatedWriteOffResponseAllOf.ts
 models/ProfileResponse.ts
+models/PropertyRequest.ts
+models/SettingRequest.ts
+models/SettingResponse.ts
 models/SignupRequest.ts
 models/TokenRefreshRequest.ts
 models/TokenRefreshResponse.ts
 models/UploadFile200Response.ts
 models/WalletResponse.ts
+models/WriteOffResponse.ts
 models/index.ts
 runtime.ts

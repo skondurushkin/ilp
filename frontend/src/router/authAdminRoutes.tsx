@@ -1,4 +1,4 @@
-import { AdminProducts } from '../pages/AdminProducts';
+import { ActivitiesAdminPage } from '../pages/ActivitiesAdminPage';
 import { Layout } from '../components/Layout';
 
 export const authAdminRoutes = [
@@ -8,10 +8,10 @@ export const authAdminRoutes = [
         index: true,
     },
     {
-        path: '/admin/products',
+        path: '/admin/activities',
         element: (
             <Layout className="overflow-y-hidden overflow-x-scroll">
-                <AdminProducts />
+                <ActivitiesAdminPage />
             </Layout>
         ),
     },

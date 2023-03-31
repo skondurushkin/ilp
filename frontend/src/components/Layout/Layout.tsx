@@ -82,7 +82,7 @@ export function Layout(props: LayoutProps): ReactElement {
                         <Nav className="mt-8 grow px-9 pb-3 sm:px-8 sm:pb-6 md:pb-10" />
                     </aside>
                     <main
-                        className={classnames(
+                        className={twMerge(
                             'grow px-4 pt-6 pb-10 sm:py-8 sm:px-8 md:px-14 md:pb-10 md:pt-8 xl:ml-[312px] xl:px-8 xl:pt-8 xl:pb-10',
                             className,
                         )}
