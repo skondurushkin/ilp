@@ -1,9 +1,11 @@
 package ru.itone.ilp.services.profiles;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedProfileResponse;
 import ru.itone.ilp.openapi.model.ProfileResponse;
@@ -33,7 +35,12 @@ public class ProfileService {
                 .map(ProfileService::toResponse);
     }
 
-
+    @Transactional(readOnly = true)
+    public List<ProfileResponse> searchProfile(String text) {
+        return userRepository.searchByText(text).stream()
+            .map(ProfileService::toResponse)
+            .toList();
+    }
 
     public static ProfileResponse toResponse(User user) {
         return  ProfileMapper.INSTANCE.userToProfileResponse(user);
@@ -42,6 +49,5 @@ public class ProfileService {
     public static PaginatedProfileResponse toPaginatedResponse(Page<User> page) {
         return ProfileMapper.INSTANCE.toPaginatedResponse(page);
     }
-
 
 }

@@ -16,6 +16,7 @@ import ru.itone.ilp.server.configuration.WebSecurityConfig;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.profiles.ProfileService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -45,4 +46,10 @@ public class ProfileController implements ProfileApi {
         Optional<ProfileResponse> user = profileService.getProfileById(userId.longValue());
         return user.map(ResponseEntity::ok)
                 .orElseThrow( () -> new ResourceNotFoundException("User profile not found."));    }
+
+    @Override
+    public ResponseEntity<List<ProfileResponse>> searchProfile(String searchKey) {
+        return ResponseEntity.ok(profileService.searchProfile(searchKey));
+    }
+
 }
