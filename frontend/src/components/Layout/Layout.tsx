@@ -8,7 +8,7 @@ import { Profile } from './Profile';
 import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
-import useClickOutside from 'use-click-outside';
+import { useClickAway } from 'react-use';
 
 export interface LayoutProps {
     menu?: ReactNode;
@@ -21,7 +21,7 @@ export function Layout(props: LayoutProps): ReactElement {
 
     const [mobileSidebarVisible, setMobileSidebarVisible] = useState(false);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
-    useClickOutside(sidebarRef, () => setMobileSidebarVisible(false));
+    useClickAway(sidebarRef, () => setMobileSidebarVisible(false));
 
     return (
         <div className="relative flex min-h-[100vh] w-full flex-col">
