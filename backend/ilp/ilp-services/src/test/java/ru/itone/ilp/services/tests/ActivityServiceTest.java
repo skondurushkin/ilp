@@ -25,7 +25,6 @@ class ActivityServiceTest extends ServicesTestConfiguration {
     @Test
     void testActivityCreate() {
         ActivityRequest req = new ActivityRequest().name("Выступление с бубном")
-                .startDate(LocalDate.now())
                 .description("Выступления на публичных мероприятиях компании с бубном");
         ActivityResponse activity = activityService.createActivity(req);
         assertNotNull(activity);

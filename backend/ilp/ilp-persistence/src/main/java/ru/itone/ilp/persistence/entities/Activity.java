@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -62,5 +63,12 @@ public class Activity implements Serializable {
     @Column(columnDefinition = "jsonb")
     @Type(JsonType.class)
     private ObjectNode extension;
+
+    @Transient
+    public boolean isActive(LocalDate at) {
+        return at.compareTo(this.getStartDate()) >= 0 &&
+               at.compareTo(this.getEndDate()) < 0;
+
+    }
 
 }
