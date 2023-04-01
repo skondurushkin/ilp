@@ -14,9 +14,10 @@
         "lint:styles:fix": "stylelint --fix --max-warnings 0 --color",
         "prettier": "prettier \"src/**/*.ts\" \"src/**/*.tsx\"",
         "prettier:fix": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
+        "openapi:prettier:fix": "prettier --write \"./src/api/generated/**/*.ts\"",
         "openapi:download": "yarn swagger-cli bundle -o ./src/api/openapi.json ../backend/ilp/ilp-openapi/src/main/resources/ilp-spec.yml",
         "openapi:generate": "openapi-generator-cli generate -i ./src/api/openapi.json -g typescript-fetch --skip-validate-spec --enable-post-process-file -o ./src/api/generated",
-        "openapi": "yarn openapi:download && yarn openapi:generate"
+        "openapi": "yarn openapi:download && yarn openapi:generate && yarn openapi:prettier:fix"
     },
     "dependencies": {
         "@tanstack/react-table": "^8.8.4",
