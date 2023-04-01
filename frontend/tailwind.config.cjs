@@ -12,6 +12,9 @@ module.exports = {
       fontFamily: {
         'sans': ['Lab Grotesque', ...defaultTheme.fontFamily.sans],
       },
+      spacing: {
+        'sidebar': '312px',
+      }
     },
     colors: {
       black:'#000000',
