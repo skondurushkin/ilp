@@ -50,6 +50,10 @@ export interface SearchActivityRequest {
     searchKey: string;
 }
 
+export interface UpdateActivityRequest {
+    activityRequest: ActivityRequest;
+}
+
 /**
  *
  */
@@ -257,6 +261,59 @@ export class ActivityApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<Array<ActivityResponse>> {
         const response = await this.searchActivityRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * update activity record
+     */
+    async updateActivityRaw(
+        requestParameters: UpdateActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<ActivityResponse>> {
+        if (requestParameters.activityRequest === null || requestParameters.activityRequest === undefined) {
+            throw new runtime.RequiredError(
+                'activityRequest',
+                'Required parameter requestParameters.activityRequest was null or undefined when calling updateActivity.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/activity`,
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: ActivityRequestToJSON(requestParameters.activityRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ActivityResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * update activity record
+     */
+    async updateActivity(
+        requestParameters: UpdateActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<ActivityResponse> {
+        const response = await this.updateActivityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }

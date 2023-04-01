@@ -535,13 +535,30 @@
                                 }
                             }
                         }
-                    },
-                    "400": {
+                    }
+                }
+            },
+            "put": {
+                "operationId": "updateActivity",
+                "summary": "update activity record",
+                "tags": ["activity"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActivityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
                         "description": "OK",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorMessage"
+                                    "$ref": "#/components/schemas/ActivityResponse"
                                 }
                             }
                         }
