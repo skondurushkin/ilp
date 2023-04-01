@@ -15,6 +15,10 @@ html {
 }
 
 @layer components {
+    .app-bg {
+        @apply bg-white text-black dark:bg-gray-dark dark:text-white;
+    }
+
     .input {
         @apply h-[50px] border-2 px-3 text-black focus:border-success focus:outline-none;
     }

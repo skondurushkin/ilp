@@ -33,7 +33,7 @@ export function Profile(props: ProfileProps): ReactElement {
                     </div>
                 )}
             </div>
-            <div className="mt-2 text-ellipsis">{fullName}</div>
+            <div className="mt-2 text-center">{fullName}</div>
         </div>
     );
 }
