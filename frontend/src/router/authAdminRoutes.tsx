@@ -11,18 +11,10 @@ export const authAdminRoutes = [
     {
         path: '/admin/activities',
         index: true,
-        element: (
-            <Layout className="overflow-y-hidden overflow-x-scroll">
-                <ActivitiesAdminPage />
-            </Layout>
-        ),
+        element: <ActivitiesAdminPage />,
     },
     {
         path: '/admin/activities/create',
-        element: (
-            <Layout>
-                <CreateActivitiesAdminPage />
-            </Layout>
-        ),
+        element: <CreateActivitiesAdminPage />,
     },
 ] as const;

@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
+import { Layout } from '../../components/Layout';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 
@@ -66,19 +67,21 @@ export const ActivitiesAdminPage = () => {
     );
 
     return (
-        <div className="flex flex-col gap-4">
-            <h1 className="text-h1">Активности</h1>
-            <div>
-                <TypedLink to="/admin/activities/create">
-                    <button className="btn btn-primary">Добавить активность</button>
-                </TypedLink>
+        <Layout>
+            <div className="flex flex-col gap-6">
+                <h1 className="text-h1">Активности</h1>
+                <div>
+                    <TypedLink to="/admin/activities/create">
+                        <button className="btn btn-primary">Добавить активность</button>
+                    </TypedLink>
+                </div>
+                <AdminTable
+                    globalFilterPlaceholder="Поиск по названию и описанию"
+                    columns={columns}
+                    queryData={queryData}
+                    queryKey="browseActivities"
+                />
             </div>
-            <AdminTable
-                globalFilterPlaceholder="Поиск по названию и описанию"
-                columns={columns}
-                queryData={queryData}
-                queryKey="browseActivities"
-            />
-        </div>
+        </Layout>
     );
 };

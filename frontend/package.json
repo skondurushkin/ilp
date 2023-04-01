@@ -26,6 +26,7 @@
         "react-hook-form": "^7.43.9",
         "react-query": "^3.39.3",
         "react-router-dom": "^6.9.0",
+        "react-toastify": "^9.1.2",
         "react-use": "^17.4.0",
         "tailwind-merge": "^1.11.0",
         "use-local-storage-state": "^18.2.1",

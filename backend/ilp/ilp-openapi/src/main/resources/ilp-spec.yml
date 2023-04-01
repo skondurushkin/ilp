@@ -369,6 +369,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActivityResponse'
+        400:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
 
   /api/ilp/activities:
     post:

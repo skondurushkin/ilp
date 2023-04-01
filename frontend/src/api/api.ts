@@ -4,9 +4,14 @@ import {
     AuthApi,
     Configuration,
     ConfigurationParameters,
+    Middleware,
     ProfileApi,
+    ResponseContext,
     WalletApi,
 } from './generated';
+
+import { DEFAULT_API_ERROR_MSG } from './constants';
+import { toast } from 'react-toastify';
 
 function createInternalApi(config: ConfigurationParameters) {
     const cnf = new Configuration(config);
@@ -19,6 +24,31 @@ function createInternalApi(config: ConfigurationParameters) {
     };
 }
 
+class ErrorContentMiddleware implements Middleware {
+    public async post?(context: ResponseContext): Promise<Response | void> {
+        if (context.response.status >= 400) {
+            const json = await context.response
+                .clone()
+                .json()
+                .then((j) => j);
+
+            if (context.response.status >= 500) {
+                toast(DEFAULT_API_ERROR_MSG, {
+                    autoClose: false,
+                    type: 'error',
+                });
+            }
+
+            return Promise.reject({
+                status: context.response.status,
+                ...json,
+            });
+        }
+
+        return Promise.resolve(context.response);
+    }
+}
+
 export type InternalAPI = ReturnType<typeof createInternalApi>;
 
 export type API = InternalAPI & { setAuthToken: (token: string | undefined) => void };
@@ -28,7 +58,7 @@ export function createAPI(cnf: ConfigurationParameters): API {
         ...createInternalApi(cnf),
         setAuthToken: function (this: API, token): void {
             const headers = token !== undefined ? { Authorization: `Bearer ${token}` } : undefined;
-            Object.assign(this, createInternalApi({ ...cnf, headers }));
+            Object.assign(this, createInternalApi({ ...cnf, headers, middleware: [new ErrorContentMiddleware()] }));
         },
     };
     return inst;
