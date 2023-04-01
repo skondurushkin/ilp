@@ -55,13 +55,13 @@ export function Layout(props: LayoutProps): ReactElement {
                 </div>
             </header>
             <div className="app-bg flex grow flex-col">
-                <div className="relative flex w-full w-full grow xl:mx-auto xl:max-w-[1280px]">
+                <div className="relative flex w-full w-full grow xl:container xl:mx-auto">
                     <aside
                         ref={sidebarRef}
                         className={twMerge(
                             //common
                             'bg-gray-dark text-white dark:bg-gray-dark dark:text-white xl:bg-white xl:text-black',
-                            'flex flex-col border-r border-r-gray ',
+                            'flex flex-col overflow-y-auto border-r border-r-gray',
                             //mobile
                             mobileSidebarVisible ? 'translate-x-0' : 'translate-x-full',
                             'fixed top-0 bottom-0 right-0 left-0 z-40 transition-transform',
@@ -80,8 +80,10 @@ export function Layout(props: LayoutProps): ReactElement {
                         <Profile className="mt-14 sm:mt-8 xl:mt-8" />
                         <Nav className="mt-8 grow px-9 pb-3 sm:px-8 sm:pb-6 md:pb-10" />
                     </aside>
-                    <main className="grow px-4 pt-6 pb-10 sm:py-8 sm:px-8 md:px-14 md:pb-10 md:pt-8 xl:ml-sidebar xl:px-8 xl:pt-8 xl:pb-10">
-                        {children}
+                    <main className="flex w-full grow flex-col xl:container xl:pl-sidebar">
+                        <div className="grow px-4 pt-6 pb-10 sm:py-8 sm:px-8 md:px-14 md:pb-10 md:pt-8 xl:px-8 xl:pt-8 xl:pb-10">
+                            {children}
+                        </div>
                     </main>
                 </div>
             </div>
