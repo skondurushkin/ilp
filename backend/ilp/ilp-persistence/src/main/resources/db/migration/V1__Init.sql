@@ -136,8 +136,10 @@ alter table if exists write_offs
     add constraint FK_write_offs__articles foreign key (article_id) references articles ON DELETE CASCADE;
 
 insert into settings (prop_key, prop_value)
-values ('db.version', '1.0'),
-       ('admin.email', 'skondurushkin@gmail.com');
+values  ('db.version', '1.0'),
+        ('admin.email', 'skondurushkin@gmail.com'),
+        ('subject.accrual', 'IT_ONE Loyalty Program: Начисление вольт'),
+        ('subject.support', 'IT_ONE Loyalty Program: Обращение в поддержку');
 
 insert into roles (name)
 values ('USER');

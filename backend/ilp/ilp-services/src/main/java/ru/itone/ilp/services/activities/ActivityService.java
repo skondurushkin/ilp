@@ -1,5 +1,6 @@
 package ru.itone.ilp.services.activities;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,8 @@ public class ActivityService {
     }
 
     public ActivityResponse createActivity(ActivityRequest request) {
-        Activity activity = ActivityMapper.INSTANCE.activityFromRequest(request);
+        Activity activity = ActivityMapper.INSTANCE.activityFromRequest(request)
+                .setStartDate(LocalDate.now());
         activity = activityRepository.save(activity);
         return toResponse(activity);
     }

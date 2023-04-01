@@ -18,11 +18,14 @@ public interface ActivityMapper {
 
     @Mapping(target = "startDate", expression = "java(this.nonVirtual(activity.getStartDate()))")
     @Mapping(target = "endDate", expression = "java(this.nonVirtual(activity.getEndDate()))")
+    @Mapping(target = "active", expression = "java(this.isActive(activity))")
     ActivityResponse activityToResponse(Activity activity);
 
-    @Mapping(target = "startDate", source = "startDate", conditionExpression = "java(request.getStartDate() != null)")
     Activity activityFromRequest(ActivityRequest request);
 
+    default boolean isActive(Activity activity) {
+        return activity.isActive(LocalDate.now());
+    }
     default LocalDate nonVirtual(LocalDate date) {
         return ApiHelper.virtualDate.equals(date)
                 ? null
