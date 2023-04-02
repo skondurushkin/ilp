@@ -32,11 +32,17 @@ export interface ActivityRequest {
      */
     description?: string;
     /**
-     *
-     * @type {Date}
+     * generic amount
+     * @type {number}
      * @memberof ActivityRequest
      */
-    startDate: Date;
+    amount: number;
+    /**
+     *
+     * @type {string}
+     * @memberof ActivityRequest
+     */
+    infoLink: string;
 }
 
 /**
@@ -45,7 +51,8 @@ export interface ActivityRequest {
 export function instanceOfActivityRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'name' in value;
-    isInstance = isInstance && 'startDate' in value;
+    isInstance = isInstance && 'amount' in value;
+    isInstance = isInstance && 'infoLink' in value;
 
     return isInstance;
 }
@@ -61,7 +68,8 @@ export function ActivityRequestFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
-        startDate: new Date(json['startDate']),
+        amount: json['amount'],
+        infoLink: json['infoLink'],
     };
 }
 
@@ -75,6 +83,7 @@ export function ActivityRequestToJSON(value?: ActivityRequest | null): any {
     return {
         name: value.name,
         description: value.description,
-        startDate: value.startDate.toISOString().substr(0, 10),
+        amount: value.amount,
+        infoLink: value.infoLink,
     };
 }

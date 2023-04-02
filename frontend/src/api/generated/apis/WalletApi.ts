@@ -14,14 +14,134 @@
 
 import * as runtime from '../runtime';
 
-import { WalletResponseFromJSON, WalletResponseToJSON } from '../models';
+import type { PaginatedAccrualResponse, PaginatedWriteOffResponse, WalletResponse } from '../models';
+import {
+    PaginatedAccrualResponseFromJSON,
+    PaginatedAccrualResponseToJSON,
+    PaginatedWriteOffResponseFromJSON,
+    PaginatedWriteOffResponseToJSON,
+    WalletResponseFromJSON,
+    WalletResponseToJSON,
+} from '../models';
 
-import type { WalletResponse } from '../models';
+export interface BrowseAccrualsRequest {
+    userId: number;
+}
+
+export interface BrowseWriteOffsRequest {
+    userId: number;
+}
 
 /**
  *
  */
 export class WalletApi extends runtime.BaseAPI {
+    /**
+     * paginated view of user\'s accruals
+     */
+    async browseAccrualsRaw(
+        requestParameters: BrowseAccrualsRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedAccrualResponse>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling browseAccruals.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/wallet/accruals/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedAccrualResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * paginated view of user\'s accruals
+     */
+    async browseAccruals(
+        requestParameters: BrowseAccrualsRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedAccrualResponse> {
+        const response = await this.browseAccrualsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * paginated view of user\'s write-offs
+     */
+    async browseWriteOffsRaw(
+        requestParameters: BrowseWriteOffsRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedWriteOffResponse>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling browseWriteOffs.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/wallet/write-offs/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedWriteOffResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * paginated view of user\'s write-offs
+     */
+    async browseWriteOffs(
+        requestParameters: BrowseWriteOffsRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedWriteOffResponse> {
+        const response = await this.browseWriteOffsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
     /**
      * get overview of the wallet state of currently logged in user
      */

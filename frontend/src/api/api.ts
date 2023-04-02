@@ -5,6 +5,7 @@ import {
     Configuration,
     ConfigurationParameters,
     ProfileApi,
+    SettingsApi,
     WalletApi,
 } from './generated';
 
@@ -16,6 +17,7 @@ function createInternalApi(config: ConfigurationParameters) {
         activity: new ActivityApi(cnf),
         article: new ArticleApi(cnf),
         wallet: new WalletApi(cnf),
+        settings: new SettingsApi(cnf),
     };
 }
 

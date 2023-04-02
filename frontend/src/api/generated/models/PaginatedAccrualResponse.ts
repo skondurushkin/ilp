@@ -12,59 +12,59 @@
  * Do not edit the class manually.
  */
 
-import { ActivityResponseFromJSON, ActivityResponseFromJSONTyped, ActivityResponseToJSON } from './ActivityResponse';
+import { AccrualResponseFromJSON, AccrualResponseFromJSONTyped, AccrualResponseToJSON } from './AccrualResponse';
 import { exists, mapValues } from '../runtime';
 
-import type { ActivityResponse } from './ActivityResponse';
+import type { AccrualResponse } from './AccrualResponse';
 
 /**
  *
  * @export
- * @interface PaginatedActivityResponse
+ * @interface PaginatedAccrualResponse
  */
-export interface PaginatedActivityResponse {
+export interface PaginatedAccrualResponse {
     /**
      * total page count
      * @type {number}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedAccrualResponse
      */
     total: number;
     /**
      * current page
      * @type {number}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedAccrualResponse
      */
     page: number;
     /**
      *
      * @type {number}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedAccrualResponse
      */
     pageSize: number;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedAccrualResponse
      */
     hasNext: boolean;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedAccrualResponse
      */
     hasPrev: boolean;
     /**
      *
-     * @type {Array<ActivityResponse>}
-     * @memberof PaginatedActivityResponse
+     * @type {Array<AccrualResponse>}
+     * @memberof PaginatedAccrualResponse
      */
-    results: Array<ActivityResponse>;
+    results: Array<AccrualResponse>;
 }
 
 /**
- * Check if a given object implements the PaginatedActivityResponse interface.
+ * Check if a given object implements the PaginatedAccrualResponse interface.
  */
-export function instanceOfPaginatedActivityResponse(value: object): boolean {
+export function instanceOfPaginatedAccrualResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'total' in value;
     isInstance = isInstance && 'page' in value;
@@ -76,14 +76,14 @@ export function instanceOfPaginatedActivityResponse(value: object): boolean {
     return isInstance;
 }
 
-export function PaginatedActivityResponseFromJSON(json: any): PaginatedActivityResponse {
-    return PaginatedActivityResponseFromJSONTyped(json, false);
+export function PaginatedAccrualResponseFromJSON(json: any): PaginatedAccrualResponse {
+    return PaginatedAccrualResponseFromJSONTyped(json, false);
 }
 
-export function PaginatedActivityResponseFromJSONTyped(
+export function PaginatedAccrualResponseFromJSONTyped(
     json: any,
     ignoreDiscriminator: boolean,
-): PaginatedActivityResponse {
+): PaginatedAccrualResponse {
     if (json === undefined || json === null) {
         return json;
     }
@@ -93,11 +93,11 @@ export function PaginatedActivityResponseFromJSONTyped(
         pageSize: json['pageSize'],
         hasNext: json['hasNext'],
         hasPrev: json['hasPrev'],
-        results: (json['results'] as Array<any>).map(ActivityResponseFromJSON),
+        results: (json['results'] as Array<any>).map(AccrualResponseFromJSON),
     };
 }
 
-export function PaginatedActivityResponseToJSON(value?: PaginatedActivityResponse | null): any {
+export function PaginatedAccrualResponseToJSON(value?: PaginatedAccrualResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -110,6 +110,6 @@ export function PaginatedActivityResponseToJSON(value?: PaginatedActivityRespons
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: (value.results as Array<any>).map(ActivityResponseToJSON),
+        results: (value.results as Array<any>).map(AccrualResponseToJSON),
     };
 }

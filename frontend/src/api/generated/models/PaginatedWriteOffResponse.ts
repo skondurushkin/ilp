@@ -12,59 +12,59 @@
  * Do not edit the class manually.
  */
 
-import { ActivityResponseFromJSON, ActivityResponseFromJSONTyped, ActivityResponseToJSON } from './ActivityResponse';
+import { WriteOffResponseFromJSON, WriteOffResponseFromJSONTyped, WriteOffResponseToJSON } from './WriteOffResponse';
 import { exists, mapValues } from '../runtime';
 
-import type { ActivityResponse } from './ActivityResponse';
+import type { WriteOffResponse } from './WriteOffResponse';
 
 /**
  *
  * @export
- * @interface PaginatedActivityResponse
+ * @interface PaginatedWriteOffResponse
  */
-export interface PaginatedActivityResponse {
+export interface PaginatedWriteOffResponse {
     /**
      * total page count
      * @type {number}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedWriteOffResponse
      */
     total: number;
     /**
      * current page
      * @type {number}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedWriteOffResponse
      */
     page: number;
     /**
      *
      * @type {number}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedWriteOffResponse
      */
     pageSize: number;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedWriteOffResponse
      */
     hasNext: boolean;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedActivityResponse
+     * @memberof PaginatedWriteOffResponse
      */
     hasPrev: boolean;
     /**
      *
-     * @type {Array<ActivityResponse>}
-     * @memberof PaginatedActivityResponse
+     * @type {Array<WriteOffResponse>}
+     * @memberof PaginatedWriteOffResponse
      */
-    results: Array<ActivityResponse>;
+    results: Array<WriteOffResponse>;
 }
 
 /**
- * Check if a given object implements the PaginatedActivityResponse interface.
+ * Check if a given object implements the PaginatedWriteOffResponse interface.
  */
-export function instanceOfPaginatedActivityResponse(value: object): boolean {
+export function instanceOfPaginatedWriteOffResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'total' in value;
     isInstance = isInstance && 'page' in value;
@@ -76,14 +76,14 @@ export function instanceOfPaginatedActivityResponse(value: object): boolean {
     return isInstance;
 }
 
-export function PaginatedActivityResponseFromJSON(json: any): PaginatedActivityResponse {
-    return PaginatedActivityResponseFromJSONTyped(json, false);
+export function PaginatedWriteOffResponseFromJSON(json: any): PaginatedWriteOffResponse {
+    return PaginatedWriteOffResponseFromJSONTyped(json, false);
 }
 
-export function PaginatedActivityResponseFromJSONTyped(
+export function PaginatedWriteOffResponseFromJSONTyped(
     json: any,
     ignoreDiscriminator: boolean,
-): PaginatedActivityResponse {
+): PaginatedWriteOffResponse {
     if (json === undefined || json === null) {
         return json;
     }
@@ -93,11 +93,11 @@ export function PaginatedActivityResponseFromJSONTyped(
         pageSize: json['pageSize'],
         hasNext: json['hasNext'],
         hasPrev: json['hasPrev'],
-        results: (json['results'] as Array<any>).map(ActivityResponseFromJSON),
+        results: (json['results'] as Array<any>).map(WriteOffResponseFromJSON),
     };
 }
 
-export function PaginatedActivityResponseToJSON(value?: PaginatedActivityResponse | null): any {
+export function PaginatedWriteOffResponseToJSON(value?: PaginatedWriteOffResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -110,6 +110,6 @@ export function PaginatedActivityResponseToJSON(value?: PaginatedActivityRespons
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: (value.results as Array<any>).map(ActivityResponseToJSON),
+        results: (value.results as Array<any>).map(WriteOffResponseToJSON),
     };
 }

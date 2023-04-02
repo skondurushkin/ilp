@@ -39,7 +39,7 @@ export function Nav(props: NavProps): ReactElement {
         };
 
     const config = useConfig();
-    const supportUrl = config ? `mailto:${config.adminEmail}?subject=${config.supportSubject}` : '#';
+    const supportUrl = config ? `mailto:${config.adminEmail}?subject=${config.supportEmailSubject}` : '#';
 
     return (
         <nav className={twMerge('flex flex-col', className)}>
