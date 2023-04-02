@@ -1,19 +1,15 @@
 import { ActivityRequest, ErrorMessage, api } from '../../api';
 
-import { FormInput } from '../../components/FormInput';
+import { FormInput } from '../../components/Form';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
 
-export interface CreateActivitiesFormProps {
-    defaultValues?: {
-        name?: string | undefined;
-        amount?: number | undefined;
-        infoLink?: string | undefined;
-    };
+export interface CreateActivityFormProps {
+    defaultValues: ActivityRequest;
 }
 
-export const CreateActivitiesForm = (props: CreateActivitiesFormProps) => {
+export const CreateActivityForm = (props: CreateActivityFormProps) => {
     const { defaultValues } = props;
 
     const { control, handleSubmit, formState, reset } = useForm<ActivityRequest>({
@@ -48,9 +44,10 @@ export const CreateActivitiesForm = (props: CreateActivitiesFormProps) => {
                         control={control}
                         type="number"
                         name="amount"
-                        label="Стоимость в вольтах"
+                        label="Стоимость"
                         rules={{
                             min: validationRules.min(1),
+                            required: validationRules.required,
                         }}
                     />
                     <FormInput control={control} name="infoLink" label="Ссылка на описание" />

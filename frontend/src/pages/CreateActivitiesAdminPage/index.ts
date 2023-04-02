@@ -1,1 +1,0 @@
-export { CreateActivitiesAdminPage } from './CreateActivitiesAdminPage';

@@ -1,4 +1,4 @@
-import { ActivityResponse, PageRequest, api } from '../../api';
+import { ArticleResponse, PageRequest, api } from '../../api';
 import { useCallback, useMemo } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
@@ -8,14 +8,16 @@ import { Layout } from '../../components/Layout';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 
-export const ActivitiesAdminPage = () => {
+export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
+
+export const ProductsAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
-        return api.activity.browseActivities({
+        return api.article.browseArticles({
             pageRequest,
         });
     }, []);
 
-    const columns = useMemo<ColumnDef<ActivityResponse>[]>(
+    const columns = useMemo<ColumnDef<ArticleResponse>[]>(
         () => [
             {
                 accessorKey: 'id',
@@ -24,41 +26,26 @@ export const ActivitiesAdminPage = () => {
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Название</span>,
+                header: () => <span>Наименование</span>,
                 cell: (info) => {
-                    const { infoLink, name } = info.row.original;
+                    const { description, name } = info.row.original;
                     return (
                         <div className="flex flex-col gap-2">
                             <p className="text-base text-white">{name}</p>
-                            <a
-                                target="_blank"
-                                rel="noreferrer"
-                                href={infoLink}
-                                className="text-small text-ellipsis text-gray underline"
-                            >
-                                {infoLink}
-                            </a>
+                            <p className="text-small text-ellipsis text-gray">{description}</p>
                         </div>
                     );
                 },
             },
             {
-                accessorKey: 'amount',
-                header: () => <span>Стоимость</span>,
+                accessorKey: 'code',
+                header: () => <span>Артикул</span>,
                 cell: (info) => info.getValue(),
             },
             {
-                accessorKey: 'infoLink',
-                header: () => <span>Дата</span>,
-                cell: (info) => {
-                    const { startDate, endDate } = info.row.original;
-                    return (
-                        <div className="flex flex-col gap-2">
-                            {startDate && <p>{new Date(startDate).toLocaleDateString('ru-RU')}</p>}
-                            {endDate && <p>{new Date(endDate).toLocaleDateString('ru-RU')}</p>}
-                        </div>
-                    );
-                },
+                accessorKey: 'price',
+                header: () => <span>Стоимость</span>,
+                cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'actions',
@@ -68,7 +55,7 @@ export const ActivitiesAdminPage = () => {
 
                     return (
                         <div className="flex gap-2">
-                            <TypedLink to="/admin/activities/edit/:activityId" params={{ activityId: id.toString() }}>
+                            <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
                                 <button className="btn">
                                     <EditSVG />
                                 </button>
@@ -88,17 +75,17 @@ export const ActivitiesAdminPage = () => {
     return (
         <Layout>
             <div className="flex flex-col gap-6">
-                <h1 className="text-h1">Активности</h1>
+                <h1 className="text-h1">Товары</h1>
                 <div>
-                    <TypedLink to="/admin/activities/create">
-                        <button className="btn btn-primary">Добавить активность</button>
+                    <TypedLink to="/admin/products/create">
+                        <button className="btn btn-primary">Добавить товар</button>
                     </TypedLink>
                 </div>
                 <AdminTable
-                    globalFilterPlaceholder="Поиск по Названию и Описанию"
+                    globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
                     columns={columns}
                     queryData={queryData}
-                    queryKey="browseActivities"
+                    queryKey="browseArticles"
                 />
             </div>
         </Layout>

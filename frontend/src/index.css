@@ -20,11 +20,19 @@ html {
     }
 
     .input {
-        @apply h-[50px] border-2 px-3 text-black focus:border-success focus:outline-none;
+        @apply h-[50px] border-2 px-3 text-black focus:border-success focus:outline-none focus:ring-0;
     }
 
     .input-error {
-        @apply border-error focus:border-error focus:outline-none;
+        @apply border-error focus:border-error focus:outline-none focus:ring-0;
+    }
+
+    .checkbox {
+        @apply h-4 w-4 border-2 text-black focus:border-success focus:outline-none focus:ring-0;
+    }
+
+    .textarea {
+        @apply border-2 px-3 text-black focus:border-success focus:outline-none focus:ring-0;
     }
 
     .btn {

@@ -380,7 +380,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ActivityRequest'
+              $ref: '#/components/schemas/ActivityUpdateRequest'
       responses:
         201:
           description: 'OK'
@@ -470,6 +470,24 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ArticleRequest'
+      responses:
+        201:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+    put:
+      operationId: updateArticle
+      summary: update article record
+      tags:
+        - article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleUpdateRequest'
       responses:
         201:
           description: 'OK'
@@ -686,6 +704,11 @@ components:
       format: int32
       minimum: 0
       description:  generic amount
+
+    Price:
+      type: integer
+      format: int32
+      minimum: 1
 
     PropertyRequest:
       type: object
@@ -995,6 +1018,17 @@ components:
         infoLink:
           type: string
 
+    ActivityUpdateRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ActivityRequest"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: '#/components/schemas/Identifier'
+
     ActivityResponse:
       type: object
       required:
@@ -1042,6 +1076,8 @@ components:
       required:
         - code
         - name
+        - price
+        - available
       properties:
         code:
           type: string
@@ -1054,12 +1090,21 @@ components:
           maxLength: 500
           nullable: true
         price:
-          type: integer
-          minimum: 0
-          nullable: true
+          $ref: '#/components/schemas/Price'
         available:
           type: boolean
           default: true
+
+    ArticleUpdateRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ArticleRequest"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: '#/components/schemas/Identifier'
 
     ArticleResponse:
       type: object
@@ -1067,6 +1112,8 @@ components:
         - id
         - code
         - name
+        - price
+        - available
       properties:
         id:
           $ref: '#/components/schemas/Identifier'
@@ -1081,9 +1128,7 @@ components:
           maxLength: 500
           nullable: true
         price:
-          type: integer
-          minimum: 0
-          nullable: true
+          $ref: '#/components/schemas/Price'
         available:
           type: boolean
           default: false

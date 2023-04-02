@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
     ActivityRequest,
     ActivityResponse,
+    ActivityUpdateRequest,
     ErrorMessage,
     PageRequest,
     PaginatedActivityResponse,
@@ -26,6 +27,8 @@ import {
     ActivityRequestToJSON,
     ActivityResponseFromJSON,
     ActivityResponseToJSON,
+    ActivityUpdateRequestFromJSON,
+    ActivityUpdateRequestToJSON,
     ErrorMessageFromJSON,
     ErrorMessageToJSON,
     PageRequestFromJSON,
@@ -51,7 +54,7 @@ export interface SearchActivityRequest {
 }
 
 export interface UpdateActivityRequest {
-    activityRequest: ActivityRequest;
+    activityUpdateRequest: ActivityUpdateRequest;
 }
 
 /**
@@ -271,10 +274,10 @@ export class ActivityApi extends runtime.BaseAPI {
         requestParameters: UpdateActivityRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<ActivityResponse>> {
-        if (requestParameters.activityRequest === null || requestParameters.activityRequest === undefined) {
+        if (requestParameters.activityUpdateRequest === null || requestParameters.activityUpdateRequest === undefined) {
             throw new runtime.RequiredError(
-                'activityRequest',
-                'Required parameter requestParameters.activityRequest was null or undefined when calling updateActivity.',
+                'activityUpdateRequest',
+                'Required parameter requestParameters.activityUpdateRequest was null or undefined when calling updateActivity.',
             );
         }
 
@@ -298,7 +301,7 @@ export class ActivityApi extends runtime.BaseAPI {
                 method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,
-                body: ActivityRequestToJSON(requestParameters.activityRequest),
+                body: ActivityUpdateRequestToJSON(requestParameters.activityUpdateRequest),
             },
             initOverrides,
         );

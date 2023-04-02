@@ -10,8 +10,11 @@ index.ts
 models/AccrualResponse.ts
 models/ActivityRequest.ts
 models/ActivityResponse.ts
+models/ActivityUpdateRequest.ts
+models/ActivityUpdateRequestAllOf.ts
 models/ArticleRequest.ts
 models/ArticleResponse.ts
+models/ArticleUpdateRequest.ts
 models/ERole.ts
 models/ErrorMessage.ts
 models/JwtResponse.ts

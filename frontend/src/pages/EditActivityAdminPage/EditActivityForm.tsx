@@ -1,29 +1,25 @@
-import { ActivityRequest, ErrorMessage, api } from '../../api';
+import { ActivityUpdateRequest, ErrorMessage, api } from '../../api';
 
-import { FormInput } from '../../components/FormInput';
+import { FormInput } from '../../components/Form';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
 
-export interface EditActivitiesFormProps {
-    defaultValues?: {
-        name?: string | undefined;
-        amount?: number | undefined;
-        infoLink?: string | undefined;
-    };
+export interface EditActivityFormProps {
+    values: ActivityUpdateRequest;
 }
 
-export const EditActivitiesForm = (props: EditActivitiesFormProps) => {
-    const { defaultValues } = props;
+export const EditActivityForm = (props: EditActivityFormProps) => {
+    const { values } = props;
 
-    const { control, handleSubmit, formState } = useForm<ActivityRequest>({
-        defaultValues,
+    const { control, handleSubmit, formState } = useForm<ActivityUpdateRequest>({
+        values,
     });
 
-    const onSubmit = async (activityRequest: ActivityRequest) => {
+    const onSubmit = async (data: ActivityUpdateRequest) => {
         try {
             await api.activity.updateActivity({
-                activityRequest,
+                activityUpdateRequest: data,
             });
             toast('Активность обновлена');
         } catch (err) {
@@ -47,9 +43,10 @@ export const EditActivitiesForm = (props: EditActivitiesFormProps) => {
                         control={control}
                         type="number"
                         name="amount"
-                        label="Стоимость в вольтах"
+                        label="Стоимость"
                         rules={{
                             min: validationRules.min(1),
+                            required: validationRules.required,
                         }}
                     />
                     <FormInput control={control} name="infoLink" label="Ссылка на описание" />

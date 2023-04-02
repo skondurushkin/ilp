@@ -14,12 +14,21 @@
 
 import * as runtime from '../runtime';
 
-import type { ArticleRequest, ArticleResponse, ErrorMessage, PageRequest, PaginatedArticleResponse } from '../models';
+import type {
+    ArticleRequest,
+    ArticleResponse,
+    ArticleUpdateRequest,
+    ErrorMessage,
+    PageRequest,
+    PaginatedArticleResponse,
+} from '../models';
 import {
     ArticleRequestFromJSON,
     ArticleRequestToJSON,
     ArticleResponseFromJSON,
     ArticleResponseToJSON,
+    ArticleUpdateRequestFromJSON,
+    ArticleUpdateRequestToJSON,
     ErrorMessageFromJSON,
     ErrorMessageToJSON,
     PageRequestFromJSON,
@@ -42,6 +51,10 @@ export interface GetArticleByIdRequest {
 
 export interface SearchArticlesRequest {
     searchKey: string;
+}
+
+export interface UpdateArticleRequest {
+    articleUpdateRequest: ArticleUpdateRequest;
 }
 
 /**
@@ -258,6 +271,59 @@ export class ArticleApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<Array<ArticleResponse>> {
         const response = await this.searchArticlesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * update article record
+     */
+    async updateArticleRaw(
+        requestParameters: UpdateArticleRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<ArticleResponse>> {
+        if (requestParameters.articleUpdateRequest === null || requestParameters.articleUpdateRequest === undefined) {
+            throw new runtime.RequiredError(
+                'articleUpdateRequest',
+                'Required parameter requestParameters.articleUpdateRequest was null or undefined when calling updateArticle.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/article`,
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: ArticleUpdateRequestToJSON(requestParameters.articleUpdateRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ArticleResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * update article record
+     */
+    async updateArticle(
+        requestParameters: UpdateArticleRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<ArticleResponse> {
+        const response = await this.updateArticleRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }

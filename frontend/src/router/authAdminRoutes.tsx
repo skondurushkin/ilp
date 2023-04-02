@@ -1,7 +1,10 @@
 import { ActivitiesAdminPage } from '../pages/ActivitiesAdminPage';
-import { CreateActivitiesAdminPage } from '../pages/CreateActivitiesAdminPage';
-import { EditActivitiesAdminPage } from '../pages/EditActivitiesAdminPage';
+import { CreateActivityAdminPage } from '../pages/CreateActivityAdminPage';
+import { CreateProductAdminPage } from '../pages/CreateProductAdminPage';
+import { EditActivityAdminPage } from '../pages/EditActivityAdminPage';
+import { EditProductAdminPage } from '../pages/EditProductAdminPage';
 import { Layout } from '../components/Layout';
+import { ProductsAdminPage } from '../pages/ProductsAdminPage';
 
 export const authAdminRoutes = [
     {
@@ -16,10 +19,23 @@ export const authAdminRoutes = [
     },
     {
         path: '/admin/activities/create',
-        element: <CreateActivitiesAdminPage />,
+        element: <CreateActivityAdminPage />,
     },
     {
         path: '/admin/activities/edit/:activityId',
-        element: <EditActivitiesAdminPage />,
+        element: <EditActivityAdminPage />,
+    },
+    {
+        path: '/admin/products',
+        index: true,
+        element: <ProductsAdminPage />,
+    },
+    {
+        path: '/admin/products/create',
+        element: <CreateProductAdminPage />,
+    },
+    {
+        path: '/admin/products/edit/:productId',
+        element: <EditProductAdminPage />,
     },
 ] as const;

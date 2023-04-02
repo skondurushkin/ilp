@@ -1,5 +1,6 @@
 import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 'react-hook-form';
 
+import { FormErrorMessage } from './FormErrorMessage';
 import { InputHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -21,8 +22,8 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues>(props:
     });
 
     return (
-        <div className="flex flex-col gap-1">
-            <label htmlFor={name} className="text-small text-black dark:text-white">
+        <div className="flex flex-col gap-2">
+            <label htmlFor={name} className="text-base text-black dark:text-white">
                 {label}
                 {rules?.required && <span>&nbsp;*</span>}
             </label>
@@ -30,16 +31,9 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues>(props:
                 {...field}
                 {...rest}
                 name={name}
-                className={twMerge('input', fieldState.invalid && 'input-error', className)}
+                className={twMerge('input form-input', fieldState.invalid && 'input-error', className)}
             />
-            <div
-                className={twMerge(
-                    'h-3 opacity-0 transition-opacity duration-300 ease-in',
-                    !!fieldState.error && 'opacity-100',
-                )}
-            >
-                {!!fieldState.error && <p className="text-small text-error ">{fieldState.error.message}</p>}
-            </div>
+            <FormErrorMessage error={fieldState.error} />
         </div>
     );
 };
