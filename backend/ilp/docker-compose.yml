@@ -9,64 +9,64 @@ networks:
     driver: bridge
 
 services:
-  # ilp-frontend:
-  #   build:
-  #     context: ../../frontend
-  #     dockerfile: Dockerfile
-  #   image: ilp-frontend:latest
-  #   depends_on:
-  #     - ilp-server
-  #   environment:
-  #     VITE_ILP_BACKEND_ENDPOINT: http://ilp-server-new:8191
-  #   networks:
-  #     - ilp_network
-  #   ports:
-  #     - 3000:80
-
-  # db:
-  #   build:
-  #     context: scripts
-  #     dockerfile: Dockerfile
-  #   image: "postgres:15"
-  #   restart: unless-stopped
-  #   networks:
-  #     - ilp_network
-  #   ports:
-  #     - "5436:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_DB: ilp
-  #     POSTGRES_USER: ilpuser
-  #     POSTGRES_PASSWORD: ilpuser
-
-  # ilp-server:
-  #   build: .
-  #   image: ilp-server-new
-  #   container_name: ilp-server-new
-  #   depends_on:
-  #     - db
-  #   extra_hosts:
-  #     - host.docker.internal:host-gateway
-  #   expose:
-  #     - 8191
-  #   ports:
-  #     - 8191:8191
-  #   env_file:
-  #     - ./app.env
-  #   networks:
-  #     - ilp_network
-  #   volumes:
-  #     - ./logs:/workspace/build/ilp-server/logs
-  #     - ./store:/workspace/build/ilp-server/store
-  #   restart: unless-stopped
-
-  openapi_mock:
-    container_name: openapi_mock
-    image: muonsoft/openapi-mock
-    volumes:
-      - ./ilp-openapi/src/main/resources:/etc/openapi
+  ilp-frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    image: ilp-frontend:latest
+    depends_on:
+      - ilp-server
     environment:
-      OPENAPI_MOCK_SPECIFICATION_URL: '/etc/openapi/ilp-spec.yml'
+      VITE_ILP_BACKEND_ENDPOINT: http://ilp-server-new:8191
+    networks:
+      - ilp_network
     ports:
-      - "8191:8080"
+      - 3000:80
+
+  db:
+    build:
+      context: scripts
+      dockerfile: Dockerfile
+    image: "postgres:15"
+    restart: unless-stopped
+    networks:
+      - ilp_network
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ilp
+      POSTGRES_USER: ilpuser
+      POSTGRES_PASSWORD: ilpuser
+
+  ilp-server:
+    build: .
+    image: ilp-server-new
+    container_name: ilp-server-new
+    depends_on:
+      - db
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    expose:
+      - 8191
+    ports:
+      - 8191:8191
+    env_file:
+      - ./app.env
+    networks:
+      - ilp_network
+    volumes:
+      - ./logs:/workspace/build/ilp-server/logs
+      - ./store:/workspace/build/ilp-server/store
+    restart: unless-stopped
+
+  # openapi_mock:
+  #   container_name: openapi_mock
+  #   image: muonsoft/openapi-mock
+  #   volumes:
+  #     - ./ilp-openapi/src/main/resources:/etc/openapi
+  #   environment:
+  #     OPENAPI_MOCK_SPECIFICATION_URL: '/etc/openapi/ilp-spec.yml'
+  #   ports:
+  #     - "8191:8080"
