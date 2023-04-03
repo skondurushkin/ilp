@@ -16,79 +16,79 @@ import { exists, mapValues } from '../runtime';
 /**
  *
  * @export
- * @interface AccrualResponse
+ * @interface WriteOffResponse
  */
-export interface AccrualResponse {
+export interface WriteOffResponse {
     /**
      * generic identifier
      * @type {number}
-     * @memberof AccrualResponse
+     * @memberof WriteOffResponse
      */
     id: number;
     /**
      * generic identifier
      * @type {number}
-     * @memberof AccrualResponse
+     * @memberof WriteOffResponse
      */
-    activityId?: number;
+    articleId?: number;
     /**
      *
      * @type {Date}
-     * @memberof AccrualResponse
+     * @memberof WriteOffResponse
      */
     date: Date;
     /**
      *
      * @type {string}
-     * @memberof AccrualResponse
+     * @memberof WriteOffResponse
      */
-    activityName: string;
+    articleName: string;
     /**
      * generic amount
      * @type {number}
-     * @memberof AccrualResponse
+     * @memberof WriteOffResponse
      */
     amount: number;
     /**
      *
      * @type {string}
-     * @memberof AccrualResponse
+     * @memberof WriteOffResponse
      */
-    infoLink?: string | null;
+    imageLink?: string | null;
 }
 
 /**
- * Check if a given object implements the AccrualResponse interface.
+ * Check if a given object implements the WriteOffResponse interface.
  */
-export function instanceOfAccrualResponse(value: object): boolean {
+export function instanceOfWriteOffResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'date' in value;
-    isInstance = isInstance && 'activityName' in value;
+    isInstance = isInstance && 'articleName' in value;
     isInstance = isInstance && 'amount' in value;
 
     return isInstance;
 }
 
-export function AccrualResponseFromJSON(json: any): AccrualResponse {
-    return AccrualResponseFromJSONTyped(json, false);
+export function WriteOffResponseFromJSON(json: any): WriteOffResponse {
+    return WriteOffResponseFromJSONTyped(json, false);
 }
 
-export function AccrualResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AccrualResponse {
+export function WriteOffResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): WriteOffResponse {
     if (json === undefined || json === null) {
         return json;
     }
     return {
         id: json['id'],
-        activityId: !exists(json, 'activityId') ? undefined : json['activityId'],
+        articleId: !exists(json, 'articleId') ? undefined : json['articleId'],
         date: new Date(json['date']),
-        activityName: json['activityName'],
+        articleName: json['articleName'],
         amount: json['amount'],
-        infoLink: !exists(json, 'infoLink') ? undefined : json['infoLink'],
+        imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
     };
 }
 
-export function AccrualResponseToJSON(value?: AccrualResponse | null): any {
+export function WriteOffResponseToJSON(value?: WriteOffResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -97,10 +97,10 @@ export function AccrualResponseToJSON(value?: AccrualResponse | null): any {
     }
     return {
         id: value.id,
-        activityId: value.activityId,
+        articleId: value.articleId,
         date: value.date.toISOString().substr(0, 10),
-        activityName: value.activityName,
+        articleName: value.articleName,
         amount: value.amount,
-        infoLink: value.infoLink,
+        imageLink: value.imageLink,
     };
 }
