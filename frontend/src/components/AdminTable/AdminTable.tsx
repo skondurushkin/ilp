@@ -97,7 +97,7 @@ export const AdminTable = <TData extends RowData>({
                 <SearchSVG className="absolute bottom-3 left-3" />
             </div>
             <div className="flex flex-col gap-6 bg-black p-6">
-                <Table table={table} />
+                <Table table={table} isFetching={dataQuery.isFetching} />
                 <TablePagination table={table} />
             </div>
         </div>

@@ -1,5 +1,7 @@
 import type { Table as ITable, RowData } from '@tanstack/react-table';
 
+import { ReactComponent as ChevronLeftSVG } from '../assets/chevron-left.svg';
+import { Spinner } from './Spinner';
 import { flexRender } from '@tanstack/react-table';
 import { twMerge } from 'tailwind-merge';
 
@@ -15,8 +17,8 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
     return (
         <div className="relative overflow-y-hidden overflow-x-scroll">
             {isFetching && (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-primary p-4 text-black">
-                    Загрузка ...
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+                    <Spinner />
                 </div>
             )}
             <table
@@ -37,8 +39,12 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
                                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                                 </div>
                                                 {{
-                                                    asc: ' 🔼',
-                                                    desc: ' 🔽',
+                                                    asc: (
+                                                        <ChevronLeftSVG className="h-4 w-4 rotate-90 transform stroke-primary" />
+                                                    ),
+                                                    desc: (
+                                                        <ChevronLeftSVG className="h-4 w-4 -rotate-90 transform stroke-primary" />
+                                                    ),
                                                 }[header.column.getIsSorted() as string] ?? null}
                                             </>
                                         )}
@@ -52,7 +58,7 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id} className="py-2 px-4">
+                                <td key={cell.id} className="py-2 px-3 text-left">
                                     <div className="text-base text-white">
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </div>
