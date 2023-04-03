@@ -15,6 +15,7 @@
 import * as runtime from '../runtime';
 
 import type {
+    ArticleDeleteRequest,
     ArticleRequest,
     ArticleResponse,
     ArticleUpdateRequest,
@@ -23,6 +24,8 @@ import type {
     PaginatedArticleResponse,
 } from '../models';
 import {
+    ArticleDeleteRequestFromJSON,
+    ArticleDeleteRequestToJSON,
     ArticleRequestFromJSON,
     ArticleRequestToJSON,
     ArticleResponseFromJSON,
@@ -43,6 +46,10 @@ export interface BrowseArticlesRequest {
 
 export interface CreateArticleRequest {
     articleRequest: ArticleRequest;
+}
+
+export interface DeleteArticleRequest {
+    articleDeleteRequest: ArticleDeleteRequest;
 }
 
 export interface GetArticleByIdRequest {
@@ -165,6 +172,58 @@ export class ArticleApi extends runtime.BaseAPI {
     ): Promise<ArticleResponse> {
         const response = await this.createArticleRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * delete article record
+     */
+    async deleteArticleRaw(
+        requestParameters: DeleteArticleRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.articleDeleteRequest === null || requestParameters.articleDeleteRequest === undefined) {
+            throw new runtime.RequiredError(
+                'articleDeleteRequest',
+                'Required parameter requestParameters.articleDeleteRequest was null or undefined when calling deleteArticle.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/article`,
+                method: 'DELETE',
+                headers: headerParameters,
+                query: queryParameters,
+                body: ArticleDeleteRequestToJSON(requestParameters.articleDeleteRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * delete article record
+     */
+    async deleteArticle(
+        requestParameters: DeleteArticleRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.deleteArticleRaw(requestParameters, initOverrides);
     }
 
     /**

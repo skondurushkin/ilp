@@ -8,10 +8,12 @@ apis/WalletApi.ts
 apis/index.ts
 index.ts
 models/AccrualResponse.ts
+models/ActivityDeleteRequest.ts
 models/ActivityRequest.ts
 models/ActivityResponse.ts
 models/ActivityUpdateRequest.ts
 models/ActivityUpdateRequestAllOf.ts
+models/ArticleDeleteRequest.ts
 models/ArticleRequest.ts
 models/ArticleResponse.ts
 models/ArticleUpdateRequest.ts

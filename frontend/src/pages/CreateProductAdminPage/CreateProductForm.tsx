@@ -22,7 +22,7 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                 articleRequest,
             });
             reset();
-            toast('Продукт добавлен');
+            toast('Товар добавлен');
         } catch (err) {
             toast((err as ErrorMessage).message ?? 'Ошибка');
         }

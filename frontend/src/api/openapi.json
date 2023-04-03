@@ -564,6 +564,26 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "operationId": "deleteActivity",
+                "summary": "delete activity record",
+                "tags": ["activity"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActivityDeleteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The resource was deleted successfully."
+                    }
+                }
             }
         },
         "/api/ilp/activities": {
@@ -718,6 +738,26 @@
                                 }
                             }
                         }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "deleteArticle",
+                "summary": "delete article record",
+                "tags": ["article"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ArticleDeleteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The resource was deleted successfully."
                     }
                 }
             }
@@ -1368,6 +1408,14 @@
                     }
                 ]
             },
+            "ActivityDeleteRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    }
+                }
+            },
             "ActivityResponse": {
                 "type": "object",
                 "required": ["id", "name", "active", "infoLink", "amount"],
@@ -1465,6 +1513,14 @@
                         }
                     }
                 ]
+            },
+            "ArticleDeleteRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    }
+                }
             },
             "ArticleResponse": {
                 "type": "object",

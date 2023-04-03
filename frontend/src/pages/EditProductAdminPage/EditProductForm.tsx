@@ -22,7 +22,7 @@ export const EditProductForm = (props: EditProductFormProps) => {
                 articleUpdateRequest: data,
             });
             reset();
-            toast('Продукт обновлен');
+            toast('Товар обновлен');
         } catch (err) {
             toast((err as ErrorMessage).message ?? 'Ошибка');
         }

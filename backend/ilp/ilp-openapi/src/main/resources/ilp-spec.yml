@@ -389,6 +389,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/ActivityResponse'
 
+    delete:
+      operationId: deleteActivity
+      summary: delete activity record
+      tags:
+        - activity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityDeleteRequest'
+      responses:
+        '204':
+          description: The resource was deleted successfully.
+
   /api/ilp/activities:
     post:
       operationId: browseActivities
@@ -495,6 +510,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArticleResponse'
+
+    delete:
+      operationId: deleteArticle
+      summary: delete article record
+      tags:
+        - article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleDeleteRequest'
+      responses:
+        '204':
+          description: The resource was deleted successfully.
 
   /api/ilp/articles:
     post:
@@ -1029,6 +1059,12 @@ components:
             id:
               $ref: '#/components/schemas/Identifier'
 
+    ActivityDeleteRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
+
     ActivityResponse:
       type: object
       required:
@@ -1105,6 +1141,12 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/Identifier'
+
+    ArticleDeleteRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
 
     ArticleResponse:
       type: object

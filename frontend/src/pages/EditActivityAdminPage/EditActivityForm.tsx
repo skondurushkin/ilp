@@ -49,7 +49,14 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                             required: validationRules.required,
                         }}
                     />
-                    <FormInput control={control} name="infoLink" label="Ссылка на описание" />
+                    <FormInput
+                        control={control}
+                        name="infoLink"
+                        label="Ссылка на описание"
+                        rules={{
+                            validate: validationRules.isUrl,
+                        }}
+                    />
                 </div>
                 <button type="submit" className="btn btn-primary md:self-start" disabled={formState.isSubmitting}>
                     Сохранить

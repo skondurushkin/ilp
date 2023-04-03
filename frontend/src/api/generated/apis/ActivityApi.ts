@@ -15,6 +15,7 @@
 import * as runtime from '../runtime';
 
 import type {
+    ActivityDeleteRequest,
     ActivityRequest,
     ActivityResponse,
     ActivityUpdateRequest,
@@ -23,6 +24,8 @@ import type {
     PaginatedActivityResponse,
 } from '../models';
 import {
+    ActivityDeleteRequestFromJSON,
+    ActivityDeleteRequestToJSON,
     ActivityRequestFromJSON,
     ActivityRequestToJSON,
     ActivityResponseFromJSON,
@@ -43,6 +46,10 @@ export interface BrowseActivitiesRequest {
 
 export interface CreateActivityRequest {
     activityRequest: ActivityRequest;
+}
+
+export interface DeleteActivityRequest {
+    activityDeleteRequest: ActivityDeleteRequest;
 }
 
 export interface GetActivityByIdRequest {
@@ -158,6 +165,58 @@ export class ActivityApi extends runtime.BaseAPI {
     ): Promise<ActivityResponse> {
         const response = await this.createActivityRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * delete activity record
+     */
+    async deleteActivityRaw(
+        requestParameters: DeleteActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.activityDeleteRequest === null || requestParameters.activityDeleteRequest === undefined) {
+            throw new runtime.RequiredError(
+                'activityDeleteRequest',
+                'Required parameter requestParameters.activityDeleteRequest was null or undefined when calling deleteActivity.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/activity`,
+                method: 'DELETE',
+                headers: headerParameters,
+                query: queryParameters,
+                body: ActivityDeleteRequestToJSON(requestParameters.activityDeleteRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * delete activity record
+     */
+    async deleteActivity(
+        requestParameters: DeleteActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.deleteActivityRaw(requestParameters, initOverrides);
     }
 
     /**

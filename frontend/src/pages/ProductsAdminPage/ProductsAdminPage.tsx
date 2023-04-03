@@ -1,5 +1,6 @@
 import { ArticleResponse, PageRequest, api } from '../../api';
 import { useCallback, useMemo } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -7,8 +8,11 @@ import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { Layout } from '../../components/Layout';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
+import { twMerge } from 'tailwind-merge';
 
 export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
+
+const PRODUCTS_ADMIN_PAGE_QUERY_KEY = 'browseArticles';
 
 export const ProductsAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
@@ -52,17 +56,38 @@ export const ProductsAdminPage = () => {
                 header: () => <span>Действия</span>,
                 cell: (info) => {
                     const { id } = info.row.original;
+                    const queryClient = useQueryClient();
+
+                    const { mutate: deleteArticle, isLoading: deleteIsLoading } = useMutation(
+                        () => {
+                            return api.article.deleteArticle({
+                                articleDeleteRequest: {
+                                    id,
+                                },
+                            });
+                        },
+                        {
+                            onSuccess: () => {
+                                queryClient.invalidateQueries(PRODUCTS_ADMIN_PAGE_QUERY_KEY);
+                            },
+                        },
+                    );
 
                     return (
-                        <div className="flex gap-2">
+                        <div className="flex flex-col gap-2">
                             <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
-                                <button className="btn">
-                                    <EditSVG />
+                                <button className="flex items-center gap-2">
+                                    <EditSVG className="h-4 w-4 stroke-primary" />
+                                    <span className="text-small text-primary">Изменить</span>
                                 </button>
                             </TypedLink>
-
-                            <button className="btn">
-                                <TrashSVG />
+                            <button
+                                className={twMerge('flex items-center gap-2', deleteIsLoading && 'opacity-50')}
+                                disabled={deleteIsLoading}
+                                onClick={() => deleteArticle()}
+                            >
+                                <TrashSVG className="h-4 w-4 stroke-primary" />
+                                <span className="text-small text-primary">Удалить</span>
                             </button>
                         </div>
                     );
@@ -85,7 +110,7 @@ export const ProductsAdminPage = () => {
                     globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
                     columns={columns}
                     queryData={queryData}
-                    queryKey="browseArticles"
+                    queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}
                 />
             </div>
         </Layout>

@@ -24,7 +24,7 @@ export const EditProductAdminPage = () => {
         return (
             <Layout>
                 <div className="flex flex-col gap-6">
-                    <h1 className="text-h1">Редактирование активности</h1>
+                    <h1 className="text-h1">Редактирование товара</h1>
                     <EditProductForm
                         values={{
                             id: product.id,

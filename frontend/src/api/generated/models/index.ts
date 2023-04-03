@@ -1,10 +1,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AccrualResponse';
+export * from './ActivityDeleteRequest';
 export * from './ActivityRequest';
 export * from './ActivityResponse';
 export * from './ActivityUpdateRequest';
 export * from './ActivityUpdateRequestAllOf';
+export * from './ArticleDeleteRequest';
 export * from './ArticleRequest';
 export * from './ArticleResponse';
 export * from './ArticleUpdateRequest';
