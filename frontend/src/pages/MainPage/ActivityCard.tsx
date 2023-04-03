@@ -2,11 +2,12 @@ import { ButtonSkeleton, Skeleton, SkeletonContainer } from '../../components/Sk
 
 import { ActivityResponse } from '../../api';
 import { Box } from '../../components/Box';
-import { Button } from '../../components/Button';
+import { Link } from 'react-router-dom';
 import { ReactElement } from 'react';
 import { ReactComponent as TokenIcon } from '../../assets/token.svg';
 import { VerticalBrackets } from '../../components/VerticalBrackets';
 import { twMerge } from 'tailwind-merge';
+import { useConfig } from '../../modules/config';
 
 export interface ActivityCardProps extends ActivityViewProps {
     className?: string;
@@ -35,6 +36,8 @@ interface ActivityViewProps {
 
 function ActivityView(props: ActivityViewProps): ReactElement {
     const { activity } = props;
+    const config = useConfig();
+    const requestTokensUrl = config ? `mailto:${config.adminEmail}?subject=${config.requestTokenEmailSubject}` : '#';
     return (
         <>
             <VerticalBrackets size="2" className="self-center">
@@ -44,10 +47,12 @@ function ActivityView(props: ActivityViewProps): ReactElement {
                 </div>
             </VerticalBrackets>
             <div className="mt-2 grow self-center text-center">{activity.name}</div>
-            <Button className="mt-4" primary>
+            <Link className="btn btn-primary mt-4" to={requestTokensUrl}>
                 Запросить вольты
-            </Button>
-            <Button className="mt-2">Подробнее</Button>
+            </Link>
+            <Link className="btn mt-2" to={activity.infoLink}>
+                Подробнее
+            </Link>
         </>
     );
 }
