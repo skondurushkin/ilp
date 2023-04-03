@@ -3,7 +3,7 @@ import { ReactElement, ReactNode } from 'react';
 
 import { ArticleResponse } from '../api';
 import { Box } from './Box';
-import { ReactComponent as TokenIcon } from '../assets/token.svg';
+import { ProductPrice } from './ProductPrice';
 import { TypedLink } from '../router';
 import { VerticalBrackets } from './VerticalBrackets';
 
@@ -37,18 +37,13 @@ export function ProductView(props: ProductViewProps): ReactElement {
     const { product, showPrice, action } = props;
     return (
         <>
-            <TypedLink to="/" className="flex grow flex-col">
+            <TypedLink to="/products/:id" params={{ id: `${product.id}` }} className="flex grow flex-col">
                 <VerticalBrackets size="4">
                     <img src={product.imageLink} alt={product.name} />
                 </VerticalBrackets>
                 <div className="mt-4 self-center text-center">{product.name}</div>
             </TypedLink>
-            {showPrice && (
-                <div className="mt-4 flex items-center gap-1 self-center rounded-lg bg-white py-1 px-2 text-xl text-black md:text-2xl">
-                    {product.price}
-                    <TokenIcon />
-                </div>
-            )}
+            {showPrice && <ProductPrice className="mt-4" price={product.price || 0} />}
             {action && <div className="mt-4 flex flex-col">{action}</div>}
         </>
     );

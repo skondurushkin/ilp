@@ -24,6 +24,51 @@ export interface ImageSkeletonProps {
     className?: string;
 }
 
+export interface BigTextSkeletonProps {
+    className?: string;
+    textSize?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
+}
+
+export function BigTextSkeleton(props: BigTextSkeletonProps): ReactElement {
+    const { className, textSize = '4' } = props;
+    const textSizeClassName = `h-${textSize}`;
+
+    return (
+        <div className={twMerge('max-w-lg space-y-2.5', className)}>
+            <div className="flex w-full items-center space-x-2">
+                <div className={twMerge('w-32 rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-24 rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+            </div>
+            <div className="flex w-full max-w-[480px] items-center space-x-2">
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-24 rounded-full bg-gray', textSizeClassName)}></div>
+            </div>
+            <div className="flex w-full max-w-[400px] items-center space-x-2">
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-80 rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+            </div>
+            <div className="flex w-full max-w-[480px] items-center space-x-2">
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-24 rounded-full bg-gray', textSizeClassName)}></div>
+            </div>
+            <div className="flex w-full max-w-[440px] items-center space-x-2">
+                <div className={twMerge('w-32 rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-24 rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+            </div>
+            <div className="flex w-full max-w-[360px] items-center space-x-2">
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-80 rounded-full bg-gray', textSizeClassName)}></div>
+                <div className={twMerge('w-full rounded-full bg-gray', textSizeClassName)}></div>
+            </div>
+        </div>
+    );
+}
+
 export function ImageSkeleton(props: ImageSkeletonProps): ReactElement {
     const { className } = props;
     return (
