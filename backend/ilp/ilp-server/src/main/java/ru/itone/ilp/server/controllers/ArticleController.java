@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 import ru.itone.ilp.openapi.api.ArticleApi;
 import ru.itone.ilp.exception.ApiExceptions;
+import ru.itone.ilp.openapi.model.ArticleDeleteRequest;
 import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
+import ru.itone.ilp.openapi.model.ArticleUpdateRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.services.articles.ArticleService;
@@ -38,6 +40,13 @@ public class ArticleController implements ArticleApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteArticle(ArticleDeleteRequest articleDeleteRequest) {
+        articleService.delete(articleDeleteRequest.getId().longValue());
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<ArticleResponse> getArticleById(Integer articleId) {
         return articleService.getArticleById(articleId)
                 .map(ResponseEntity::ok)
@@ -47,5 +56,11 @@ public class ArticleController implements ArticleApi {
     @Override
     public ResponseEntity<List<ArticleResponse>> searchArticles(String searchKey) {
         return ResponseEntity.ok(articleService.searchArticleByText(searchKey));
+    }
+
+    @Override
+    @Secured("hasRole('ADMIN')")
+    public ResponseEntity<ArticleResponse> updateArticle(ArticleUpdateRequest articleUpdateRequest) {
+        return ResponseEntity.ok(articleService.update(articleUpdateRequest));
     }
 }

@@ -14,6 +14,7 @@ import java.time.Instant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -23,6 +24,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 @Accessors(chain = true)
 public class RefreshToken implements Serializable {
     @Id

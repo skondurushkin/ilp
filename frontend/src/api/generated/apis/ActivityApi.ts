@@ -15,17 +15,23 @@
 import * as runtime from '../runtime';
 
 import type {
+    ActivityDeleteRequest,
     ActivityRequest,
     ActivityResponse,
+    ActivityUpdateRequest,
     ErrorMessage,
     PageRequest,
     PaginatedActivityResponse,
 } from '../models';
 import {
+    ActivityDeleteRequestFromJSON,
+    ActivityDeleteRequestToJSON,
     ActivityRequestFromJSON,
     ActivityRequestToJSON,
     ActivityResponseFromJSON,
     ActivityResponseToJSON,
+    ActivityUpdateRequestFromJSON,
+    ActivityUpdateRequestToJSON,
     ErrorMessageFromJSON,
     ErrorMessageToJSON,
     PageRequestFromJSON,
@@ -42,12 +48,20 @@ export interface CreateActivityRequest {
     activityRequest: ActivityRequest;
 }
 
+export interface DeleteActivityRequest {
+    activityDeleteRequest: ActivityDeleteRequest;
+}
+
 export interface GetActivityByIdRequest {
     activityId: number;
 }
 
 export interface SearchActivityRequest {
     searchKey: string;
+}
+
+export interface UpdateActivityRequest {
+    activityUpdateRequest: ActivityUpdateRequest;
 }
 
 /**
@@ -154,6 +168,58 @@ export class ActivityApi extends runtime.BaseAPI {
     }
 
     /**
+     * delete activity record
+     */
+    async deleteActivityRaw(
+        requestParameters: DeleteActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.activityDeleteRequest === null || requestParameters.activityDeleteRequest === undefined) {
+            throw new runtime.RequiredError(
+                'activityDeleteRequest',
+                'Required parameter requestParameters.activityDeleteRequest was null or undefined when calling deleteActivity.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/activity`,
+                method: 'DELETE',
+                headers: headerParameters,
+                query: queryParameters,
+                body: ActivityDeleteRequestToJSON(requestParameters.activityDeleteRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * delete activity record
+     */
+    async deleteActivity(
+        requestParameters: DeleteActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.deleteActivityRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * get activity by identifier
      */
     async getActivityByIdRaw(
@@ -257,6 +323,59 @@ export class ActivityApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<Array<ActivityResponse>> {
         const response = await this.searchActivityRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * update activity record
+     */
+    async updateActivityRaw(
+        requestParameters: UpdateActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<ActivityResponse>> {
+        if (requestParameters.activityUpdateRequest === null || requestParameters.activityUpdateRequest === undefined) {
+            throw new runtime.RequiredError(
+                'activityUpdateRequest',
+                'Required parameter requestParameters.activityUpdateRequest was null or undefined when calling updateActivity.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/activity`,
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: ActivityUpdateRequestToJSON(requestParameters.activityUpdateRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ActivityResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * update activity record
+     */
+    async updateActivity(
+        requestParameters: UpdateActivityRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<ActivityResponse> {
+        const response = await this.updateActivityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }

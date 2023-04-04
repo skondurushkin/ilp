@@ -48,13 +48,13 @@ export interface ArticleResponse {
      * @type {number}
      * @memberof ArticleResponse
      */
-    price?: number | null;
+    price: number;
     /**
      *
      * @type {boolean}
      * @memberof ArticleResponse
      */
-    available?: boolean;
+    available: boolean;
     /**
      *
      * @type {string}
@@ -77,6 +77,8 @@ export function instanceOfArticleResponse(value: object): boolean {
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'code' in value;
     isInstance = isInstance && 'name' in value;
+    isInstance = isInstance && 'price' in value;
+    isInstance = isInstance && 'available' in value;
 
     return isInstance;
 }
@@ -94,8 +96,8 @@ export function ArticleResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         code: json['code'],
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
-        price: !exists(json, 'price') ? undefined : json['price'],
-        available: !exists(json, 'available') ? undefined : json['available'],
+        price: json['price'],
+        available: json['available'],
         imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
         extension: !exists(json, 'extension') ? undefined : json['extension'],
     };

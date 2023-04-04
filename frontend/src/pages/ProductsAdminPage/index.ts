@@ -1,0 +1,1 @@
+export { ProductsAdminPage } from './ProductsAdminPage';

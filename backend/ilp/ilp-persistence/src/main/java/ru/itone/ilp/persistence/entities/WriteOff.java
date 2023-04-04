@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,6 +46,8 @@ public class WriteOff implements Serializable {
     @OneToOne
     @JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false)
     private Article article;
+
+    private LocalDate date;
 
     @NotNull
     @Min(1)

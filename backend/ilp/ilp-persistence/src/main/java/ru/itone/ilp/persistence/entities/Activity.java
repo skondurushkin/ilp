@@ -48,8 +48,8 @@ public class Activity implements Serializable {
     private String description;
 
     @Min(1)
-    @Column
-    private Integer price;
+    @Column(name = "price")
+    private Integer amount;
 
     @Column(nullable = false, columnDefinition = "date default '3000-01-01'")
     private LocalDate startDate = virtualDate;

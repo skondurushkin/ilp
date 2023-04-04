@@ -6,19 +6,21 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.itone.ilp.misc.Helpers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import ru.itone.ilp.persistence.entities.WriteOff;
 import ru.itone.ilp.persistence.repositories.WriteOffRepository;
 
 @Slf4j
-public class WriteOffTest extends AbstractPersistenceTest {
+class WriteOffTest extends AbstractPersistenceTest {
 
     @Autowired
     WriteOffRepository writeOffRepository;
 
     @Test
     void test_writeOffFindAllByUserId() {
-        List<WriteOff> writeOffs = Helpers.asList(writeOffRepository.findAllByUserId(2L));
+        Page<WriteOff> pageByUserId = writeOffRepository.findAllByUserId(2L, PageRequest.ofSize(5));
+        List<WriteOff> writeOffs = pageByUserId.getContent();
         assertEquals(2, writeOffs.size());
         log.info("RESPONSE: {}", writeOffs);
     }

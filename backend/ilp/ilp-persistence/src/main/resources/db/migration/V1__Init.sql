@@ -135,6 +135,119 @@ alter table if exists write_offs
 alter table if exists write_offs
     add constraint FK_write_offs__articles foreign key (article_id) references articles ON DELETE CASCADE;
 
+create type op_type as enum (
+    'accrual',
+    'writeOff'
+    );
+
+-- история операций
+create table operations
+(
+    id          bigserial   not null,
+    type        op_type     not null,
+    instant     timestamp(0) not null default now(),
+    user_id     bigint      not null,
+    accrual_id  bigint,
+    writeoff_id bigint,
+    name        varchar(50) not null,
+    amount      int         not null,
+    primary key (id)
+);
+
+
+alter table if exists operations
+    add constraint FK_operations__accruals foreign key (accrual_id) references accruals ON DELETE CASCADE;
+
+alter table if exists operations
+    add constraint FK_operations__writeoffs foreign key (writeoff_id) references write_offs ON DELETE CASCADE;
+
+create unique index UX_accrual_operations on operations(user_id, accrual_id) where accrual_id is not null;
+create unique index UX_write_off_operations on operations(user_id, writeoff_id) where writeoff_id is not null;
+
+CREATE OR REPLACE FUNCTION on_accrual_change() RETURNS TRIGGER AS $accrual_op$
+DECLARE
+    ACT_NAME varchar;
+BEGIN
+    select act.name into ACT_NAME from (
+        select name from activities a where a.id = new.activity_id
+    ) act;
+    --
+    -- Добавление строки в operations, которая отражает операцию начисления;
+    --
+    IF (TG_OP = 'UPDATE') THEN
+        UPDATE operations SET name = ACT_NAME, amount = NEW.amount
+        WHERE accrual_id = new.id;
+        return NEW;
+    ELSIF (TG_OP = 'INSERT') THEN
+        insert into operations(type, user_id, accrual_id, name, amount)
+        values('accrual'::op_type, new.user_id, new.id, ACT_NAME, new.amount);
+        return NEW;
+    END IF;
+    RETURN NULL;
+
+END
+$accrual_op$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION on_write_off_change() RETURNS TRIGGER AS $write_off_op$
+DECLARE
+    ART_NAME varchar;
+BEGIN
+    select art.name into ART_NAME from (
+        select name from articles a where a.id = new.article_id
+    ) art;
+
+    --
+    -- Добавление строки в operations, которая отражает операцию списания;
+    --
+    IF (TG_OP = 'UPDATE') THEN
+        UPDATE operations SET name = ART_NAME, amount = NEW.amount
+        WHERE writeoff_id = new.id;
+        return NEW;
+    ELSIF (TG_OP = 'INSERT') THEN
+        insert into operations(type, user_id, writeoff_id, name, amount)
+        values('writeOff'::op_type, new.user_id, new.id, ART_NAME, new.amount);
+        return NEW;
+    END IF;
+    RETURN NULL;
+
+END;
+$write_off_op$ LANGUAGE plpgsql;
+
+
+create trigger accrual_op
+    AFTER INSERT OR UPDATE on accruals
+    FOR EACH ROW EXECUTE PROCEDURE on_accrual_change();
+
+create trigger write_off_op
+    AFTER INSERT OR UPDATE on write_offs
+    FOR EACH ROW EXECUTE PROCEDURE on_write_off_change();
+
+
+CREATE OR REPLACE FUNCTION public.balance(userid bigint)
+    RETURNS jsonb
+    LANGUAGE plpgsql
+AS $function$
+declare
+    earned integer;
+    spent  integer;
+    _result jsonb;
+begin
+    select coalesce (sum(a.amount), 0) into earned from accruals a where a.user_id = userId;
+    select coalesce (sum(w.amount), 0) into spent from write_offs w where w.user_id = userId;
+
+    select row_to_json(t) into _result from (
+        select userId, earned, spent, earned - spent as balance
+    ) t;
+    return _result;
+END;
+$function$
+;
+
+-- Permissions
+alter function public.balance(int8) owner to current_user;
+grant all on function public.balance(int8) to public;
+
+
 insert into settings (prop_key, prop_value)
 values  ('db.version', '1.0'),
         ('admin.email', 'skondurushkin@gmail.com'),

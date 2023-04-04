@@ -27,7 +27,7 @@ class ActivityTest extends AbstractPersistenceTest {
         Activity activity = new Activity()
             .setName("Менторство")
             .setDescription("Передача знаний своим коллегам")
-            .setPrice(25)
+            .setAmount(25)
             .setInfoLink("/link/info.docx")
             .setStartDate(LocalDate.now());
 

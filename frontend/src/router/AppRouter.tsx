@@ -8,30 +8,42 @@ import {
 } from '../modules/auth';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { ConfigProvider } from '../modules/config';
+import { authAdminRoutes } from './authAdminRoutes';
 import { authUserRoutes } from './authUserRoutes';
 import { guestRoutes } from './guestRoutes';
 
 const guestRouter = <RouterProvider router={createBrowserRouter([...guestRoutes])} />;
 const userRouter = <RouterProvider router={createBrowserRouter([...authUserRoutes])} />;
+const adminRouter = <RouterProvider router={createBrowserRouter([...authUserRoutes, ...authAdminRoutes])} />;
 
 restoreAuthFromLocalStorage();
 
 export const AppRouter = () => {
     const { authData, authActions } = useHttpAuthBackend();
 
-    const router = hasRole(authData, UserRole.USER) ? userRouter : guestRouter;
+    // TODO: uncomment
+    // const router = hasRole(authData, UserRole.USER)
+    //     ? hasRole(authData, UserRole.ADMIN)
+    //         ? adminRouter
+    //         : userRouter
+    //     : guestRouter;
+    const router = hasRole(authData, UserRole.USER)
+        ? hasRole(authData, 'MODERATOR')
+            ? adminRouter
+            : userRouter
+        : guestRouter;
 
     return (
-        <ConfigProvider>
-            <AuthContext.Provider value={authData}>
-                <AuthActionsContext.Provider value={authActions}>{router}</AuthActionsContext.Provider>
-            </AuthContext.Provider>
-        </ConfigProvider>
+        <AuthContext.Provider value={authData}>
+            <AuthActionsContext.Provider value={authActions}>{router}</AuthActionsContext.Provider>
+        </AuthContext.Provider>
     );
 };
 
-export type RoutePath = InferRoutesPaths<typeof guestRoutes> | InferRoutesPaths<typeof authUserRoutes>;
+export type RoutePath =
+    | InferRoutesPaths<typeof guestRoutes>
+    | InferRoutesPaths<typeof authUserRoutes>
+    | InferRoutesPaths<typeof authAdminRoutes>;
 
 type InferRoutesPaths<T> = T extends ReadonlyArray<infer Route>
     ? Route extends { path: infer Path }

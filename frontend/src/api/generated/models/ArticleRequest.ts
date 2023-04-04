@@ -42,13 +42,13 @@ export interface ArticleRequest {
      * @type {number}
      * @memberof ArticleRequest
      */
-    price?: number | null;
+    price: number;
     /**
      *
      * @type {boolean}
      * @memberof ArticleRequest
      */
-    available?: boolean;
+    available: boolean;
 }
 
 /**
@@ -58,6 +58,8 @@ export function instanceOfArticleRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'code' in value;
     isInstance = isInstance && 'name' in value;
+    isInstance = isInstance && 'price' in value;
+    isInstance = isInstance && 'available' in value;
 
     return isInstance;
 }
@@ -74,8 +76,8 @@ export function ArticleRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
         code: json['code'],
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
-        price: !exists(json, 'price') ? undefined : json['price'],
-        available: !exists(json, 'available') ? undefined : json['available'],
+        price: json['price'],
+        available: json['available'],
     };
 }
 

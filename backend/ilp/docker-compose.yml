@@ -3,6 +3,7 @@ version: "3.9"
 volumes:
   postgres_data:
 
+
 networks:
   ilp_network:
     driver: bridge
@@ -59,3 +60,13 @@ services:
       - ./logs:/workspace/build/ilp-server/logs
       - ./store:/workspace/build/ilp-server/store
     restart: unless-stopped
+
+  # openapi_mock:
+  #   container_name: openapi_mock
+  #   image: muonsoft/openapi-mock
+  #   volumes:
+  #     - ./ilp-openapi/src/main/resources:/etc/openapi
+  #   environment:
+  #     OPENAPI_MOCK_SPECIFICATION_URL: '/etc/openapi/ilp-spec.yml'
+  #   ports:
+  #     - "8191:8080"
