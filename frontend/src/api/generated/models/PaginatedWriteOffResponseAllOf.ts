@@ -12,10 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { WriteOffResponseFromJSON, WriteOffResponseFromJSONTyped, WriteOffResponseToJSON } from './WriteOffResponse';
+import {
+    WriteOffUserResponseFromJSON,
+    WriteOffUserResponseFromJSONTyped,
+    WriteOffUserResponseToJSON,
+} from './WriteOffUserResponse';
 import { exists, mapValues } from '../runtime';
 
-import type { WriteOffResponse } from './WriteOffResponse';
+import type { WriteOffUserResponse } from './WriteOffUserResponse';
 
 /**
  *
@@ -25,10 +29,10 @@ import type { WriteOffResponse } from './WriteOffResponse';
 export interface PaginatedWriteOffResponseAllOf {
     /**
      *
-     * @type {Array<WriteOffResponse>}
+     * @type {Array<WriteOffUserResponse>}
      * @memberof PaginatedWriteOffResponseAllOf
      */
-    results?: Array<WriteOffResponse>;
+    results?: Array<WriteOffUserResponse>;
 }
 
 /**
@@ -52,7 +56,9 @@ export function PaginatedWriteOffResponseAllOfFromJSONTyped(
         return json;
     }
     return {
-        results: !exists(json, 'results') ? undefined : (json['results'] as Array<any>).map(WriteOffResponseFromJSON),
+        results: !exists(json, 'results')
+            ? undefined
+            : (json['results'] as Array<any>).map(WriteOffUserResponseFromJSON),
     };
 }
 
@@ -64,6 +70,7 @@ export function PaginatedWriteOffResponseAllOfToJSON(value?: PaginatedWriteOffRe
         return null;
     }
     return {
-        results: value.results === undefined ? undefined : (value.results as Array<any>).map(WriteOffResponseToJSON),
+        results:
+            value.results === undefined ? undefined : (value.results as Array<any>).map(WriteOffUserResponseToJSON),
     };
 }

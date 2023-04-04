@@ -13,62 +13,62 @@
  */
 
 import {
-    WriteOffUserResponseFromJSON,
-    WriteOffUserResponseFromJSONTyped,
-    WriteOffUserResponseToJSON,
-} from './WriteOffUserResponse';
+    OperationResponseFromJSON,
+    OperationResponseFromJSONTyped,
+    OperationResponseToJSON,
+} from './OperationResponse';
 import { exists, mapValues } from '../runtime';
 
-import type { WriteOffUserResponse } from './WriteOffUserResponse';
+import type { OperationResponse } from './OperationResponse';
 
 /**
  *
  * @export
- * @interface PaginatedWriteOffResponse
+ * @interface PaginatedOperationResponse
  */
-export interface PaginatedWriteOffResponse {
+export interface PaginatedOperationResponse {
     /**
      * total page count
      * @type {number}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedOperationResponse
      */
     total: number;
     /**
      * current page
      * @type {number}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedOperationResponse
      */
     page: number;
     /**
      *
      * @type {number}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedOperationResponse
      */
     pageSize: number;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedOperationResponse
      */
     hasNext: boolean;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedOperationResponse
      */
     hasPrev: boolean;
     /**
      *
-     * @type {Array<WriteOffUserResponse>}
-     * @memberof PaginatedWriteOffResponse
+     * @type {Array<OperationResponse>}
+     * @memberof PaginatedOperationResponse
      */
-    results: Array<WriteOffUserResponse>;
+    results: Array<OperationResponse>;
 }
 
 /**
- * Check if a given object implements the PaginatedWriteOffResponse interface.
+ * Check if a given object implements the PaginatedOperationResponse interface.
  */
-export function instanceOfPaginatedWriteOffResponse(value: object): boolean {
+export function instanceOfPaginatedOperationResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'total' in value;
     isInstance = isInstance && 'page' in value;
@@ -80,14 +80,14 @@ export function instanceOfPaginatedWriteOffResponse(value: object): boolean {
     return isInstance;
 }
 
-export function PaginatedWriteOffResponseFromJSON(json: any): PaginatedWriteOffResponse {
-    return PaginatedWriteOffResponseFromJSONTyped(json, false);
+export function PaginatedOperationResponseFromJSON(json: any): PaginatedOperationResponse {
+    return PaginatedOperationResponseFromJSONTyped(json, false);
 }
 
-export function PaginatedWriteOffResponseFromJSONTyped(
+export function PaginatedOperationResponseFromJSONTyped(
     json: any,
     ignoreDiscriminator: boolean,
-): PaginatedWriteOffResponse {
+): PaginatedOperationResponse {
     if (json === undefined || json === null) {
         return json;
     }
@@ -97,11 +97,11 @@ export function PaginatedWriteOffResponseFromJSONTyped(
         pageSize: json['pageSize'],
         hasNext: json['hasNext'],
         hasPrev: json['hasPrev'],
-        results: (json['results'] as Array<any>).map(WriteOffUserResponseFromJSON),
+        results: (json['results'] as Array<any>).map(OperationResponseFromJSON),
     };
 }
 
-export function PaginatedWriteOffResponseToJSON(value?: PaginatedWriteOffResponse | null): any {
+export function PaginatedOperationResponseToJSON(value?: PaginatedOperationResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -114,6 +114,6 @@ export function PaginatedWriteOffResponseToJSON(value?: PaginatedWriteOffRespons
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: (value.results as Array<any>).map(WriteOffUserResponseToJSON),
+        results: (value.results as Array<any>).map(OperationResponseToJSON),
     };
 }
