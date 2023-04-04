@@ -19,6 +19,7 @@ public interface ArticleMapper {
     @Mapping(target = "extension", ignore = true)
     Article articleFromRequest(ArticleRequest request);
 
+    @Mapping(target = "price", source="amount")
     ArticleResponse articleToResponse(Article article);
 
     default PaginatedArticleResponse toPaginatedResponse(Page<Article> page) {
