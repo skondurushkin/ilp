@@ -16,6 +16,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Type;
 
@@ -25,6 +26,7 @@ import org.hibernate.annotations.Type;
 })
 @Setter
 @Getter
+@ToString
 @Accessors(chain = true)
 @NoArgsConstructor
 public class Article implements Serializable {
@@ -47,8 +49,8 @@ public class Article implements Serializable {
     private String description;
 
     @Min(1)
-    @Column
-    private Integer price;
+    @Column(name = "price")
+    private Integer amount;
 
     @Column(name="image_link")
     private String imageLink;

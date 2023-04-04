@@ -10,55 +10,59 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import ru.itone.ilp.persistence.types.OrderStatus;
-import ru.itone.ilp.persistence.types.OrderStatusEnumType;
+import ru.itone.ilp.persistence.types.OperationType;
+import ru.itone.ilp.persistence.types.OperationTypeEnumType;
 
+@Entity
+@Table(name = "operations")
 @Setter
 @Getter
 @ToString
 @Accessors(chain = true)
-@Entity
-@Table(name = "write_offs")
 @NoArgsConstructor
-
-@TypeDef(name = "order_status", typeClass = OrderStatusEnumType.class)
-public class WriteOff implements Serializable {
+@TypeDef(name = "operation_type", typeClass = OperationTypeEnumType.class)
+public class Operation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Type(OperationTypeEnumType.class)
+    @Column(name = "type", nullable = false)
+    private OperationType type;
+
+    @Column
+    Instant instant;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false)
-    private Article article;
+    @JoinColumn(name = "accrual_id", referencedColumnName = "id", nullable = false)
+    private Accrual accrual;
 
-    private LocalDate date;
+    @OneToOne
+    @JoinColumn(name = "writeoff_id", referencedColumnName = "id", nullable = false)
+    private WriteOff writeOff;
 
-    @NotNull
-    @Min(1)
-    @Column(name = "amount", nullable = false)
+    @Column(length = 50)
+    private String name;
+
+    @Column
     private Integer amount;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @ColumnDefault("created")
-    @Type(OrderStatusEnumType.class)
-    @Column(name = "status", nullable = false)
-    private OrderStatus orderStatus;
+
 
 }

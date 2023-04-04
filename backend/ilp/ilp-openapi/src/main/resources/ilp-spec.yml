@@ -513,32 +513,137 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletResponse'
 
+  /api/ilp/wallet/history:
+    post:
+      operationId: getWalletHistory
+      summary: get history of operations of the currently logged in user
+      tags:
+        - wallet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOperationResponse'
 
-  /api/ilp/wallet/write-offs/{user_id}:
-    get:
-      operationId: browseWriteOffs
-      summary: paginated view of user's write-offs
+
+  /api/ilp/wallet/history/{user_id}:
+    post:
+      operationId: getWalletHistoryForUserId
+      summary: get history of operations of the user identified by user_id
       tags:
         - wallet
       parameters:
-        - $ref: '#/components/parameters/user_id'
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
 
       responses:
         200:
           description: 'OK'
           content:
-            applications/json:
+            application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedWriteOffResponse"
+                $ref: '#/components/schemas/PaginatedOperationResponse'
 
-  /api/ilp/wallet/accruals/{user_id}:
-    get:
-      operationId: browseAccruals
-      summary: paginated view of user's accruals
+
+  /api/ilp/wallet/accrual/{user_id}:
+    post:
+      operationId: createNewAccrual
+      summary: create new accrual for user identified by user_id
       tags:
         - wallet
       parameters:
         - $ref: '#/components/parameters/user_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - activityId
+              properties:
+                activityId:
+                  $ref: '#/components/schemas/Identifier'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccrualResponse'
+
+  /api/ilp/wallet/write-off/{user_id}:
+    post:
+      operationId: createNewWriteOff
+      summary: create new write-off for user identified by user_id
+      tags:
+        - wallet
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - articleId
+              properties:
+                articleId:
+                  $ref: '#/components/schemas/Identifier'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOffUserResponse'
+
+  /api/ilp/wallet/write-off/{writeoff_id}:
+    patch:
+      operationId: updateWriteOff
+      summary: change status of the write-off identified by writeoff_id
+      tags:
+        - wallet
+      parameters:
+        - $ref: '#/components/parameters/writeoff_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/WriteOffStatus'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOffResponse'
+
+
+  /api/ilp/wallet/accruals:
+    post:
+      operationId: browseAccruals
+      summary: paginated view of accruals of currently logged in user
+      tags:
+        - wallet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
 
       responses:
         200:
@@ -548,6 +653,70 @@ paths:
               schema:
                 $ref: "#/components/schemas/PaginatedAccrualResponse"
 
+
+  /api/ilp/wallet/accruals/{user_id}:
+    post:
+      operationId: browseAccrualsForUserId
+      summary: paginated view of accruals of the user identified by user_id
+      tags:
+        - wallet
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+
+      responses:
+        200:
+          description: 'OK'
+          content:
+            applications/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedAccrualResponse"
+
+
+  /api/ilp/wallet/write-offs:
+    post:
+      operationId: browseWriteOffs
+      summary: paginated view of write-offs of currently logged in user
+      tags:
+        - wallet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            applications/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedWriteOffResponse"
+
+
+  /api/ilp/wallet/write-offs/{user_id}:
+    post:
+      operationId: browseWriteOffsForUserId
+      summary: paginated view of write-offs of the user identified by user_id
+      tags:
+        - wallet
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            applications/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedWriteOffResponse"
 
 # files
   /api/ilp/file/upload/{scope}:
@@ -574,7 +743,6 @@ paths:
               properties:
                 id:
                   $ref: '#/components/schemas/Identifier'
-                  description: in-scope identifier (ignored for scope 'global')
                 filename:
                   type: string
                   format: binary
@@ -646,6 +814,14 @@ components:
         $ref: '#/components/schemas/Identifier'
       description:  article identifier
 
+    writeoff_id:
+      in: path
+      name: writeoff_id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Identifier'
+      description:  write-off identifier
+
     search_key:
       in: query
       name: search_key
@@ -656,6 +832,10 @@ components:
       description: value for search
 
   schemas:
+    WriteOffStatus:
+      type: string
+      enum: [new, processing, delivering, completed, cancelled]
+
     Identifier:
       type: integer
       format: int32
@@ -1117,7 +1297,43 @@ components:
               items:
                 $ref: '#/components/schemas/AccrualResponse'
 
+    UserInfo:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/Name'
+
     WriteOffResponse:
+      type: object
+      required:
+        - id
+        - date
+        - user
+        - articleName
+        - amount
+      properties:
+        id:
+          $ref: '#/components/schemas/Identifier'
+        articleId:
+          $ref: '#/components/schemas/Identifier'
+        date:
+          type: string
+          format: date
+        user:
+          $ref: '#/components/schemas/UserInfo'
+        articleName:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Amount'
+        status:
+          $ref: '#/components/schemas/WriteOffStatus'
+
+    WriteOffUserResponse:
       type: object
       required:
         - id
@@ -1148,7 +1364,7 @@ components:
             results:
               type: array
               items:
-                $ref: '#/components/schemas/WriteOffResponse'
+                $ref: '#/components/schemas/WriteOffUserResponse'
 
     WalletResponse:
       type: object
@@ -1156,7 +1372,7 @@ components:
         - balance
         - totalEarned
         - totalSpent
-        - accruals
+        - operations
       properties:
         balance:
           type: integer
@@ -1166,12 +1382,47 @@ components:
           $ref: '#/components/schemas/Amount'
         totalSpent:
           $ref: '#/components/schemas/Amount'
-        accruals:
+        operations:
           type: array
           description: up to 5 recent accruals
           maxLength: 5
           items:
-            $ref: '#/components/schemas/AccrualResponse'
+            $ref: '#/components/schemas/OperationResponse'
+
+    OperationResponse:
+      type: object
+      required:
+        - type
+        - id
+        - date
+        - name
+        - amount
+      properties:
+        type:
+          type: string
+          enum: [accrual, writeOff]
+        id:
+          $ref: '#/components/schemas/Identifier'
+          description: identifier of accrual or writeOff operation
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+          description: operation name (Activity.name for accrual and Article.name for writeOff)
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: operation amount
+
+    PaginatedOperationResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+        - type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/OperationResponse'
 
 
   securitySchemes:
