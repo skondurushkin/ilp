@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 import ru.itone.ilp.openapi.api.ActivityApi;
 import ru.itone.ilp.exception.ApiExceptions;
+import ru.itone.ilp.openapi.model.ActivityDeleteRequest;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
+import ru.itone.ilp.openapi.model.ActivityUpdateRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.server.configuration.WebSecurityConfig;
@@ -40,6 +42,13 @@ public class ActivityController implements ActivityApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteActivity(ActivityDeleteRequest activityDeleteRequest) {
+        activityService.delete(activityDeleteRequest.getId().longValue());
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<ActivityResponse> getActivityById(Integer activityId) {
         return activityService.getActivityById(activityId)
                 .map(ResponseEntity::ok)
@@ -49,5 +58,11 @@ public class ActivityController implements ActivityApi {
     @Override
     public ResponseEntity<List<ActivityResponse>> searchActivity(String searchKey) {
         return ResponseEntity.ok(activityService.searchActivity(searchKey));
+    }
+
+    @Override
+    @Secured("hasRole('ADMIN')")
+    public ResponseEntity<ActivityResponse> updateActivity(ActivityUpdateRequest activityUpdateRequest) {
+        return ResponseEntity.ok(activityService.update(activityUpdateRequest));
     }
 }
