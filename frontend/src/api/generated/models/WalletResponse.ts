@@ -12,10 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { AccrualResponseFromJSON, AccrualResponseFromJSONTyped, AccrualResponseToJSON } from './AccrualResponse';
+import {
+    OperationResponseFromJSON,
+    OperationResponseFromJSONTyped,
+    OperationResponseToJSON,
+} from './OperationResponse';
 import { exists, mapValues } from '../runtime';
 
-import type { AccrualResponse } from './AccrualResponse';
+import type { OperationResponse } from './OperationResponse';
 
 /**
  *
@@ -43,10 +47,10 @@ export interface WalletResponse {
     totalSpent: number;
     /**
      * up to 5 recent accruals
-     * @type {Array<AccrualResponse>}
+     * @type {Array<OperationResponse>}
      * @memberof WalletResponse
      */
-    accruals: Array<AccrualResponse>;
+    operations: Array<OperationResponse>;
 }
 
 /**
@@ -57,7 +61,7 @@ export function instanceOfWalletResponse(value: object): boolean {
     isInstance = isInstance && 'balance' in value;
     isInstance = isInstance && 'totalEarned' in value;
     isInstance = isInstance && 'totalSpent' in value;
-    isInstance = isInstance && 'accruals' in value;
+    isInstance = isInstance && 'operations' in value;
 
     return isInstance;
 }
@@ -74,7 +78,7 @@ export function WalletResponseFromJSONTyped(json: any, ignoreDiscriminator: bool
         balance: json['balance'],
         totalEarned: json['totalEarned'],
         totalSpent: json['totalSpent'],
-        accruals: (json['accruals'] as Array<any>).map(AccrualResponseFromJSON),
+        operations: (json['operations'] as Array<any>).map(OperationResponseFromJSON),
     };
 }
 
@@ -89,6 +93,6 @@ export function WalletResponseToJSON(value?: WalletResponse | null): any {
         balance: value.balance,
         totalEarned: value.totalEarned,
         totalSpent: value.totalSpent,
-        accruals: (value.accruals as Array<any>).map(AccrualResponseToJSON),
+        operations: (value.operations as Array<any>).map(OperationResponseToJSON),
     };
 }

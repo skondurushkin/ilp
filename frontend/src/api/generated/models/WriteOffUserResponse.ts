@@ -12,82 +12,69 @@
  * Do not edit the class manually.
  */
 
-import { UserInfoFromJSON, UserInfoFromJSONTyped, UserInfoToJSON } from './UserInfo';
-import { WriteOffStatusFromJSON, WriteOffStatusFromJSONTyped, WriteOffStatusToJSON } from './WriteOffStatus';
 import { exists, mapValues } from '../runtime';
-
-import type { UserInfo } from './UserInfo';
-import type { WriteOffStatus } from './WriteOffStatus';
-
 /**
  *
  * @export
- * @interface WriteOffResponse
+ * @interface WriteOffUserResponse
  */
-export interface WriteOffResponse {
+export interface WriteOffUserResponse {
     /**
      * generic identifier
      * @type {number}
-     * @memberof WriteOffResponse
+     * @memberof WriteOffUserResponse
      */
     id: number;
     /**
      * generic identifier
      * @type {number}
-     * @memberof WriteOffResponse
+     * @memberof WriteOffUserResponse
      */
     articleId?: number;
     /**
      *
      * @type {Date}
-     * @memberof WriteOffResponse
+     * @memberof WriteOffUserResponse
      */
     date: Date;
     /**
      *
-     * @type {UserInfo}
-     * @memberof WriteOffResponse
-     */
-    user: UserInfo;
-    /**
-     *
      * @type {string}
-     * @memberof WriteOffResponse
+     * @memberof WriteOffUserResponse
      */
     articleName: string;
     /**
      * generic amount
      * @type {number}
-     * @memberof WriteOffResponse
+     * @memberof WriteOffUserResponse
      */
     amount: number;
     /**
      *
-     * @type {WriteOffStatus}
-     * @memberof WriteOffResponse
+     * @type {string}
+     * @memberof WriteOffUserResponse
      */
-    status?: WriteOffStatus;
+    imageLink?: string | null;
 }
 
 /**
- * Check if a given object implements the WriteOffResponse interface.
+ * Check if a given object implements the WriteOffUserResponse interface.
  */
-export function instanceOfWriteOffResponse(value: object): boolean {
+export function instanceOfWriteOffUserResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'date' in value;
-    isInstance = isInstance && 'user' in value;
     isInstance = isInstance && 'articleName' in value;
     isInstance = isInstance && 'amount' in value;
 
     return isInstance;
 }
 
-export function WriteOffResponseFromJSON(json: any): WriteOffResponse {
-    return WriteOffResponseFromJSONTyped(json, false);
+export function WriteOffUserResponseFromJSON(json: any): WriteOffUserResponse {
+    return WriteOffUserResponseFromJSONTyped(json, false);
 }
 
-export function WriteOffResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): WriteOffResponse {
+export function WriteOffUserResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): WriteOffUserResponse {
     if (json === undefined || json === null) {
         return json;
     }
@@ -95,14 +82,13 @@ export function WriteOffResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
         id: json['id'],
         articleId: !exists(json, 'articleId') ? undefined : json['articleId'],
         date: new Date(json['date']),
-        user: UserInfoFromJSON(json['user']),
         articleName: json['articleName'],
         amount: json['amount'],
-        status: !exists(json, 'status') ? undefined : WriteOffStatusFromJSON(json['status']),
+        imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
     };
 }
 
-export function WriteOffResponseToJSON(value?: WriteOffResponse | null): any {
+export function WriteOffUserResponseToJSON(value?: WriteOffUserResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -113,9 +99,8 @@ export function WriteOffResponseToJSON(value?: WriteOffResponse | null): any {
         id: value.id,
         articleId: value.articleId,
         date: value.date.toISOString().substr(0, 10),
-        user: UserInfoToJSON(value.user),
         articleName: value.articleName,
         amount: value.amount,
-        status: WriteOffStatusToJSON(value.status),
+        imageLink: value.imageLink,
     };
 }
