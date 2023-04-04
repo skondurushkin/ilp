@@ -1,16 +1,19 @@
 package ru.itone.ilp.server.controllers;
 
-import java.util.List;
-import java.util.Optional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
-import ru.itone.ilp.openapi.api.ArticleApi;
 import ru.itone.ilp.exception.ApiExceptions;
+import ru.itone.ilp.openapi.api.ArticleApi;
 import ru.itone.ilp.openapi.model.ArticleDeleteRequest;
 import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
@@ -18,6 +21,10 @@ import ru.itone.ilp.openapi.model.ArticleUpdateRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.services.articles.ArticleService;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -62,5 +69,16 @@ public class ArticleController implements ArticleApi {
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<ArticleResponse> updateArticle(ArticleUpdateRequest articleUpdateRequest) {
         return ResponseEntity.ok(articleService.update(articleUpdateRequest));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ErrorResponse handleValidationException(ConstraintViolationException ex) {
+        String errors = ex.getConstraintViolations().stream()
+            .map(ConstraintViolation::getMessage)
+            .collect(Collectors.joining(","));
+        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, "Validation failed")
+            .detail(errors)
+            .build();
     }
 }
