@@ -16,59 +16,66 @@ import { exists, mapValues } from '../runtime';
 /**
  *
  * @export
- * @interface ArticleRequest
+ * @interface ArticleUpdateRequest
  */
-export interface ArticleRequest {
+export interface ArticleUpdateRequest {
     /**
      *
      * @type {string}
-     * @memberof ArticleRequest
+     * @memberof ArticleUpdateRequest
      */
     code: string;
     /**
      *
      * @type {string}
-     * @memberof ArticleRequest
+     * @memberof ArticleUpdateRequest
      */
     name: string;
     /**
      *
      * @type {string}
-     * @memberof ArticleRequest
+     * @memberof ArticleUpdateRequest
      */
     description?: string | null;
     /**
      *
      * @type {number}
-     * @memberof ArticleRequest
+     * @memberof ArticleUpdateRequest
      */
     price: number;
     /**
      *
      * @type {boolean}
-     * @memberof ArticleRequest
+     * @memberof ArticleUpdateRequest
      */
     available: boolean;
+    /**
+     * generic identifier
+     * @type {number}
+     * @memberof ArticleUpdateRequest
+     */
+    id: number;
 }
 
 /**
- * Check if a given object implements the ArticleRequest interface.
+ * Check if a given object implements the ArticleUpdateRequest interface.
  */
-export function instanceOfArticleRequest(value: object): boolean {
+export function instanceOfArticleUpdateRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'code' in value;
     isInstance = isInstance && 'name' in value;
     isInstance = isInstance && 'price' in value;
     isInstance = isInstance && 'available' in value;
+    isInstance = isInstance && 'id' in value;
 
     return isInstance;
 }
 
-export function ArticleRequestFromJSON(json: any): ArticleRequest {
-    return ArticleRequestFromJSONTyped(json, false);
+export function ArticleUpdateRequestFromJSON(json: any): ArticleUpdateRequest {
+    return ArticleUpdateRequestFromJSONTyped(json, false);
 }
 
-export function ArticleRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): ArticleRequest {
+export function ArticleUpdateRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): ArticleUpdateRequest {
     if (json === undefined || json === null) {
         return json;
     }
@@ -78,10 +85,11 @@ export function ArticleRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
         description: !exists(json, 'description') ? undefined : json['description'],
         price: json['price'],
         available: json['available'],
+        id: json['id'],
     };
 }
 
-export function ArticleRequestToJSON(value?: ArticleRequest | null): any {
+export function ArticleUpdateRequestToJSON(value?: ArticleUpdateRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -94,5 +102,6 @@ export function ArticleRequestToJSON(value?: ArticleRequest | null): any {
         description: value.description,
         price: value.price,
         available: value.available,
+        id: value.id,
     };
 }
