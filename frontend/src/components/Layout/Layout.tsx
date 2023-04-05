@@ -55,7 +55,7 @@ export function Layout(props: LayoutProps): ReactElement {
                 </div>
             </header>
             <div className="app-bg flex grow flex-col">
-                <div className="relative flex w-full w-full grow xl:container xl:mx-auto">
+                <div className="relative flex w-full grow xl:container xl:mx-auto">
                     <aside
                         ref={sidebarRef}
                         className={twMerge(
