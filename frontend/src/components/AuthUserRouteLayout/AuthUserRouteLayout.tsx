@@ -1,24 +1,24 @@
-import { Outlet, useLocation } from 'react-router-dom';
-import { ReactElement, Suspense, useRef, useState } from 'react';
+import { ReactElement, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 
 import { ReactComponent as BurgerIcon } from '../../assets/burger.svg';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import { ReactComponent as Logo } from '../../assets/logo-light.svg';
 import { Nav } from './Nav';
+import { Outlet } from 'react-router-dom';
 import { Profile } from './Profile';
 import { Spinner } from '../Spinner';
 import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
+import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 import useClickAway from 'react-use/lib/useClickAway';
+
+const PAGE_NAV_NODE_ID = 'page-nav';
 
 export function AuthUserRouteLayout(): ReactElement {
     const [mobileSidebarVisible, setMobileSidebarVisible] = useState(false);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
     useClickAway(sidebarRef, () => setMobileSidebarVisible(false));
-
-    const { pathname } = useLocation();
-    const isMainPage = pathname === '/';
 
     return (
         <div className="relative flex min-h-[100vh] w-full flex-col">
@@ -29,20 +29,8 @@ export function AuthUserRouteLayout(): ReactElement {
                             <Logo />
                         </TypedLink>
                     </div>
-                    <div className="hidden grow justify-center pl-8 md:flex xl:justify-start">
-                        {isMainPage && (
-                            <ul className="flex items-center gap-4">
-                                <li>
-                                    <a href="#balance">Мой баланс</a>
-                                </li>
-                                <li>
-                                    <a href="#activities">Как заработать баллы</a>
-                                </li>
-                                <li>
-                                    <a href="#products">На что потратить баллы</a>
-                                </li>
-                            </ul>
-                        )}
+                    <div className="hidden grow pl-8 md:flex">
+                        <nav id={PAGE_NAV_NODE_ID} className="flex grow justify-center xl:justify-start" />
                     </div>
                     <ThemeToggle className="hidden xl:block" />
                     <button
@@ -103,4 +91,23 @@ export function AuthUserRouteLayout(): ReactElement {
             </div>
         </div>
     );
+}
+
+export interface PageNavProps {
+    children?: ReactNode;
+}
+
+export function PageNav(props: PageNavProps): ReactElement | null {
+    const { children } = props;
+    const [domNode, setDomNode] = useState<HTMLElement | null>(null);
+    useEffect(() => {
+        const node = document.getElementById(PAGE_NAV_NODE_ID);
+        if (node) {
+            setDomNode(node);
+        }
+    }, []);
+    if (!domNode) {
+        return null;
+    }
+    return createPortal(children, domNode);
 }
