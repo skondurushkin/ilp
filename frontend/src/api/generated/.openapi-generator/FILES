@@ -17,12 +17,15 @@ models/ArticleDeleteRequest.ts
 models/ArticleRequest.ts
 models/ArticleResponse.ts
 models/ArticleUpdateRequest.ts
+models/CreateNewAccrualRequest.ts
+models/CreateNewWriteOffRequest.ts
 models/ERole.ts
 models/ErrorMessage.ts
 models/JwtResponse.ts
 models/LoginRequest.ts
 models/MessageResponse.ts
 models/Name.ts
+models/OperationResponse.ts
 models/PageRequest.ts
 models/PageRequestConfig.ts
 models/PageRequestConfigSortInner.ts
@@ -32,6 +35,8 @@ models/PaginatedActivityResponse.ts
 models/PaginatedActivityResponseAllOf.ts
 models/PaginatedArticleResponse.ts
 models/PaginatedArticleResponseAllOf.ts
+models/PaginatedOperationResponse.ts
+models/PaginatedOperationResponseAllOf.ts
 models/PaginatedProfileResponse.ts
 models/PaginatedProfileResponseAllOf.ts
 models/PaginatedResult.ts
@@ -44,8 +49,12 @@ models/SettingResponse.ts
 models/SignupRequest.ts
 models/TokenRefreshRequest.ts
 models/TokenRefreshResponse.ts
+models/UpdateWriteOffRequest.ts
 models/UploadFile200Response.ts
+models/UserInfo.ts
 models/WalletResponse.ts
 models/WriteOffResponse.ts
+models/WriteOffStatus.ts
+models/WriteOffUserResponse.ts
 models/index.ts
 runtime.ts
