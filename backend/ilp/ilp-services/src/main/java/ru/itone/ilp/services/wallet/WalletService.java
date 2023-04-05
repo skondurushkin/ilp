@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itone.ilp.exception.ApiExceptions.PermissionDeniedException;
 import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.openapi.model.AccrualResponse;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
@@ -40,6 +41,7 @@ import ru.itone.ilp.persistence.types.OrderStatus;
 @RequiredArgsConstructor
 public class WalletService {
 
+    private static final String PROFILE_NOT_FOUND = "Профиль не найден";
     private final DbApi dbApi;
     private final DbJpa dbJpa;
 
@@ -47,7 +49,7 @@ public class WalletService {
     @Transactional(readOnly = true)
     public WalletResponse getWalletOverview(Long userId) {
         PageRequest pageable = PageRequest.of(0, 3, Sort.by(Direction.DESC, "instant"));
-        Page<Operation> operationPage = dbJpa.getOperationRepository().findAllByUserId(userId, pageable);
+        Page<Operation> operationPage = dbJpa.getOperationRepository().findAllByUserIdAndAccrualNotNullOrWriteOff_OrderStatusNot(userId, OrderStatus.cancelled, pageable);
         JsonNode balance = dbApi.getBalance(userId);
 
         List<OperationResponse> lastOperations = operationPage.getContent()
@@ -77,9 +79,13 @@ public class WalletService {
     }
 
     @Transactional(readOnly = true)
-    public PaginatedWriteOffResponse paginateWriteOffs(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
+    public PaginatedWriteOffResponse paginateWriteOffs(boolean isAdmin, Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
+        dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
-        Page<WriteOff> page = dbJpa.getWriteOffRepository().findAllByUserId(userId, pageable);
+        Page<WriteOff> page = isAdmin
+                    ? dbJpa.getWriteOffRepository().findAllByUserId(userId, pageable)
+                    : dbJpa.getWriteOffRepository().findAllByUserIdAndOrderStatusNot(userId, OrderStatus.cancelled, pageable)
+                ;
         List<WriteOffUserResponse> results = page.getContent().stream().map(WriteOffMapper.INSTANCE::toUserResponse).toList();
         return new PaginatedWriteOffResponse()
                 .total(page.getTotalPages())
@@ -91,9 +97,12 @@ public class WalletService {
     }
 
     @Transactional(readOnly = true)
-    public PaginatedOperationResponse getWalletHistory(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
+    public PaginatedOperationResponse getWalletHistory(boolean isAdmin, Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
+        dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
-        Page<Operation> operationPage = dbJpa.getOperationRepository().findAllByUserId(userId, pageable);
+        Page<Operation> operationPage = isAdmin
+                ? dbJpa.getOperationRepository().findAllByUserId(userId, pageable)
+                : dbJpa.getOperationRepository().findAllByUserIdAndAccrualNotNullOrWriteOff_OrderStatusNot(userId, OrderStatus.cancelled, pageable);
         List<OperationResponse> results = operationPage.getContent()
                 .stream()
                 .map(OperationMapper.INSTANCE::toResponse)
@@ -109,7 +118,7 @@ public class WalletService {
 
     @Transactional
     public AccrualResponse createNewAccrual(Long userId, CreateNewAccrualRequest createNewAccrualRequest) {
-        User user = dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException("Профиль не найден"));
+        User user = dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
         Activity activity = dbJpa.getActivityRepository()
                 .findById(createNewAccrualRequest.getActivityId().longValue())
                 .orElseThrow(() -> new DbApiException("Активность не найдена"));
@@ -126,16 +135,23 @@ public class WalletService {
     }
 
     @Transactional
-    public WriteOffResponse updateWriteOffStatus(Long writeOffId, WriteOffStatus status) {
+    public WriteOffResponse updateWriteOffStatus(Long userId, boolean admin, Long writeOffId, WriteOffStatus status) {
         WriteOff writeOff = dbJpa.getWriteOffRepository().findById(writeOffId)
                 .orElseThrow(() -> new DbApiException("Объект списания не найден"));
-        writeOff = dbJpa.getWriteOffRepository().save(writeOff.setOrderStatus(OrderStatus.valueOf(status.getValue())));
-        return WriteOffMapper.INSTANCE.toResponse(writeOff);
+        if (writeOff.getUser().getId().equals(userId) || admin) {
+            OrderStatus orderStatus = OrderStatus.valueOf(status.getValue());
+            if (!(admin || orderStatus == OrderStatus.cancelled)) {
+                throw new PermissionDeniedException("Отсутствуют права на изменение статуса списания (" + orderStatus + ")" );
+            }
+            writeOff = dbJpa.getWriteOffRepository().save(writeOff.setOrderStatus(orderStatus));
+            return WriteOffMapper.INSTANCE.toResponse(writeOff);
+        }
+        throw new PermissionDeniedException("Отсутствуют права на редактирование списаний других пользователей");
     }
 
     @Transactional
     public WriteOffUserResponse writeOff(Long userId, WriteOffRequest writeOffRequest) {
-        User user = dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException("Профиль не найден"));
+        User user = dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
         Article article = dbJpa.getArticleRepository().findById(writeOffRequest.getArticleId().longValue())
                 .orElseThrow(() -> new DbApiException("Артикул не найден"));
         WriteOff writeOff = dbJpa.getWriteOffRepository()
