@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
-import { Layout } from '../../components/Layout';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
@@ -36,7 +35,7 @@ export const ProductsAdminPage = () => {
                     return (
                         <div className="flex flex-col gap-2">
                             <p className="text-base text-white">{name}</p>
-                            <p className="text-small text-ellipsis text-gray">{description}</p>
+                            <p className="text-small text-gray text-ellipsis">{description}</p>
                         </div>
                     );
                 },
@@ -77,7 +76,7 @@ export const ProductsAdminPage = () => {
                         <div className="flex flex-col gap-2">
                             <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
                                 <button className="flex items-center gap-2">
-                                    <EditSVG className="h-4 w-4 stroke-primary" />
+                                    <EditSVG className="stroke-primary h-4 w-4" />
                                     <span className="text-small text-primary">Изменить</span>
                                 </button>
                             </TypedLink>
@@ -86,7 +85,7 @@ export const ProductsAdminPage = () => {
                                 disabled={deleteIsLoading}
                                 onClick={() => deleteArticle()}
                             >
-                                <TrashSVG className="h-4 w-4 stroke-primary" />
+                                <TrashSVG className="stroke-primary h-4 w-4" />
                                 <span className="text-small text-primary">Удалить</span>
                             </button>
                         </div>
@@ -98,21 +97,19 @@ export const ProductsAdminPage = () => {
     );
 
     return (
-        <Layout>
-            <div className="flex flex-col gap-6">
-                <h1 className="text-h1">Товары</h1>
-                <div>
-                    <TypedLink to="/admin/products/create">
-                        <button className="btn btn-primary">Добавить товар</button>
-                    </TypedLink>
-                </div>
-                <AdminTable
-                    globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
-                    columns={columns}
-                    queryData={queryData}
-                    queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}
-                />
+        <div className="flex flex-col gap-6">
+            <h1 className="text-h1">Товары</h1>
+            <div>
+                <TypedLink to="/admin/products/create">
+                    <button className="btn btn-primary">Добавить товар</button>
+                </TypedLink>
             </div>
-        </Layout>
+            <AdminTable
+                globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
+                columns={columns}
+                queryData={queryData}
+                queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}
+            />
+        </div>
     );
 };

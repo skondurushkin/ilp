@@ -1,41 +1,54 @@
-import { ActivitiesAdminPage } from '../pages/ActivitiesAdminPage';
-import { CreateActivityAdminPage } from '../pages/CreateActivityAdminPage';
-import { CreateProductAdminPage } from '../pages/CreateProductAdminPage';
-import { EditActivityAdminPage } from '../pages/EditActivityAdminPage';
-import { EditProductAdminPage } from '../pages/EditProductAdminPage';
-import { Layout } from '../components/Layout';
-import { ProductsAdminPage } from '../pages/ProductsAdminPage';
+import { AuthUserRouteLayout } from '../components/AuthUserRouteLayout';
+import { Link } from 'react-router-dom';
+import React from 'react';
+
+const ActivitiesAdminPage = React.lazy(() => import('../pages/ActivitiesAdminPage'));
+const CreateActivityAdminPage = React.lazy(() => import('../pages/CreateActivityAdminPage'));
+const CreateProductAdminPage = React.lazy(() => import('../pages/CreateProductAdminPage'));
+const EditActivityAdminPage = React.lazy(() => import('../pages/EditActivityAdminPage'));
+const EditProductAdminPage = React.lazy(() => import('../pages/EditProductAdminPage'));
+const ProductsAdminPage = React.lazy(() => import('../pages/ProductsAdminPage'));
 
 export const authAdminRoutes = [
     {
         path: '/admin',
-        element: <Layout>Admin page</Layout>,
-        index: true,
+        element: <AuthUserRouteLayout />,
+        children: [
+            {
+                index: true,
+                element: (
+                    <div className="flex flex-col gap-2">
+                        <Link to="/admin/activities">activities</Link>
+                        <Link to="/admin/activities/create">activities create</Link>
+                    </div>
+                ),
+            },
+            {
+                path: 'activities',
+                index: true,
+                element: <ActivitiesAdminPage />,
+            },
+            {
+                path: 'activities/create',
+                element: <CreateActivityAdminPage />,
+            },
+            {
+                path: 'activities/edit/:activityId',
+                element: <EditActivityAdminPage />,
+            },
+            {
+                path: 'products',
+                index: true,
+                element: <ProductsAdminPage />,
+            },
+            {
+                path: 'products/create',
+                element: <CreateProductAdminPage />,
+            },
+            {
+                path: 'products/edit/:productId',
+                element: <EditProductAdminPage />,
+            },
+        ],
     },
-    {
-        path: '/admin/activities',
-        index: true,
-        element: <ActivitiesAdminPage />,
-    },
-    {
-        path: '/admin/activities/create',
-        element: <CreateActivityAdminPage />,
-    },
-    {
-        path: '/admin/activities/edit/:activityId',
-        element: <EditActivityAdminPage />,
-    },
-    {
-        path: '/admin/products',
-        index: true,
-        element: <ProductsAdminPage />,
-    },
-    {
-        path: '/admin/products/create',
-        element: <CreateProductAdminPage />,
-    },
-    {
-        path: '/admin/products/edit/:productId',
-        element: <EditProductAdminPage />,
-    },
-] as const;
+];

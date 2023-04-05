@@ -1,19 +1,15 @@
 import { Link, createSearchParams } from 'react-router-dom';
+import { LinkWithParamProps, buildUrl } from '../url-builder';
 
 import type { LinkProps } from 'react-router-dom';
-import { RoutePath } from '../AppRouter';
-import { TypedRouterComponentProps } from './TypedRouterComponent';
-import { buildUrl } from '../url-builder';
 import { twMerge } from 'tailwind-merge';
 
-export type TypedLinkProps<P extends RoutePath> = TypedRouterComponentProps<LinkProps, P> & PresentationProps;
-
-export interface PresentationProps {
+export interface PresentationProps extends LinkProps {
     presentation?: 'link' | 'button';
     primary?: boolean;
 }
 
-export const TypedLink = <P extends RoutePath>(props: TypedLinkProps<P>) => {
+export const TypedLink = (props: LinkWithParamProps & PresentationProps) => {
     const { to, params, search, presentation = 'link', primary, className, ...rest } = props;
 
     let searchStr: string | undefined;

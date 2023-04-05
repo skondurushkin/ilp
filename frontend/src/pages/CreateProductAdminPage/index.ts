@@ -1,1 +1,1 @@
-export { CreateProductAdminPage } from './CreateProductAdminPage';
+export { CreateProductAdminPage as default } from './CreateProductAdminPage';

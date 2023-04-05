@@ -7,7 +7,6 @@ import { useActivitiesQuery, useProductsCatalogQuery, useWalletQuery } from '../
 
 import { ActivityCard } from './ActivityCard';
 import { Button } from '../../components/Button';
-import { Layout } from '../../components/Layout';
 import { PageSection } from '../../components/PageSection';
 import { ProductCard } from '../../components/ProductCard';
 import { WalletCard } from '../../components/WalletCard';
@@ -20,21 +19,7 @@ export const MainPage = () => {
     const productsCatalogQuery = useProductsCatalogQuery();
 
     return (
-        <Layout
-            menu={
-                <ul className="flex items-center gap-4">
-                    <li>
-                        <a href="#balance">Мой баланс</a>
-                    </li>
-                    <li>
-                        <a href="#activities">Как заработать вольты</a>
-                    </li>
-                    <li>
-                        <a href="#products">На что потратить вольты</a>
-                    </li>
-                </ul>
-            }
-        >
+        <div>
             <PageSection id="balance">
                 {walletQuery.status !== 'success' && <WalletCard skeleton extended />}
                 {walletQuery.status === 'success' && <WalletCard wallet={walletQuery.data} extended />}
@@ -70,7 +55,7 @@ export const MainPage = () => {
                         })}
                 </AdaptiveGrid>
             </PageSection>
-        </Layout>
+        </div>
     );
 };
 

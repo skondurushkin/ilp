@@ -17,13 +17,13 @@ import * as runtime from '../runtime';
 import type {
     AccrualResponse,
     CreateNewAccrualRequest,
-    CreateNewWriteOffRequest,
     PageRequest,
     PaginatedAccrualResponse,
     PaginatedOperationResponse,
     PaginatedWriteOffResponse,
     UpdateWriteOffRequest,
     WalletResponse,
+    WriteOffRequest,
     WriteOffResponse,
     WriteOffUserResponse,
 } from '../models';
@@ -32,8 +32,6 @@ import {
     AccrualResponseToJSON,
     CreateNewAccrualRequestFromJSON,
     CreateNewAccrualRequestToJSON,
-    CreateNewWriteOffRequestFromJSON,
-    CreateNewWriteOffRequestToJSON,
     PageRequestFromJSON,
     PageRequestToJSON,
     PaginatedAccrualResponseFromJSON,
@@ -46,6 +44,8 @@ import {
     UpdateWriteOffRequestToJSON,
     WalletResponseFromJSON,
     WalletResponseToJSON,
+    WriteOffRequestFromJSON,
+    WriteOffRequestToJSON,
     WriteOffResponseFromJSON,
     WriteOffResponseToJSON,
     WriteOffUserResponseFromJSON,
@@ -75,9 +75,8 @@ export interface CreateNewAccrualOperationRequest {
     createNewAccrualRequest?: CreateNewAccrualRequest;
 }
 
-export interface CreateNewWriteOffOperationRequest {
-    userId: number;
-    createNewWriteOffRequest?: CreateNewWriteOffRequest;
+export interface GetAccrualRequest {
+    accrualId: number;
 }
 
 export interface GetWalletHistoryRequest {
@@ -89,9 +88,17 @@ export interface GetWalletHistoryForUserIdRequest {
     pageRequest?: PageRequest;
 }
 
+export interface GetWriteOffRequest {
+    writeoffId: number;
+}
+
 export interface UpdateWriteOffOperationRequest {
     writeoffId: number;
     updateWriteOffRequest?: UpdateWriteOffRequest;
+}
+
+export interface WriteOffOperationRequest {
+    writeOffRequest?: WriteOffRequest;
 }
 
 /**
@@ -359,24 +366,22 @@ export class WalletApi extends runtime.BaseAPI {
     }
 
     /**
-     * create new write-off for user identified by user_id
+     * get accrual record by its identifier
      */
-    async createNewWriteOffRaw(
-        requestParameters: CreateNewWriteOffOperationRequest,
+    async getAccrualRaw(
+        requestParameters: GetAccrualRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<WriteOffUserResponse>> {
-        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+    ): Promise<runtime.ApiResponse<AccrualResponse>> {
+        if (requestParameters.accrualId === null || requestParameters.accrualId === undefined) {
             throw new runtime.RequiredError(
-                'userId',
-                'Required parameter requestParameters.userId was null or undefined when calling createNewWriteOff.',
+                'accrualId',
+                'Required parameter requestParameters.accrualId was null or undefined when calling getAccrual.',
             );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -388,29 +393,28 @@ export class WalletApi extends runtime.BaseAPI {
         }
         const response = await this.request(
             {
-                path: `/api/ilp/wallet/write-off/{user_id}`.replace(
-                    `{${'user_id'}}`,
-                    encodeURIComponent(String(requestParameters.userId)),
+                path: `/api/ilp/wallet/accrual/{accrual_id}`.replace(
+                    `{${'accrual_id'}}`,
+                    encodeURIComponent(String(requestParameters.accrualId)),
                 ),
-                method: 'POST',
+                method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
-                body: CreateNewWriteOffRequestToJSON(requestParameters.createNewWriteOffRequest),
             },
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffUserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccrualResponseFromJSON(jsonValue));
     }
 
     /**
-     * create new write-off for user identified by user_id
+     * get accrual record by its identifier
      */
-    async createNewWriteOff(
-        requestParameters: CreateNewWriteOffOperationRequest,
+    async getAccrual(
+        requestParameters: GetAccrualRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<WriteOffUserResponse> {
-        const response = await this.createNewWriteOffRaw(requestParameters, initOverrides);
+    ): Promise<AccrualResponse> {
+        const response = await this.getAccrualRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -556,6 +560,59 @@ export class WalletApi extends runtime.BaseAPI {
     }
 
     /**
+     * get the write-off record identified by writeoff_id
+     */
+    async getWriteOffRaw(
+        requestParameters: GetWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
+        if (requestParameters.writeoffId === null || requestParameters.writeoffId === undefined) {
+            throw new runtime.RequiredError(
+                'writeoffId',
+                'Required parameter requestParameters.writeoffId was null or undefined when calling getWriteOff.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/wallet/write-off/{writeoff_id}`.replace(
+                    `{${'writeoff_id'}}`,
+                    encodeURIComponent(String(requestParameters.writeoffId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get the write-off record identified by writeoff_id
+     */
+    async getWriteOff(
+        requestParameters: GetWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<WriteOffResponse> {
+        const response = await this.getWriteOffRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * change status of the write-off identified by writeoff_id
      */
     async updateWriteOffRaw(
@@ -608,6 +665,52 @@ export class WalletApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<WriteOffResponse> {
         const response = await this.updateWriteOffRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * write off funds of currently logged in user for the selected item
+     */
+    async writeOffRaw(
+        requestParameters: WriteOffOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<WriteOffUserResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/wallet/write-off`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: WriteOffRequestToJSON(requestParameters.writeOffRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffUserResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * write off funds of currently logged in user for the selected item
+     */
+    async writeOff(
+        requestParameters: WriteOffOperationRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<WriteOffUserResponse> {
+        const response = await this.writeOffRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }

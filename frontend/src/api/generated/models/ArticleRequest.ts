@@ -49,6 +49,12 @@ export interface ArticleRequest {
      * @memberof ArticleRequest
      */
     available: boolean;
+    /**
+     *
+     * @type {string}
+     * @memberof ArticleRequest
+     */
+    imageLink?: string | null;
 }
 
 /**
@@ -78,6 +84,7 @@ export function ArticleRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
         description: !exists(json, 'description') ? undefined : json['description'],
         price: json['price'],
         available: json['available'],
+        imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
     };
 }
 
@@ -94,5 +101,6 @@ export function ArticleRequestToJSON(value?: ArticleRequest | null): any {
         description: value.description,
         price: value.price,
         available: value.available,
+        imageLink: value.imageLink,
     };
 }

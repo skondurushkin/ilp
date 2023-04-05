@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
-import { Layout } from '../../components/Layout';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
@@ -38,7 +37,7 @@ export const ActivitiesAdminPage = () => {
                                 target="_blank"
                                 rel="noreferrer"
                                 href={infoLink}
-                                className="text-small text-ellipsis text-gray underline"
+                                className="text-small text-gray text-ellipsis underline"
                             >
                                 {infoLink}
                             </a>
@@ -90,7 +89,7 @@ export const ActivitiesAdminPage = () => {
                         <div className="flex flex-col gap-2">
                             <TypedLink to="/admin/activities/edit/:activityId" params={{ activityId: id.toString() }}>
                                 <button className="flex items-center gap-2">
-                                    <EditSVG className="h-4 w-4 stroke-primary" />
+                                    <EditSVG className="stroke-primary h-4 w-4" />
                                     <span className="text-small text-primary">Изменить</span>
                                 </button>
                             </TypedLink>
@@ -99,7 +98,7 @@ export const ActivitiesAdminPage = () => {
                                 disabled={deleteIsLoading}
                                 onClick={() => deleteActivity()}
                             >
-                                <TrashSVG className="h-4 w-4 stroke-primary" />
+                                <TrashSVG className="stroke-primary h-4 w-4" />
                                 <span className="text-small text-primary">Удалить</span>
                             </button>
                         </div>
@@ -111,21 +110,19 @@ export const ActivitiesAdminPage = () => {
     );
 
     return (
-        <Layout>
-            <div className="flex flex-col gap-6">
-                <h1 className="text-h1">Активности</h1>
-                <div>
-                    <TypedLink to="/admin/activities/create">
-                        <button className="btn btn-primary">Добавить активность</button>
-                    </TypedLink>
-                </div>
-                <AdminTable
-                    queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
-                    globalFilterPlaceholder="Поиск по Названию и Описанию"
-                    columns={columns}
-                    queryData={queryData}
-                />
+        <div className="flex flex-col gap-6">
+            <h1 className="text-h1">Активности</h1>
+            <div>
+                <TypedLink to="/admin/activities/create">
+                    <button className="btn btn-primary">Добавить активность</button>
+                </TypedLink>
             </div>
-        </Layout>
+            <AdminTable
+                queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
+                globalFilterPlaceholder="Поиск по Названию и Описанию"
+                columns={columns}
+                queryData={queryData}
+            />
+        </div>
     );
 };

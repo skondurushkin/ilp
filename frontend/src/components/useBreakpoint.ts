@@ -1,4 +1,4 @@
-import { createBreakpoint } from 'react-use';
+import createBreakpoint from 'react-use/lib/factory/createBreakpoint';
 import { screens } from '../../screens';
 
 const useBreakpoint = createBreakpoint(screens);

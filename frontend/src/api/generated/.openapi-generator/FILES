@@ -18,7 +18,6 @@ models/ArticleRequest.ts
 models/ArticleResponse.ts
 models/ArticleUpdateRequest.ts
 models/CreateNewAccrualRequest.ts
-models/CreateNewWriteOffRequest.ts
 models/ERole.ts
 models/ErrorMessage.ts
 models/JwtResponse.ts
@@ -53,6 +52,7 @@ models/UpdateWriteOffRequest.ts
 models/UploadFile200Response.ts
 models/UserInfo.ts
 models/WalletResponse.ts
+models/WriteOffRequest.ts
 models/WriteOffResponse.ts
 models/WriteOffStatus.ts
 models/WriteOffUserResponse.ts
