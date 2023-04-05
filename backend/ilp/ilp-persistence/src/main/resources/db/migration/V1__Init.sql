@@ -154,7 +154,6 @@ create table operations
     primary key (id)
 );
 
-
 alter table if exists operations
     add constraint FK_operations__accruals foreign key (accrual_id) references accruals ON DELETE CASCADE;
 
@@ -163,6 +162,28 @@ alter table if exists operations
 
 create unique index UX_accrual_operations on operations(user_id, accrual_id) where accrual_id is not null;
 create unique index UX_write_off_operations on operations(user_id, writeoff_id) where writeoff_id is not null;
+
+create type event_type as enum (
+    'login',
+    'logout',
+    'accrual',
+    'writeOff',
+    'error'
+    );
+
+create table event_log
+(
+    id          bigserial   not null,
+    ev_type     event_type  not null,
+    user_id     bigint      not null,
+    instant     timestamp(0) not null default now(),
+    ev_info     text        not null,
+    primary key (id)
+);
+
+alter table if exists event_log
+    add constraint FK_event_log__users foreign key (user_id) references users ON DELETE CASCADE;
+
 
 CREATE OR REPLACE FUNCTION on_accrual_change() RETURNS TRIGGER AS $accrual_op$
 DECLARE
@@ -177,10 +198,12 @@ BEGIN
     IF (TG_OP = 'UPDATE') THEN
         UPDATE operations SET name = ACT_NAME, amount = NEW.amount
         WHERE accrual_id = new.id;
+        CALL public.log_event(new.user_id, 'accrual'::event_type, format('Обновлена операция начисления %s', new.id));
         return NEW;
     ELSIF (TG_OP = 'INSERT') THEN
         insert into operations(type, user_id, accrual_id, name, amount)
         values('accrual'::op_type, new.user_id, new.id, ACT_NAME, new.amount);
+        CALL public.log_event(new.user_id, 'accrual'::event_type, format('Создана операция начисления %s', new.id));
         return NEW;
     END IF;
     RETURN NULL;
@@ -202,10 +225,12 @@ BEGIN
     IF (TG_OP = 'UPDATE') THEN
         UPDATE operations SET name = ART_NAME, amount = NEW.amount
         WHERE writeoff_id = new.id;
+        CALL public.log_event(new.user_id, 'writeOff'::event_type, format('Обновлена операция списания %s', new.id));
         return NEW;
     ELSIF (TG_OP = 'INSERT') THEN
         insert into operations(type, user_id, writeoff_id, name, amount)
         values('writeOff'::op_type, new.user_id, new.id, ART_NAME, new.amount);
+        CALL public.log_event(new.user_id, 'writeOff'::event_type, format('Создана операция списания %s', new.id));
         return NEW;
     END IF;
     RETURN NULL;
@@ -222,6 +247,14 @@ create trigger write_off_op
     AFTER INSERT OR UPDATE on write_offs
     FOR EACH ROW EXECUTE PROCEDURE on_write_off_change();
 
+CREATE OR REPLACE PROCEDURE public.log_event(_user_id bigint, _ev_type event_type, _ev_info text)
+    language plpgsql
+    as $$
+begin
+    insert into event_log(user_id, ev_type, ev_info)
+    values (_user_id, _ev_type, _ev_info);
+end;
+$$;
 
 CREATE OR REPLACE FUNCTION public.balance(userid bigint)
     RETURNS jsonb
@@ -233,7 +266,7 @@ declare
     _result jsonb;
 begin
     select coalesce (sum(a.amount), 0) into earned from accruals a where a.user_id = userId;
-    select coalesce (sum(w.amount), 0) into spent from write_offs w where w.user_id = userId;
+    select coalesce (sum(w.amount), 0) into spent from write_offs w where w.user_id = userId and w.status <> 'cancelled'::order_status;
 
     select row_to_json(t) into _result from (
         select userId, earned, spent, earned - spent as balance
@@ -244,9 +277,11 @@ $function$
 ;
 
 -- Permissions
+alter procedure public.log_event(userid bigint, ev_type event_type, info text) owner to current_user;
+grant all on procedure public.log_event(userid bigint, ev_type event_type, info text) to public;
+
 alter function public.balance(int8) owner to current_user;
 grant all on function public.balance(int8) to public;
-
 
 insert into settings (prop_key, prop_value)
 values  ('db.version', '1.0'),
@@ -306,6 +341,7 @@ values  (3, 1);
 
 insert into activities (name, description, start_date, price)
 values
+    ('Добро пожаловать!', 'Добро пожаловать в программу лояльности!', '2020-01-01', 10),
     ('Работа в компании', 'Мы награждаем наших сотрудников за стабильную трудовую деятельность на благо компании', '2020-01-01', 20),
     ('Юбилей сотрудника', 'Мы ценим ваш возраст и опыт', '2020-01-01', 25),
     ('Выступление', 'Публичное выступление на мероприятиях компании', '2020-01-01', 30),
@@ -322,9 +358,9 @@ values
 
 insert into accruals (date, user_id, activity_id, amount)
 values
-    ('2023-03-24', 2, 2, 25),
-    ('2023-03-22', 2, 3, 30),
-    ('2023-03-22', 3, 1, 20)
+    ('2023-03-24', 2, 3, 25),
+    ('2023-03-22', 2, 4, 30),
+    ('2023-03-22', 3, 2, 20)
 ;
 
 insert into write_offs (date, user_id, article_id, amount, status)

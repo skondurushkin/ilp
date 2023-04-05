@@ -1,20 +1,24 @@
 package ru.itone.ilp.server.controllers;
 
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.itone.ilp.openapi.api.WalletApi;
 import ru.itone.ilp.openapi.model.AccrualResponse;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
-import ru.itone.ilp.openapi.model.CreateNewWriteOffRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedAccrualResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
 import ru.itone.ilp.openapi.model.PaginatedWriteOffResponse;
 import ru.itone.ilp.openapi.model.UpdateWriteOffRequest;
 import ru.itone.ilp.openapi.model.WalletResponse;
+import ru.itone.ilp.openapi.model.WriteOffRequest;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
 import ru.itone.ilp.openapi.model.WriteOffUserResponse;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
@@ -51,12 +55,22 @@ public class WalletController implements WalletApi {
 
     @Override
     public ResponseEntity<AccrualResponse> createNewAccrual(Integer userId, CreateNewAccrualRequest createNewAccrualRequest) {
-        return ResponseEntity.ok(walletService.createNewAccrual(userId.longValue(), createNewAccrualRequest));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(walletService.createNewAccrual(userId.longValue(), createNewAccrualRequest));
     }
 
     @Override
-    public ResponseEntity<WriteOffUserResponse> createNewWriteOff(Integer userId, CreateNewWriteOffRequest createNewWriteOffRequest) {
-        return ResponseEntity.ok(walletService.createNewWriteOff(userId.longValue(), createNewWriteOffRequest));
+    public ResponseEntity<AccrualResponse> getAccrual(Integer accrualId) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isAdmin = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch("ADMIN"::equalsIgnoreCase);
+        if (isAdmin) {
+            return ResponseEntity.ok(walletService.getAccrual(accrualId.longValue()));
+        } else {
+            return ResponseEntity.ok(walletService.getAccrualForUser(accrualId.longValue(), userDetails.getId()));
+        }
     }
 
     @Override
@@ -77,7 +91,30 @@ public class WalletController implements WalletApi {
     }
 
     @Override
+    public ResponseEntity<WriteOffResponse> getWriteOff(Integer writeoffId) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isAdmin = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch("ADMIN"::equalsIgnoreCase);
+        if (isAdmin) {
+            return ResponseEntity.ok(walletService.getWriteOff(writeoffId.longValue()));
+        } else {
+            return ResponseEntity.ok(walletService.getWriteOffForUser(writeoffId.longValue(), userDetails.getId()));
+        }
+    }
+
+    @Override
     public ResponseEntity<WriteOffResponse> updateWriteOff(Integer writeOffId, UpdateWriteOffRequest updateWriteOffRequest) {
         return ResponseEntity.ok(walletService.updateWriteOffStatus(writeOffId.longValue(), updateWriteOffRequest.getStatus()));
+    }
+
+    @Override
+    public ResponseEntity<WriteOffUserResponse> writeOff(WriteOffRequest writeOffRequest) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        WriteOffUserResponse response = walletService.writeOff(userDetails.getId(), writeOffRequest);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
+        log.info("CREATED: {}", uri);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

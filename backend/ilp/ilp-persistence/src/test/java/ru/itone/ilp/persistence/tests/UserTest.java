@@ -29,7 +29,7 @@ class UserTest extends AbstractPersistenceTest {
 
     @Test
     void testSearch() {
-        List<User> users = userRepository.searchByText("иван");
+        List<User> users = userRepository.searchByText("иван", 10);
         assertEquals(2, users.size());
     }
 }

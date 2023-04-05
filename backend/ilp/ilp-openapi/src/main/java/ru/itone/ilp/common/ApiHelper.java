@@ -1,12 +1,11 @@
 package ru.itone.ilp.common;
 
-import lombok.experimental.UtilityClass;
-import org.springframework.util.StringUtils;
-import ru.itone.ilp.openapi.model.ERole;
-import ru.itone.ilp.openapi.model.Name;
-
 import java.time.LocalDate;
 import java.util.StringJoiner;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
+import ru.itone.ilp.openapi.model.ERole;
+import ru.itone.ilp.openapi.model.Name;
 
 @UtilityClass
 public class ApiHelper {
@@ -30,5 +29,12 @@ public class ApiHelper {
             role = role.substring(5);
         }
         return ERole.fromValue(role);
+    }
+
+    public String trimSearchKey(String searchKey, int min, int max) {
+        searchKey = StringUtils.trimToEmpty(searchKey);
+        if (searchKey.length() < min)
+            return StringUtils.EMPTY;
+        return StringUtils.substring(searchKey, 0, Math.min(searchKey.length(), max));
     }
 }

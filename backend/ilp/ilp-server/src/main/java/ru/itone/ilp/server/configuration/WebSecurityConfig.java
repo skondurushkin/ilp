@@ -31,7 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.itone.ilp.persistence.repositories.UserRepository;
 import ru.itone.ilp.server.jwt.JwtHelper;
-import ru.itone.ilp.server.jwt.advice.TokenControllerAdvice;
+import ru.itone.ilp.server.jwt.advice.ApiControllerAdvice;
 import ru.itone.ilp.server.jwt.security.AuthEntryPointJwt;
 import ru.itone.ilp.services.configuration.ActivityConfiguration;
 import ru.itone.ilp.services.configuration.PersistenceConfiguration;
@@ -60,8 +60,8 @@ public class WebSecurityConfig {
     private final UserRepository userRepository;
 
     @Bean
-    public TokenControllerAdvice controllerAdvice() {
-        return new TokenControllerAdvice();
+    public ApiControllerAdvice controllerAdvice() {
+        return new ApiControllerAdvice();
     }
 
     @Bean
