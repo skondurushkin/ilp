@@ -1,14 +1,14 @@
-import { PageRequest, WriteOffResponse, api } from '../../api';
-import { ReadonlyUpdateWriteOffRequest, UpdateStatusModal } from './UpdateStatusModal';
+import { EditStatusForm, ReadonlyUpdateWriteOffRequest } from './EditStatusForm';
+import { PageRequest, WriteOffResponse, WriteOffStatus, api } from '../../api';
 import { useCallback, useMemo, useState } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
+import Modal from '../../components/Modal';
 import { TypedLink } from '../../router';
+import { WRITE_OFFS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { WriteOffStatusName } from '../../modules/loyalty';
-
-const WRITE_OFFS_ADMIN_PAGE_QUERY_KEY = 'admin.browseWriteOffsAsAdmin';
 
 export const WriteOffsAdminPage = () => {
     const [modalData, setModalData] = useState<ReadonlyUpdateWriteOffRequest | null>(null);
@@ -62,18 +62,8 @@ export const WriteOffsAdminPage = () => {
                 accessorKey: 'articleId',
                 header: () => <span>Товар</span>,
                 cell: (info) => {
-                    const { articleId, articleName } = info.row.original;
-                    return (
-                        <div className="flex flex-col gap-2">
-                            <p className="text-base text-white">{articleName}</p>
-                            <TypedLink
-                                to="/admin/products/edit/:productId"
-                                params={{ productId: articleId.toString() }}
-                            >
-                                <p className="text-small text-gray underline">Перейти</p>
-                            </TypedLink>
-                        </div>
-                    );
+                    const { article } = info.row.original;
+                    return <p className="text-base text-white">{article.name}</p>;
                 },
             },
             {
@@ -88,26 +78,29 @@ export const WriteOffsAdminPage = () => {
                 accessorKey: 'actions',
                 header: () => <span>Действия</span>,
                 cell: (info) => {
-                    const { id, date, status, articleName } = info.row.original;
+                    const { id, date, status, article } = info.row.original;
+                    if (status !== WriteOffStatus.Completed && status !== WriteOffStatus.Cancelled) {
+                        return (
+                            <div>
+                                <button
+                                    className="flex items-center gap-2"
+                                    onClick={() =>
+                                        setModalData({
+                                            articleName: article.name,
+                                            id,
+                                            status,
+                                            date: new Date(date).toLocaleDateString('ru-RU'),
+                                        })
+                                    }
+                                >
+                                    <EditSVG className="stroke-primary h-4 w-4" />
+                                    <span className="text-small text-primary">Изменить</span>
+                                </button>
+                            </div>
+                        );
+                    }
 
-                    return (
-                        <div>
-                            <button
-                                className="flex items-center gap-2"
-                                onClick={() =>
-                                    setModalData({
-                                        articleName,
-                                        id,
-                                        status,
-                                        date: new Date(date).toLocaleDateString('ru-RU'),
-                                    })
-                                }
-                            >
-                                <EditSVG className="stroke-primary h-4 w-4" />
-                                <span className="text-small text-primary">Изменить</span>
-                            </button>
-                        </div>
-                    );
+                    return null;
                 },
             },
         ],
@@ -123,9 +116,11 @@ export const WriteOffsAdminPage = () => {
                 columns={columns}
                 queryData={queryData}
             />
-            {modalData && (
-                <UpdateStatusModal isOpen={!!modalData.id} close={() => setModalData(null)} defaultValues={modalData} />
-            )}
+            <Modal id="EditStatusForm" isOpen={Boolean(modalData)} closeModal={() => setModalData(null)} size="sm">
+                <Modal.Body>
+                    {!!modalData && <EditStatusForm defaultValues={modalData} closeModal={() => setModalData(null)} />}
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };

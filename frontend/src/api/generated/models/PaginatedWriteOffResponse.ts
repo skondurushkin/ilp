@@ -12,14 +12,10 @@
  * Do not edit the class manually.
  */
 
-import {
-    WriteOffUserResponseFromJSON,
-    WriteOffUserResponseFromJSONTyped,
-    WriteOffUserResponseToJSON,
-} from './WriteOffUserResponse';
+import { WriteOffResponseFromJSON, WriteOffResponseFromJSONTyped, WriteOffResponseToJSON } from './WriteOffResponse';
 import { exists, mapValues } from '../runtime';
 
-import type { WriteOffUserResponse } from './WriteOffUserResponse';
+import type { WriteOffResponse } from './WriteOffResponse';
 
 /**
  *
@@ -59,10 +55,10 @@ export interface PaginatedWriteOffResponse {
     hasPrev: boolean;
     /**
      *
-     * @type {Array<WriteOffUserResponse>}
+     * @type {Array<WriteOffResponse>}
      * @memberof PaginatedWriteOffResponse
      */
-    results: Array<WriteOffUserResponse>;
+    results: Array<WriteOffResponse>;
 }
 
 /**
@@ -97,7 +93,7 @@ export function PaginatedWriteOffResponseFromJSONTyped(
         pageSize: json['pageSize'],
         hasNext: json['hasNext'],
         hasPrev: json['hasPrev'],
-        results: (json['results'] as Array<any>).map(WriteOffUserResponseFromJSON),
+        results: (json['results'] as Array<any>).map(WriteOffResponseFromJSON),
     };
 }
 
@@ -114,6 +110,6 @@ export function PaginatedWriteOffResponseToJSON(value?: PaginatedWriteOffRespons
         pageSize: value.pageSize,
         hasNext: value.hasNext,
         hasPrev: value.hasPrev,
-        results: (value.results as Array<any>).map(WriteOffUserResponseToJSON),
+        results: (value.results as Array<any>).map(WriteOffResponseToJSON),
     };
 }

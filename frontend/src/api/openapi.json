@@ -948,7 +948,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/WriteOffUserResponse"
+                                    "$ref": "#/components/schemas/WriteOffResponse"
                                 }
                             }
                         }
@@ -1065,7 +1065,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/PaginatedAdminWriteOffResponse"
+                                    "$ref": "#/components/schemas/PaginatedWriteOffResponse"
                                 }
                             }
                         }
@@ -2012,12 +2012,9 @@
             },
             "WriteOffResponse": {
                 "type": "object",
-                "required": ["id", "articleId", "date", "user", "articleName", "amount", "status"],
+                "required": ["id", "date", "user", "article", "amount", "status"],
                 "properties": {
                     "id": {
-                        "$ref": "#/components/schemas/Identifier"
-                    },
-                    "articleId": {
                         "$ref": "#/components/schemas/Identifier"
                     },
                     "date": {
@@ -2027,8 +2024,8 @@
                     "user": {
                         "$ref": "#/components/schemas/UserInfo"
                     },
-                    "articleName": {
-                        "type": "string"
+                    "article": {
+                        "$ref": "#/components/schemas/ArticleResponse"
                     },
                     "amount": {
                         "$ref": "#/components/schemas/Amount"
@@ -2038,51 +2035,7 @@
                     }
                 }
             },
-            "WriteOffUserResponse": {
-                "type": "object",
-                "required": ["id", "date", "articleName", "amount"],
-                "properties": {
-                    "id": {
-                        "$ref": "#/components/schemas/Identifier"
-                    },
-                    "articleId": {
-                        "$ref": "#/components/schemas/Identifier"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date"
-                    },
-                    "articleName": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "$ref": "#/components/schemas/Amount"
-                    },
-                    "imageLink": {
-                        "type": "string",
-                        "nullable": true
-                    }
-                }
-            },
             "PaginatedWriteOffResponse": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/PaginatedResult"
-                    },
-                    {
-                        "type": "object",
-                        "properties": {
-                            "results": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/WriteOffUserResponse"
-                                }
-                            }
-                        }
-                    }
-                ]
-            },
-            "PaginatedAdminWriteOffResponse": {
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/PaginatedResult"

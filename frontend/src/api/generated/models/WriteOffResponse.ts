@@ -12,10 +12,12 @@
  * Do not edit the class manually.
  */
 
+import { ArticleResponseFromJSON, ArticleResponseFromJSONTyped, ArticleResponseToJSON } from './ArticleResponse';
 import { UserInfoFromJSON, UserInfoFromJSONTyped, UserInfoToJSON } from './UserInfo';
 import { WriteOffStatusFromJSON, WriteOffStatusFromJSONTyped, WriteOffStatusToJSON } from './WriteOffStatus';
 import { exists, mapValues } from '../runtime';
 
+import type { ArticleResponse } from './ArticleResponse';
 import type { UserInfo } from './UserInfo';
 import type { WriteOffStatus } from './WriteOffStatus';
 
@@ -32,12 +34,6 @@ export interface WriteOffResponse {
      */
     id: number;
     /**
-     * generic identifier
-     * @type {number}
-     * @memberof WriteOffResponse
-     */
-    articleId: number;
-    /**
      *
      * @type {Date}
      * @memberof WriteOffResponse
@@ -51,10 +47,10 @@ export interface WriteOffResponse {
     user: UserInfo;
     /**
      *
-     * @type {string}
+     * @type {ArticleResponse}
      * @memberof WriteOffResponse
      */
-    articleName: string;
+    article: ArticleResponse;
     /**
      * generic amount
      * @type {number}
@@ -75,10 +71,9 @@ export interface WriteOffResponse {
 export function instanceOfWriteOffResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
-    isInstance = isInstance && 'articleId' in value;
     isInstance = isInstance && 'date' in value;
     isInstance = isInstance && 'user' in value;
-    isInstance = isInstance && 'articleName' in value;
+    isInstance = isInstance && 'article' in value;
     isInstance = isInstance && 'amount' in value;
     isInstance = isInstance && 'status' in value;
 
@@ -95,10 +90,9 @@ export function WriteOffResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         id: json['id'],
-        articleId: json['articleId'],
         date: new Date(json['date']),
         user: UserInfoFromJSON(json['user']),
-        articleName: json['articleName'],
+        article: ArticleResponseFromJSON(json['article']),
         amount: json['amount'],
         status: WriteOffStatusFromJSON(json['status']),
     };
@@ -113,10 +107,9 @@ export function WriteOffResponseToJSON(value?: WriteOffResponse | null): any {
     }
     return {
         id: value.id,
-        articleId: value.articleId,
         date: value.date.toISOString().substr(0, 10),
         user: UserInfoToJSON(value.user),
-        articleName: value.articleName,
+        article: ArticleResponseToJSON(value.article),
         amount: value.amount,
         status: WriteOffStatusToJSON(value.status),
     };

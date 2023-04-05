@@ -2,14 +2,13 @@ import { ActivityResponse, PageRequest, api } from '../../api';
 import { useCallback, useMemo } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
+import { ACTIVITIES_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
-
-const ACTIVITIES_ADMIN_PAGE_QUERY_KEY = 'browseActivities';
 
 export const ActivitiesAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {

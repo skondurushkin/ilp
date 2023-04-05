@@ -14,12 +14,12 @@
 
 import * as runtime from '../runtime';
 
-import type { PageRequest, PaginatedAdminWriteOffResponse, UpdateWriteOffRequest, WriteOffResponse } from '../models';
+import type { PageRequest, PaginatedWriteOffResponse, UpdateWriteOffRequest, WriteOffResponse } from '../models';
 import {
     PageRequestFromJSON,
     PageRequestToJSON,
-    PaginatedAdminWriteOffResponseFromJSON,
-    PaginatedAdminWriteOffResponseToJSON,
+    PaginatedWriteOffResponseFromJSON,
+    PaginatedWriteOffResponseToJSON,
     UpdateWriteOffRequestFromJSON,
     UpdateWriteOffRequestToJSON,
     WriteOffResponseFromJSON,
@@ -45,7 +45,7 @@ export class AdminApi extends runtime.BaseAPI {
     async browseWriteOffsAsAdminRaw(
         requestParameters: BrowseWriteOffsAsAdminRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<PaginatedAdminWriteOffResponse>> {
+    ): Promise<runtime.ApiResponse<PaginatedWriteOffResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -71,7 +71,7 @@ export class AdminApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedAdminWriteOffResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedWriteOffResponseFromJSON(jsonValue));
     }
 
     /**
@@ -80,7 +80,7 @@ export class AdminApi extends runtime.BaseAPI {
     async browseWriteOffsAsAdmin(
         requestParameters: BrowseWriteOffsAsAdminRequest = {},
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<PaginatedAdminWriteOffResponse> {
+    ): Promise<PaginatedWriteOffResponse> {
         const response = await this.browseWriteOffsAsAdminRaw(requestParameters, initOverrides);
         return await response.value();
     }

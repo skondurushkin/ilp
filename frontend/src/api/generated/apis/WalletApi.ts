@@ -24,7 +24,6 @@ import type {
     WalletResponse,
     WriteOffRequest,
     WriteOffResponse,
-    WriteOffUserResponse,
 } from '../models';
 import {
     AccrualResponseFromJSON,
@@ -45,8 +44,6 @@ import {
     WriteOffRequestToJSON,
     WriteOffResponseFromJSON,
     WriteOffResponseToJSON,
-    WriteOffUserResponseFromJSON,
-    WriteOffUserResponseToJSON,
 } from '../models';
 
 export interface BrowseAccrualsRequest {
@@ -610,7 +607,7 @@ export class WalletApi extends runtime.BaseAPI {
     async writeOffRaw(
         requestParameters: WriteOffOperationRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<WriteOffUserResponse>> {
+    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -636,7 +633,7 @@ export class WalletApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffUserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
     }
 
     /**
@@ -645,7 +642,7 @@ export class WalletApi extends runtime.BaseAPI {
     async writeOff(
         requestParameters: WriteOffOperationRequest = {},
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<WriteOffUserResponse> {
+    ): Promise<WriteOffResponse> {
         const response = await this.writeOffRaw(requestParameters, initOverrides);
         return await response.value();
     }

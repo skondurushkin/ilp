@@ -4,11 +4,12 @@ import styles from './Modal.module.css';
 import { twMerge } from 'tailwind-merge';
 
 export interface PublicModalProps {
+    id: string;
     isOpen: boolean;
     size?: 'sm' | 'md' | 'lg' | 'xl' | 'full-screen';
     className?: string;
     classNameBody?: string;
-    close: () => void;
+    closeModal: () => void;
 }
 
 export interface ModalProps extends PublicModalProps {
@@ -16,13 +17,13 @@ export interface ModalProps extends PublicModalProps {
 }
 
 export const Modal = (props: ModalProps) => {
-    const { children, isOpen, close, className, size = 'lg' } = props;
+    const { id, children, isOpen, closeModal, className, size = 'lg' } = props;
 
     return (
         <ReactModal
+            id={id}
             isOpen={isOpen}
-            onRequestClose={() => close()}
-            shouldCloseOnOverlayClick={false}
+            onRequestClose={() => closeModal()}
             overlayClassName="z-modal bg-black-transparent-70% fixed left-0 top-0 flex h-screen w-screen  items-center justify-center"
             className={twMerge(
                 'fixed top-0 overflow-hidden',

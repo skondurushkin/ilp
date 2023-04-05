@@ -33,8 +33,6 @@ models/PaginatedAccrualResponse.ts
 models/PaginatedAccrualResponseAllOf.ts
 models/PaginatedActivityResponse.ts
 models/PaginatedActivityResponseAllOf.ts
-models/PaginatedAdminWriteOffResponse.ts
-models/PaginatedAdminWriteOffResponseAllOf.ts
 models/PaginatedArticleResponse.ts
 models/PaginatedArticleResponseAllOf.ts
 models/PaginatedOperationResponse.ts
@@ -58,6 +56,5 @@ models/WalletResponse.ts
 models/WriteOffRequest.ts
 models/WriteOffResponse.ts
 models/WriteOffStatus.ts
-models/WriteOffUserResponse.ts
 models/index.ts
 runtime.ts

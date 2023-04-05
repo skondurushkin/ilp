@@ -5,13 +5,12 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
+import { PRODUCTS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
 
 export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
-
-const PRODUCTS_ADMIN_PAGE_QUERY_KEY = 'browseArticles';
 
 export const ProductsAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
