@@ -10,10 +10,18 @@ const validationRules = {
         value,
         message: `Максимальное значение ${value}`,
     }),
+    minLength: (value: number) => ({
+        value,
+        message: `Минимальное количество символов ${value}`,
+    }),
+    maxLength: (value: number) => ({
+        value,
+        message: `Максимальное количество символов ${value}`,
+    }),
     isUrl: (value?: string) => {
         if (value) {
             const isValidUrl = isURL(value);
-            return isValidUrl ? undefined : 'Неправильный url';
+            return isValidUrl ? undefined : 'Неправильный адрес страницы';
         }
         return undefined;
     },

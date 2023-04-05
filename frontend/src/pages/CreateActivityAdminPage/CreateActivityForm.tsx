@@ -38,6 +38,8 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
                         label="Название активности"
                         rules={{
                             required: validationRules.required,
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(50),
                         }}
                     />
                     <FormInput
@@ -47,6 +49,7 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
                         label="Стоимость"
                         rules={{
                             min: validationRules.min(1),
+                            max: validationRules.min(9999),
                             required: validationRules.required,
                         }}
                     />
