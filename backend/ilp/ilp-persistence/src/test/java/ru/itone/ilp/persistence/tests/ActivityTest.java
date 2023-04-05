@@ -40,7 +40,7 @@ class ActivityTest extends AbstractPersistenceTest {
     @Test
     @Order(2)
     void searchActivity() {
-        var activities = activityRepository.searchByText("зна");
+        var activities = activityRepository.searchByText("зна", 10);
         assertEquals(1, activities.size());
         assertEquals("Менторство", activities.get(0).getName());
     }

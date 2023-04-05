@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import ru.itone.ilp.persistence.entities.Article;
 import ru.itone.ilp.persistence.repositories.ArticleRepository;
 
@@ -82,7 +84,9 @@ class ArticleTest extends AbstractPersistenceTest {
         articleRepository.save(article);
 
         var text = "фу";
-        List<Article> articles = articleRepository.searchByText(text);
+        List<Article> articles = articleRepository.searchByText(text, 10);
         assertEquals(3, articles.size());  //3, т.к. в миграциях добавили 1 футболку
+        Page<Article> page = articleRepository.searchByText(text, PageRequest.of(0, 5));
+        log.info("PAGE: {}, CONTENT: {}", page, page.getContent());
     }
 }

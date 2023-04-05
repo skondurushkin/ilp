@@ -1,16 +1,20 @@
 package ru.itone.ilp.services.articles;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.ArticleUpdateRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
+import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.persistence.api.DbApi.DbApiException;
 import ru.itone.ilp.persistence.entities.Article;
@@ -26,7 +30,10 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public PaginatedArticleResponse paginate(PageRequest request) {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request);
-        Page<Article> page = articleRepository.findAll(pageable);
+        String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
+        Page<Article> page = StringUtils.isBlank(filter)
+            ? articleRepository.findAll(pageable)
+            : articleRepository.searchByText(filter, pageable)   ;
         return toPaginatedResponse(page);
     }
 
@@ -68,8 +75,12 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> searchArticleByText(String text) {
-        return articleRepository.searchByText(text).stream()
+    public List<ArticleResponse> searchArticleByText(String searchKey) {
+        searchKey = ApiHelper.trimSearchKey(searchKey, 2, 50);
+        if (StringUtils.isEmpty(searchKey)) {
+            return Collections.emptyList();
+        }
+        return articleRepository.searchByText(searchKey, 50).stream()
             .map(ArticleService::toResponse)
             .toList();
     }

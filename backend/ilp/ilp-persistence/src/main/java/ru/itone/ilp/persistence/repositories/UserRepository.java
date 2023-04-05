@@ -1,5 +1,7 @@
 package ru.itone.ilp.persistence.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,13 +20,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
                             u.middle_name ILIKE %:text% OR
                             u.last_name ILIKE %:text% OR
                             u.email ILIKE %:text%
-                            LIMIT 50
         """;
+
+    String PLAIN_SEARCH = SEARCH_USER + " LIMIT :limit";
+    String PAGEABLE_SEARCH = SEARCH_USER + " /*#{#pageable}*/";
 
     Optional<User> findByEmail(String email);
 
     Boolean existsByEmail(String email);
 
-    @Query(value = SEARCH_USER, nativeQuery = true)
-    List<User> searchByText(@Param("text") String text);
+    @Query(value = PLAIN_SEARCH, nativeQuery = true)
+    List<User> searchByText(@Param("text") String text, @Param("limit") int limit);
+
+    @Query(value = PAGEABLE_SEARCH, nativeQuery = true)
+    Page<User> searchByText(@Param("text") String text, Pageable pageable);
 }

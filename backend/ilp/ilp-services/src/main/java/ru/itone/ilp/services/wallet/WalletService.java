@@ -10,14 +10,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.openapi.model.AccrualResponse;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
-import ru.itone.ilp.openapi.model.CreateNewWriteOffRequest;
 import ru.itone.ilp.openapi.model.OperationResponse;
 import ru.itone.ilp.openapi.model.PaginatedAccrualResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
 import ru.itone.ilp.openapi.model.PaginatedWriteOffResponse;
 import ru.itone.ilp.openapi.model.WalletResponse;
+import ru.itone.ilp.openapi.model.WriteOffRequest;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
 import ru.itone.ilp.openapi.model.WriteOffStatus;
 import ru.itone.ilp.openapi.model.WriteOffUserResponse;
@@ -125,9 +126,17 @@ public class WalletService {
     }
 
     @Transactional
-    public WriteOffUserResponse createNewWriteOff(Long userId, CreateNewWriteOffRequest createNewWriteOffRequest) {
+    public WriteOffResponse updateWriteOffStatus(Long writeOffId, WriteOffStatus status) {
+        WriteOff writeOff = dbJpa.getWriteOffRepository().findById(writeOffId)
+                .orElseThrow(() -> new DbApiException("Объект списания не найден"));
+        writeOff = dbJpa.getWriteOffRepository().save(writeOff.setOrderStatus(OrderStatus.valueOf(status.getValue())));
+        return WriteOffMapper.INSTANCE.toResponse(writeOff);
+    }
+
+    @Transactional
+    public WriteOffUserResponse writeOff(Long userId, WriteOffRequest writeOffRequest) {
         User user = dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException("Профиль не найден"));
-        Article article = dbJpa.getArticleRepository().findById(createNewWriteOffRequest.getArticleId().longValue())
+        Article article = dbJpa.getArticleRepository().findById(writeOffRequest.getArticleId().longValue())
                 .orElseThrow(() -> new DbApiException("Артикул не найден"));
         WriteOff writeOff = dbJpa.getWriteOffRepository()
                 .save(
@@ -136,16 +145,36 @@ public class WalletService {
                                 .setArticle(article)
                                 .setDate(LocalDate.now())
                                 .setAmount(article.getAmount())
-
+                                .setOrderStatus(OrderStatus.created)
                 );
         return WriteOffMapper.INSTANCE.toUserResponse(writeOff);
     }
 
     @Transactional
-    public WriteOffResponse updateWriteOffStatus(Long writeOffId, WriteOffStatus status) {
-        WriteOff writeOff = dbJpa.getWriteOffRepository().findById(writeOffId)
-                .orElseThrow(() -> new DbApiException("Объект списания не найден"));
-        writeOff = dbJpa.getWriteOffRepository().save(writeOff.setOrderStatus(OrderStatus.valueOf(status.getValue())));
-        return WriteOffMapper.INSTANCE.toResponse(writeOff);
+    public AccrualResponse getAccrual(Long accrualId) {
+        return dbJpa.getAccrualRepository().findById(accrualId)
+                .map(AccrualMapper.INSTANCE::toResponse)
+                .orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
+    }
+    @Transactional
+    public AccrualResponse getAccrualForUser(Long accrualId, Long userId) {
+        return dbJpa.getAccrualRepository()
+                .findById(accrualId).filter(a -> a.getUser().getId().equals(userId))
+                .map(AccrualMapper.INSTANCE::toResponse)
+                .orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
+    }
+
+    @Transactional
+    public WriteOffResponse getWriteOff(Long writeOffId) {
+        return dbJpa.getWriteOffRepository().findById(writeOffId)
+                .map(WriteOffMapper.INSTANCE::toResponse)
+                .orElseThrow( () -> new ResourceNotFoundException("Запись о списании не найдена"));
+    }
+    @Transactional
+    public WriteOffResponse getWriteOffForUser(Long writeOffId, Long userId) {
+        return dbJpa.getWriteOffRepository().findById(writeOffId)
+                .filter(a -> a.getUser().getId().equals(userId))
+                .map(WriteOffMapper.INSTANCE::toResponse)
+                .orElseThrow( () -> new ResourceNotFoundException("Запись о списании не найдена"));
     }
 }

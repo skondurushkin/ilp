@@ -1,5 +1,7 @@
 package ru.itone.ilp.persistence.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,11 +17,14 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             SELECT DISTINCT a.* FROM activities a WHERE
             a.name ILIKE %:text% OR
             a.description ILIKE %:text%
-        LIMIT 50
         """;
 
-    @Query(value = SEARCH_ACTIVITY, nativeQuery = true)
-    List<Activity> searchByText(@Param("text") String text);
+    String PLAIN_SEARCH = SEARCH_ACTIVITY + " LIMIT :limit";
+    String PAGEABLE_SEARCH = SEARCH_ACTIVITY + " /*#{#pageable}*/";
+    @Query(value = PLAIN_SEARCH, nativeQuery = true)
+    List<Activity> searchByText(@Param("text") String text, @Param("limit") int limit);
 
+    @Query(value = PAGEABLE_SEARCH, nativeQuery = true)
+    Page<Activity> searchByText(@Param("text") String text, Pageable pageable);
 
 }

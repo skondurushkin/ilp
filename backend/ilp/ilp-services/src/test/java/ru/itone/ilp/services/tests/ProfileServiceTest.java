@@ -19,7 +19,7 @@ class ProfileServiceTest extends ServicesTestConfiguration {
 
     @Test
     void testProfilePaginate() {
-        PageRequest request = new PageRequest().page(3).pageSize(3).config(new PageRequestConfig());
+        PageRequest request = new PageRequest().page(3).pageSize(3).config(new PageRequestConfig().globalFilter("втор"));
         PaginatedProfileResponse response = profileService.paginate(request);
         log.info("RESPONSE: {}", response);
         assertTrue(response.getHasPrev());

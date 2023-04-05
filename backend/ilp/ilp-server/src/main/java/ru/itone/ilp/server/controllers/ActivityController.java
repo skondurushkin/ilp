@@ -1,6 +1,8 @@
 package ru.itone.ilp.server.controllers;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,10 @@ public class ActivityController implements ActivityApi {
 
     @Override
     public ResponseEntity<List<ActivityResponse>> searchActivity(String searchKey) {
+        searchKey = StringUtils.trimToEmpty(searchKey);
+        if (StringUtils.length(searchKey) < 2) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
         return ResponseEntity.ok(activityService.searchActivity(searchKey));
     }
 

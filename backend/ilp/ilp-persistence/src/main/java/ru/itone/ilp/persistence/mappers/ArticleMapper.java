@@ -15,8 +15,8 @@ public interface ArticleMapper {
     ArticleMapper INSTANCE = Mappers.getMapper(ArticleMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "imageLink", ignore = true)
     @Mapping(target = "extension", ignore = true)
+    @Mapping(target = "amount", source = "price")
     Article articleFromRequest(ArticleRequest request);
 
     @Mapping(target = "price", source="amount")

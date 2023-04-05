@@ -1,6 +1,8 @@
 package ru.itone.ilp.server.jwt.advice;
 
+import jakarta.validation.ConstraintViolationException;
 import java.time.OffsetDateTime;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,14 +17,18 @@ import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 
 @Slf4j
 @RestControllerAdvice
-public class TokenControllerAdvice {
+@NoArgsConstructor
+public class ApiControllerAdvice {
 
-    public TokenControllerAdvice() {
-        // TODO document why this constructor is empty
-    }
     @ExceptionHandler(value = HttpStatusCodeException.class)
     public ErrorMessage handleStatusCodeException(HttpStatusCodeException ex, WebRequest request) {
         return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleValidationException(ConstraintViolationException ex, WebRequest request) {
+        return buildErrorMessage(HttpStatus.BAD_REQUEST, ex, request);
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)

@@ -1,16 +1,20 @@
 package ru.itone.ilp.services.activities;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.ActivityUpdateRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
+import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.persistence.api.DbApi.DbApiException;
 import ru.itone.ilp.persistence.entities.Activity;
@@ -25,7 +29,10 @@ public class ActivityService {
     @Transactional(readOnly = true)
     public PaginatedActivityResponse paginate(PageRequest request) {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request);
-        Page<Activity> page = activityRepository.findAll(pageable);
+        String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
+        Page<Activity> page = StringUtils.isBlank(filter)
+                ? activityRepository.findAll(pageable)
+                : activityRepository.searchByText(filter, pageable);
         return toPaginatedResponse(page);
     }
 
@@ -60,8 +67,12 @@ public class ActivityService {
     }
 
     @Transactional(readOnly = true)
-    public List<ActivityResponse> searchActivity(String text) {
-        return activityRepository.searchByText(text).stream().map(ActivityService::toResponse).toList();
+    public List<ActivityResponse> searchActivity(String searchKey) {
+        searchKey = ApiHelper.trimSearchKey(searchKey, 2, 50);
+        if (StringUtils.isEmpty(searchKey)) {
+            return Collections.emptyList();
+        }
+        return activityRepository.searchByText(searchKey, 50).stream().map(ActivityService::toResponse).toList();
     }
 
 
