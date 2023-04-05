@@ -3,6 +3,7 @@ import { PageRequest, WriteOffResponse, WriteOffStatus, api } from '../../api';
 import { useCallback, useMemo, useState } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
@@ -109,6 +110,7 @@ export const WriteOffsAdminPage = () => {
 
     return (
         <div className="flex flex-col gap-6">
+            <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Заказы' }]} />
             <h1 className="text-h1">Заказы</h1>
             <AdminTable
                 queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}

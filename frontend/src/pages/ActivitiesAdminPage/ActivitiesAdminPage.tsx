@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import { ACTIVITIES_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { AdminTable } from '../../components/AdminTable';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
@@ -119,8 +120,9 @@ export const ActivitiesAdminPage = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <h1 className="text-h1">Активности</h1>
-            <div>
+            <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Активности' }]} />
+            <div className="flex flex-col gap-4">
+                <h1 className="text-h1">Активности</h1>
                 <TypedLink to="/admin/activities/create">
                     <button className="btn btn-primary">Добавить активность</button>
                 </TypedLink>

@@ -5,8 +5,8 @@ import { ReactComponent as BurgerIcon } from '../../assets/burger.svg';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import { ReactComponent as Logo } from '../../assets/logo-light.svg';
 import { Nav } from './Nav';
+import { PageSpinner } from '../Spinner';
 import { Profile } from './Profile';
-import { Spinner } from '../Spinner';
 import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
@@ -94,7 +94,7 @@ export function AuthUserRouteLayout(): ReactElement {
                     </aside>
                     <main className="xl:pl-sidebar flex w-full grow flex-col xl:container">
                         <div className="grow px-4 pb-10 pt-6 sm:px-8 sm:py-8 md:px-14 md:pb-10 md:pt-8 xl:px-8 xl:pb-10 xl:pt-8">
-                            <Suspense fallback={<Spinner />}>
+                            <Suspense fallback={<PageSpinner />}>
                                 <Outlet />
                             </Suspense>
                         </div>

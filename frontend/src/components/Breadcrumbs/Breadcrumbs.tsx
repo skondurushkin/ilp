@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ReactElement } from 'react';
+import styles from './Breadcrumbs.module.css';
 import { twMerge } from 'tailwind-merge';
 
 export interface BreadcrumbsProps {
@@ -14,10 +15,12 @@ export interface Breadcrumb {
 
 export function Breadcrumbs(props: BreadcrumbsProps): ReactElement {
     const { className, items } = props;
+
     return (
         <ul
             className={twMerge(
-                'flex flex-nowrap items-center gap-3 overflow-hidden text-ellipsis whitespace-nowrap',
+                styles.breadcrumbs,
+                'flex flex-nowrap items-center gap-3 overflow-x-scroll text-ellipsis whitespace-nowrap',
                 className,
             )}
         >
@@ -29,11 +32,11 @@ export function Breadcrumbs(props: BreadcrumbsProps): ReactElement {
                     <li
                         key={item.label}
                         className={twMerge(
-                            "text-h2 flex items-center gap-3 whitespace-nowrap after:block after:h-2 after:w-2 after:rounded-full after:bg-[#D9D9D9] after:content-[''] last:after:hidden",
+                            "flex items-center gap-3 whitespace-nowrap after:block after:h-2 after:w-2 after:rounded-full after:bg-[#D9D9D9] after:content-[''] last:after:hidden",
                             isLast ? 'text-black dark:text-white' : 'text-gray',
                         )}
                     >
-                        {content}
+                        <h2 className="text-h2">{content}</h2>
                     </li>
                 );
             })}
