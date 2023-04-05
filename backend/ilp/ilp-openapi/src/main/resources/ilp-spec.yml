@@ -670,6 +670,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/writeoff_id'
       requestBody:
+        required: true
         content:
           application/json:
             schema:

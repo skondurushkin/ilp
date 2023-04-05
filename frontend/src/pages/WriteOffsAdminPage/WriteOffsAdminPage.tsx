@@ -1,5 +1,6 @@
 import { PageRequest, WriteOffResponse, api } from '../../api';
-import { useCallback, useMemo } from 'react';
+import { ReadonlyUpdateWriteOffRequest, UpdateStatusModal } from './UpdateStatusModal';
+import { useCallback, useMemo, useState } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -7,9 +8,11 @@ import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { TypedLink } from '../../router';
 import { WriteOffStatusName } from '../../modules/loyalty';
 
-const ACTIVITIES_ADMIN_PAGE_QUERY_KEY = 'browseActivities';
+const WRITE_OFFS_ADMIN_PAGE_QUERY_KEY = 'admin.browseWriteOffsAsAdmin';
 
 export const WriteOffsAdminPage = () => {
+    const [modalData, setModalData] = useState<ReadonlyUpdateWriteOffRequest | null>(null);
+
     const queryData = useCallback((pageRequest: PageRequest) => {
         return api.admin.browseWriteOffsAsAdmin({
             pageRequest,
@@ -22,6 +25,18 @@ export const WriteOffsAdminPage = () => {
                 accessorKey: 'id',
                 header: () => <span>ИД</span>,
                 cell: (info) => info.getValue(),
+            },
+            {
+                accessorKey: 'date',
+                header: () => <span>Дата</span>,
+                cell: (info) => {
+                    const { date } = info.row.original;
+                    return (
+                        <div className="flex flex-col gap-2">
+                            {date && <p>{new Date(date).toLocaleDateString('ru-RU')}</p>}
+                        </div>
+                    );
+                },
             },
             {
                 accessorKey: 'user',
@@ -73,31 +88,44 @@ export const WriteOffsAdminPage = () => {
                 accessorKey: 'actions',
                 header: () => <span>Действия</span>,
                 cell: (info) => {
-                    const { id } = info.row.original;
+                    const { id, date, status, articleName } = info.row.original;
 
                     return (
-                        <TypedLink to="/admin/activities/edit/:activityId" params={{ activityId: id.toString() }}>
-                            <button className="flex items-center gap-2">
+                        <div>
+                            <button
+                                className="flex items-center gap-2"
+                                onClick={() =>
+                                    setModalData({
+                                        articleName,
+                                        id,
+                                        status,
+                                        date: new Date(date).toLocaleDateString('ru-RU'),
+                                    })
+                                }
+                            >
                                 <EditSVG className="stroke-primary h-4 w-4" />
                                 <span className="text-small text-primary">Изменить</span>
                             </button>
-                        </TypedLink>
+                        </div>
                     );
                 },
             },
         ],
-        [],
+        [setModalData],
     );
 
     return (
         <div className="flex flex-col gap-6">
             <h1 className="text-h1">Заказы</h1>
             <AdminTable
-                queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
+                queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
                 globalFilterPlaceholder="Поиск по ИД, Покупателю и Товару"
                 columns={columns}
                 queryData={queryData}
             />
+            {modalData && (
+                <UpdateStatusModal isOpen={!!modalData.id} close={() => setModalData(null)} defaultValues={modalData} />
+            )}
         </div>
     );
 };

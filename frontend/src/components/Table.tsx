@@ -58,7 +58,7 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id} className="px-3 py-2 text-left align-top">
+                                <td key={cell.id} className="px-3 py-2 text-left">
                                     <div className="text-base text-white">
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </div>

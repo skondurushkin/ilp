@@ -32,7 +32,7 @@ export interface BrowseWriteOffsAsAdminRequest {
 
 export interface UpdateWriteOffOperationRequest {
     writeoffId: number;
-    updateWriteOffRequest?: UpdateWriteOffRequest;
+    updateWriteOffRequest: UpdateWriteOffRequest;
 }
 
 /**
@@ -96,6 +96,13 @@ export class AdminApi extends runtime.BaseAPI {
             throw new runtime.RequiredError(
                 'writeoffId',
                 'Required parameter requestParameters.writeoffId was null or undefined when calling updateWriteOff.',
+            );
+        }
+
+        if (requestParameters.updateWriteOffRequest === null || requestParameters.updateWriteOffRequest === undefined) {
+            throw new runtime.RequiredError(
+                'updateWriteOffRequest',
+                'Required parameter requestParameters.updateWriteOffRequest was null or undefined when calling updateWriteOff.',
             );
         }
 

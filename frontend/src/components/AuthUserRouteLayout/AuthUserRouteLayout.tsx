@@ -22,7 +22,7 @@ export function AuthUserRouteLayout(): ReactElement {
 
     return (
         <div className="relative flex min-h-[100vh] w-full flex-col">
-            <header className="sticky top-0 z-40 bg-black text-white">
+            <header className="z-header sticky top-0 bg-black text-white">
                 <div className="flex justify-between px-4 py-4 xl:container sm:px-8 md:px-14 xl:mx-auto xl:py-6 xl:pl-0 xl:pr-8">
                     <div className="xl:w-sidebar flex items-center xl:pl-8">
                         <TypedLink to="/">
@@ -76,7 +76,7 @@ export function AuthUserRouteLayout(): ReactElement {
                             'border-r-gray flex flex-col overflow-y-auto border-r',
                             //mobile
                             mobileSidebarVisible ? 'translate-x-0' : 'translate-x-full',
-                            'fixed bottom-0 left-0 right-0 top-0 z-40 transition-transform',
+                            'z-sidebar fixed bottom-0 left-0 right-0 top-0 transition-transform',
                             // tablet, screen
                             'sm:w-sidebar sm:left-auto',
                             // wide screen

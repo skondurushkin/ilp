@@ -20,7 +20,7 @@ html {
     }
 
     .input {
-        @apply focus:border-success h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
+        @apply focus:border-success read-only:text-gray h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
     }
 
     .select {
@@ -32,7 +32,7 @@ html {
     }
 
     .checkbox {
-        @apply focus:border-success h-4 w-4 border-2 text-black focus:outline-none focus:ring-0;
+        @apply focus:border-success dark:text-gray h-6 w-6 border-2 text-black focus:outline-none focus:ring-0;
     }
 
     .textarea {
