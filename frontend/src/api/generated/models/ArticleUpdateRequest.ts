@@ -50,6 +50,12 @@ export interface ArticleUpdateRequest {
      */
     available: boolean;
     /**
+     *
+     * @type {string}
+     * @memberof ArticleUpdateRequest
+     */
+    imageLink?: string | null;
+    /**
      * generic identifier
      * @type {number}
      * @memberof ArticleUpdateRequest
@@ -85,6 +91,7 @@ export function ArticleUpdateRequestFromJSONTyped(json: any, ignoreDiscriminator
         description: !exists(json, 'description') ? undefined : json['description'],
         price: json['price'],
         available: json['available'],
+        imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
         id: json['id'],
     };
 }
@@ -102,6 +109,7 @@ export function ArticleUpdateRequestToJSON(value?: ArticleUpdateRequest | null):
         description: value.description,
         price: value.price,
         available: value.available,
+        imageLink: value.imageLink,
         id: value.id,
     };
 }

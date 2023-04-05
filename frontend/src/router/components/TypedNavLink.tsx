@@ -1,13 +1,9 @@
+import { LinkWithParamProps, buildUrl } from '../url-builder';
 import { NavLink, createSearchParams } from 'react-router-dom';
 
 import type { NavLinkProps } from 'react-router-dom';
-import { RoutePath } from '../AppRouter';
-import { TypedRouterComponentProps } from './TypedRouterComponent';
-import { buildUrl } from '../url-builder';
 
-export type TypedNavLinkProps<P extends RoutePath> = TypedRouterComponentProps<NavLinkProps, P>;
-
-export const TypedNavLink = <P extends RoutePath>(props: TypedNavLinkProps<P>) => {
+export const TypedNavLink = (props: LinkWithParamProps & NavLinkProps) => {
     const { to, params, search, ...rest } = props;
 
     let searchStr: string | undefined;

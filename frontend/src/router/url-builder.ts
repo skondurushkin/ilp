@@ -1,19 +1,14 @@
-import { RoutePath } from './AppRouter';
+import type { URLSearchParamsInit } from 'react-router-dom';
 
-export type PathParams<P extends RoutePath> = ExtractRouteParams<P>;
+export type RouteParams = Record<string, string> | undefined;
 
-type ExtractRouteParams<T> = string extends T
-    ? Record<string, string>
-    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    T extends `${infer _Start}:${infer Param}/${infer Rest}`
-    ? { [k in Param | keyof ExtractRouteParams<Rest>]: string }
-    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    T extends `${infer _Start}:${infer Param}`
-    ? { [k in Param]: string }
-    : // eslint-disable-next-line @typescript-eslint/ban-types
-      undefined;
+export interface LinkWithParamProps {
+    to: string;
+    params?: RouteParams;
+    search?: URLSearchParamsInit | string;
+}
 
-export const buildUrl = <P extends RoutePath>(path: P, params: PathParams<P>): string => {
+export const buildUrl = (path: string, params: RouteParams): string => {
     let url = `${path}`;
 
     if (params) {

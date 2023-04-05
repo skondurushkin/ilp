@@ -91,7 +91,7 @@ interface NavItemProps {
 function NavItem(props: NavItemProps): ReactElement {
     const { children, icon: Icon, active } = props;
     return (
-        <div className="flex items-center gap-4 whitespace-nowrap py-2 px-4 text-left leading-[18px]">
+        <div className="flex items-center gap-4 whitespace-nowrap px-4 py-2 text-left leading-[18px]">
             <Icon
                 className={
                     active

@@ -1,1 +1,1 @@
-export { ActivitiesAdminPage } from './ActivitiesAdminPage';
+export { ActivitiesAdminPage as default } from './ActivitiesAdminPage';

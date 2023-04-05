@@ -3,7 +3,6 @@ import { BigTextSkeleton, ButtonSkeleton, ImageSkeleton, Skeleton, SkeletonConta
 import { ArticleResponse } from '../../api';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { Button } from '../../components/Button';
-import { Layout } from '../../components/Layout';
 import { ProductPrice } from '../../components/ProductPrice';
 import { ReactElement } from 'react';
 import { VerticalBrackets } from '../../components/VerticalBrackets';
@@ -24,16 +23,16 @@ export function ProductPage(): ReactElement {
     try {
         productId = parseInt(id, 10);
     } catch {
-        return <Layout>Invalid product id &quot;{id}&quot;</Layout>;
+        return <div>Invalid product id &quot;{id}&quot;</div>;
     }
 
     const productQuery = useProductQuery(productId);
 
     return (
-        <Layout>
+        <div>
             {productQuery.isSuccess && <ProductView product={productQuery.data} />}
             {!productQuery.isSuccess && <SkeletonView />}
-        </Layout>
+        </div>
     );
 }
 
@@ -54,7 +53,7 @@ function ProductView(props: ProductViewProps): ReactElement {
                 <ProductPrice className="mt-4 w-min" price={product.price || 0} themed />
                 {product.description && <p className="mt-4">{product.description}</p>}
             </div>
-            <div className="app-bg sticky bottom-0 pt-6 pb-10 sm:pb-8">
+            <div className="app-bg sticky bottom-0 pb-10 pt-6 sm:pb-8">
                 <Button primary className="w-full md:w-min">
                     Заказать
                 </Button>

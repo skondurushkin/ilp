@@ -1,4 +1,4 @@
-import validator from 'validator';
+import isURL from 'validator/lib/isURL';
 
 const validationRules = {
     required: 'Не заполнено обязательное поле',
@@ -12,7 +12,7 @@ const validationRules = {
     }),
     isUrl: (value?: string) => {
         if (value) {
-            const isValidUrl = validator.isURL(value);
+            const isValidUrl = isURL(value);
             return isValidUrl ? undefined : 'Неправильный url';
         }
         return undefined;
