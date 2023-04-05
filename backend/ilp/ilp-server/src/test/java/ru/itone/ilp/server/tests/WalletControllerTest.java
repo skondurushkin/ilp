@@ -47,8 +47,7 @@ class WalletControllerTest extends AbstractServerTest {
                         .header("Authorization", "Bearer " + jwt.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
-                                new WriteOffRequest()
-                                        .articleId(1)
+                                new WriteOffRequest().articleId(1)
                         ))
                 )
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
