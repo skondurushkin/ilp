@@ -38,4 +38,21 @@ class WalletControllerTest extends AbstractServerTest {
 
         log.info("RESPONSE: {}", walletInfo);
     }
+
+    @Test
+    void test_walletAccruals() throws Exception {
+
+        JwtResponse jwt = login("skondurushkin@it-one.ru", "test");
+        String walletInfo = mockMvc.perform(post("/api/ilp/wallet/accruals/4")
+                        .header("Authorization", "Bearer " + jwt.getToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new WriteOffRequest()
+                                        .articleId(1)
+                        ))
+                )
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        log.info("RESPONSE: {}", walletInfo);
+    }
 }

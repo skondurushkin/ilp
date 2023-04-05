@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,7 @@ public class WalletController implements WalletApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedAccrualResponse> browseAccrualsForUserId(Integer userId, PageRequest pageRequest) {
         return ResponseEntity.ok(walletService.paginateAccruals(userId.longValue(), pageRequest));
     }
@@ -49,11 +51,13 @@ public class WalletController implements WalletApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsForUserId(Integer userId, PageRequest pageRequest) {
         return ResponseEntity.ok(walletService.paginateWriteOffs(userId.longValue(), pageRequest));
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
     public ResponseEntity<AccrualResponse> createNewAccrual(Integer userId, CreateNewAccrualRequest createNewAccrualRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(walletService.createNewAccrual(userId.longValue(), createNewAccrualRequest));
@@ -80,6 +84,7 @@ public class WalletController implements WalletApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedOperationResponse> getWalletHistoryForUserId(Integer userId, PageRequest pageRequest) {
         return ResponseEntity.ok(walletService.getWalletHistory(userId.longValue(), pageRequest));
     }
