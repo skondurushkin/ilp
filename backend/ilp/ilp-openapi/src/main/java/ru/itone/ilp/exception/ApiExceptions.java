@@ -17,6 +17,13 @@ public class ApiExceptions {
         }
     }
 
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public static class PermissionDeniedException extends RuntimeException {
+        public PermissionDeniedException(String message) {
+            super(message);
+        }
+    }
+
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public static class TokenRefreshException extends RuntimeException {
 

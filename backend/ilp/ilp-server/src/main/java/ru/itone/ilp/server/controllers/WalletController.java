@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,6 +21,7 @@ import ru.itone.ilp.openapi.model.WalletResponse;
 import ru.itone.ilp.openapi.model.WriteOffRequest;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
 import ru.itone.ilp.openapi.model.WriteOffUserResponse;
+import ru.itone.ilp.server.misc.Helpers;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.wallet.WalletService;
 
@@ -47,13 +47,14 @@ public class WalletController implements WalletApi {
     @Override
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffs(PageRequest pageRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(walletService.paginateWriteOffs(userDetails.getId(), pageRequest));
+        boolean isAdmin = Helpers.isAdmin(userDetails);
+        return ResponseEntity.ok(walletService.paginateWriteOffs(isAdmin, userDetails.getId(), pageRequest));
     }
 
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsForUserId(Integer userId, PageRequest pageRequest) {
-        return ResponseEntity.ok(walletService.paginateWriteOffs(userId.longValue(), pageRequest));
+        return ResponseEntity.ok(walletService.paginateWriteOffs(true, userId.longValue(), pageRequest));
     }
 
     @Override
@@ -66,10 +67,7 @@ public class WalletController implements WalletApi {
     @Override
     public ResponseEntity<AccrualResponse> getAccrual(Integer accrualId) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        boolean isAdmin = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch("ADMIN"::equalsIgnoreCase);
+        boolean isAdmin = Helpers.isAdmin(userDetails);
         if (isAdmin) {
             return ResponseEntity.ok(walletService.getAccrual(accrualId.longValue()));
         } else {
@@ -80,13 +78,14 @@ public class WalletController implements WalletApi {
     @Override
     public ResponseEntity<PaginatedOperationResponse> getWalletHistory(PageRequest pageRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(walletService.getWalletHistory(userDetails.getId(), pageRequest));
+        boolean isAdmin = Helpers.isAdmin(userDetails);
+        return ResponseEntity.ok(walletService.getWalletHistory(isAdmin, userDetails.getId(), pageRequest));
     }
 
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedOperationResponse> getWalletHistoryForUserId(Integer userId, PageRequest pageRequest) {
-        return ResponseEntity.ok(walletService.getWalletHistory(userId.longValue(), pageRequest));
+        return ResponseEntity.ok(walletService.getWalletHistory(true, userId.longValue(), pageRequest));
     }
 
     @Override
@@ -98,10 +97,7 @@ public class WalletController implements WalletApi {
     @Override
     public ResponseEntity<WriteOffResponse> getWriteOff(Integer writeoffId) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        boolean isAdmin = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch("ADMIN"::equalsIgnoreCase);
+        boolean isAdmin = Helpers.isAdmin(userDetails);
         if (isAdmin) {
             return ResponseEntity.ok(walletService.getWriteOff(writeoffId.longValue()));
         } else {
@@ -111,7 +107,9 @@ public class WalletController implements WalletApi {
 
     @Override
     public ResponseEntity<WriteOffResponse> updateWriteOff(Integer writeOffId, UpdateWriteOffRequest updateWriteOffRequest) {
-        return ResponseEntity.ok(walletService.updateWriteOffStatus(writeOffId.longValue(), updateWriteOffRequest.getStatus()));
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isAdmin = Helpers.isAdmin(userDetails);
+        return ResponseEntity.ok(walletService.updateWriteOffStatus(userDetails.getId(), isAdmin, writeOffId.longValue(), updateWriteOffRequest.getStatus()));
     }
 
     @Override
