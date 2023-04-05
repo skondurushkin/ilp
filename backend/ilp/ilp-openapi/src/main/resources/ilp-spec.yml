@@ -661,12 +661,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/WriteOffUserResponse'
 
-  /api/ilp/wallet/write-off/{writeoff_id}:
+  /api/ilp/admin/wallet/write-off/{writeoff_id}:
     patch:
       operationId: updateWriteOff
       summary: change status of the write-off identified by writeoff_id
       tags:
-        - wallet
+        - admin
       parameters:
         - $ref: '#/components/parameters/writeoff_id'
       requestBody:
@@ -717,6 +717,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedWriteOffResponse"
+
+  /api/ilp/admin/wallet/write-offs:
+    post:
+      operationId: browseWriteOffsAsAdmin
+      summary: paginated view of write-offs for admin
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedAdminWriteOffResponse"
 
   /api/ilp/wallet/write-offs/{user_id}:
     post:
@@ -1475,10 +1494,12 @@ components:
       type: object
       required:
         - id
+        - articleId
         - date
         - user
         - articleName
         - amount
+        - status
       properties:
         id:
           $ref: '#/components/schemas/Identifier'
@@ -1528,6 +1549,16 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/WriteOffUserResponse'
+
+    PaginatedAdminWriteOffResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+        - type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/WriteOffResponse'
 
     WalletResponse:
       type: object

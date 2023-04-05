@@ -105,7 +105,7 @@ export const ProductsAdminPage = () => {
                 </TypedLink>
             </div>
             <AdminTable
-                globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
+                globalFilterPlaceholder="Поиск по ИД, Наименованию, Артиклу и Стоимости"
                 columns={columns}
                 queryData={queryData}
                 queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}

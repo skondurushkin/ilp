@@ -36,7 +36,7 @@ export interface WriteOffResponse {
      * @type {number}
      * @memberof WriteOffResponse
      */
-    articleId?: number;
+    articleId: number;
     /**
      *
      * @type {Date}
@@ -66,7 +66,7 @@ export interface WriteOffResponse {
      * @type {WriteOffStatus}
      * @memberof WriteOffResponse
      */
-    status?: WriteOffStatus;
+    status: WriteOffStatus;
 }
 
 /**
@@ -75,10 +75,12 @@ export interface WriteOffResponse {
 export function instanceOfWriteOffResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
+    isInstance = isInstance && 'articleId' in value;
     isInstance = isInstance && 'date' in value;
     isInstance = isInstance && 'user' in value;
     isInstance = isInstance && 'articleName' in value;
     isInstance = isInstance && 'amount' in value;
+    isInstance = isInstance && 'status' in value;
 
     return isInstance;
 }
@@ -93,12 +95,12 @@ export function WriteOffResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         id: json['id'],
-        articleId: !exists(json, 'articleId') ? undefined : json['articleId'],
+        articleId: json['articleId'],
         date: new Date(json['date']),
         user: UserInfoFromJSON(json['user']),
         articleName: json['articleName'],
         amount: json['amount'],
-        status: !exists(json, 'status') ? undefined : WriteOffStatusFromJSON(json['status']),
+        status: WriteOffStatusFromJSON(json['status']),
     };
 }
 

@@ -25,6 +25,8 @@ export * from './PaginatedAccrualResponse';
 export * from './PaginatedAccrualResponseAllOf';
 export * from './PaginatedActivityResponse';
 export * from './PaginatedActivityResponseAllOf';
+export * from './PaginatedAdminWriteOffResponse';
+export * from './PaginatedAdminWriteOffResponseAllOf';
 export * from './PaginatedArticleResponse';
 export * from './PaginatedArticleResponseAllOf';
 export * from './PaginatedOperationResponse';

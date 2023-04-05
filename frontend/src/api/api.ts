@@ -1,5 +1,6 @@
 import {
     ActivityApi,
+    AdminApi,
     ArticleApi,
     AuthApi,
     Configuration,
@@ -23,6 +24,7 @@ function createInternalApi(config: ConfigurationParameters) {
         article: new ArticleApi(cnf),
         wallet: new WalletApi(cnf),
         settings: new SettingsApi(cnf),
+        admin: new AdminApi(cnf),
     };
 }
 

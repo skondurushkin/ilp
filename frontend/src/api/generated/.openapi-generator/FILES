@@ -1,4 +1,5 @@
 apis/ActivityApi.ts
+apis/AdminApi.ts
 apis/ArticleApi.ts
 apis/AuthApi.ts
 apis/FilesApi.ts
@@ -32,6 +33,8 @@ models/PaginatedAccrualResponse.ts
 models/PaginatedAccrualResponseAllOf.ts
 models/PaginatedActivityResponse.ts
 models/PaginatedActivityResponseAllOf.ts
+models/PaginatedAdminWriteOffResponse.ts
+models/PaginatedAdminWriteOffResponseAllOf.ts
 models/PaginatedArticleResponse.ts
 models/PaginatedArticleResponseAllOf.ts
 models/PaginatedOperationResponse.ts
