@@ -21,14 +21,8 @@ export const authUserRoutes = [
             { path: 'profile', element: <ProfilePage /> },
             { path: 'products/:id', element: <ProductPage /> },
             { path: 'rules', element: <RulesPage /> },
-        ],
-    },
-    {
-        path: '*',
-        element: <AuthUserRouteLayout />,
-        children: [
             {
-                index: true,
+                path: '*',
                 element: <NotFoundPage />,
             },
         ],
