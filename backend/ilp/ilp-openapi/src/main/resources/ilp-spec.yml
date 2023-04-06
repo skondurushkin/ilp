@@ -171,22 +171,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/PaginatedProfileResponse"
 
-  /api/ilp/profile/{user_id}:
+  /api/ilp/admin/profile/{user_id}:
     get:
-      operationId: getProfileById
+      operationId: getProfileByIdAsAdmin
       summary: get user profile by user id
       tags:
-        - profile
+        - admin
       parameters:
-        - $ref: "#/components/parameters/user_id"
-
+        - $ref: '#/components/parameters/user_id'
       responses:
         200:
           description: authenticated user profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProfileResponse"
+                $ref: '#/components/schemas/ProfileResponseForAdmin'
         401:
           description: "Unauthorized"
           content:
@@ -198,25 +197,24 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorMessage"
-
-  /api/ilp/profile/search:
+                $ref: '#/components/schemas/ErrorMessage'
+  /api/ilp/admin/profile/search:
     get:
-      operationId: searchProfile
+      operationId: searchProfileAsAdmin
       summary: search for profile
       tags:
-        - profile
+        - admin
       parameters:
-        - $ref: "#/components/parameters/search_key"
+        - $ref: '#/components/parameters/search_key'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/page'
       responses:
         200:
           description: list user profiles
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ProfileResponse"
+                $ref: '#/components/schemas/PaginatedProfileResponse'
         400:
           description: bad request
           content:
@@ -614,14 +612,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedOperationResponse"
+                $ref: '#/components/schemas/PaginatedOperationResponse'
 
-  /api/ilp/wallet/history/{user_id}:
+  /api/ilp/admin/wallet/history/{user_id}:
     post:
       operationId: getWalletHistoryForUserId
       summary: get history of operations of the user identified by user_id
       tags:
-        - wallet
+        - admin
       parameters:
         - $ref: "#/components/parameters/user_id"
       requestBody:
@@ -755,12 +753,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/PaginatedAccrualResponse"
 
-  /api/ilp/wallet/accrual/{user_id}:
+  /api/ilp/admin/wallet/accrual/{user_id}:
     post:
       operationId: createNewAccrual
       summary: create new accrual for user identified by user_id
       tags:
-        - wallet
+        - admin
       parameters:
         - $ref: "#/components/parameters/user_id"
       requestBody:
@@ -1064,6 +1062,22 @@ components:
       schema:
         type: string
       description: value for search
+
+    pageSize:
+      in: query
+      name: pageSize
+      required: true
+      schema:
+        type: number
+      description: requested page size
+
+    page:
+      in: query
+      name: page
+      required: true
+      schema:
+        type: number
+      description: requested page
 
   schemas:
     BalancePeriodRequest:
@@ -1467,8 +1481,31 @@ components:
           type: string
           nullable: false
 
+    ProfileResponseForAdmin:
+      allOf:
+        - $ref: '#/components/schemas/ProfileResponse'
+        - type: object
+          required:
+            - balance
+          properties:
+            balance:
+              type: integer
+              format: int32
+              minimum: 0
+
     ProfileResponse:
       type: object
+      required:
+        - id
+        - fio
+        - email
+        - roles
+        - avatarLink
+        - jobPosition
+        - city
+        - country
+        - phone
+        - active
       properties:
         id:
           $ref: "#/components/schemas/Identifier"
@@ -1477,6 +1514,11 @@ components:
         email:
           type: string
           format: email
+          maxLength: 50
+        phone:
+          type: string
+          format: email
+          maxLength: 20
         roles:
           type: array
           uniqueItems: true
@@ -1484,6 +1526,15 @@ components:
             $ref: "#/components/schemas/ERole"
         avatarLink:
           type: string
+        jobPosition:
+          type: string
+          maxLength: 50
+        city:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          maxLength: 50
         active:
           type: boolean
           readOnly: true
@@ -1497,13 +1548,7 @@ components:
         endDate:
           type: string
           format: date
-          example: "2023-04-10"
-      required:
-        - id
-        - fio
-        - email
-        - roles
-        - active
+          example: '2023-04-10'
 
     Name:
       type: object

@@ -12,7 +12,7 @@ export interface EditProductFormProps {
 export const EditProductForm = (props: EditProductFormProps) => {
     const { values } = props;
 
-    const { control, handleSubmit, formState, reset } = useForm<ArticleUpdateRequest>({
+    const { control, handleSubmit, formState } = useForm<ArticleUpdateRequest>({
         values,
     });
 
@@ -21,7 +21,6 @@ export const EditProductForm = (props: EditProductFormProps) => {
             await api.article.updateArticle({
                 articleUpdateRequest: data,
             });
-            reset();
             toast('Товар обновлен');
         } catch (err) {
             toast((err as ErrorMessage).message ?? 'Ошибка');
@@ -52,7 +51,7 @@ export const EditProductForm = (props: EditProductFormProps) => {
                         control={control}
                         type="number"
                         name="price"
-                        label="Стоимость"
+                        label="Стоимость в вольтах"
                         rules={{
                             required: validationRules.required,
                             min: validationRules.min(1),

@@ -1,5 +1,5 @@
 .content {
-    @apply h-screen w-screen;
+    @apply mt-header w-full;
 }
 
 @screen md {

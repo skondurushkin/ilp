@@ -30,14 +30,6 @@ export interface BrowseProfilesRequest {
     pageRequest?: PageRequest;
 }
 
-export interface GetProfileByIdRequest {
-    userId: number;
-}
-
-export interface SearchProfileRequest {
-    searchKey: string;
-}
-
 /**
  *
  */
@@ -124,113 +116,6 @@ export class ProfileApi extends runtime.BaseAPI {
      */
     async getProfile(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileResponse> {
         const response = await this.getProfileRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * get user profile by user id
-     */
-    async getProfileByIdRaw(
-        requestParameters: GetProfileByIdRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<ProfileResponse>> {
-        if (requestParameters.userId === null || requestParameters.userId === undefined) {
-            throw new runtime.RequiredError(
-                'userId',
-                'Required parameter requestParameters.userId was null or undefined when calling getProfileById.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/profile/{user_id}`.replace(
-                    `{${'user_id'}}`,
-                    encodeURIComponent(String(requestParameters.userId)),
-                ),
-                method: 'GET',
-                headers: headerParameters,
-                query: queryParameters,
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * get user profile by user id
-     */
-    async getProfileById(
-        requestParameters: GetProfileByIdRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<ProfileResponse> {
-        const response = await this.getProfileByIdRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * search for profile
-     */
-    async searchProfileRaw(
-        requestParameters: SearchProfileRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<Array<ProfileResponse>>> {
-        if (requestParameters.searchKey === null || requestParameters.searchKey === undefined) {
-            throw new runtime.RequiredError(
-                'searchKey',
-                'Required parameter requestParameters.searchKey was null or undefined when calling searchProfile.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters.searchKey !== undefined) {
-            queryParameters['search_key'] = requestParameters.searchKey;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/profile/search`,
-                method: 'GET',
-                headers: headerParameters,
-                query: queryParameters,
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProfileResponseFromJSON));
-    }
-
-    /**
-     * search for profile
-     */
-    async searchProfile(
-        requestParameters: SearchProfileRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<Array<ProfileResponse>> {
-        const response = await this.searchProfileRaw(requestParameters, initOverrides);
         return await response.value();
     }
 }

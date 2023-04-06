@@ -12,6 +12,7 @@ import { useQuery } from 'react-query';
 const DEFAULT_PAGINATION_STATE = { pageIndex: 0, pageSize: 10 };
 
 export const AdminTable = <TData extends RowData>({
+    showSearch = true,
     columns,
     queryKey,
     initialSort = [],
@@ -87,25 +88,28 @@ export const AdminTable = <TData extends RowData>({
     });
 
     return (
-        <div className=" flex w-full flex-col gap-6 overflow-y-hidden overflow-x-scroll">
-            <div className="relative mt-2 inline-flex text-left">
-                <DebouncedInput
-                    value={globalFilter ?? ''}
-                    onChange={(value) => handleGlobalFilter(String(value))}
-                    className="input form-input w-full pl-12"
-                    placeholder={globalFilterPlaceholder ?? 'Поиск по всем колонкам'}
-                />
-                <SearchSVG className="stroke-gray absolute bottom-3 left-3" />
-            </div>
+        <div className="flex w-full flex-col gap-6 overflow-y-hidden overflow-x-scroll">
+            {showSearch && (
+                <div className="relative mt-2 inline-flex text-left">
+                    <DebouncedInput
+                        value={globalFilter ?? ''}
+                        onChange={(value) => handleGlobalFilter(String(value))}
+                        className="input form-input w-full pl-12"
+                        placeholder={globalFilterPlaceholder ?? 'Поиск по всем колонкам'}
+                    />
+                    <SearchSVG className="stroke-gray absolute bottom-3 left-3" />
+                </div>
+            )}
             <div className="flex flex-col gap-6 bg-black p-6">
                 <Table table={table} isFetching={dataQuery.isFetching} />
-                <TablePagination table={table} />
+                {Number(dataQuery.data?.total) > 0 && <TablePagination table={table} />}
             </div>
         </div>
     );
 };
 
 interface AdminTableProps<TData extends RowData> {
+    showSearch?: boolean;
     globalFilterPlaceholder?: string;
     initialSort?: SortingState;
     columns: ColumnDef<TData, unknown>[];

@@ -1,5 +1,6 @@
 import ReactModal from 'react-modal';
 import { ReactNode } from 'react';
+import { RemoveScroll } from 'react-remove-scroll';
 import styles from './Modal.module.css';
 import { twMerge } from 'tailwind-merge';
 
@@ -20,20 +21,22 @@ export const Modal = (props: ModalProps) => {
     const { id, children, isOpen, closeModal, className, size = 'lg' } = props;
 
     return (
-        <ReactModal
-            id={id}
-            isOpen={isOpen}
-            onRequestClose={() => closeModal()}
-            overlayClassName="z-modal bg-black-transparent-70% fixed left-0 top-0 flex h-screen w-screen  items-center justify-center"
-            className={twMerge(
-                'fixed top-0 overflow-hidden',
-                size && [styles[`content-${size}`]],
-                size !== 'full-screen' && [styles.content],
-                className,
-            )}
-        >
-            {children}
-        </ReactModal>
+        <RemoveScroll enabled={isOpen}>
+            <ReactModal
+                id={id}
+                isOpen={isOpen}
+                onRequestClose={() => closeModal()}
+                overlayClassName="z-modal bg-black-transparent-70% fixed left-0 top-0 flex h-screen w-screen  items-center justify-center"
+                className={twMerge(
+                    'fixed top-0 overflow-hidden',
+                    size && [styles[`content-${size}`]],
+                    size !== 'full-screen' && [styles.content],
+                    className,
+                )}
+            >
+                {children}
+            </ReactModal>
+        </RemoveScroll>
     );
 };
 

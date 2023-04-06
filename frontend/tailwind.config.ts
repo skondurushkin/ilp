@@ -14,6 +14,8 @@ export default {
             },
             spacing: {
                 sidebar: '312px',
+                'header-mobile': '72px',
+                header: '92px',
             },
             zIndex: {
                 header: '99',

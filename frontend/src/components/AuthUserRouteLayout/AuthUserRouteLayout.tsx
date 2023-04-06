@@ -22,7 +22,7 @@ export function AuthUserRouteLayout(): ReactElement {
 
     return (
         <div className="relative flex min-h-[100vh] w-full flex-col">
-            <header className="sticky top-0 z-40 bg-black text-white">
+            <header className="z-header fixed top-0 w-full bg-black text-white">
                 <div className="flex justify-between px-4 py-4 xl:container sm:px-8 md:px-14 xl:mx-auto xl:py-6 xl:pl-0 xl:pr-8">
                     <div className="xl:w-sidebar flex items-center xl:pl-8">
                         <TypedLink to="/">
@@ -54,7 +54,7 @@ export function AuthUserRouteLayout(): ReactElement {
                     </button>
                 </div>
             </header>
-            <div className="app-bg flex grow flex-col">
+            <div className="app-bg pt-header-mobile xl:pt-header flex grow flex-col">
                 <div className="relative flex w-full grow xl:container xl:mx-auto">
                     <aside
                         ref={sidebarRef}
@@ -87,13 +87,7 @@ export function AuthUserRouteLayout(): ReactElement {
                     </aside>
                     <main className="xl:pl-sidebar flex w-full grow flex-col xl:container">
                         <div className="grow px-4 pb-10 pt-6 sm:px-8 sm:py-8 md:px-14 md:pb-10 md:pt-8 xl:px-8 xl:pb-10 xl:pt-8">
-                            <Suspense
-                                fallback={
-                                    <div className="flex h-full w-full flex-col items-center justify-center">
-                                        <Spinner />
-                                    </div>
-                                }
-                            >
+                            <Suspense fallback={<PageSpinner />}>
                                 <Outlet />
                             </Suspense>
                         </div>
