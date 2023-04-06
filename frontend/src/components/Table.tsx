@@ -1,5 +1,6 @@
 import type { Table as ITable, RowData } from '@tanstack/react-table';
 
+import { CSSProperties } from 'react';
 import { ReactComponent as ChevronLeftSVG } from '../assets/chevron-left.svg';
 import { Spinner } from './Spinner';
 import { flexRender } from '@tanstack/react-table';
@@ -9,26 +10,30 @@ interface TableProps<TData extends RowData> {
     table: ITable<TData>;
     isFetching?: boolean;
     className?: string;
+    fixed?: boolean;
 }
 
 export const Table = <TData extends RowData>(props: TableProps<TData>) => {
-    const { table, isFetching, className } = props;
+    const { table, isFetching, className, fixed } = props;
 
     return (
-        <div className="relative overflow-y-hidden overflow-x-scroll">
+        <div className="relative overflow-y-hidden">
             {isFetching && (
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
                     <Spinner />
                 </div>
             )}
-            <table
-                className={twMerge('w-full overflow-y-hidden overflow-x-scroll', isFetching && 'opacity-50', className)}
-            >
+            <table className={twMerge('w-full', isFetching && 'opacity-50', fixed && 'table-fixed', className)}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => (
-                                <th key={header.id} colSpan={header.colSpan} className="px-3 py-2 text-left">
+                                <th
+                                    key={header.id}
+                                    colSpan={header.colSpan}
+                                    className="px-3 py-2 text-left"
+                                    style={cellStyle(header, fixed)}
+                                >
                                     <button
                                         disabled={!header.column.getCanSort()}
                                         onClick={header.column.getToggleSortingHandler()}
@@ -71,3 +76,11 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
         </div>
     );
 };
+
+function cellStyle(column: { getSize: () => number }, fixed: boolean | undefined): CSSProperties | undefined {
+    if (!fixed) {
+        return undefined;
+    }
+    const size = column.getSize();
+    return size > 0 ? { width: size } : undefined;
+}
