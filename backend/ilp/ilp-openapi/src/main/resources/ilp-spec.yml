@@ -201,6 +201,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
+
   /api/ilp/profile/search:
     get:
       operationId: searchProfile
@@ -661,33 +662,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/WriteOffResponse'
 
-  /api/ilp/admin/wallet/write-off/{writeoff_id}:
-    patch:
-      operationId: updateWriteOff
-      summary: change status of the write-off identified by writeoff_id
-      tags:
-        - admin
-      parameters:
-        - $ref: '#/components/parameters/writeoff_id'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  $ref: '#/components/schemas/WriteOffStatus'
-      responses:
-        200:
-          description: 'OK'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WriteOffResponse'
+  /api/ilp/wallet/write-off/{writeoff_id}:
     get:
-      operationId: getWriteOff
-      summary: get the write-off record identified by writeoff_id
+      operationId: getOwnWriteOff
+      summary: get the write-off record identified by writeoff_id and created by currently logged user
       tags:
         - wallet
       parameters:
@@ -706,25 +684,6 @@ paths:
       summary: paginated view of write-offs of currently logged in user
       tags:
         - wallet
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PageRequest'
-      responses:
-        200:
-          description: 'OK'
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PaginatedWriteOffResponse"
-
-  /api/ilp/admin/wallet/write-offs:
-    post:
-      operationId: browseWriteOffsAsAdmin
-      summary: paginated view of write-offs for admin
-      tags:
-        - admin
       requestBody:
         content:
           application/json:
@@ -843,6 +802,65 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccrualResponse'
+
+  # admin
+  /api/ilp/admin/wallet/write-off/{writeoff_id}:
+    patch:
+      operationId: updateWriteOff
+      summary: change status of the write-off identified by writeoff_id
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/writeoff_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/WriteOffStatus'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOffResponse'
+    get:
+      operationId: getWriteOff
+      summary: get the write-off record identified by writeoff_id
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/writeoff_id'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOffResponse'
+
+  /api/ilp/admin/wallet/write-offs:
+    post:
+      operationId: browseWriteOffsAsAdmin
+      summary: paginated view of write-offs for admin
+      tags:
+        - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageRequest'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedWriteOffResponse"
 
   # files
   /api/ilp/file/upload/{scope}:
@@ -967,7 +985,7 @@ components:
   schemas:
     WriteOffStatus:
       type: string
-      enum: [new, processing, delivering, completed, cancelled]
+      enum: [created, processing, delivering, completed, cancelled]
 
     Identifier:
       type: integer
@@ -1091,6 +1109,8 @@ components:
           type: string
         path:
           type: string
+        details:
+          type: object
 
     SignupRequest:
       type: object
