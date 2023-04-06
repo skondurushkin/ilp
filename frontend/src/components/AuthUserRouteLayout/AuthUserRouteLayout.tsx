@@ -78,11 +78,22 @@ export function AuthUserRouteLayout(): ReactElement {
                             </button>
                         </div>
                         <Profile className="mt-14 sm:mt-8 xl:mt-8" />
-                        <Nav className="mt-8 grow px-9 pb-3 sm:px-8 sm:pb-6 md:pb-10" />
+                        <Nav
+                            className="mt-8 grow px-9 pb-3 sm:px-8 sm:pb-6 md:pb-10"
+                            onRequestNavClosing={() => {
+                                setMobileSidebarVisible(false);
+                            }}
+                        />
                     </aside>
                     <main className="xl:pl-sidebar flex w-full grow flex-col xl:container">
                         <div className="grow px-4 pb-10 pt-6 sm:px-8 sm:py-8 md:px-14 md:pb-10 md:pt-8 xl:px-8 xl:pb-10 xl:pt-8">
-                            <Suspense fallback={<Spinner />}>
+                            <Suspense
+                                fallback={
+                                    <div className="flex h-full w-full flex-col items-center justify-center">
+                                        <Spinner />
+                                    </div>
+                                }
+                            >
                                 <Outlet />
                             </Suspense>
                         </div>

@@ -10,11 +10,14 @@ import { ProductCard } from '../../components/ProductCard';
 import { ReactNode } from 'react';
 import { WalletCard } from '../../components/WalletCard';
 import { range } from '../../utils/range';
+import { useScrollToHash } from '../../components/useScrollToHash';
 
 export const MainPage = () => {
     const walletQuery = useWalletQuery();
     const activitiesQuery = useActivitiesQuery();
     const productsCatalogQuery = useProductsCatalogQuery();
+
+    useScrollToHash();
 
     return (
         <div>

@@ -30,6 +30,10 @@ export interface BrowseWriteOffsAsAdminRequest {
     pageRequest?: PageRequest;
 }
 
+export interface GetWriteOffRequest {
+    writeoffId: number;
+}
+
 export interface UpdateWriteOffOperationRequest {
     writeoffId: number;
     updateWriteOffRequest: UpdateWriteOffRequest;
@@ -82,6 +86,59 @@ export class AdminApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedWriteOffResponse> {
         const response = await this.browseWriteOffsAsAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * get the write-off record identified by writeoff_id
+     */
+    async getWriteOffRaw(
+        requestParameters: GetWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
+        if (requestParameters.writeoffId === null || requestParameters.writeoffId === undefined) {
+            throw new runtime.RequiredError(
+                'writeoffId',
+                'Required parameter requestParameters.writeoffId was null or undefined when calling getWriteOff.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/wallet/write-off/{writeoff_id}`.replace(
+                    `{${'writeoff_id'}}`,
+                    encodeURIComponent(String(requestParameters.writeoffId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get the write-off record identified by writeoff_id
+     */
+    async getWriteOff(
+        requestParameters: GetWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<WriteOffResponse> {
+        const response = await this.getWriteOffRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -61,6 +61,12 @@ export interface ErrorMessage {
      * @memberof ErrorMessage
      */
     path?: string;
+    /**
+     *
+     * @type {object}
+     * @memberof ErrorMessage
+     */
+    details?: object;
 }
 
 /**
@@ -100,6 +106,7 @@ export function ErrorMessageFromJSONTyped(json: any, ignoreDiscriminator: boolea
         message: !exists(json, 'message') ? undefined : json['message'],
         description: !exists(json, 'description') ? undefined : json['description'],
         path: !exists(json, 'path') ? undefined : json['path'],
+        details: !exists(json, 'details') ? undefined : json['details'],
     };
 }
 
@@ -118,5 +125,6 @@ export function ErrorMessageToJSON(value?: ErrorMessage | null): any {
         message: value.message,
         description: value.description,
         path: value.path,
+        details: value.details,
     };
 }

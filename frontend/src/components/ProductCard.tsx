@@ -3,6 +3,7 @@ import { ReactElement, ReactNode } from 'react';
 
 import { ArticleResponse } from '../api';
 import { Box } from './Box';
+import { ImageGallery } from './ImageGallery';
 import { ProductPrice } from './ProductPrice';
 import { TypedLink } from '../router';
 import { VerticalBrackets } from './VerticalBrackets';
@@ -27,19 +28,19 @@ export function ProductCard(props: ProductCardProps | ProductCardSkeletonProps):
     );
 }
 
-export interface ProductViewProps {
+interface ProductViewProps {
     product: ArticleResponse;
     showPrice?: boolean;
     action?: ReactNode;
 }
 
-export function ProductView(props: ProductViewProps): ReactElement {
+function ProductView(props: ProductViewProps): ReactElement {
     const { product, showPrice, action } = props;
     return (
         <>
             <TypedLink to="/products/:id" params={{ id: `${product.id}` }} className="flex grow flex-col">
                 <VerticalBrackets size="4">
-                    <img src={product.imageLink} alt={product.name} />
+                    <ImageGallery imgs={[{ src: product.imageLink || '', alt: product.name }]} />
                 </VerticalBrackets>
                 <div className="mt-4 self-center text-center">{product.name}</div>
             </TypedLink>
@@ -49,13 +50,13 @@ export function ProductView(props: ProductViewProps): ReactElement {
     );
 }
 
-export interface SkeletonViewProps {
+interface SkeletonViewProps {
     skeleton: true;
     withPrice?: boolean;
     withAction?: boolean;
 }
 
-export function SkeletonView(props: SkeletonViewProps): ReactElement {
+function SkeletonView(props: SkeletonViewProps): ReactElement {
     return (
         <SkeletonContainer>
             <ImageSkeleton className="h-48" />
