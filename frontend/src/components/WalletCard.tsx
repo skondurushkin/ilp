@@ -111,7 +111,7 @@ function WalletView(props: WalletViewProps): ReactElement {
                             );
                         })}
                     </ul>
-                    <TypedLink to="/" className="mt-4 text-white underline md:mt-6">
+                    <TypedLink to="/profile" hash="balance-history" className="mt-4 text-white underline md:mt-6">
                         Посмотреть всю историю
                     </TypedLink>
                 </>

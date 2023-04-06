@@ -25,6 +25,7 @@ type NavItem = NavLinkItem | NavButtonItem | NavSpacerItem;
 
 interface NavLinkItem {
     to: string;
+    end?: boolean;
     label: string;
     icon: ComponentType<SvgProps>;
     children?: NavItem[];
@@ -58,6 +59,7 @@ export function Nav(props: NavProps): ReactElement {
         if (hasRole(auth, UserRole.ADMIN)) {
             list.push({
                 to: '/admin',
+                end: true,
                 label: 'Администрирование',
                 icon: SlidersIcon,
                 children: [
@@ -159,7 +161,7 @@ function NavLinkElement(props: NavLinkElementProps): ReactElement {
     }
 
     return (
-        <TypedNavLink to={item.to} className={navItemClassNameFn} onClick={hadleClick}>
+        <TypedNavLink to={item.to} end={item.end} className={navItemClassNameFn} onClick={hadleClick}>
             {navItemFn(item.label, item.icon)}
         </TypedNavLink>
     );

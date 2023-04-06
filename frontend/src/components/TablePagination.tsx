@@ -51,7 +51,7 @@ export const TablePagination = <TData extends RowData>({ table }: TablePaginatio
                     </PagingButton>
                 </div>
                 <select
-                    className="select form-select border-gray h-10 border bg-black px-3 py-2 text-white"
+                    className="select form-select border-gray h-10 border bg-black text-white"
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
                         table.setPageSize(Number(e.target.value));
