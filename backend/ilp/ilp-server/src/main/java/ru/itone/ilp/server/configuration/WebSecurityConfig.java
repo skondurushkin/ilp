@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -50,6 +51,7 @@ import ru.itone.ilp.services.jwt.UserDetailsServiceImpl;
 public class WebSecurityConfig {
 
     static final String LOGIN_URL = "/api/ilp/auth/login";
+    static final String SETTING_URL = "/api/ilp/setting";
 
     protected static final String[] ENDPOINTS_WHITELIST = {
             LOGIN_URL
@@ -125,6 +127,7 @@ public class WebSecurityConfig {
                 .and()
 
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.GET, SETTING_URL).permitAll()
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
