@@ -20,7 +20,6 @@ import ru.itone.ilp.openapi.model.UpdateWriteOffRequest;
 import ru.itone.ilp.openapi.model.WalletResponse;
 import ru.itone.ilp.openapi.model.WriteOffRequest;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
-import ru.itone.ilp.openapi.model.WriteOffUserResponse;
 import ru.itone.ilp.server.misc.Helpers;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.wallet.WalletService;
@@ -47,14 +46,13 @@ public class WalletController implements WalletApi {
     @Override
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffs(PageRequest pageRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        boolean isAdmin = Helpers.isAdmin(userDetails);
-        return ResponseEntity.ok(walletService.paginateWriteOffs(isAdmin, userDetails.getId(), pageRequest));
+        return ResponseEntity.ok(walletService.paginateWriteOffs(userDetails.getId(), pageRequest));
     }
 
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsForUserId(Integer userId, PageRequest pageRequest) {
-        return ResponseEntity.ok(walletService.paginateWriteOffs(true, userId.longValue(), pageRequest));
+        return ResponseEntity.ok(walletService.paginateWriteOffs(userId.longValue(), pageRequest));
     }
 
     @Override
@@ -95,7 +93,7 @@ public class WalletController implements WalletApi {
     }
 
     @Override
-    public ResponseEntity<WriteOffResponse> getWriteOff(Integer writeoffId) {
+    public ResponseEntity<WriteOffResponse> getOwnWriteOff(Integer writeoffId) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isAdmin = Helpers.isAdmin(userDetails);
         if (isAdmin) {
@@ -105,17 +103,15 @@ public class WalletController implements WalletApi {
         }
     }
 
-    @Override
     public ResponseEntity<WriteOffResponse> updateWriteOff(Integer writeOffId, UpdateWriteOffRequest updateWriteOffRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        boolean isAdmin = Helpers.isAdmin(userDetails);
-        return ResponseEntity.ok(walletService.updateWriteOffStatus(userDetails.getId(), isAdmin, writeOffId.longValue(), updateWriteOffRequest.getStatus()));
+        return ResponseEntity.ok(walletService.updateWriteOffStatus(userDetails.getId(), false, writeOffId.longValue(), updateWriteOffRequest.getStatus()));
     }
 
     @Override
-    public ResponseEntity<WriteOffUserResponse> writeOff(WriteOffRequest writeOffRequest) {
+    public ResponseEntity<WriteOffResponse> writeOff(WriteOffRequest writeOffRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        WriteOffUserResponse response = walletService.writeOff(userDetails.getId(), writeOffRequest);
+        WriteOffResponse response = walletService.writeOff(userDetails.getId(), writeOffRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
         log.info("CREATED: {}", uri);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

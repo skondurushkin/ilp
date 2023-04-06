@@ -24,6 +24,14 @@ public class ApiExceptions {
         }
     }
 
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public static class TransitionDeniedException extends RuntimeException {
+        public TransitionDeniedException(String message) {
+            super(message);
+        }
+    }
+
+
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public static class TokenRefreshException extends RuntimeException {
 

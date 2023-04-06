@@ -1,10 +1,15 @@
 package ru.itone.ilp.server.jwt.advice;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.validation.ConstraintViolationException;
 import java.time.OffsetDateTime;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,18 +22,31 @@ import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 
 @Slf4j
 @RestControllerAdvice
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ApiControllerAdvice {
+
+    private final ObjectMapper objectMapper;
 
     @ExceptionHandler(value = HttpStatusCodeException.class)
     public ErrorMessage handleStatusCodeException(HttpStatusCodeException ex, WebRequest request) {
         return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorMessage handleMethodArgumentValidationException(MethodArgumentNotValidException ex, WebRequest request) {
+        ObjectNode errors = objectMapper.createObjectNode();
+        ex.getAllErrors().forEach(e -> errors.put(e.getObjectName(), e.getDefaultMessage()));
+        return buildValidationErrorMessage("Ошибка в аргументах метода", errors, request);
+    }
+
+
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     public ErrorMessage handleValidationException(ConstraintViolationException ex, WebRequest request) {
-        return buildErrorMessage(HttpStatus.BAD_REQUEST, ex, request);
+        ObjectNode errors = objectMapper.createObjectNode();
+        ex.getConstraintViolations().forEach(e -> errors.put(e.getPropertyPath().toString(), e.getMessage()));
+        return buildValidationErrorMessage("Нарушение ограничений", errors, request);
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
@@ -53,4 +71,17 @@ public class ApiControllerAdvice {
                 .description(request.getDescription(false))
                 .path(request.getContextPath());
     }
+
+    private static ErrorMessage buildValidationErrorMessage(String message, ObjectNode details, WebRequest request) {
+        return new ErrorMessage()
+                .statusCode(BAD_REQUEST.value())
+                .statusText(BAD_REQUEST.getReasonPhrase())
+                .timestamp(OffsetDateTime.now())
+                .category(CategoryEnum.VALIDATION_ERROR)
+                .message(message)
+                .description(request.getDescription(false))
+                .details(details)
+                .path(request.getContextPath());
+    }
+
 }

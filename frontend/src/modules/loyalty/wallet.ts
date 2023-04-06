@@ -6,7 +6,7 @@ export const useWalletQuery = (): UseQueryResult<WalletResponse> => {
 };
 
 export const WriteOffStatusName = {
-    [WriteOffStatus.New]: 'Создан',
+    [WriteOffStatus.Created]: 'Создан',
     [WriteOffStatus.Processing]: 'Комплектуется',
     [WriteOffStatus.Cancelled]: 'Отменен',
     [WriteOffStatus.Completed]: 'Выдан',

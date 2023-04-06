@@ -17,7 +17,7 @@
  * @export
  */
 export const WriteOffStatus = {
-    New: 'new',
+    Created: 'created',
     Processing: 'processing',
     Delivering: 'delivering',
     Completed: 'completed',

@@ -61,7 +61,7 @@ public class WebSecurityConfig {
 
     @Bean
     public ApiControllerAdvice controllerAdvice() {
-        return new ApiControllerAdvice();
+        return new ApiControllerAdvice(objectMapper());
     }
 
     @Bean
