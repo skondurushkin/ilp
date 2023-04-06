@@ -8,16 +8,26 @@ import {
 } from '../../api';
 import { UseQueryResult, useQuery } from 'react-query';
 
+import { Color } from '../../../colors';
+
 export const useWalletQuery = (): UseQueryResult<WalletResponse> => {
     return useQuery('wallet', () => api.wallet.getWalletOverview(), { retry: false, refetchOnWindowFocus: false });
 };
 
-export const WriteOffStatusName = {
+export const WriteOffStatusName: Record<WriteOffStatus, string> = {
     [WriteOffStatus.Created]: 'Создан',
     [WriteOffStatus.Processing]: 'Комплектуется',
     [WriteOffStatus.Cancelled]: 'Отменен',
     [WriteOffStatus.Completed]: 'Выдан',
     [WriteOffStatus.Delivering]: 'Готов к выдаче',
+};
+
+export const WriteOffStatusColor: Record<WriteOffStatus, Color> = {
+    [WriteOffStatus.Created]: 'gray',
+    [WriteOffStatus.Processing]: 'gray',
+    [WriteOffStatus.Cancelled]: 'error',
+    [WriteOffStatus.Completed]: 'success',
+    [WriteOffStatus.Delivering]: 'secondary-green',
 };
 
 const WALLET_HISTORY_PAGE_SIZE = 5;
