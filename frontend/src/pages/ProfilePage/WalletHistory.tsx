@@ -120,7 +120,7 @@ function NonEmptyWalletHistory(props: NonEmptyWalletHistoryProps): ReactElement 
     });
 
     return (
-        <Box className={className}>
+        <div className={className}>
             <Chips
                 options={
                     [
@@ -131,8 +131,10 @@ function NonEmptyWalletHistory(props: NonEmptyWalletHistoryProps): ReactElement 
                 value={historyType}
                 onChange={onHistoryTypeChange}
             />
-            <Table className="mt-4" table={table} />
-        </Box>
+            <Box className="mt-4">
+                <Table table={table} />
+            </Box>
+        </div>
     );
 }
 

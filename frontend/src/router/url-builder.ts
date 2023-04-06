@@ -6,6 +6,7 @@ export interface LinkWithParamProps {
     to: string;
     params?: RouteParams;
     search?: URLSearchParamsInit | string;
+    hash?: string;
 }
 
 export const buildUrl = (path: string, params: RouteParams): string => {

@@ -3,10 +3,13 @@ import { PageNav } from '../../components/AuthUserRouteLayout';
 import { PageSection } from '../../components/PageSection';
 import { WalletCard } from '../../components/WalletCard';
 import { WalletHistory } from './WalletHistory';
+import { useScrollToHash } from '../../components/useScrollToHash';
 import { useWalletQuery } from '../../modules/loyalty';
 
 export const ProfilePage = () => {
     const walletQuery = useWalletQuery();
+
+    useScrollToHash();
 
     return (
         <div>
