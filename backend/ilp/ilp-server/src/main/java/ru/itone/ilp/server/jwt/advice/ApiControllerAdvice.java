@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.servlet.ServletException;
 import jakarta.validation.ConstraintViolationException;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,16 @@ public class ApiControllerAdvice {
 
     private final ObjectMapper objectMapper;
 
+
     @ExceptionHandler(value = HttpStatusCodeException.class)
     public ErrorMessage handleStatusCodeException(HttpStatusCodeException ex, WebRequest request) {
         return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
+    }
+
+    @ExceptionHandler(ServletException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorMessage handleServletException(ServletException ex, WebRequest request) {
+        return buildErrorMessage(BAD_REQUEST, ex, request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
