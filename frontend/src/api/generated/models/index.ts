@@ -48,4 +48,3 @@ export * from './WalletResponse';
 export * from './WriteOffRequest';
 export * from './WriteOffResponse';
 export * from './WriteOffStatus';
-export * from './WriteOffUserResponse';

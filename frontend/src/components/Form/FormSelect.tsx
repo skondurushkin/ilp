@@ -1,20 +1,26 @@
 import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 'react-hook-form';
 
 import { FormErrorMessage } from './FormErrorMessage';
-import { InputHTMLAttributes } from 'react';
+import { SelectHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface FormInputProps<TFieldValues extends FieldValues> extends Partial<InputHTMLAttributes<HTMLInputElement>> {
+export interface FormSelectOption {
+    label: string;
+    value: string;
+}
+
+interface FormSelectProps<TFieldValues extends FieldValues> extends Partial<SelectHTMLAttributes<HTMLSelectElement>> {
     name: FieldPath<TFieldValues>;
     rules?: RegisterOptions;
     label?: string;
     className?: string;
     labelClassName?: string;
     control: Control<TFieldValues>;
+    options: FormSelectOption[];
 }
 
-export const FormInput = <TFieldValues extends FieldValues = FieldValues>(props: FormInputProps<TFieldValues>) => {
-    const { control, name, rules, label, className, labelClassName, ...rest } = props;
+export const FormSelect = <TFieldValues extends FieldValues = FieldValues>(props: FormSelectProps<TFieldValues>) => {
+    const { control, name, rules, label, className, labelClassName, options, ...rest } = props;
 
     const { field, fieldState } = useController({
         name,
@@ -28,12 +34,18 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues>(props:
                 {label}
                 {rules?.required && <span>&nbsp;*</span>}
             </label>
-            <input
+            <select
                 {...field}
                 {...rest}
                 name={name}
-                className={twMerge('input form-input', fieldState.invalid && 'input-error', className)}
-            />
+                className={twMerge('select form-select', fieldState.invalid && 'input-error', className)}
+            >
+                {options.map((option, index) => (
+                    <option key={index} value={option.value}>
+                        {option.label}
+                    </option>
+                ))}
+            </select>
             <FormErrorMessage error={fieldState.error} />
         </div>
     );

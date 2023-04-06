@@ -3,15 +3,15 @@ import { useCallback, useMemo } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { AdminTable } from '../../components/AdminTable';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
+import { PRODUCTS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 import { twMerge } from 'tailwind-merge';
 
 export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
-
-const PRODUCTS_ADMIN_PAGE_QUERY_KEY = 'browseArticles';
 
 export const ProductsAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
@@ -98,14 +98,15 @@ export const ProductsAdminPage = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <h1 className="text-h1">Товары</h1>
-            <div>
+            <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Товары' }]} />
+            <div className="flex flex-col gap-4">
+                <h1 className="text-h1">Товары</h1>
                 <TypedLink to="/admin/products/create">
                     <button className="btn btn-primary">Добавить товар</button>
                 </TypedLink>
             </div>
             <AdminTable
-                globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
+                globalFilterPlaceholder="Поиск по ИД, Наименованию, Артиклу и Стоимости"
                 columns={columns}
                 queryData={queryData}
                 queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}

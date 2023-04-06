@@ -66,9 +66,23 @@ export function Nav(props: NavProps): ReactElement {
                 </li>
                 {hasRole(auth, UserRole.ADMIN) && (
                     <li>
-                        <TypedNavLink to="/admin" className={navItemClassNameFn}>
+                        <TypedNavLink end to="/admin" className={navItemClassNameFn}>
                             {navItemFn('Администрирование', SlidersIcon)}
                         </TypedNavLink>
+                        <div className="ml-10">
+                            <TypedNavLink to="/admin/products" className={navItemClassNameFn}>
+                                {navItemFn('Товары', SlidersIcon)}
+                            </TypedNavLink>
+                            <TypedNavLink to="/admin/activities" className={navItemClassNameFn}>
+                                {navItemFn('Активности', SlidersIcon)}
+                            </TypedNavLink>
+                            <TypedNavLink to="/admin/users" className={navItemClassNameFn}>
+                                {navItemFn('Пользователи', SlidersIcon)}
+                            </TypedNavLink>
+                            <TypedNavLink to="/admin/write-offs" className={navItemClassNameFn}>
+                                {navItemFn('Заказы', SlidersIcon)}
+                            </TypedNavLink>
+                        </div>
                     </li>
                 )}
                 <li className="grow"></li>

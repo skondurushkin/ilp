@@ -20,51 +20,51 @@ import type { WriteOffResponse } from './WriteOffResponse';
 /**
  *
  * @export
- * @interface PaginatedWriteOffResponse
+ * @interface PaginatedAdminWriteOffResponse
  */
-export interface PaginatedWriteOffResponse {
+export interface PaginatedAdminWriteOffResponse {
     /**
      * total page count
      * @type {number}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedAdminWriteOffResponse
      */
     total: number;
     /**
      * current page
      * @type {number}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedAdminWriteOffResponse
      */
     page: number;
     /**
      *
      * @type {number}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedAdminWriteOffResponse
      */
     pageSize: number;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedAdminWriteOffResponse
      */
     hasNext: boolean;
     /**
      *
      * @type {boolean}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedAdminWriteOffResponse
      */
     hasPrev: boolean;
     /**
      *
      * @type {Array<WriteOffResponse>}
-     * @memberof PaginatedWriteOffResponse
+     * @memberof PaginatedAdminWriteOffResponse
      */
     results: Array<WriteOffResponse>;
 }
 
 /**
- * Check if a given object implements the PaginatedWriteOffResponse interface.
+ * Check if a given object implements the PaginatedAdminWriteOffResponse interface.
  */
-export function instanceOfPaginatedWriteOffResponse(value: object): boolean {
+export function instanceOfPaginatedAdminWriteOffResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'total' in value;
     isInstance = isInstance && 'page' in value;
@@ -76,14 +76,14 @@ export function instanceOfPaginatedWriteOffResponse(value: object): boolean {
     return isInstance;
 }
 
-export function PaginatedWriteOffResponseFromJSON(json: any): PaginatedWriteOffResponse {
-    return PaginatedWriteOffResponseFromJSONTyped(json, false);
+export function PaginatedAdminWriteOffResponseFromJSON(json: any): PaginatedAdminWriteOffResponse {
+    return PaginatedAdminWriteOffResponseFromJSONTyped(json, false);
 }
 
-export function PaginatedWriteOffResponseFromJSONTyped(
+export function PaginatedAdminWriteOffResponseFromJSONTyped(
     json: any,
     ignoreDiscriminator: boolean,
-): PaginatedWriteOffResponse {
+): PaginatedAdminWriteOffResponse {
     if (json === undefined || json === null) {
         return json;
     }
@@ -97,7 +97,7 @@ export function PaginatedWriteOffResponseFromJSONTyped(
     };
 }
 
-export function PaginatedWriteOffResponseToJSON(value?: PaginatedWriteOffResponse | null): any {
+export function PaginatedAdminWriteOffResponseToJSON(value?: PaginatedAdminWriteOffResponse | null): any {
     if (value === undefined) {
         return undefined;
     }

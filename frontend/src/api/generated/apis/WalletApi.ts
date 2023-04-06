@@ -21,11 +21,9 @@ import type {
     PaginatedAccrualResponse,
     PaginatedOperationResponse,
     PaginatedWriteOffResponse,
-    UpdateWriteOffRequest,
     WalletResponse,
     WriteOffRequest,
     WriteOffResponse,
-    WriteOffUserResponse,
 } from '../models';
 import {
     AccrualResponseFromJSON,
@@ -40,16 +38,12 @@ import {
     PaginatedOperationResponseToJSON,
     PaginatedWriteOffResponseFromJSON,
     PaginatedWriteOffResponseToJSON,
-    UpdateWriteOffRequestFromJSON,
-    UpdateWriteOffRequestToJSON,
     WalletResponseFromJSON,
     WalletResponseToJSON,
     WriteOffRequestFromJSON,
     WriteOffRequestToJSON,
     WriteOffResponseFromJSON,
     WriteOffResponseToJSON,
-    WriteOffUserResponseFromJSON,
-    WriteOffUserResponseToJSON,
 } from '../models';
 
 export interface BrowseAccrualsRequest {
@@ -90,11 +84,6 @@ export interface GetWalletHistoryForUserIdRequest {
 
 export interface GetWriteOffRequest {
     writeoffId: number;
-}
-
-export interface UpdateWriteOffOperationRequest {
-    writeoffId: number;
-    updateWriteOffRequest?: UpdateWriteOffRequest;
 }
 
 export interface WriteOffOperationRequest {
@@ -587,7 +576,7 @@ export class WalletApi extends runtime.BaseAPI {
         }
         const response = await this.request(
             {
-                path: `/api/ilp/wallet/write-off/{writeoff_id}`.replace(
+                path: `/api/ilp/admin/wallet/write-off/{writeoff_id}`.replace(
                     `{${'writeoff_id'}}`,
                     encodeURIComponent(String(requestParameters.writeoffId)),
                 ),
@@ -613,68 +602,12 @@ export class WalletApi extends runtime.BaseAPI {
     }
 
     /**
-     * change status of the write-off identified by writeoff_id
-     */
-    async updateWriteOffRaw(
-        requestParameters: UpdateWriteOffOperationRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
-        if (requestParameters.writeoffId === null || requestParameters.writeoffId === undefined) {
-            throw new runtime.RequiredError(
-                'writeoffId',
-                'Required parameter requestParameters.writeoffId was null or undefined when calling updateWriteOff.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/wallet/write-off/{writeoff_id}`.replace(
-                    `{${'writeoff_id'}}`,
-                    encodeURIComponent(String(requestParameters.writeoffId)),
-                ),
-                method: 'PATCH',
-                headers: headerParameters,
-                query: queryParameters,
-                body: UpdateWriteOffRequestToJSON(requestParameters.updateWriteOffRequest),
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * change status of the write-off identified by writeoff_id
-     */
-    async updateWriteOff(
-        requestParameters: UpdateWriteOffOperationRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<WriteOffResponse> {
-        const response = await this.updateWriteOffRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * write off funds of currently logged in user for the selected item
      */
     async writeOffRaw(
         requestParameters: WriteOffOperationRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<WriteOffUserResponse>> {
+    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -700,7 +633,7 @@ export class WalletApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffUserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
     }
 
     /**
@@ -709,7 +642,7 @@ export class WalletApi extends runtime.BaseAPI {
     async writeOff(
         requestParameters: WriteOffOperationRequest = {},
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<WriteOffUserResponse> {
+    ): Promise<WriteOffResponse> {
         const response = await this.writeOffRaw(requestParameters, initOverrides);
         return await response.value();
     }

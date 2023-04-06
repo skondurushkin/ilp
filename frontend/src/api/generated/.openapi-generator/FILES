@@ -1,4 +1,5 @@
 apis/ActivityApi.ts
+apis/AdminApi.ts
 apis/ArticleApi.ts
 apis/AuthApi.ts
 apis/FilesApi.ts
@@ -55,6 +56,5 @@ models/WalletResponse.ts
 models/WriteOffRequest.ts
 models/WriteOffResponse.ts
 models/WriteOffStatus.ts
-models/WriteOffUserResponse.ts
 models/index.ts
 runtime.ts

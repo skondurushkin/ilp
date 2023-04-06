@@ -1,0 +1,38 @@
+.content {
+    @apply h-screen w-screen;
+}
+
+@screen md {
+    .content {
+        max-height: 100vw !important;
+
+        @apply static h-auto max-w-max !important;
+    }
+
+    .content-sm {
+        min-width: 500px !important;
+        max-width: 550px !important;
+    }
+
+    .content-md {
+        min-width: 700px !important;
+        max-width: 750px !important;
+    }
+
+    .content-lg {
+        min-width: 800px !important;
+        max-width: 850px !important;
+    }
+
+    .content-xl {
+        min-width: 964px !important;
+        max-width: 1114px !important;
+    }
+
+    .content-full-screen {
+        min-width: auto;
+        max-width: auto;
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+}

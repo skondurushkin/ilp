@@ -20,34 +20,34 @@ import type { WriteOffResponse } from './WriteOffResponse';
 /**
  *
  * @export
- * @interface PaginatedWriteOffResponseAllOf
+ * @interface PaginatedAdminWriteOffResponseAllOf
  */
-export interface PaginatedWriteOffResponseAllOf {
+export interface PaginatedAdminWriteOffResponseAllOf {
     /**
      *
      * @type {Array<WriteOffResponse>}
-     * @memberof PaginatedWriteOffResponseAllOf
+     * @memberof PaginatedAdminWriteOffResponseAllOf
      */
     results?: Array<WriteOffResponse>;
 }
 
 /**
- * Check if a given object implements the PaginatedWriteOffResponseAllOf interface.
+ * Check if a given object implements the PaginatedAdminWriteOffResponseAllOf interface.
  */
-export function instanceOfPaginatedWriteOffResponseAllOf(value: object): boolean {
+export function instanceOfPaginatedAdminWriteOffResponseAllOf(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function PaginatedWriteOffResponseAllOfFromJSON(json: any): PaginatedWriteOffResponseAllOf {
-    return PaginatedWriteOffResponseAllOfFromJSONTyped(json, false);
+export function PaginatedAdminWriteOffResponseAllOfFromJSON(json: any): PaginatedAdminWriteOffResponseAllOf {
+    return PaginatedAdminWriteOffResponseAllOfFromJSONTyped(json, false);
 }
 
-export function PaginatedWriteOffResponseAllOfFromJSONTyped(
+export function PaginatedAdminWriteOffResponseAllOfFromJSONTyped(
     json: any,
     ignoreDiscriminator: boolean,
-): PaginatedWriteOffResponseAllOf {
+): PaginatedAdminWriteOffResponseAllOf {
     if (json === undefined || json === null) {
         return json;
     }
@@ -56,7 +56,7 @@ export function PaginatedWriteOffResponseAllOfFromJSONTyped(
     };
 }
 
-export function PaginatedWriteOffResponseAllOfToJSON(value?: PaginatedWriteOffResponseAllOf | null): any {
+export function PaginatedAdminWriteOffResponseAllOfToJSON(value?: PaginatedAdminWriteOffResponseAllOf | null): any {
     if (value === undefined) {
         return undefined;
     }

@@ -38,6 +38,8 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                         label="Артикул"
                         rules={{
                             required: validationRules.required,
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(50),
                         }}
                     />
                     <FormInput
@@ -46,6 +48,8 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                         label="Наименование товара"
                         rules={{
                             required: validationRules.required,
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(50),
                         }}
                     />
                     <FormInput
@@ -56,9 +60,20 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                         rules={{
                             required: validationRules.required,
                             min: validationRules.min(1),
+                            max: validationRules.min(9999),
                         }}
                     />
-                    <FormTextArea control={control} name="description" label="Описание товара" rows={4} cols={50} />
+                    <FormTextArea
+                        control={control}
+                        name="description"
+                        label="Описание товара"
+                        rows={4}
+                        cols={50}
+                        rules={{
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(500),
+                        }}
+                    />
                     <FormCheckbox control={control} name="available" label="Товар в наличии" />
                 </div>
                 <button type="submit" className="btn btn-primary md:self-start" disabled={formState.isSubmitting}>
