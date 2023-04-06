@@ -1,13 +1,11 @@
-import { ButtonSkeleton, SkeletonContainer } from '../../components/Skeleton';
 import { useActivitiesQuery, useProductsCatalogQuery, useWalletQuery } from '../../modules/loyalty';
 
 import { ActivityCard } from './ActivityCard';
-import { Button } from '../../components/Button';
 import { Grid } from '../../components/Grid';
 import { PageNav } from '../../components/AuthUserRouteLayout';
 import { PageSection } from '../../components/PageSection';
-import { ProductCard } from '../../components/ProductCard';
-import { ReactNode } from 'react';
+import { ProductAvailability } from '../../components/CreateOrderButton';
+import { ProductCard } from './ProductCard';
 import { WalletCard } from '../../components/WalletCard';
 import { range } from '../../utils/range';
 import { useScrollToHash } from '../../components/useScrollToHash';
@@ -47,25 +45,20 @@ export const MainPage = () => {
             </PageSection>
             <PageSection id="products" className="mt-6 md:mt-10" caption="На что можно потратить вольты">
                 <Grid>
-                    {productsCatalogQuery.status !== 'success' &&
-                        range(3).map((n) => <ProductCard key={n} skeleton withPrice withAction />)}
+                    {productsCatalogQuery.status !== 'success' && range(3).map((n) => <ProductCard key={n} skeleton />)}
                     {productsCatalogQuery.status === 'success' &&
                         productsCatalogQuery.data.map((product) => {
-                            let action: ReactNode;
+                            let availability: ProductAvailability;
                             if (!product.available) {
-                                action = <Button disabled>Нет в наличии</Button>;
+                                availability = 'not-available';
                             } else if (!walletQuery.isSuccess) {
-                                action = (
-                                    <SkeletonContainer>
-                                        <ButtonSkeleton />
-                                    </SkeletonContainer>
-                                );
+                                availability = 'processing';
                             } else if (walletQuery.data.balance - product.price < 0) {
-                                action = <Button disabled>Недостаточно баллов</Button>;
+                                availability = 'no-tokens';
                             } else {
-                                action = <Button primary>Заказать</Button>;
+                                availability = 'available';
                             }
-                            return <ProductCard key={product.id} product={product} showPrice action={action} />;
+                            return <ProductCard key={product.id} product={product} availability={availability} />;
                         })}
                 </Grid>
             </PageSection>

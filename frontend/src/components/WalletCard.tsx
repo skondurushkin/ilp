@@ -1,10 +1,11 @@
+import { ReactElement, useMemo } from 'react';
 import { Skeleton, SkeletonContainer } from './Skeleton';
 
-import { ReactElement } from 'react';
 import { ReactComponent as TokenIcon } from '../assets/token.svg';
 import { TypedLink } from '../router';
 import { WalletResponse } from '../api';
 import loyaltyProgramCardUrl from '../assets/loyalty-program-card.png';
+import { range } from '../utils/range';
 import { twMerge } from 'tailwind-merge';
 
 export interface WalletCardProps extends WalletViewProps {
@@ -82,6 +83,12 @@ function EmptyWalletView(props: WalletViewProps) {
 
 function WalletView(props: WalletViewProps): ReactElement {
     const { wallet, extended } = props;
+
+    const maxAmountLength = useMemo(
+        () => Math.max(...wallet.operations.map((op) => op.amount.toString().length)),
+        [wallet],
+    );
+
     return (
         <>
             <div className="text-xs leading-4">Мой баланс</div>
@@ -101,9 +108,8 @@ function WalletView(props: WalletViewProps): ReactElement {
                             return (
                                 <li key={item.id}>
                                     <span className="text-sm leading-[110%] text-white md:text-base">
-                                        <span className="font-bold">
-                                            {dir}
-                                            {item.amount}
+                                        <span className="font-mono font-bold">
+                                            {normalizeAmount(dir, item.amount, maxAmountLength)}
                                         </span>{' '}
                                         <TokenIcon className="inline h-3 w-3" /> {item.name}
                                     </span>
@@ -118,6 +124,13 @@ function WalletView(props: WalletViewProps): ReactElement {
             )}
         </>
     );
+}
+
+function normalizeAmount(dir: string, amount: number, length: number): string {
+    const prefix = range(length - amount.toString().length)
+        .map(() => '\u00A0')
+        .join('');
+    return `${prefix}${dir}${amount}`;
 }
 
 interface SkeletonViewProps {
