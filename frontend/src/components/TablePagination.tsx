@@ -1,3 +1,4 @@
+import { Button, ButtonProps } from './Button';
 import type { Table as ITable, RowData } from '@tanstack/react-table';
 
 import { ReactComponent as ChevronLeftSVG } from '../assets/chevron-left.svg';
@@ -11,8 +12,8 @@ interface TablePaginationProps<TData extends RowData> {
 export const TablePagination = <TData extends RowData>({ table }: TablePaginationProps<TData>) => {
     return (
         <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
-            <span className="btn-black text-pr flex items-center gap-1 border-none">
-                <div className="text-base text-white">Страница</div>
+            <span className="text-pr flex items-center gap-1 border-none px-3 py-2 text-white">
+                <span className="text-base text-white">Страница</span>
                 <strong>
                     {table.getState().pagination.pageIndex + 1} из {table.getPageCount()}
                 </strong>
@@ -22,7 +23,7 @@ export const TablePagination = <TData extends RowData>({ table }: TablePaginatio
                     <span className="text-white">Перейти к</span>
                     <input
                         type="number"
-                        className="input form-input h-10 w-16 border border-gray bg-black text-white"
+                        className="input form-input border-gray h-10 w-16 border bg-black text-white"
                         value={table.getState().pagination.pageIndex + 1}
                         onChange={(e) => {
                             const page = e.target.value ? Number(e.target.value) - 1 : 0;
@@ -31,35 +32,26 @@ export const TablePagination = <TData extends RowData>({ table }: TablePaginatio
                     />
                 </div>
                 <div className="flex gap-2">
-                    <button
-                        className="btn-black flex items-center"
-                        onClick={() => table.setPageIndex(0)}
-                        disabled={!table.getCanPreviousPage()}
-                    >
+                    <PagingButton onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
                         <ChevronLeftSVG className="h-4 w-4 stroke-white" />
                         <ChevronLeftSVG className="-ml-2 h-4 w-4 stroke-white" />
-                    </button>
-                    <button
-                        className="btn-black"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
+                    </PagingButton>
+                    <PagingButton onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                         <ChevronLeftSVG className="h-4 w-4 stroke-white" />
-                    </button>
-                    <button className="btn-black" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                    </PagingButton>
+                    <PagingButton onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
                         <ChevronRightSVG className="h-4 w-4 stroke-white" />
-                    </button>
-                    <button
-                        className="btn-black flex items-center"
+                    </PagingButton>
+                    <PagingButton
                         onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                         disabled={!table.getCanNextPage()}
                     >
                         <ChevronRightSVG className="-mr-2 h-4 w-4 stroke-white" />
                         <ChevronRightSVG className="h-4 w-4 stroke-white" />
-                    </button>
+                    </PagingButton>
                 </div>
                 <select
-                    className="select form-select h-10 border border-gray bg-black text-white"
+                    className="select form-select border-gray h-10 border bg-black px-3 py-2 text-white"
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
                         table.setPageSize(Number(e.target.value));
@@ -74,4 +66,8 @@ export const TablePagination = <TData extends RowData>({ table }: TablePaginatio
             </div>
         </div>
     );
+};
+
+const PagingButton = (props: ButtonProps) => {
+    return <Button black className="border-gray flex items-center px-3 py-2" {...props} />;
 };

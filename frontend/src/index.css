@@ -44,11 +44,15 @@ html {
     }
 
     .btn-black {
-        @apply border-gray disabled:text-gray border bg-black px-3 py-2 text-center text-sm leading-[110%] text-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none md:text-base;
+        @apply border-black bg-black text-white;
     }
 
     .btn-primary {
         @apply bg-primary border-primary;
+    }
+
+    .btn-small {
+        @apply px-2 py-1 text-xs leading-[110%];
     }
 
     .link {
