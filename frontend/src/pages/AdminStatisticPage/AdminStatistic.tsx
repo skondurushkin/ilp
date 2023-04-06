@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { useQueryBalanceStatistic, useQueryUsersStatistic } from '../../modules/admin';
 
-// eslint-disable-next-line import/no-unresolved
-import { AxisOptions } from 'react-charts/types/types';
+import type { AxisOptions } from 'react-charts';
 import { BalanceStatisticResponseInnerDataInner } from '../../api';
 import { Chart } from 'react-charts';
+import { Chips } from '../../components/Chips';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
 import { twMerge } from 'tailwind-merge';
-import { useTheme } from '../../theme';
-
-const DAY = 'day';
-const WEEK = 'week';
-const MONTH = 'month';
-const ALL_TIME = 'all';
 
 type BalanceChip = 'day' | 'week' | 'month';
 type UsersChip = 'day' | 'all';
@@ -25,9 +19,7 @@ export function AdminStatisticPage() {
     const [focused, setFocused] = useState({
         activeSeriesIndex: -1,
         activeDatumIndex: -1,
-        title: undefined,
     });
-    const theme = useTheme();
 
     const { data: balanceData, isLoading: isLoadingBalance } = useQueryBalanceStatistic({
         balancePeriodRequest: { period: balanceChip },
@@ -58,36 +50,17 @@ export function AdminStatisticPage() {
             <div className="text-h1">Статистика</div>
             <div className="flex flex-col gap-4">
                 <div className="flex gap-2 pl-2 ">
-                    <button
-                        className={twMerge(
-                            'chip h-6',
-                            theme === 'dark' && 'chip-dark',
-                            balanceChip === DAY && 'chip-active',
-                        )}
-                        onClick={() => setBalanceChip(DAY)}
-                    >
-                        день
-                    </button>
-                    <button
-                        className={twMerge(
-                            'chip h-6',
-                            theme === 'dark' && 'chip-dark',
-                            balanceChip === WEEK && 'chip-active',
-                        )}
-                        onClick={() => setBalanceChip(WEEK)}
-                    >
-                        неделя
-                    </button>
-                    <button
-                        className={twMerge(
-                            'chip h-6',
-                            theme === 'dark' && 'chip-dark',
-                            balanceChip === MONTH && 'chip-active',
-                        )}
-                        onClick={() => setBalanceChip(MONTH)}
-                    >
-                        месяц
-                    </button>
+                    <Chips
+                        options={
+                            [
+                                { label: 'день', value: 'day' },
+                                { label: 'неделя', value: 'week' },
+                                { label: 'месяц', value: 'month' },
+                            ] as const
+                        }
+                        value={balanceChip}
+                        onChange={setBalanceChip}
+                    />
                     <a href="/" download className="ml-auto">
                         <button className={twMerge('chip h-6', 'chip-active')}>Скачать XML</button>
                     </a>
@@ -115,7 +88,6 @@ export function AdminStatisticPage() {
                                     }),
                                     onFocusDatum: (focused) =>
                                         setFocused({
-                                            title: undefined,
                                             activeSeriesIndex: focused ? focused.seriesIndex : -1,
                                             activeDatumIndex: focused ? focused.index : -1,
                                         }),
@@ -126,12 +98,10 @@ export function AdminStatisticPage() {
                     <div className="">
                         <div className="flex-column py-4 pl-6">
                             <div className="text-white">
-                                <div className="inline-block h-[10px] w-[10px] rounded-[10px] bg-primary" /> -
-                                Начисления
+                                <div className="inline-block h-4 w-4 rounded-full bg-primary" /> - Начисления
                             </div>
                             <div className="text-white">
-                                <div className="inline-block h-[10px] w-[10px] rounded-[10px] bg-error text-white" /> -
-                                Списания
+                                <div className="inline-block h-4 w-4 rounded-full bg-error text-white" /> - Списания
                             </div>
                         </div>
                     </div>
@@ -139,22 +109,16 @@ export function AdminStatisticPage() {
             </div>
             <div>
                 <div className="flex gap-2 p-2">
-                    <button
-                        className={twMerge('chip h-6', usersChip === DAY && 'chip-active')}
-                        onClick={() => setUsersChip(DAY)}
-                    >
-                        день
-                    </button>
-                    <button
-                        className={twMerge(
-                            'chip h-6',
-                            theme === 'dark' && 'chip-dark',
-                            usersChip === ALL_TIME && 'chip-active',
-                        )}
-                        onClick={() => setUsersChip(ALL_TIME)}
-                    >
-                        всё время
-                    </button>
+                    <Chips
+                        options={
+                            [
+                                { value: 'day', label: 'день' },
+                                { value: 'all', label: 'всё время' },
+                            ] as const
+                        }
+                        value={usersChip}
+                        onChange={setUsersChip}
+                    />
                 </div>
                 <TopProducts />
                 <TopActivities />

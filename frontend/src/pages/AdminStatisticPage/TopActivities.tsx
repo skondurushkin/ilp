@@ -3,8 +3,7 @@ import { useCallback, useMemo } from 'react';
 
 import { ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY } from '../../modules/admin';
 import { AdminTable } from '../../components/AdminTable';
-// eslint-disable-next-line import/named
-import { ColumnDef } from '@tanstack/table-core';
+import type { ColumnDef } from '@tanstack/table-core';
 
 export const TopActivities = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
