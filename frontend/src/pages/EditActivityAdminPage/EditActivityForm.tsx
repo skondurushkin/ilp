@@ -47,6 +47,7 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                         name="amount"
                         label="Стоимость в вольтах"
                         rules={{
+                            valueAsNumber: true,
                             min: validationRules.min(1),
                             max: validationRules.max(9999),
                             required: validationRules.required,

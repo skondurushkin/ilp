@@ -53,8 +53,10 @@ export const EditProductForm = (props: EditProductFormProps) => {
                         name="price"
                         label="Стоимость в вольтах"
                         rules={{
-                            required: validationRules.required,
+                            valueAsNumber: true,
                             min: validationRules.min(1),
+                            max: validationRules.max(9999),
+                            required: validationRules.required,
                         }}
                     />
                     <FormTextArea control={control} name="description" label="Описание товара" rows={4} cols={50} />

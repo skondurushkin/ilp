@@ -58,9 +58,10 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                         name="price"
                         label="Стоимость в вольтах"
                         rules={{
-                            required: validationRules.required,
+                            valueAsNumber: true,
                             min: validationRules.min(1),
                             max: validationRules.max(9999),
+                            required: validationRules.required,
                         }}
                     />
                     <FormTextArea
