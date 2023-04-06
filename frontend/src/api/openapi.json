@@ -1254,6 +1254,146 @@
                 }
             }
         },
+        "/api/ilp/admin/statistic/balance": {
+            "post": {
+                "operationId": "browseStatisticBalance",
+                "summary": "balance accrual and write-off statistics for admin",
+                "tags": ["admin"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BalancePeriodRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BalanceStatisticResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/admin/statistic/users": {
+            "post": {
+                "operationId": "browseStatisticUsers",
+                "summary": "users log-in statistics for admin",
+                "tags": ["admin"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UsersPeriodRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UsersStatisticResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/admin/statistic/articles": {
+            "post": {
+                "operationId": "browseStatisticArticles",
+                "summary": "articles statistics for admin",
+                "tags": ["admin"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/PageRequest"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "period": {
+                                                "type": "string",
+                                                "enum": ["day", "week", "month"]
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "page loaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedArticleStatisticResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ilp/admin/statistic/activities": {
+            "post": {
+                "operationId": "browseStatisticActivities",
+                "summary": "activities statistics for admin",
+                "tags": ["admin"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/PageRequest"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "period": {
+                                                "type": "string",
+                                                "enum": ["day", "all"]
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "page loaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedActivitiesStatisticResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/ilp/file/upload/{scope}": {
             "post": {
                 "operationId": "uploadFile",
@@ -1411,6 +1551,199 @@
             }
         },
         "schemas": {
+            "BalancePeriodRequest": {
+                "type": "object",
+                "properties": {
+                    "period": {
+                        "type": "string",
+                        "enum": ["day", "week", "month"]
+                    }
+                },
+                "required": ["period"]
+            },
+            "BalanceStatisticResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "label": {
+                            "type": "string",
+                            "description": "Начисления или Списания"
+                        },
+                        "data": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-04-21T17:32:28"
+                                    },
+                                    "count": {
+                                        "type": "number",
+                                        "minimum": 0
+                                    }
+                                },
+                                "required": ["date", "count"]
+                            }
+                        }
+                    },
+                    "required": ["label", "data"]
+                }
+            },
+            "UsersPeriodRequest": {
+                "type": "object",
+                "properties": {
+                    "period": {
+                        "type": "string",
+                        "enum": ["day", "all"]
+                    }
+                },
+                "required": ["period"]
+            },
+            "UsersStatisticResponse": {
+                "type": "object",
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "description": "Пользователи"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-04-21T17:32:28"
+                                },
+                                "count": {
+                                    "type": "number",
+                                    "minimum": 0
+                                }
+                            },
+                            "required": ["date", "count"]
+                        }
+                    }
+                },
+                "required": ["label", "data"]
+            },
+            "ArticleStatisticResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "code": {
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 500,
+                        "nullable": true
+                    },
+                    "price": {
+                        "$ref": "#/components/schemas/Price"
+                    },
+                    "available": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "imageLink": {
+                        "type": "string"
+                    },
+                    "extension": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "orders": {
+                        "type": "number",
+                        "minimum": 0
+                    }
+                },
+                "required": ["id", "code", "name", "price", "available", "orders"]
+            },
+            "PaginatedArticleStatisticResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginatedResult"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ArticleStatisticResponse"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "ActivityStatisticResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/Identifier"
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 200
+                    },
+                    "amount": {
+                        "$ref": "#/components/schemas/Amount"
+                    },
+                    "infoLink": {
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "extension": {
+                        "type": "object"
+                    },
+                    "orders": {
+                        "type": "number",
+                        "minimum": 0
+                    }
+                },
+                "required": ["id", "name", "active", "infoLink", "amount", "orders"]
+            },
+            "PaginatedActivitiesStatisticResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaginatedResult"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ActivityStatisticResponse"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
             "WriteOffStatus": {
                 "type": "string",
                 "enum": ["created", "processing", "delivering", "completed", "cancelled"]

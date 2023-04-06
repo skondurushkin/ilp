@@ -14,11 +14,12 @@ const DEFAULT_PAGINATION_STATE = { pageIndex: 0, pageSize: 10 };
 export const AdminTable = <TData extends RowData>({
     columns,
     queryKey,
+    initialSort = [],
     queryData,
     globalFilterPlaceholder,
 }: AdminTableProps<TData>) => {
     const [globalFilter, setGlobalFilter] = useState('');
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>(initialSort);
 
     const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>(DEFAULT_PAGINATION_STATE);
 
@@ -94,7 +95,7 @@ export const AdminTable = <TData extends RowData>({
                     className="input form-input w-full pl-12"
                     placeholder={globalFilterPlaceholder ?? 'Поиск по всем колонкам'}
                 />
-                <SearchSVG className="stroke-gray absolute bottom-3 left-3" />
+                <SearchSVG className="absolute bottom-3 left-3 stroke-gray" />
             </div>
             <div className="flex flex-col gap-6 bg-black p-6">
                 <Table table={table} isFetching={dataQuery.isFetching} />
@@ -106,6 +107,7 @@ export const AdminTable = <TData extends RowData>({
 
 interface AdminTableProps<TData extends RowData> {
     globalFilterPlaceholder?: string;
+    initialSort?: SortingState;
     columns: ColumnDef<TData, unknown>[];
     queryKey: string | string[];
     queryData: (body: PageRequest) => Promise<
