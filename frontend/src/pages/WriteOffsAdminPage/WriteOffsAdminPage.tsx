@@ -45,7 +45,7 @@ export const WriteOffsAdminPage = () => {
                 cell: (info) => {
                     const { user } = info.row.original;
                     return (
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col items-start gap-2">
                             <div>
                                 <p className="text-base text-white">{user.name.lastName}</p>
                                 <p className="text-base text-white">

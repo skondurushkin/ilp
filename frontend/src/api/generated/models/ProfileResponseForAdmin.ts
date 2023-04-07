@@ -22,87 +22,93 @@ import type { Name } from './Name';
 /**
  *
  * @export
- * @interface ProfileResponse
+ * @interface ProfileResponseForAdmin
  */
-export interface ProfileResponse {
+export interface ProfileResponseForAdmin {
     /**
      * generic identifier
      * @type {number}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     id: number;
     /**
      *
      * @type {Name}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     fio: Name;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     email: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     phone: string;
     /**
      *
      * @type {Set<ERole>}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     roles: Set<ERole>;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     avatarLink: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     jobPosition: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     city: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     country: string;
     /**
      *
      * @type {boolean}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     readonly active: boolean;
     /**
      *
      * @type {Date}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     startDate?: Date;
     /**
      *
      * @type {Date}
-     * @memberof ProfileResponse
+     * @memberof ProfileResponseForAdmin
      */
     endDate?: Date;
+    /**
+     *
+     * @type {number}
+     * @memberof ProfileResponseForAdmin
+     */
+    balance: number;
 }
 
 /**
- * Check if a given object implements the ProfileResponse interface.
+ * Check if a given object implements the ProfileResponseForAdmin interface.
  */
-export function instanceOfProfileResponse(value: object): boolean {
+export function instanceOfProfileResponseForAdmin(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'fio' in value;
@@ -114,15 +120,16 @@ export function instanceOfProfileResponse(value: object): boolean {
     isInstance = isInstance && 'city' in value;
     isInstance = isInstance && 'country' in value;
     isInstance = isInstance && 'active' in value;
+    isInstance = isInstance && 'balance' in value;
 
     return isInstance;
 }
 
-export function ProfileResponseFromJSON(json: any): ProfileResponse {
-    return ProfileResponseFromJSONTyped(json, false);
+export function ProfileResponseForAdminFromJSON(json: any): ProfileResponseForAdmin {
+    return ProfileResponseForAdminFromJSONTyped(json, false);
 }
 
-export function ProfileResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProfileResponse {
+export function ProfileResponseForAdminFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProfileResponseForAdmin {
     if (json === undefined || json === null) {
         return json;
     }
@@ -139,10 +146,11 @@ export function ProfileResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         active: json['active'],
         startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
         endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
+        balance: json['balance'],
     };
 }
 
-export function ProfileResponseToJSON(value?: ProfileResponse | null): any {
+export function ProfileResponseForAdminToJSON(value?: ProfileResponseForAdmin | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -161,5 +169,6 @@ export function ProfileResponseToJSON(value?: ProfileResponse | null): any {
         country: value.country,
         startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
         endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
+        balance: value.balance,
     };
 }

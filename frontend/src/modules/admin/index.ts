@@ -1,4 +1,5 @@
 export * from './activities';
 export * from './products';
-export * from './walltet';
+export * from './wallet';
+export * from './profile';
 export * from './statistic';

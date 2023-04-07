@@ -22,87 +22,93 @@ import type { Name } from './Name';
 /**
  *
  * @export
- * @interface ProfileResponse
+ * @interface GetProfileByIdAsAdmin200Response
  */
-export interface ProfileResponse {
+export interface GetProfileByIdAsAdmin200Response {
     /**
      * generic identifier
      * @type {number}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     id: number;
     /**
      *
      * @type {Name}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     fio: Name;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     email: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     phone: string;
     /**
      *
      * @type {Set<ERole>}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     roles: Set<ERole>;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     avatarLink: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     jobPosition: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     city: string;
     /**
      *
      * @type {string}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     country: string;
     /**
      *
      * @type {boolean}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     readonly active: boolean;
     /**
      *
      * @type {Date}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     startDate?: Date;
     /**
      *
      * @type {Date}
-     * @memberof ProfileResponse
+     * @memberof GetProfileByIdAsAdmin200Response
      */
     endDate?: Date;
+    /**
+     *
+     * @type {number}
+     * @memberof GetProfileByIdAsAdmin200Response
+     */
+    balance: number;
 }
 
 /**
- * Check if a given object implements the ProfileResponse interface.
+ * Check if a given object implements the GetProfileByIdAsAdmin200Response interface.
  */
-export function instanceOfProfileResponse(value: object): boolean {
+export function instanceOfGetProfileByIdAsAdmin200Response(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'fio' in value;
@@ -114,15 +120,19 @@ export function instanceOfProfileResponse(value: object): boolean {
     isInstance = isInstance && 'city' in value;
     isInstance = isInstance && 'country' in value;
     isInstance = isInstance && 'active' in value;
+    isInstance = isInstance && 'balance' in value;
 
     return isInstance;
 }
 
-export function ProfileResponseFromJSON(json: any): ProfileResponse {
-    return ProfileResponseFromJSONTyped(json, false);
+export function GetProfileByIdAsAdmin200ResponseFromJSON(json: any): GetProfileByIdAsAdmin200Response {
+    return GetProfileByIdAsAdmin200ResponseFromJSONTyped(json, false);
 }
 
-export function ProfileResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProfileResponse {
+export function GetProfileByIdAsAdmin200ResponseFromJSONTyped(
+    json: any,
+    ignoreDiscriminator: boolean,
+): GetProfileByIdAsAdmin200Response {
     if (json === undefined || json === null) {
         return json;
     }
@@ -139,10 +149,11 @@ export function ProfileResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         active: json['active'],
         startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
         endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
+        balance: json['balance'],
     };
 }
 
-export function ProfileResponseToJSON(value?: ProfileResponse | null): any {
+export function GetProfileByIdAsAdmin200ResponseToJSON(value?: GetProfileByIdAsAdmin200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -161,5 +172,6 @@ export function ProfileResponseToJSON(value?: ProfileResponse | null): any {
         country: value.country,
         startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
         endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
+        balance: value.balance,
     };
 }

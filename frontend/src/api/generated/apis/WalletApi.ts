@@ -16,7 +16,6 @@ import * as runtime from '../runtime';
 
 import type {
     AccrualResponse,
-    CreateNewAccrualRequest,
     PageRequest,
     PaginatedAccrualResponse,
     PaginatedOperationResponse,
@@ -28,8 +27,6 @@ import type {
 import {
     AccrualResponseFromJSON,
     AccrualResponseToJSON,
-    CreateNewAccrualRequestFromJSON,
-    CreateNewAccrualRequestToJSON,
     PageRequestFromJSON,
     PageRequestToJSON,
     PaginatedAccrualResponseFromJSON,
@@ -64,11 +61,6 @@ export interface BrowseWriteOffsForUserIdRequest {
     pageRequest?: PageRequest;
 }
 
-export interface CreateNewAccrualOperationRequest {
-    userId: number;
-    createNewAccrualRequest?: CreateNewAccrualRequest;
-}
-
 export interface GetAccrualRequest {
     accrualId: number;
 }
@@ -78,11 +70,6 @@ export interface GetOwnWriteOffRequest {
 }
 
 export interface GetWalletHistoryRequest {
-    pageRequest?: PageRequest;
-}
-
-export interface GetWalletHistoryForUserIdRequest {
-    userId: number;
     pageRequest?: PageRequest;
 }
 
@@ -299,62 +286,6 @@ export class WalletApi extends runtime.BaseAPI {
     }
 
     /**
-     * create new accrual for user identified by user_id
-     */
-    async createNewAccrualRaw(
-        requestParameters: CreateNewAccrualOperationRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<AccrualResponse>> {
-        if (requestParameters.userId === null || requestParameters.userId === undefined) {
-            throw new runtime.RequiredError(
-                'userId',
-                'Required parameter requestParameters.userId was null or undefined when calling createNewAccrual.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/wallet/accrual/{user_id}`.replace(
-                    `{${'user_id'}}`,
-                    encodeURIComponent(String(requestParameters.userId)),
-                ),
-                method: 'POST',
-                headers: headerParameters,
-                query: queryParameters,
-                body: CreateNewAccrualRequestToJSON(requestParameters.createNewAccrualRequest),
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AccrualResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * create new accrual for user identified by user_id
-     */
-    async createNewAccrual(
-        requestParameters: CreateNewAccrualOperationRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<AccrualResponse> {
-        const response = await this.createNewAccrualRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * get accrual record by its identifier
      */
     async getAccrualRaw(
@@ -503,62 +434,6 @@ export class WalletApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedOperationResponse> {
         const response = await this.getWalletHistoryRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * get history of operations of the user identified by user_id
-     */
-    async getWalletHistoryForUserIdRaw(
-        requestParameters: GetWalletHistoryForUserIdRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<PaginatedOperationResponse>> {
-        if (requestParameters.userId === null || requestParameters.userId === undefined) {
-            throw new runtime.RequiredError(
-                'userId',
-                'Required parameter requestParameters.userId was null or undefined when calling getWalletHistoryForUserId.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/wallet/history/{user_id}`.replace(
-                    `{${'user_id'}}`,
-                    encodeURIComponent(String(requestParameters.userId)),
-                ),
-                method: 'POST',
-                headers: headerParameters,
-                query: queryParameters,
-                body: PageRequestToJSON(requestParameters.pageRequest),
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedOperationResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * get history of operations of the user identified by user_id
-     */
-    async getWalletHistoryForUserId(
-        requestParameters: GetWalletHistoryForUserIdRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<PaginatedOperationResponse> {
-        const response = await this.getWalletHistoryForUserIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
