@@ -1,6 +1,7 @@
 package ru.itone.ilp.server.jwt.advice;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.exception.ApiExceptions.TokenRefreshException;
+import ru.itone.ilp.exception.FileOperationException;
 import ru.itone.ilp.openapi.model.ErrorMessage;
 import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 
@@ -27,6 +31,18 @@ import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 public class ApiControllerAdvice {
 
     private final ObjectMapper objectMapper;
+
+
+    @ExceptionHandler(value = FileOperationException.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public ErrorMessage handleFileOperationException(FileOperationException ex, WebRequest request) {
+        return buildErrorMessage(INTERNAL_SERVER_ERROR, ex, request);
+    }
+
+    @ExceptionHandler(value = ResponseStatusException.class)
+    public ErrorMessage handleStatusCodeException(ResponseStatusException ex, WebRequest request) {
+        return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
+    }
 
 
     @ExceptionHandler(value = HttpStatusCodeException.class)
@@ -39,6 +55,14 @@ public class ApiControllerAdvice {
     public ErrorMessage handleServletException(ServletException ex, WebRequest request) {
         return buildErrorMessage(BAD_REQUEST, ex, request);
     }
+
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorMessage handleMethodArgumentValidationException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        return buildErrorMessage(BAD_REQUEST, ex, request);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
