@@ -10,6 +10,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @UtilityClass
 public class ApiExceptions {
 
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public static class InternalServerErrorException extends RuntimeException {
+        public InternalServerErrorException(String message) {
+            super(message);
+        }
+        public InternalServerErrorException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public static class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String message) {

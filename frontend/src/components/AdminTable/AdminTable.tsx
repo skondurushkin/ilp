@@ -95,7 +95,7 @@ export const AdminTable = <TData extends RowData>({
                     className="input form-input w-full pl-12"
                     placeholder={globalFilterPlaceholder ?? 'Поиск по всем колонкам'}
                 />
-                <SearchSVG className="absolute bottom-3 left-3 stroke-gray" />
+                <SearchSVG className="stroke-gray absolute bottom-3 left-3" />
             </div>
             <div className="flex flex-col gap-6 bg-black p-6">
                 <Table table={table} isFetching={dataQuery.isFetching} />

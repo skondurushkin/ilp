@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 import ru.itone.ilp.exception.ApiExceptions;
@@ -22,20 +23,20 @@ import ru.itone.ilp.services.articles.ArticleService;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ArticleController implements ArticleApi {
+public class ArticleController extends LinkResolver implements ArticleApi {
 
     private final ArticleService articleService;
 
     @Override
     public ResponseEntity<PaginatedArticleResponse> browseArticles(PageRequest pageRequest) {
-        return ResponseEntity.ok(articleService.paginate(pageRequest));
+        return ResponseEntity.ok(resolveLinks(articleService.paginate(pageRequest)));
     }
 
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<ArticleResponse> createArticle(ArticleRequest articleRequest) {
-        return Optional.ofNullable(articleService.createArticle(articleRequest))
-                .map( a -> new ResponseEntity<>(a, HttpStatus.CREATED))
+        return Optional.ofNullable(articleService.createArticle(articleRequest)).map(this::resolveLink)
+                .map(a -> new ResponseEntity<>(a, HttpStatus.CREATED))
                 .orElseThrow(() -> new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
@@ -48,19 +49,34 @@ public class ArticleController implements ArticleApi {
 
     @Override
     public ResponseEntity<ArticleResponse> getArticleById(Integer articleId) {
-        return articleService.getArticleById(articleId)
-                .map(ResponseEntity::ok)
+        return articleService.getArticleById(articleId).map(this::resolveLink).map(ResponseEntity::ok)
                 .orElseThrow(() -> new ApiExceptions.ResourceNotFoundException("Article record not found."));
     }
 
     @Override
     public ResponseEntity<List<ArticleResponse>> searchArticles(String searchKey) {
-        return ResponseEntity.ok(articleService.searchArticleByText(searchKey));
+        return ResponseEntity.ok(resolveLinks(articleService.searchArticleByText(searchKey)));
     }
 
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<ArticleResponse> updateArticle(ArticleUpdateRequest articleUpdateRequest) {
-        return ResponseEntity.ok(articleService.update(articleUpdateRequest));
+        return ResponseEntity.ok(resolveLink(articleService.update(articleUpdateRequest)));
+    }
+
+    ArticleResponse resolveLink(ArticleResponse response) {
+        return response.imageLink(resolve(response.getImageLink()));
+    }
+
+    List<ArticleResponse> resolveLinks(List<ArticleResponse> articles) {
+        if (!CollectionUtils.isEmpty(articles)) {
+            articles.forEach(this::resolveLink);
+        }
+        return articles;
+    }
+
+    PaginatedArticleResponse resolveLinks(PaginatedArticleResponse page) {
+        resolveLinks(page.getResults());
+        return page;
     }
 }

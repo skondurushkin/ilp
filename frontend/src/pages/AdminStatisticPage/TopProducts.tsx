@@ -27,7 +27,7 @@ export const TopProducts = () => {
                     return (
                         <div className="flex flex-col gap-2">
                             <p className="text-base text-white">{name}</p>
-                            <p className="text-small text-ellipsis text-gray">{description}</p>
+                            <p className="text-small text-gray text-ellipsis">{description}</p>
                         </div>
                     );
                 },
