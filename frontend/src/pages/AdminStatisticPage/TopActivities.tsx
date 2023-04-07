@@ -31,7 +31,7 @@ export const TopActivities = () => {
                                 target="_blank"
                                 rel="noreferrer"
                                 href={infoLink}
-                                className="text-small text-ellipsis text-gray underline"
+                                className="text-small text-gray text-ellipsis underline"
                             >
                                 {infoLink}
                             </a>

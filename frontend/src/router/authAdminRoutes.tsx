@@ -9,6 +9,8 @@ const EditProductAdminPage = React.lazy(() => import('../pages/EditProductAdminP
 const ProductsAdminPage = React.lazy(() => import('../pages/ProductsAdminPage'));
 const WriteOffsAdminPage = React.lazy(() => import('../pages/WriteOffsAdminPage'));
 const AdminStatisticPage = React.lazy(() => import('../pages/AdminStatisticPage'));
+const UsersAdminPage = React.lazy(() => import('../pages/UsersAdminPage'));
+const UserAdminPage = React.lazy(() => import('../pages/UserAdminPage'));
 
 export const authAdminRoutes = [
     {
@@ -46,9 +48,19 @@ export const authAdminRoutes = [
                 element: <EditProductAdminPage />,
             },
             {
-                path: '/admin/write-offs',
+                path: 'write-offs',
                 index: true,
                 element: <WriteOffsAdminPage />,
+            },
+            {
+                path: 'users',
+                index: true,
+                element: <UsersAdminPage />,
+            },
+            {
+                path: 'users/:userId',
+                index: true,
+                element: <UserAdminPage />,
             },
         ],
     },

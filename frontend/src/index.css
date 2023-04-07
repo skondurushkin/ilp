@@ -16,15 +16,15 @@ html {
 
 @layer components {
     .app-bg {
-        @apply bg-white text-black dark:bg-gray-dark dark:text-white;
+        @apply dark:bg-gray-dark bg-white text-black dark:text-white;
     }
 
     .input {
-        @apply h-[50px] border-2 px-3 text-black read-only:text-gray focus:border-success focus:outline-none focus:ring-0;
+        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
     }
 
     .select {
-        @apply h-[50px] border-2 text-black focus:border-success focus:outline-none focus:ring-0;
+        @apply focus:border-success h-[50px] border-2 text-black focus:outline-none focus:ring-0;
     }
 
     .input-error {
@@ -32,11 +32,11 @@ html {
     }
 
     .checkbox {
-        @apply h-6 w-6 border-2 text-black focus:border-success focus:outline-none focus:ring-0 dark:text-gray;
+        @apply focus:border-success dark:text-primary h-6 w-6 border-2 text-black focus:outline-none focus:ring-0;
     }
 
     .textarea {
-        @apply border-2 px-3 text-black focus:border-success focus:outline-none focus:ring-0;
+        @apply focus:border-success border-2 px-3 text-black focus:outline-none focus:ring-0;
     }
 
     .chip {
@@ -52,7 +52,7 @@ html {
     }
 
     .btn {
-        @apply border border-gray bg-white p-4 text-center text-sm leading-[110%] text-black shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none disabled:text-gray md:text-base;
+        @apply border-gray disabled:text-gray border bg-white p-4 text-center text-sm leading-[110%] text-black shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none md:text-base;
     }
 
     .btn-black {

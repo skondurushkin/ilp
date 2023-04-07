@@ -248,11 +248,11 @@
                 }
             }
         },
-        "/api/ilp/profile/{user_id}": {
+        "/api/ilp/admin/profile/{user_id}": {
             "get": {
-                "operationId": "getProfileById",
+                "operationId": "getProfileByIdAsAdmin",
                 "summary": "get user profile by user id",
-                "tags": ["profile"],
+                "tags": ["admin"],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/user_id"
@@ -264,7 +264,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ProfileResponse"
+                                    "$ref": "#/components/schemas/ProfileResponseForAdmin"
                                 }
                             }
                         }
@@ -292,14 +292,20 @@
                 }
             }
         },
-        "/api/ilp/profile/search": {
+        "/api/ilp/admin/profile/search": {
             "get": {
-                "operationId": "searchProfile",
+                "operationId": "searchProfileAsAdmin",
                 "summary": "search for profile",
-                "tags": ["profile"],
+                "tags": ["admin"],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/search_key"
+                    },
+                    {
+                        "$ref": "#/components/parameters/pageSize"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -308,10 +314,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ProfileResponse"
-                                    }
+                                    "$ref": "#/components/schemas/PaginatedProfileResponse"
                                 }
                             }
                         }
@@ -895,11 +898,11 @@
                 }
             }
         },
-        "/api/ilp/wallet/history/{user_id}": {
+        "/api/ilp/admin/wallet/history/{user_id}": {
             "post": {
                 "operationId": "getWalletHistoryForUserId",
                 "summary": "get history of operations of the user identified by user_id",
-                "tags": ["wallet"],
+                "tags": ["admin"],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/user_id"
@@ -1102,11 +1105,11 @@
                 }
             }
         },
-        "/api/ilp/wallet/accrual/{user_id}": {
+        "/api/ilp/admin/wallet/accrual/{user_id}": {
             "post": {
                 "operationId": "createNewAccrual",
                 "summary": "create new accrual for user identified by user_id",
-                "tags": ["wallet"],
+                "tags": ["admin"],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/user_id"
@@ -1548,6 +1551,24 @@
                     "type": "string"
                 },
                 "description": "value for search"
+            },
+            "pageSize": {
+                "in": "query",
+                "name": "pageSize",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                },
+                "description": "requested page size"
+            },
+            "page": {
+                "in": "query",
+                "name": "page",
+                "required": true,
+                "schema": {
+                    "type": "number"
+                },
+                "description": "requested page"
             }
         },
         "schemas": {
@@ -2013,8 +2034,38 @@
                     }
                 }
             },
+            "ProfileResponseForAdmin": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ProfileResponse"
+                    },
+                    {
+                        "type": "object",
+                        "required": ["balance"],
+                        "properties": {
+                            "balance": {
+                                "type": "integer",
+                                "format": "int32",
+                                "minimum": 0
+                            }
+                        }
+                    }
+                ]
+            },
             "ProfileResponse": {
                 "type": "object",
+                "required": [
+                    "id",
+                    "fio",
+                    "email",
+                    "roles",
+                    "avatarLink",
+                    "jobPosition",
+                    "city",
+                    "country",
+                    "phone",
+                    "active"
+                ],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"
@@ -2024,7 +2075,13 @@
                     },
                     "email": {
                         "type": "string",
-                        "format": "email"
+                        "format": "email",
+                        "maxLength": 50
+                    },
+                    "phone": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 20
                     },
                     "roles": {
                         "type": "array",
@@ -2035,6 +2092,18 @@
                     },
                     "avatarLink": {
                         "type": "string"
+                    },
+                    "jobPosition": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "city": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "country": {
+                        "type": "string",
+                        "maxLength": 50
                     },
                     "active": {
                         "type": "boolean",
@@ -2053,8 +2122,7 @@
                         "format": "date",
                         "example": "2023-04-10"
                     }
-                },
-                "required": ["id", "fio", "email", "roles", "active"]
+                }
             },
             "Name": {
                 "type": "object",

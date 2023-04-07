@@ -36,6 +36,12 @@ spring:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5436/ilp}
     username: ${DATASOURCE_USERNAME:ilpuser}
     password: ${DATASOURCE_PASSWORD:ilpuser}
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 64KB
+      max-file-size: 1MB
+      max-request-size: 10MB
 
 logging:
   file:

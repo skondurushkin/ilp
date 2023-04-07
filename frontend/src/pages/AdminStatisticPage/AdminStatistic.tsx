@@ -98,10 +98,10 @@ export function AdminStatisticPage() {
                     <div className="">
                         <div className="flex-column py-4 pl-6">
                             <div className="text-white">
-                                <div className="inline-block h-4 w-4 rounded-full bg-primary" /> - Начисления
+                                <div className="bg-primary inline-block h-4 w-4 rounded-full" /> - Начисления
                             </div>
                             <div className="text-white">
-                                <div className="inline-block h-4 w-4 rounded-full bg-error text-white" /> - Списания
+                                <div className="bg-error inline-block h-4 w-4 rounded-full text-white" /> - Списания
                             </div>
                         </div>
                     </div>

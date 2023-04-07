@@ -56,7 +56,13 @@ export const EditStatusForm = (props: EditStatusFormProps) => {
                 <h1 className="text-h1 text-white">Изменение статуса</h1>
                 <div className="flex flex-col gap-3">
                     <FormInput readOnly control={control} name="date" label="Дата заказа" labelClassName="text-white" />
-                    <FormInput readOnly control={control} name="articleName" label="Приз" labelClassName="text-white" />
+                    <FormInput
+                        readOnly
+                        control={control}
+                        name="articleName"
+                        label="Товар"
+                        labelClassName="text-white"
+                    />
                     <FormSelect
                         control={control}
                         name="status"

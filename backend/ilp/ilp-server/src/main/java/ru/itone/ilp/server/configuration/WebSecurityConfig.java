@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 
     static final String LOGIN_URL = "/api/ilp/auth/login";
     static final String SETTING_URL = "/api/ilp/setting";
+    static final String DOWNLOAD_URL = "/api/ilp/file/**";
 
     protected static final String[] ENDPOINTS_WHITELIST = {
             LOGIN_URL
@@ -121,13 +122,14 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler())
 
                 .and()
+
                 // deactivate session creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
 
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.GET, SETTING_URL).permitAll()
+                        .requestMatchers(HttpMethod.GET, SETTING_URL, DOWNLOAD_URL).permitAll()
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )

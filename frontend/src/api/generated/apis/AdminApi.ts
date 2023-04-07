@@ -15,20 +15,28 @@
 import * as runtime from '../runtime';
 
 import type {
+    AccrualResponse,
     BalancePeriodRequest,
     BalanceStatisticResponseInner,
     BrowseStatisticActivitiesRequest,
     BrowseStatisticArticlesRequest,
+    CreateNewAccrualRequest,
+    ErrorMessage,
     PageRequest,
     PaginatedActivitiesStatisticResponse,
     PaginatedArticleStatisticResponse,
+    PaginatedOperationResponse,
+    PaginatedProfileResponse,
     PaginatedWriteOffResponse,
+    ProfileResponseForAdmin,
     UpdateWriteOffRequest,
     UsersPeriodRequest,
     UsersStatisticResponse,
     WriteOffResponse,
 } from '../models';
 import {
+    AccrualResponseFromJSON,
+    AccrualResponseToJSON,
     BalancePeriodRequestFromJSON,
     BalancePeriodRequestToJSON,
     BalanceStatisticResponseInnerFromJSON,
@@ -37,14 +45,24 @@ import {
     BrowseStatisticActivitiesRequestToJSON,
     BrowseStatisticArticlesRequestFromJSON,
     BrowseStatisticArticlesRequestToJSON,
+    CreateNewAccrualRequestFromJSON,
+    CreateNewAccrualRequestToJSON,
+    ErrorMessageFromJSON,
+    ErrorMessageToJSON,
     PageRequestFromJSON,
     PageRequestToJSON,
     PaginatedActivitiesStatisticResponseFromJSON,
     PaginatedActivitiesStatisticResponseToJSON,
     PaginatedArticleStatisticResponseFromJSON,
     PaginatedArticleStatisticResponseToJSON,
+    PaginatedOperationResponseFromJSON,
+    PaginatedOperationResponseToJSON,
+    PaginatedProfileResponseFromJSON,
+    PaginatedProfileResponseToJSON,
     PaginatedWriteOffResponseFromJSON,
     PaginatedWriteOffResponseToJSON,
+    ProfileResponseForAdminFromJSON,
+    ProfileResponseForAdminToJSON,
     UpdateWriteOffRequestFromJSON,
     UpdateWriteOffRequestToJSON,
     UsersPeriodRequestFromJSON,
@@ -75,8 +93,28 @@ export interface BrowseWriteOffsAsAdminRequest {
     pageRequest?: PageRequest;
 }
 
+export interface CreateNewAccrualOperationRequest {
+    userId: number;
+    createNewAccrualRequest?: CreateNewAccrualRequest;
+}
+
+export interface GetProfileByIdAsAdminRequest {
+    userId: number;
+}
+
+export interface GetWalletHistoryForUserIdRequest {
+    userId: number;
+    pageRequest?: PageRequest;
+}
+
 export interface GetWriteOffRequest {
     writeoffId: number;
+}
+
+export interface SearchProfileAsAdminRequest {
+    searchKey: string;
+    pageSize: number;
+    page: number;
 }
 
 export interface UpdateWriteOffOperationRequest {
@@ -345,6 +383,171 @@ export class AdminApi extends runtime.BaseAPI {
     }
 
     /**
+     * create new accrual for user identified by user_id
+     */
+    async createNewAccrualRaw(
+        requestParameters: CreateNewAccrualOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<AccrualResponse>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling createNewAccrual.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/wallet/accrual/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: CreateNewAccrualRequestToJSON(requestParameters.createNewAccrualRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccrualResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * create new accrual for user identified by user_id
+     */
+    async createNewAccrual(
+        requestParameters: CreateNewAccrualOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<AccrualResponse> {
+        const response = await this.createNewAccrualRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * get user profile by user id
+     */
+    async getProfileByIdAsAdminRaw(
+        requestParameters: GetProfileByIdAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<ProfileResponseForAdmin>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling getProfileByIdAsAdmin.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/profile/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileResponseForAdminFromJSON(jsonValue));
+    }
+
+    /**
+     * get user profile by user id
+     */
+    async getProfileByIdAsAdmin(
+        requestParameters: GetProfileByIdAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<ProfileResponseForAdmin> {
+        const response = await this.getProfileByIdAsAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * get history of operations of the user identified by user_id
+     */
+    async getWalletHistoryForUserIdRaw(
+        requestParameters: GetWalletHistoryForUserIdRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedOperationResponse>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling getWalletHistoryForUserId.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/wallet/history/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: PageRequestToJSON(requestParameters.pageRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedOperationResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get history of operations of the user identified by user_id
+     */
+    async getWalletHistoryForUserId(
+        requestParameters: GetWalletHistoryForUserIdRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedOperationResponse> {
+        const response = await this.getWalletHistoryForUserIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * get the write-off record identified by writeoff_id
      */
     async getWriteOffRaw(
@@ -394,6 +597,82 @@ export class AdminApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<WriteOffResponse> {
         const response = await this.getWriteOffRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * search for profile
+     */
+    async searchProfileAsAdminRaw(
+        requestParameters: SearchProfileAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedProfileResponse>> {
+        if (requestParameters.searchKey === null || requestParameters.searchKey === undefined) {
+            throw new runtime.RequiredError(
+                'searchKey',
+                'Required parameter requestParameters.searchKey was null or undefined when calling searchProfileAsAdmin.',
+            );
+        }
+
+        if (requestParameters.pageSize === null || requestParameters.pageSize === undefined) {
+            throw new runtime.RequiredError(
+                'pageSize',
+                'Required parameter requestParameters.pageSize was null or undefined when calling searchProfileAsAdmin.',
+            );
+        }
+
+        if (requestParameters.page === null || requestParameters.page === undefined) {
+            throw new runtime.RequiredError(
+                'page',
+                'Required parameter requestParameters.page was null or undefined when calling searchProfileAsAdmin.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.searchKey !== undefined) {
+            queryParameters['search_key'] = requestParameters.searchKey;
+        }
+
+        if (requestParameters.pageSize !== undefined) {
+            queryParameters['pageSize'] = requestParameters.pageSize;
+        }
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/profile/search`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedProfileResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * search for profile
+     */
+    async searchProfileAsAdmin(
+        requestParameters: SearchProfileAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedProfileResponse> {
+        const response = await this.searchProfileAsAdminRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

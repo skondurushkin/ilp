@@ -48,6 +48,8 @@ export * from './PaginatedResult';
 export * from './PaginatedWriteOffResponse';
 export * from './PaginatedWriteOffResponseAllOf';
 export * from './ProfileResponse';
+export * from './ProfileResponseForAdmin';
+export * from './ProfileResponseForAdminAllOf';
 export * from './PropertyRequest';
 export * from './SettingRequest';
 export * from './SettingResponse';
