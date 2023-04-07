@@ -1,26 +1,70 @@
 package ru.itone.ilp.server.controllers;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestController;
+import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.openapi.api.AdminApi;
+import ru.itone.ilp.openapi.model.AccrualResponse;
+import ru.itone.ilp.openapi.model.BalancePeriodRequest;
+import ru.itone.ilp.openapi.model.BalanceStatisticResponseInner;
+import ru.itone.ilp.openapi.model.BrowseStatisticActivitiesRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
+import ru.itone.ilp.openapi.model.PageRequestConfig;
+import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
+import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
+import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
+import ru.itone.ilp.openapi.model.PaginatedProfileResponse;
 import ru.itone.ilp.openapi.model.PaginatedWriteOffResponse;
+import ru.itone.ilp.openapi.model.ProfileResponse;
+import ru.itone.ilp.openapi.model.ProfileResponseForAdmin;
 import ru.itone.ilp.openapi.model.UpdateWriteOffRequest;
+import ru.itone.ilp.openapi.model.UsersPeriodRequest;
+import ru.itone.ilp.openapi.model.UsersStatisticResponse;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
+import ru.itone.ilp.services.profiles.ProfileService;
 import ru.itone.ilp.services.wallet.WalletService;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @Secured("hasRole('ADMIN')")
-public class AdminController implements AdminApi {
+public class AdminController extends LinkResolver implements AdminApi {
 
     private final WalletService walletService;
+    private final ProfileService profileService;
+
+    @Override
+    public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
+            BrowseStatisticActivitiesRequest browseStatisticActivitiesRequest) {
+        throw new IllegalStateException("Not yet implemented");
+    }
+
+    @Override
+    public ResponseEntity<PaginatedArticleStatisticResponse> browseStatisticArticles(
+            BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
+        throw new IllegalStateException("Not yet implemented");
+    }
+
+    @Override
+    public ResponseEntity<List<BalanceStatisticResponseInner>> browseStatisticBalance(BalancePeriodRequest balancePeriodRequest) {
+        throw new IllegalStateException("Not yet implemented");
+    }
+
+    @Override
+    public ResponseEntity<UsersStatisticResponse> browseStatisticUsers(UsersPeriodRequest usersPeriodRequest) {
+        throw new IllegalStateException("Not yet implemented");
+    }
 
     @Override
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsAsAdmin(PageRequest pageRequest) {
@@ -28,12 +72,65 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    @Secured("hasRole('ADMIN')")
+    public ResponseEntity<AccrualResponse> createNewAccrual(Integer userId, CreateNewAccrualRequest createNewAccrualRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(walletService.createNewAccrual(userId.longValue(), createNewAccrualRequest));
+    }
+
+    @Override
+    public ResponseEntity<ProfileResponseForAdmin> getProfileByIdAsAdmin(Integer userId) {
+        Optional<ProfileResponseForAdmin> user = profileService.getProfileByIdForAdmin(userId.longValue());
+        return user.map(this::resolveLink).map(ResponseEntity::ok)
+                .orElseThrow( () -> new ResourceNotFoundException("User profile not found."));
+    }
+
+    @Override
+    @Secured("hasRole('ADMIN')")
+    public ResponseEntity<PaginatedOperationResponse> getWalletHistoryForUserId(Integer userId, PageRequest pageRequest) {
+        return ResponseEntity.ok(walletService.getWalletHistory(true, userId.longValue(), pageRequest));
+    }
+
+
+    @Override
     public ResponseEntity<WriteOffResponse> getWriteOff(Integer writeOffId) {
         return ResponseEntity.ok(walletService.getWriteOff(writeOffId.longValue()));
+    }
+
+    @Override
+    public ResponseEntity<PaginatedProfileResponse> searchProfileAsAdmin(String searchKey, Integer pageSize, Integer page) {
+        PageRequest pageRequest = new PageRequest()
+                .config(new PageRequestConfig().globalFilter(searchKey))
+                .pageSize(pageSize)
+                .page(page);
+        return ResponseEntity.ok(resolveLinks(profileService.paginate(pageRequest)));
     }
 
     public ResponseEntity<WriteOffResponse> updateWriteOff(Integer writeOffId, UpdateWriteOffRequest updateWriteOffRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(walletService.updateWriteOffStatus(userDetails.getId(), true, writeOffId.longValue(), updateWriteOffRequest.getStatus()));
     }
+
+    private ProfileResponse resolveLink(ProfileResponse profile) {
+        profile.setAvatarLink(resolve(profile.getAvatarLink()));
+        return profile;
+    }
+
+    private ProfileResponseForAdmin resolveLink(ProfileResponseForAdmin profile) {
+        profile.setAvatarLink(resolve(profile.getAvatarLink()));
+        return profile;
+    }
+
+    private List<ProfileResponse> resolveLinks(List<ProfileResponse> profiles) {
+        if (!CollectionUtils.isEmpty(profiles)) {
+            profiles.forEach(this::resolveLink);
+        }
+        return profiles;
+    }
+
+    private PaginatedProfileResponse resolveLinks(PaginatedProfileResponse page) {
+        resolveLinks(page.getResults());
+        return page;
+    }
+
 }

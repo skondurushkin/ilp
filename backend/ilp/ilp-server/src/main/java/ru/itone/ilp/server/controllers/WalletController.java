@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.itone.ilp.openapi.api.WalletApi;
 import ru.itone.ilp.openapi.model.AccrualResponse;
-import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PaginatedAccrualResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
@@ -56,13 +55,6 @@ public class WalletController implements WalletApi {
     }
 
     @Override
-    @Secured("hasRole('ADMIN')")
-    public ResponseEntity<AccrualResponse> createNewAccrual(Integer userId, CreateNewAccrualRequest createNewAccrualRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(walletService.createNewAccrual(userId.longValue(), createNewAccrualRequest));
-    }
-
-    @Override
     public ResponseEntity<AccrualResponse> getAccrual(Integer accrualId) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isAdmin = Helpers.isAdmin(userDetails);
@@ -78,12 +70,6 @@ public class WalletController implements WalletApi {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isAdmin = Helpers.isAdmin(userDetails);
         return ResponseEntity.ok(walletService.getWalletHistory(isAdmin, userDetails.getId(), pageRequest));
-    }
-
-    @Override
-    @Secured("hasRole('ADMIN')")
-    public ResponseEntity<PaginatedOperationResponse> getWalletHistoryForUserId(Integer userId, PageRequest pageRequest) {
-        return ResponseEntity.ok(walletService.getWalletHistory(true, userId.longValue(), pageRequest));
     }
 
     @Override

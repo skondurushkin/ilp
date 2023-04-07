@@ -198,6 +198,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
+
   /api/ilp/admin/profile/search:
     get:
       operationId: searchProfileAsAdmin
@@ -952,12 +953,7 @@ paths:
       tags:
         - files
       parameters:
-        - name: scope
-          in: path
-          required: true
-          schema:
-            type: string
-            enum: [global, activity, article, profile]
+        - $ref: '#/components/parameters/scope'
       requestBody:
         content:
           multipart/form-data:
@@ -965,44 +961,45 @@ paths:
               type: object
               required:
                 - id
-                - filename
+                - file
               properties:
                 id:
                   $ref: "#/components/schemas/Identifier"
-                filename:
+                  description: identifier of the object in the given scope
+                file:
                   type: string
                   format: binary
+
       responses:
         200:
           description: "OK"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  link:
-                    type: string
+                $ref: '#/components/schemas/UploadResponse'
         409:
           description: already exists
 
-  /api/ilp/file/download:
+  /api/ilp/file/{scope}/{fileName}:
     get:
-      operationId: downloadFile
+      operationId: getFile
       summary: fetch file from ILP file store
       tags:
         - files
       parameters:
-        - name: link
-          in: query
+        - $ref: "#/components/parameters/scope"
+        - name: fileName
+          in: path
           required: true
           schema:
             type: string
             minLength: 1
+
       responses:
         200:
           description: "OK"
           content:
-            application/json:
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -1063,12 +1060,20 @@ components:
         type: string
       description: value for search
 
+    scope:
+      in: path
+      name: scope
+      required: true
+      schema:
+        type: string
+        enum: [activity, article, profile]
+
     pageSize:
       in: query
       name: pageSize
       required: true
       schema:
-        type: number
+        type: integer
       description: requested page size
 
     page:
@@ -1076,7 +1081,7 @@ components:
       name: page
       required: true
       schema:
-        type: number
+        type: integer
       description: requested page
 
   schemas:
@@ -1517,7 +1522,6 @@ components:
           maxLength: 50
         phone:
           type: string
-          format: email
           maxLength: 20
         roles:
           type: array
@@ -1572,6 +1576,10 @@ components:
         - USER
         - MODERATOR
         - ADMIN
+
+    EScope:
+      type: string
+      enum: [activity, article, profile]
 
     PaginatedProfileResponse:
       allOf:
@@ -1889,6 +1897,22 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/OperationResponse"
+
+    UploadResponse:
+      type: object
+      description: links to the uploaded files
+      required:
+        - link
+      properties:
+        link:
+          type: string
+          description: relative link to the primary uploaded file
+        more:
+          type: array
+          description: list of relative links to secondary files
+          items:
+            type: string
+            description: relative link to secondary file
 
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme
