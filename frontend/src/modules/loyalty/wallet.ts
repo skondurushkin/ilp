@@ -10,8 +10,10 @@ import { UseQueryResult, useQuery } from 'react-query';
 
 import { Color } from '../../../colors';
 
+export const WALLET_QUERY = 'wallet';
+
 export const useWalletQuery = (): UseQueryResult<WalletResponse> => {
-    return useQuery('wallet', () => api.wallet.getWalletOverview(), { retry: false, refetchOnWindowFocus: false });
+    return useQuery(WALLET_QUERY, () => api.wallet.getWalletOverview(), { retry: false, refetchOnWindowFocus: false });
 };
 
 export const WriteOffStatusName: Record<WriteOffStatus, string> = {

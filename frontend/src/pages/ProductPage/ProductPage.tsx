@@ -1,13 +1,13 @@
 import { BigTextSkeleton, ButtonSkeleton, ImageSkeleton, Skeleton, SkeletonContainer } from '../../components/Skeleton';
+import { CreateOrderButton, ProductAvailability } from '../../components/CreateOrderButton';
+import { useProductQuery, useWalletQuery } from '../../modules/loyalty';
 
 import { ArticleResponse } from '../../api';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
-import { Button } from '../../components/Button';
 import { ProductPrice } from '../../components/ProductPrice';
 import { ReactElement } from 'react';
 import { VerticalBrackets } from '../../components/VerticalBrackets';
 import { useParams } from 'react-router';
-import { useProductQuery } from '../../modules/loyalty';
 
 interface ProductPageParams {
     id: string;
@@ -42,6 +42,19 @@ interface ProductViewProps {
 
 function ProductView(props: ProductViewProps): ReactElement {
     const { product } = props;
+
+    const walletQuery = useWalletQuery();
+    let availability: ProductAvailability;
+    if (!product.available) {
+        availability = 'not-available';
+    } else if (!walletQuery.isSuccess) {
+        availability = 'processing';
+    } else if (walletQuery.data.balance - product.price < 0) {
+        availability = 'no-tokens';
+    } else {
+        availability = 'available';
+    }
+
     return (
         <>
             <div>
@@ -54,9 +67,7 @@ function ProductView(props: ProductViewProps): ReactElement {
                 {product.description && <p className="mt-4">{product.description}</p>}
             </div>
             <div className="app-bg sticky bottom-0 pb-10 pt-6 sm:pb-8">
-                <Button primary className="w-full md:w-min">
-                    Заказать
-                </Button>
+                <CreateOrderButton product={product} availability={availability} />
             </div>
         </>
     );

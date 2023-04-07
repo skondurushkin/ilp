@@ -43,6 +43,6 @@ export interface ModalBodyProps {
 }
 
 export const ModalBody = (props: ModalBodyProps) => {
-    const { children, className = 'border border-white bg-black px-12 py-8' } = props;
+    const { children, className = 'border border-white bg-black text-white px-12 py-8' } = props;
     return <div className={className}>{children}</div>;
 };
