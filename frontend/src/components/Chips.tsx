@@ -27,6 +27,7 @@ export function Chips<T extends ReadonlyArray<Option>>(props: ChipsProps<T>): Re
                         key={opt.value}
                         size="small"
                         black
+                        textBlack={primary}
                         primary={primary}
                         onClick={() => {
                             if (filter === opt.value) {
