@@ -38,11 +38,11 @@ export const useWalletHistoryQuery = (
     operationType: OperationResponseTypeEnum,
     page: number,
 ): UseQueryResult<PaginatedOperationResponse> => {
-    const loaderParams = { pageRequest: { page, pageSize: WALLET_HISTORY_PAGE_SIZE } };
+    const pageParams = { page, pageSize: WALLET_HISTORY_PAGE_SIZE };
     const laoder =
         operationType === 'accrual'
             ? () =>
-                  api.wallet.browseAccruals(loaderParams).then((coll) => {
+                  api.wallet.browseAccruals({ pageRequest: pageParams }).then((coll) => {
                       return {
                           ...coll,
                           results: coll.results.map(
@@ -57,7 +57,7 @@ export const useWalletHistoryQuery = (
                       };
                   })
             : () =>
-                  api.wallet.browseWriteOffs(loaderParams).then((coll) => {
+                  api.wallet.browseWriteOffs({ browseWriteOffsRequest: pageParams }).then((coll) => {
                       return {
                           ...coll,
                           results: coll.results.map(
