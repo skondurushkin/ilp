@@ -304,7 +304,7 @@ VALUES (
            'Кондурушкин',
            '$2a$10$7v4ZoxJRBCKWBvrzVZ5WU.s32TDClI4wgQnppBuoXxEUN/ud4G1GK',
            '2023-03-13',
-            '/avatar/1.jpeg'
+            'profile/1.jpeg'
        );
 
 insert into user_roles (user_id, role_id)
@@ -319,7 +319,7 @@ VALUES (
            'Тестовый',
            '$2a$10$7v4ZoxJRBCKWBvrzVZ5WU.s32TDClI4wgQnppBuoXxEUN/ud4G1GK',
            '2023-03-13',
-           '/avatar/2.jpeg'
+           'profile/2.jpeg'
        );
 
 insert into user_roles (user_id, role_id)
@@ -333,7 +333,7 @@ VALUES (
            'Тестовый-Второй',
            '$2a$10$7v4ZoxJRBCKWBvrzVZ5WU.s32TDClI4wgQnppBuoXxEUN/ud4G1GK',
            '2023-03-13',
-           '/avatar/3.jpeg'
+           'profile/3.jpeg'
        );
 
 insert into user_roles (user_id, role_id)
@@ -351,9 +351,9 @@ values
 
 insert into articles (code, name, description, price, image_link, available)
 values
-    ('t-shirt-0001', 'Футболка', 'Черная футболка с логотипом компании', 5, '/articles/t-shirt-0001.jpg', true),
-    ('mug-0001', 'Кружка', 'Кружка с логотипом компании', 5, '/articles/mug-0001.jpg', true),
-    ('t-mug-0002', 'Термокружка', 'Термокружка с логотипом компании', 10, '/articles/t-mug-0001.jpg', true)
+    ('t-shirt-0001', 'Футболка', 'Черная футболка с логотипом компании', 5, 'article/t-shirt-0001.jpg', true),
+    ('mug-0001', 'Кружка', 'Кружка с логотипом компании', 5, 'article/mug-0001.jpg', true),
+    ('t-mug-0002', 'Термокружка', 'Термокружка с логотипом компании', 10, 'article/t-mug-0001.jpg', true)
 ;
 
 insert into accruals (date, user_id, activity_id, amount)

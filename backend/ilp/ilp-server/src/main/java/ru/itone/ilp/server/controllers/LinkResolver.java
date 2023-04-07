@@ -27,7 +27,7 @@ abstract class LinkResolver {
                 localUri = baseUri;
                 if (localUri == null) {
                     baseUri = localUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                            .path("/api/ilp/file").build().toUri();
+                            .path("/api/ilp/file/").build().toUri();
                 }
             }
         }
