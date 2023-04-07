@@ -2,6 +2,7 @@ package ru.itone.ilp.services.wallet;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -106,6 +107,22 @@ public class WalletService {
                 .hasPrev(page.hasPrevious())
                 .results(results);
     }
+
+    @Transactional(readOnly = true)
+    public PaginatedWriteOffResponse paginateWriteOffsWithStatus(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest, Collection<OrderStatus> statuses) {
+        dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
+        Page<WriteOff> page = dbJpa.getWriteOffRepository().findAllByUserIdAndOrderStatusIsIn(userId, statuses, pageable);
+        List<WriteOffResponse> results = page.getContent().stream().map(WriteOffMapper.INSTANCE::toResponse).toList();
+        return new PaginatedWriteOffResponse()
+                .total(page.getTotalPages())
+                .page(page.getNumber())
+                .pageSize(page.getSize())
+                .hasNext(page.hasNext())
+                .hasPrev(page.hasPrevious())
+                .results(results);
+    }
+
 
     @Transactional(readOnly = true)
     public PaginatedOperationResponse getWalletHistory(boolean isAdmin, Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {

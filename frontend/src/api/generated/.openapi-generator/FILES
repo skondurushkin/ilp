@@ -27,6 +27,8 @@ models/BrowseStatisticActivitiesRequest.ts
 models/BrowseStatisticActivitiesRequestAllOf.ts
 models/BrowseStatisticArticlesRequest.ts
 models/BrowseStatisticArticlesRequestAllOf.ts
+models/BrowseWriteOffsRequest.ts
+models/BrowseWriteOffsRequestAllOf.ts
 models/CreateNewAccrualRequest.ts
 models/ERole.ts
 models/ErrorMessage.ts

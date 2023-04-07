@@ -19,6 +19,8 @@ export * from './BrowseStatisticActivitiesRequest';
 export * from './BrowseStatisticActivitiesRequestAllOf';
 export * from './BrowseStatisticArticlesRequest';
 export * from './BrowseStatisticArticlesRequestAllOf';
+export * from './BrowseWriteOffsRequest';
+export * from './BrowseWriteOffsRequestAllOf';
 export * from './CreateNewAccrualRequest';
 export * from './ERole';
 export * from './ErrorMessage';
