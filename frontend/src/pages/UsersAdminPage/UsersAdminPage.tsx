@@ -1,18 +1,13 @@
-import { useCallback, useState } from 'react';
-
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { Button } from '../../components/Button';
 import { DataNotFound } from '../../components/DataNotFound';
 import { ProfileCard } from './ProfileCard';
 import { SearchInput } from './SearchInput';
 import { useQuerySearchProfileAsAdmin } from '../../modules/admin';
+import { useState } from 'react';
 
 export const UsersAdminPage = () => {
     const [searchKey, setSearchKey] = useState('');
-
-    const handleSearchKey = useCallback((value: string) => {
-        setSearchKey(value);
-    }, []);
 
     const { data, fetchNextPage, hasNextPage, isFetching, isError } = useQuerySearchProfileAsAdmin(searchKey);
 
@@ -20,7 +15,8 @@ export const UsersAdminPage = () => {
         <div className="flex flex-col gap-6">
             <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Пользователи' }]} />
             <h1 className="text-h1 mb-2">Пользователи</h1>
-            <SearchInput value={searchKey} onChange={handleSearchKey} />
+
+            <SearchInput value={searchKey} onChange={setSearchKey} />
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {(data?.pages ?? []).map((paginated) =>
