@@ -6,10 +6,14 @@ import { WALLET_QUERY } from './wallet';
 const ORDERS_QUERY_KEY = 'orders';
 
 export const useOrdersQuery = (): UseQueryResult<WriteOffResponse[]> => {
-    return useQuery(ORDERS_QUERY_KEY, () => fetchAll(api.wallet.browseWriteOffs.bind(api.wallet)), {
-        retry: false,
-        refetchOnWindowFocus: false,
-    });
+    return useQuery(
+        ORDERS_QUERY_KEY,
+        () => fetchAll((params) => api.wallet.browseWriteOffs({ browseWriteOffsRequest: params.pageRequest })),
+        {
+            retry: false,
+            refetchOnWindowFocus: false,
+        },
+    );
 };
 
 export const useCreateOrderMutation = (): UseMutationResult<WriteOffResponse, unknown, ArticleResponse> => {

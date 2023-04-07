@@ -16,6 +16,7 @@ import * as runtime from '../runtime';
 
 import type {
     AccrualResponse,
+    BrowseWriteOffsRequest,
     PageRequest,
     PaginatedAccrualResponse,
     PaginatedOperationResponse,
@@ -27,6 +28,8 @@ import type {
 import {
     AccrualResponseFromJSON,
     AccrualResponseToJSON,
+    BrowseWriteOffsRequestFromJSON,
+    BrowseWriteOffsRequestToJSON,
     PageRequestFromJSON,
     PageRequestToJSON,
     PaginatedAccrualResponseFromJSON,
@@ -52,8 +55,8 @@ export interface BrowseAccrualsForUserIdRequest {
     pageRequest?: PageRequest;
 }
 
-export interface BrowseWriteOffsRequest {
-    pageRequest?: PageRequest;
+export interface BrowseWriteOffsOperationRequest {
+    browseWriteOffsRequest?: BrowseWriteOffsRequest;
 }
 
 export interface BrowseWriteOffsForUserIdRequest {
@@ -187,7 +190,7 @@ export class WalletApi extends runtime.BaseAPI {
      * paginated view of write-offs of currently logged in user
      */
     async browseWriteOffsRaw(
-        requestParameters: BrowseWriteOffsRequest,
+        requestParameters: BrowseWriteOffsOperationRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<PaginatedWriteOffResponse>> {
         const queryParameters: any = {};
@@ -210,7 +213,7 @@ export class WalletApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: PageRequestToJSON(requestParameters.pageRequest),
+                body: BrowseWriteOffsRequestToJSON(requestParameters.browseWriteOffsRequest),
             },
             initOverrides,
         );
@@ -222,7 +225,7 @@ export class WalletApi extends runtime.BaseAPI {
      * paginated view of write-offs of currently logged in user
      */
     async browseWriteOffs(
-        requestParameters: BrowseWriteOffsRequest = {},
+        requestParameters: BrowseWriteOffsOperationRequest = {},
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedWriteOffResponse> {
         const response = await this.browseWriteOffsRaw(requestParameters, initOverrides);

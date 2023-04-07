@@ -992,7 +992,23 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/PageRequest"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/PageRequest"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "status": {
+                                                "type": "array",
+                                                "uniqueItems": true,
+                                                "items": {
+                                                    "$ref": "#/components/schemas/WriteOffStatus"
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
                             }
                         }
                     }
