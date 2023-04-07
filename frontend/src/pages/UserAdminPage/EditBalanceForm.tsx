@@ -79,6 +79,9 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
                         loadOptions={loadOptions}
                         rules={{
                             required: validationRules.required,
+                            validate: (value) => {
+                                return value?.value ? undefined : validationRules.required;
+                            },
                             onChange: (data) => {
                                 setValue('activity.amount', data.target.value.amount);
                             },
@@ -90,6 +93,9 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
                         name="activity.amount"
                         label="Сумма в вольтах"
                         labelClassName="text-white"
+                        rules={{
+                            required: validationRules.required,
+                        }}
                     />
                 </div>
                 <div className="flex gap-4">

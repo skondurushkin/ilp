@@ -3,6 +3,7 @@ import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 
 import AsyncSelect from 'react-select/async';
 import { ComponentProps } from 'react';
 import { FormErrorMessage } from './FormErrorMessage';
+import { colors } from '../../../colors';
 import { twMerge } from 'tailwind-merge';
 
 export interface FormAsyncSelectOption {
@@ -46,19 +47,32 @@ export const FormAsyncSelect = <TFieldValues extends FieldValues = FieldValues>(
                 placeholder="Введите название"
                 noOptionsMessage={() => 'Нет результатов, уточните запрос'}
                 loadingMessage={() => 'Загрузка ...'}
+                className="text-black"
                 styles={{
                     menu: (base) => ({
                         ...base,
                         borderRadius: 0,
                     }),
+                    option: (base, state) => ({
+                        ...base,
+                        background: state.isFocused ? colors.primary : colors.white,
+                        color: colors.black,
+                        '&:hover': {
+                            background: state.isFocused ? colors.primary : colors.white,
+                        },
+                    }),
                     control: (base, state) => ({
                         ...base,
                         borderRadius: 0,
                         height: 50,
-                        border: state.isFocused ? '2px solid #029C08' : '2px solid #95979A',
+                        border: fieldState.invalid
+                            ? `2px solid ${colors.error}`
+                            : state.isFocused
+                            ? `2px solid ${colors.success}`
+                            : `2px solid ${colors.gray}`,
                         boxShadow: 'none',
                         '&:hover': {
-                            border: '2px solid #029C08',
+                            border: `2px solid ${colors.success}`,
                         },
                     }),
                 }}

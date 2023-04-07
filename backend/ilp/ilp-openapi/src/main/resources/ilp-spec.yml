@@ -178,14 +178,14 @@ paths:
       tags:
         - admin
       parameters:
-        - $ref: '#/components/parameters/user_id'
+        - $ref: "#/components/parameters/user_id"
       responses:
         200:
           description: authenticated user profile
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProfileResponseForAdmin'
+                $ref: "#/components/schemas/ProfileResponseForAdmin"
         401:
           description: "Unauthorized"
           content:
@@ -197,7 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorMessage'
+                $ref: "#/components/schemas/ErrorMessage"
   /api/ilp/admin/profile/search:
     get:
       operationId: searchProfileAsAdmin
@@ -205,16 +205,16 @@ paths:
       tags:
         - admin
       parameters:
-        - $ref: '#/components/parameters/search_key'
-        - $ref: '#/components/parameters/pageSize'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/search_key"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/page"
       responses:
         200:
           description: list user profiles
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedProfileResponse'
+                $ref: "#/components/schemas/PaginatedProfileResponse"
         400:
           description: bad request
           content:
@@ -612,7 +612,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedOperationResponse'
+                $ref: "#/components/schemas/PaginatedOperationResponse"
 
   /api/ilp/admin/wallet/history/{user_id}:
     post:
@@ -1483,7 +1483,7 @@ components:
 
     ProfileResponseForAdmin:
       allOf:
-        - $ref: '#/components/schemas/ProfileResponse'
+        - $ref: "#/components/schemas/ProfileResponse"
         - type: object
           required:
             - balance
@@ -1548,7 +1548,7 @@ components:
         endDate:
           type: string
           format: date
-          example: '2023-04-10'
+          example: "2023-04-10"
 
     Name:
       type: object
