@@ -5,7 +5,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
@@ -39,18 +38,6 @@ public class ProfileController extends LinkResolver implements ProfileApi {
         Optional<ProfileResponse> user = profileService.getProfileByEmail(principal.getEmail());
         return user.map(this::resolveLink).map(ResponseEntity::ok)
                 .orElseThrow( () -> new ResourceNotFoundException("User profile not found."));
-    }
-
-    @Override
-    @Secured("hasRole('ADMIN')")
-    public ResponseEntity<ProfileResponse> getProfileById(Integer userId) {
-        Optional<ProfileResponse> user = profileService.getProfileById(userId.longValue());
-        return user.map(this::resolveLink).map(ResponseEntity::ok)
-                .orElseThrow( () -> new ResourceNotFoundException("User profile not found."));    }
-
-    @Override
-    public ResponseEntity<List<ProfileResponse>> searchProfile(String searchKey) {
-        return ResponseEntity.ok(resolveLinks(profileService.searchProfile(searchKey)));
     }
 
     private ProfileResponse resolveLink(ProfileResponse profile) {

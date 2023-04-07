@@ -56,6 +56,8 @@ models/PaginatedResult.ts
 models/PaginatedWriteOffResponse.ts
 models/PaginatedWriteOffResponseAllOf.ts
 models/ProfileResponse.ts
+models/ProfileResponseForAdmin.ts
+models/ProfileResponseForAdminAllOf.ts
 models/PropertyRequest.ts
 models/SettingRequest.ts
 models/SettingResponse.ts

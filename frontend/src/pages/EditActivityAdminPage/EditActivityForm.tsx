@@ -45,10 +45,11 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                         control={control}
                         type="number"
                         name="amount"
-                        label="Стоимость"
+                        label="Стоимость в вольтах"
                         rules={{
+                            valueAsNumber: true,
                             min: validationRules.min(1),
-                            max: validationRules.min(9999),
+                            max: validationRules.max(9999),
                             required: validationRules.required,
                         }}
                     />
@@ -58,6 +59,7 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                         label="Ссылка на описание"
                         rules={{
                             validate: validationRules.isUrl,
+                            required: validationRules.required,
                         }}
                     />
                 </div>

@@ -45,6 +45,12 @@ export interface ProfileResponse {
     email: string;
     /**
      *
+     * @type {string}
+     * @memberof ProfileResponse
+     */
+    phone: string;
+    /**
+     *
      * @type {Set<ERole>}
      * @memberof ProfileResponse
      */
@@ -54,7 +60,25 @@ export interface ProfileResponse {
      * @type {string}
      * @memberof ProfileResponse
      */
-    avatarLink?: string;
+    avatarLink: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ProfileResponse
+     */
+    jobPosition: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ProfileResponse
+     */
+    city: string;
+    /**
+     *
+     * @type {string}
+     * @memberof ProfileResponse
+     */
+    country: string;
     /**
      *
      * @type {boolean}
@@ -83,7 +107,12 @@ export function instanceOfProfileResponse(value: object): boolean {
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'fio' in value;
     isInstance = isInstance && 'email' in value;
+    isInstance = isInstance && 'phone' in value;
     isInstance = isInstance && 'roles' in value;
+    isInstance = isInstance && 'avatarLink' in value;
+    isInstance = isInstance && 'jobPosition' in value;
+    isInstance = isInstance && 'city' in value;
+    isInstance = isInstance && 'country' in value;
     isInstance = isInstance && 'active' in value;
 
     return isInstance;
@@ -101,8 +130,12 @@ export function ProfileResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         id: json['id'],
         fio: NameFromJSON(json['fio']),
         email: json['email'],
+        phone: json['phone'],
         roles: new Set((json['roles'] as Array<any>).map(ERoleFromJSON)),
-        avatarLink: !exists(json, 'avatarLink') ? undefined : json['avatarLink'],
+        avatarLink: json['avatarLink'],
+        jobPosition: json['jobPosition'],
+        city: json['city'],
+        country: json['country'],
         active: json['active'],
         startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
         endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
@@ -120,8 +153,12 @@ export function ProfileResponseToJSON(value?: ProfileResponse | null): any {
         id: value.id,
         fio: NameToJSON(value.fio),
         email: value.email,
+        phone: value.phone,
         roles: Array.from(value.roles as Set<any>).map(ERoleToJSON),
         avatarLink: value.avatarLink,
+        jobPosition: value.jobPosition,
+        city: value.city,
+        country: value.country,
         startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
         endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
     };

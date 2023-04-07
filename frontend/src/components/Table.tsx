@@ -15,15 +15,13 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
     const { table, isFetching, className } = props;
 
     return (
-        <div className="relative overflow-y-hidden overflow-x-scroll">
+        <div className="relative overflow-y-hidden">
             {isFetching && (
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
                     <Spinner />
                 </div>
             )}
-            <table
-                className={twMerge('w-full overflow-y-hidden overflow-x-scroll', isFetching && 'opacity-50', className)}
-            >
+            <table className={twMerge('w-full', isFetching && 'opacity-50', className)}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>

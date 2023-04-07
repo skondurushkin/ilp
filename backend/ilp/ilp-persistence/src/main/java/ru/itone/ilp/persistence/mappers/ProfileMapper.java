@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import ru.itone.ilp.openapi.model.ERole;
 import ru.itone.ilp.openapi.model.PaginatedProfileResponse;
 import ru.itone.ilp.openapi.model.ProfileResponse;
+import ru.itone.ilp.openapi.model.ProfileResponseForAdmin;
 import ru.itone.ilp.persistence.entities.Role;
 import ru.itone.ilp.persistence.entities.User;
 
@@ -24,6 +25,34 @@ public interface ProfileMapper {
     @Mapping(target = "roles", qualifiedByName = "responseRoles")
     @Mapping(target = "endDate", conditionExpression = "java(!user.isActive())")
     ProfileResponse userToProfileResponse(User user);
+
+    default ProfileResponseForAdmin userToProfileResponseForAdmin(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        ProfileResponseForAdmin profileResponse = new ProfileResponseForAdmin();
+
+        profileResponse.setRoles( mapRoles( user.getRoles() ) );
+        if ( !user.isActive() ) {
+            profileResponse.setEndDate( user.getEndDate() );
+        }
+        if ( user.getId() != null ) {
+            profileResponse.setId( user.getId().intValue() );
+        }
+        profileResponse.setEmail( user.getEmail() );
+        profileResponse.setAvatarLink( user.getAvatarLink() );
+        profileResponse.setActive( user.isActive() );
+        profileResponse.setStartDate( user.getStartDate() );
+        profileResponse.setFio( user.toName() );
+        profileResponse.jobPosition("Sr. Java Developer")
+                .country("Россия")
+                .city("Москва")
+                .phone("+7(905)123-45-67");
+
+        return profileResponse;
+
+    }
 
     @Named("responseRoles")
     default Set<ERole> mapRoles(Set<Role> roles) {

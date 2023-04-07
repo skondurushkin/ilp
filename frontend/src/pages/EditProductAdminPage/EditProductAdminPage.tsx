@@ -23,7 +23,7 @@ export const EditProductAdminPage = () => {
                 <Breadcrumbs
                     items={[
                         { label: 'Администрирование', link: '/admin' },
-                        { label: 'Активности', link: '/admin/products' },
+                        { label: 'Товары', link: '/admin/products' },
                         { label: 'Редактирование товара' },
                     ]}
                 />

@@ -32,7 +32,7 @@ html {
     }
 
     .checkbox {
-        @apply focus:border-success dark:text-gray h-6 w-6 border-2 text-black focus:outline-none focus:ring-0;
+        @apply focus:border-success dark:text-primary h-6 w-6 border-2 text-black focus:outline-none focus:ring-0;
     }
 
     .textarea {
