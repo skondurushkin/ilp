@@ -1,9 +1,24 @@
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export type ButtonProps = JSX.IntrinsicElements['button'] & { primary?: boolean };
+export type ButtonProps = JSX.IntrinsicElements['button'] & {
+    primary?: boolean;
+    size?: 'normal' | 'small';
+    black?: boolean;
+};
 
 export function Button(props: ButtonProps): ReactElement {
-    const { className, primary, ...rest } = props;
-    return <button {...rest} className={twMerge('btn', primary && 'btn-primary', className)} />;
+    const { className, black, primary, size = 'normal', ...rest } = props;
+    return (
+        <button
+            {...rest}
+            className={twMerge(
+                'btn',
+                black && 'btn-black',
+                primary && 'btn-primary',
+                size === 'small' && 'btn-small',
+                className,
+            )}
+        />
+    );
 }

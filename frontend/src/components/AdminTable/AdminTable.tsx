@@ -14,11 +14,12 @@ const DEFAULT_PAGINATION_STATE = { pageIndex: 0, pageSize: 10 };
 export const AdminTable = <TData extends RowData>({
     columns,
     queryKey,
+    initialSort = [],
     queryData,
     globalFilterPlaceholder,
 }: AdminTableProps<TData>) => {
     const [globalFilter, setGlobalFilter] = useState('');
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>(initialSort);
 
     const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>(DEFAULT_PAGINATION_STATE);
 
@@ -106,6 +107,7 @@ export const AdminTable = <TData extends RowData>({
 
 interface AdminTableProps<TData extends RowData> {
     globalFilterPlaceholder?: string;
+    initialSort?: SortingState;
     columns: ColumnDef<TData, unknown>[];
     queryKey: string | string[];
     queryData: (body: PageRequest) => Promise<

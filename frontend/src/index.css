@@ -20,7 +20,7 @@ html {
     }
 
     .input {
-        @apply focus:border-success read-only:text-gray h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
+        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
     }
 
     .select {
@@ -39,16 +39,32 @@ html {
         @apply focus:border-success border-2 px-3 text-black focus:outline-none focus:ring-0;
     }
 
+    .chip {
+        @apply bg-black px-3 text-center text-xs text-white focus:outline-none;
+    }
+
+    .chip-dark {
+        @apply bg-white text-black;
+    }
+
+    .chip-active {
+        @apply bg-primary text-black;
+    }
+
     .btn {
         @apply border-gray disabled:text-gray border bg-white p-4 text-center text-sm leading-[110%] text-black shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none md:text-base;
     }
 
     .btn-black {
-        @apply border-gray disabled:text-gray border bg-black px-3 py-2 text-center text-sm leading-[110%] text-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none md:text-base;
+        @apply border-black bg-black text-white;
     }
 
     .btn-primary {
-        @apply bg-primary border-primary;
+        @apply border-primary bg-primary;
+    }
+
+    .btn-small {
+        @apply px-2 py-1 text-xs leading-[110%];
     }
 
     .link {

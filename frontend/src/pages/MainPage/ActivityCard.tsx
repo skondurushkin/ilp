@@ -50,7 +50,7 @@ function ActivityView(props: ActivityViewProps): ReactElement {
             <Link className="btn btn-primary mt-4" to={requestTokensUrl}>
                 Запросить вольты
             </Link>
-            <Link className="btn mt-2" to={activity.infoLink}>
+            <Link className="btn mt-2" to={activity.infoLink} target="_blank">
                 Подробнее
             </Link>
         </>

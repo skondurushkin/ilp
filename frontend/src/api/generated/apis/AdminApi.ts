@@ -14,20 +14,69 @@
 
 import * as runtime from '../runtime';
 
-import type { PageRequest, PaginatedWriteOffResponse, UpdateWriteOffRequest, WriteOffResponse } from '../models';
+import type {
+    BalancePeriodRequest,
+    BalanceStatisticResponseInner,
+    BrowseStatisticActivitiesRequest,
+    BrowseStatisticArticlesRequest,
+    PageRequest,
+    PaginatedActivitiesStatisticResponse,
+    PaginatedArticleStatisticResponse,
+    PaginatedWriteOffResponse,
+    UpdateWriteOffRequest,
+    UsersPeriodRequest,
+    UsersStatisticResponse,
+    WriteOffResponse,
+} from '../models';
 import {
+    BalancePeriodRequestFromJSON,
+    BalancePeriodRequestToJSON,
+    BalanceStatisticResponseInnerFromJSON,
+    BalanceStatisticResponseInnerToJSON,
+    BrowseStatisticActivitiesRequestFromJSON,
+    BrowseStatisticActivitiesRequestToJSON,
+    BrowseStatisticArticlesRequestFromJSON,
+    BrowseStatisticArticlesRequestToJSON,
     PageRequestFromJSON,
     PageRequestToJSON,
+    PaginatedActivitiesStatisticResponseFromJSON,
+    PaginatedActivitiesStatisticResponseToJSON,
+    PaginatedArticleStatisticResponseFromJSON,
+    PaginatedArticleStatisticResponseToJSON,
     PaginatedWriteOffResponseFromJSON,
     PaginatedWriteOffResponseToJSON,
     UpdateWriteOffRequestFromJSON,
     UpdateWriteOffRequestToJSON,
+    UsersPeriodRequestFromJSON,
+    UsersPeriodRequestToJSON,
+    UsersStatisticResponseFromJSON,
+    UsersStatisticResponseToJSON,
     WriteOffResponseFromJSON,
     WriteOffResponseToJSON,
 } from '../models';
 
+export interface BrowseStatisticActivitiesOperationRequest {
+    browseStatisticActivitiesRequest: BrowseStatisticActivitiesRequest;
+}
+
+export interface BrowseStatisticArticlesOperationRequest {
+    browseStatisticArticlesRequest: BrowseStatisticArticlesRequest;
+}
+
+export interface BrowseStatisticBalanceRequest {
+    balancePeriodRequest?: BalancePeriodRequest;
+}
+
+export interface BrowseStatisticUsersRequest {
+    usersPeriodRequest?: UsersPeriodRequest;
+}
+
 export interface BrowseWriteOffsAsAdminRequest {
     pageRequest?: PageRequest;
+}
+
+export interface GetWriteOffRequest {
+    writeoffId: number;
 }
 
 export interface UpdateWriteOffOperationRequest {
@@ -39,6 +88,216 @@ export interface UpdateWriteOffOperationRequest {
  *
  */
 export class AdminApi extends runtime.BaseAPI {
+    /**
+     * activities statistics for admin
+     */
+    async browseStatisticActivitiesRaw(
+        requestParameters: BrowseStatisticActivitiesOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedActivitiesStatisticResponse>> {
+        if (
+            requestParameters.browseStatisticActivitiesRequest === null ||
+            requestParameters.browseStatisticActivitiesRequest === undefined
+        ) {
+            throw new runtime.RequiredError(
+                'browseStatisticActivitiesRequest',
+                'Required parameter requestParameters.browseStatisticActivitiesRequest was null or undefined when calling browseStatisticActivities.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/statistic/activities`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: BrowseStatisticActivitiesRequestToJSON(requestParameters.browseStatisticActivitiesRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            PaginatedActivitiesStatisticResponseFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * activities statistics for admin
+     */
+    async browseStatisticActivities(
+        requestParameters: BrowseStatisticActivitiesOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedActivitiesStatisticResponse> {
+        const response = await this.browseStatisticActivitiesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * articles statistics for admin
+     */
+    async browseStatisticArticlesRaw(
+        requestParameters: BrowseStatisticArticlesOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedArticleStatisticResponse>> {
+        if (
+            requestParameters.browseStatisticArticlesRequest === null ||
+            requestParameters.browseStatisticArticlesRequest === undefined
+        ) {
+            throw new runtime.RequiredError(
+                'browseStatisticArticlesRequest',
+                'Required parameter requestParameters.browseStatisticArticlesRequest was null or undefined when calling browseStatisticArticles.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/statistic/articles`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: BrowseStatisticArticlesRequestToJSON(requestParameters.browseStatisticArticlesRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            PaginatedArticleStatisticResponseFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * articles statistics for admin
+     */
+    async browseStatisticArticles(
+        requestParameters: BrowseStatisticArticlesOperationRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedArticleStatisticResponse> {
+        const response = await this.browseStatisticArticlesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * balance accrual and write-off statistics for admin
+     */
+    async browseStatisticBalanceRaw(
+        requestParameters: BrowseStatisticBalanceRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<Array<BalanceStatisticResponseInner>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/statistic/balance`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: BalancePeriodRequestToJSON(requestParameters.balancePeriodRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            jsonValue.map(BalanceStatisticResponseInnerFromJSON),
+        );
+    }
+
+    /**
+     * balance accrual and write-off statistics for admin
+     */
+    async browseStatisticBalance(
+        requestParameters: BrowseStatisticBalanceRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<Array<BalanceStatisticResponseInner>> {
+        const response = await this.browseStatisticBalanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * users log-in statistics for admin
+     */
+    async browseStatisticUsersRaw(
+        requestParameters: BrowseStatisticUsersRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<UsersStatisticResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/statistic/users`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: UsersPeriodRequestToJSON(requestParameters.usersPeriodRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UsersStatisticResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * users log-in statistics for admin
+     */
+    async browseStatisticUsers(
+        requestParameters: BrowseStatisticUsersRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<UsersStatisticResponse> {
+        const response = await this.browseStatisticUsersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
     /**
      * paginated view of write-offs for admin
      */
@@ -82,6 +341,59 @@ export class AdminApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedWriteOffResponse> {
         const response = await this.browseWriteOffsAsAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * get the write-off record identified by writeoff_id
+     */
+    async getWriteOffRaw(
+        requestParameters: GetWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
+        if (requestParameters.writeoffId === null || requestParameters.writeoffId === undefined) {
+            throw new runtime.RequiredError(
+                'writeoffId',
+                'Required parameter requestParameters.writeoffId was null or undefined when calling getWriteOff.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/wallet/write-off/{writeoff_id}`.replace(
+                    `{${'writeoff_id'}}`,
+                    encodeURIComponent(String(requestParameters.writeoffId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get the write-off record identified by writeoff_id
+     */
+    async getWriteOff(
+        requestParameters: GetWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<WriteOffResponse> {
+        const response = await this.getWriteOffRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -73,6 +73,10 @@ export interface GetAccrualRequest {
     accrualId: number;
 }
 
+export interface GetOwnWriteOffRequest {
+    writeoffId: number;
+}
+
 export interface GetWalletHistoryRequest {
     pageRequest?: PageRequest;
 }
@@ -80,10 +84,6 @@ export interface GetWalletHistoryRequest {
 export interface GetWalletHistoryForUserIdRequest {
     userId: number;
     pageRequest?: PageRequest;
-}
-
-export interface GetWriteOffRequest {
-    writeoffId: number;
 }
 
 export interface WriteOffOperationRequest {
@@ -408,6 +408,59 @@ export class WalletApi extends runtime.BaseAPI {
     }
 
     /**
+     * get the write-off record identified by writeoff_id and created by currently logged user
+     */
+    async getOwnWriteOffRaw(
+        requestParameters: GetOwnWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
+        if (requestParameters.writeoffId === null || requestParameters.writeoffId === undefined) {
+            throw new runtime.RequiredError(
+                'writeoffId',
+                'Required parameter requestParameters.writeoffId was null or undefined when calling getOwnWriteOff.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/wallet/write-off/{writeoff_id}`.replace(
+                    `{${'writeoff_id'}}`,
+                    encodeURIComponent(String(requestParameters.writeoffId)),
+                ),
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get the write-off record identified by writeoff_id and created by currently logged user
+     */
+    async getOwnWriteOff(
+        requestParameters: GetOwnWriteOffRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<WriteOffResponse> {
+        const response = await this.getOwnWriteOffRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * get history of operations of the currently logged in user
      */
     async getWalletHistoryRaw(
@@ -545,59 +598,6 @@ export class WalletApi extends runtime.BaseAPI {
      */
     async getWalletOverview(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WalletResponse> {
         const response = await this.getWalletOverviewRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * get the write-off record identified by writeoff_id
-     */
-    async getWriteOffRaw(
-        requestParameters: GetWriteOffRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<WriteOffResponse>> {
-        if (requestParameters.writeoffId === null || requestParameters.writeoffId === undefined) {
-            throw new runtime.RequiredError(
-                'writeoffId',
-                'Required parameter requestParameters.writeoffId was null or undefined when calling getWriteOff.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/admin/wallet/write-off/{writeoff_id}`.replace(
-                    `{${'writeoff_id'}}`,
-                    encodeURIComponent(String(requestParameters.writeoffId)),
-                ),
-                method: 'GET',
-                headers: headerParameters,
-                query: queryParameters,
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => WriteOffResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * get the write-off record identified by writeoff_id
-     */
-    async getWriteOff(
-        requestParameters: GetWriteOffRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<WriteOffResponse> {
-        const response = await this.getWriteOffRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

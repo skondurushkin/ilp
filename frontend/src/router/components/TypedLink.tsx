@@ -10,7 +10,7 @@ export interface PresentationProps extends LinkProps {
 }
 
 export const TypedLink = (props: LinkWithParamProps & PresentationProps) => {
-    const { to, params, search, presentation = 'link', primary, className, ...rest } = props;
+    const { to, params, search, hash, presentation = 'link', primary, className, ...rest } = props;
 
     let searchStr: string | undefined;
     if (search) {
@@ -24,5 +24,5 @@ export const TypedLink = (props: LinkWithParamProps & PresentationProps) => {
         className,
     );
 
-    return <Link {...rest} to={{ pathname: buildUrl(to, params), search: searchStr }} className={classes} />;
+    return <Link {...rest} to={{ pathname: buildUrl(to, params), search: searchStr, hash }} className={classes} />;
 };
