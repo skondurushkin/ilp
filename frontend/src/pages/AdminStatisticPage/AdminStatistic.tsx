@@ -40,10 +40,12 @@ export function AdminStatisticPage() {
 
     const primaryAxis = React.useMemo<AxisOptions<BalanceStatisticResponseInnerDataInner>>(
         () => ({
-            getValue: (datum) => datum.date,
+            getValue: (datum) => new Date(datum.date),
         }),
         [],
     );
+
+    const noData = <div className="text-h2 py-10 text-center text-white">Нет данных для отображения</div>;
 
     return (
         <div className="flex flex-col gap-8">
@@ -68,6 +70,7 @@ export function AdminStatisticPage() {
                 {isLoadingBalance && <Spinner />}
                 <div className="bg-black">
                     <div className="text-h2 my-4 ml-8 text-white">Движение вольт по балансу пользователей</div>
+                    {!balanceData && noData}
                     {balanceData && (
                         <div className="m-2 h-[40vh]">
                             <Chart
@@ -125,6 +128,7 @@ export function AdminStatisticPage() {
                 <div className="bg-black py-1">
                     <div className="text-h2 my-4 ml-8 text-white">Статистика входов посетителей</div>
                     {isLoadingUsers && <Spinner />}
+                    {!usersData && noData}
                     {usersData && (
                         <div className="m-2 h-[40vh]">
                             <Chart
