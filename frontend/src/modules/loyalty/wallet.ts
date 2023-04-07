@@ -38,7 +38,7 @@ export const useAccrualsHistoryQuery = (page: number): UseQueryResult<PaginatedA
 };
 
 export const useWriteOffsHistoryQuery = (page: number): UseQueryResult<PaginatedWriteOffResponse> => {
-    const loaderParams = { pageRequest: { page, pageSize: WALLET_HISTORY_PAGE_SIZE } };
+    const loaderParams = { browseWriteOffsRequest: { page, pageSize: WALLET_HISTORY_PAGE_SIZE } };
     const loader = () => api.wallet.browseWriteOffs(loaderParams);
     return useQuery(['write-offs-history', page], loader, {
         retry: false,

@@ -13,6 +13,7 @@ import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedProfileResponse;
 import ru.itone.ilp.openapi.model.ProfileResponse;
+import ru.itone.ilp.openapi.model.ProfileResponseForAdmin;
 import ru.itone.ilp.persistence.entities.User;
 import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.mappers.ProfileMapper;
@@ -40,6 +41,12 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<ProfileResponseForAdmin> getProfileByIdForAdmin(Long userId) {
+        return  userRepository.findById(userId)
+                .map(ProfileService::toResponseForAdmin);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<ProfileResponse> getProfileByEmail(String email) {
         return  userRepository.findByEmail(email)
                 .map(ProfileService::toResponse);
@@ -59,6 +66,11 @@ public class ProfileService {
     public static ProfileResponse toResponse(User user) {
         return  ProfileMapper.INSTANCE.userToProfileResponse(user);
     }
+
+    public static ProfileResponseForAdmin toResponseForAdmin(User user) {
+        return  ProfileMapper.INSTANCE.userToProfileResponseForAdmin(user);
+    }
+
 
     public static PaginatedProfileResponse toPaginatedResponse(Page<User> page) {
         return ProfileMapper.INSTANCE.toPaginatedResponse(page);
