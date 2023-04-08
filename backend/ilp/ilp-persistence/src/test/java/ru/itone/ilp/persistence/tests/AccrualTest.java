@@ -21,7 +21,7 @@ class AccrualTest extends AbstractPersistenceTest {
     void testAccrual_findAllByUserId() {
         List<AccrualResponse> accrualResponses = Helpers.asList(accrualRepository.findAllByUserIdOrderByDateDesc(2L),
                 AccrualMapper.INSTANCE::toResponse);
-        assertEquals(2, accrualResponses.size());
+        assertEquals(3, accrualResponses.size());
         log.info("RESPONSE: {}", accrualResponses);
     }
 
