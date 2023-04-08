@@ -1,9 +1,9 @@
+import { AccrualResponse, OperationResponseTypeEnum } from '../../../api';
 import { ReactElement, useMemo } from 'react';
 
-import { AccrualResponse } from '../../../api';
-import { Amount } from './Amount';
 import type { ColumnDef } from '@tanstack/table-core';
 import { HistoryTable } from './HistoryTable';
+import { Zaps } from '../../../components/Zaps';
 import { useAccrualsHistoryQuery } from '../../../modules/loyalty';
 
 export function AccrualsTable(): ReactElement {
@@ -33,7 +33,13 @@ export function AccrualsTable(): ReactElement {
                 header: 'сумма действия',
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <Amount dir="+" amount={amount} />;
+                    return (
+                        <Zaps
+                            className="items-baseline font-bold"
+                            type={OperationResponseTypeEnum.Accrual}
+                            amount={amount}
+                        />
+                    );
                 },
                 size: 160,
             },
@@ -41,5 +47,5 @@ export function AccrualsTable(): ReactElement {
         [],
     );
 
-    return <HistoryTable useHistoryQuery={useAccrualsHistoryQuery} columns={columns} />;
+    return <HistoryTable useHistoryQuery={useAccrualsHistoryQuery} columns={columns} noRowsMessage="Нет пополнений" />;
 }

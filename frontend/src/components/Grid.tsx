@@ -1,14 +1,14 @@
 import 'swiper/swiper.min.css';
 
+import { Key, ReactElement, ReactNode } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useIsXsScreen } from './useBreakpoint';
 
 export interface GridProps {
     className?: string;
-    children?: (boolean | JSX.Element[])[];
+    children?: ReactNode;
 }
 
 /**
@@ -19,17 +19,35 @@ export function Grid(props: GridProps): ReactElement {
 
     const isXsScreen = useIsXsScreen();
 
-    const elements: ReactElement[] = [];
+    const elements: ReactNode[] = [];
     if (Array.isArray(children)) {
-        elements.push(...children.flat().filter((c): c is ReactElement => typeof c !== 'boolean'));
+        elements.push(...children.flat(Number.MAX_VALUE));
+    } else {
+        elements.push(children);
     }
 
     if (isXsScreen) {
         return (
-            <Swiper slidesPerView={1} spaceBetween={16} className={className}>
-                {elements.map((el) => (
-                    <SwiperSlide key={el.key}>{el}</SwiperSlide>
-                ))}
+            <Swiper className={className} cssMode slidesPerView={1.1} spaceBetween={16}>
+                {elements
+                    .filter(
+                        (c): c is Exclude<ReactNode, boolean | null | undefined> =>
+                            c !== undefined && c !== null && typeof c !== 'boolean',
+                    )
+                    .map((el, i) => {
+                        let key: Key | null = null;
+                        if (typeof el === 'string') {
+                            key = el;
+                        } else if (typeof el === 'number') {
+                            key = el;
+                        } else if ('key' in el) {
+                            key = el.key;
+                        }
+                        if (key == null) {
+                            key = i;
+                        }
+                        return <SwiperSlide key={key}>{el}</SwiperSlide>;
+                    })}
             </Swiper>
         );
     }

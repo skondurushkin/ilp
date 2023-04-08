@@ -2,11 +2,12 @@ import { ReactElement, ReactNode, Suspense, useEffect, useRef, useState } from '
 
 import { ReactComponent as BurgerIcon } from '../../assets/burger.svg';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
-import { ReactComponent as Logo } from '../../assets/logo-light.svg';
+import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { Nav } from './Nav';
 import { Outlet } from 'react-router-dom';
 import { PageSpinner } from '../Spinner';
 import { Profile } from './Profile';
+import { ReactComponent as ProgramLogo } from '../../assets/program-logo.svg';
 import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
 import { createPortal } from 'react-dom';
@@ -22,11 +23,12 @@ export function AuthUserRouteLayout(): ReactElement {
 
     return (
         <div className="relative flex min-h-[100vh] w-full flex-col">
-            <header className="z-header fixed top-0 w-full bg-black text-white">
-                <div className="flex justify-between px-4 py-4 xl:container sm:px-8 md:px-14 xl:mx-auto xl:py-6 xl:pl-0 xl:pr-8">
+            <header className="z-header h-header md:h-header-md fixed top-0 flex w-full bg-black text-white">
+                <div className="flex grow justify-between px-4 py-3 xl:container sm:px-8 md:px-14 md:py-4 xl:mx-auto xl:pl-0 xl:pr-8">
                     <div className="xl:w-sidebar flex items-center xl:pl-8">
-                        <TypedLink to="/">
-                            <Logo />
+                        <TypedLink className="flex flex-col justify-between" to="/">
+                            <Logo className="icon-dark md:h-[39px] md:w-[113px]" />
+                            <ProgramLogo className="md:h-[18px] md:w-[149px]" />
                         </TypedLink>
                     </div>
                     <div className="hidden grow pl-8 md:flex">
@@ -54,7 +56,7 @@ export function AuthUserRouteLayout(): ReactElement {
                     </button>
                 </div>
             </header>
-            <div className="app-bg pt-header-mobile xl:pt-header flex grow flex-col">
+            <div className="app-bg pt-header md:pt-header-md flex grow flex-col">
                 <div className="relative flex w-full grow xl:container xl:mx-auto">
                     <aside
                         ref={sidebarRef}
@@ -64,11 +66,11 @@ export function AuthUserRouteLayout(): ReactElement {
                             'border-r-gray flex flex-col overflow-y-auto border-r',
                             //mobile
                             mobileSidebarVisible ? 'translate-x-0' : 'translate-x-full',
-                            'fixed bottom-0 left-0 right-0 top-0 z-40 transition-transform',
+                            'z-sidebar fixed bottom-0 left-0 right-0 top-0 transition-transform',
                             // tablet, screen
                             'sm:w-sidebar sm:left-auto',
                             // wide screen
-                            'xl:right-auto xl:top-[92px] xl:translate-x-0',
+                            'xl:top-header-md xl:right-auto xl:translate-x-0',
                         )}
                     >
                         <div className="flex justify-between px-4 py-3 sm:px-8 sm:py-6 md:px-14 xl:hidden">
@@ -86,7 +88,7 @@ export function AuthUserRouteLayout(): ReactElement {
                         />
                     </aside>
                     <main className="xl:pl-sidebar flex w-full grow flex-col xl:container">
-                        <div className="grow px-4 pb-10 pt-6 sm:px-8 sm:py-8 md:px-14 md:pb-10 md:pt-8 xl:px-8 xl:pb-10 xl:pt-8">
+                        <div className="pt-app-content-v-padding sm:py-app-content-v-padding-md grow px-4 pb-10 sm:px-8 md:px-14 md:pb-10 xl:px-8">
                             <Suspense fallback={<PageSpinner />}>
                                 <Outlet />
                             </Suspense>

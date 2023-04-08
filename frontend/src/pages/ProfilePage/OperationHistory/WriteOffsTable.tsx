@@ -1,10 +1,10 @@
+import { OperationResponseTypeEnum, WriteOffResponse } from '../../../api';
 import { ReactElement, useMemo } from 'react';
 
-import { Amount } from './Amount';
 import type { ColumnDef } from '@tanstack/table-core';
 import { HistoryTable } from './HistoryTable';
 import { TypedLink } from '../../../router';
-import { WriteOffResponse } from '../../../api';
+import { Zaps } from '../../../components/Zaps';
 import { useWriteOffsHistoryQuery } from '../../../modules/loyalty';
 
 export function WriteOffsTable(): ReactElement {
@@ -38,7 +38,13 @@ export function WriteOffsTable(): ReactElement {
                 header: 'сумма действия',
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <Amount dir="-" amount={amount} />;
+                    return (
+                        <Zaps
+                            className="items-baseline font-bold"
+                            type={OperationResponseTypeEnum.WriteOff}
+                            amount={amount}
+                        />
+                    );
                 },
                 size: 160,
             },
@@ -46,5 +52,5 @@ export function WriteOffsTable(): ReactElement {
         [],
     );
 
-    return <HistoryTable useHistoryQuery={useWriteOffsHistoryQuery} columns={columns} />;
+    return <HistoryTable useHistoryQuery={useWriteOffsHistoryQuery} columns={columns} noRowsMessage="Нет списаний" />;
 }
