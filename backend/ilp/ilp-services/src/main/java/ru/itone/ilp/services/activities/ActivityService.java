@@ -33,8 +33,9 @@ import ru.itone.ilp.persistence.repositories.ActivityRepository;
 public class ActivityService {
     private final ActivityRepository activityRepository;
 
-    private final ExampleMatcher nameMatcher = ExampleMatcher.matching()
-            .withIgnorePaths("id", "description", "amount", "startDate", "endDate", "infoLink")
+    private final ExampleMatcher nameMatcher = ExampleMatcher
+            .matching()
+            .withIgnoreNullValues()
             .withMatcher("name", ignoreCase());
 
     @Transactional(readOnly = true)
@@ -55,14 +56,16 @@ public class ActivityService {
 
     @Transactional
     public ActivityResponse createActivity(ActivityRequest request) {
-        Activity activity = ActivityMapper.INSTANCE.activityFromRequest(request)
-                .setStartDate(LocalDate.now());
-        if (activityRepository.exists(Example.of(activity, nameMatcher))) {
-            String message = String.format("Активность '%s' уже существует", activity.getName());
+        if (activityRepository.exists(Example.of(new Activity().setName(request.getName()), nameMatcher))) {
+            String message = String.format("Активность '%s' уже существует", request.getName());
             log.error("Невозможно создать запись: {}", message);
             throw new ApiExceptions.ConflictException(message);
         }
-        activity = activityRepository.save(activity);
+
+        Activity activity = activityRepository.save(
+                ActivityMapper.INSTANCE.activityFromRequest(request)
+                        .setStartDate(LocalDate.now())
+        );
         return toResponse(activity);
     }
 

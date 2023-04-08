@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.openapi.api.AdminApi;
 import ru.itone.ilp.openapi.model.AccrualResponse;
+import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.BalancePeriodRequest;
 import ru.itone.ilp.openapi.model.BalanceStatisticResponseInner;
 import ru.itone.ilp.openapi.model.BrowseStatisticActivitiesRequest;
@@ -68,7 +69,7 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsAsAdmin(PageRequest pageRequest) {
-        return ResponseEntity.ok(walletService.paginateWriteOffs(pageRequest));
+        return ResponseEntity.ok(resolveProfileLinks(walletService.paginateWriteOffs(pageRequest)));
     }
 
     @Override
@@ -103,7 +104,7 @@ public class AdminController extends LinkResolver implements AdminApi {
                 .config(new PageRequestConfig().globalFilter(searchKey))
                 .pageSize(pageSize)
                 .page(page);
-        return ResponseEntity.ok(resolveLinks(profileService.paginate(pageRequest)));
+        return ResponseEntity.ok(resolveProfileLinks(profileService.paginate(pageRequest)));
     }
 
     public ResponseEntity<WriteOffResponse> updateWriteOff(Integer writeOffId, UpdateWriteOffRequest updateWriteOffRequest) {
@@ -116,20 +117,44 @@ public class AdminController extends LinkResolver implements AdminApi {
         return profile;
     }
 
+    private ArticleResponse resolveLink(ArticleResponse article) {
+        article.setImageLink(resolve(article.getImageLink()));
+        return article;
+    }
+
+
+    private WriteOffResponse resolveLink(WriteOffResponse writeOff) {
+        resolveLink(writeOff.getArticle());
+        return writeOff;
+    }
+
+
     private ProfileResponseForAdmin resolveLink(ProfileResponseForAdmin profile) {
         profile.setAvatarLink(resolve(profile.getAvatarLink()));
         return profile;
     }
 
-    private List<ProfileResponse> resolveLinks(List<ProfileResponse> profiles) {
+    private List<ProfileResponse> resolveProfileLinks(List<ProfileResponse> profiles) {
         if (!CollectionUtils.isEmpty(profiles)) {
             profiles.forEach(this::resolveLink);
         }
         return profiles;
     }
 
-    private PaginatedProfileResponse resolveLinks(PaginatedProfileResponse page) {
-        resolveLinks(page.getResults());
+    private List<WriteOffResponse> resolveWriteOffLinks(List<WriteOffResponse> writeOffs) {
+        if (!CollectionUtils.isEmpty(writeOffs)) {
+            writeOffs.forEach(this::resolveLink);
+        }
+        return writeOffs;
+    }
+
+    private PaginatedProfileResponse resolveProfileLinks(PaginatedProfileResponse page) {
+        this.resolveProfileLinks(page.getResults());
+        return page;
+    }
+
+    private PaginatedWriteOffResponse resolveProfileLinks(PaginatedWriteOffResponse page) {
+        resolveWriteOffLinks(page.getResults());
         return page;
     }
 
