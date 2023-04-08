@@ -13,6 +13,7 @@ export * from './ArticleResponse';
 export * from './ArticleStatisticResponse';
 export * from './ArticleUpdateRequest';
 export * from './BalancePeriodRequest';
+export * from './BalancePeriodRequestPeriod';
 export * from './BalanceStatisticResponseInner';
 export * from './BalanceStatisticResponseInnerDataInner';
 export * from './BrowseStatisticActivitiesRequest';

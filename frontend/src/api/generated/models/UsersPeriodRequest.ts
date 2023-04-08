@@ -12,7 +12,15 @@
  * Do not edit the class manually.
  */
 
+import {
+    BalancePeriodRequestPeriodFromJSON,
+    BalancePeriodRequestPeriodFromJSONTyped,
+    BalancePeriodRequestPeriodToJSON,
+} from './BalancePeriodRequestPeriod';
 import { exists, mapValues } from '../runtime';
+
+import type { BalancePeriodRequestPeriod } from './BalancePeriodRequestPeriod';
+
 /**
  *
  * @export
@@ -21,21 +29,11 @@ import { exists, mapValues } from '../runtime';
 export interface UsersPeriodRequest {
     /**
      *
-     * @type {string}
+     * @type {BalancePeriodRequestPeriod}
      * @memberof UsersPeriodRequest
      */
-    period: UsersPeriodRequestPeriodEnum;
+    period: BalancePeriodRequestPeriod;
 }
-
-/**
- * @export
- */
-export const UsersPeriodRequestPeriodEnum = {
-    Day: 'day',
-    All: 'all',
-} as const;
-export type UsersPeriodRequestPeriodEnum =
-    (typeof UsersPeriodRequestPeriodEnum)[keyof typeof UsersPeriodRequestPeriodEnum];
 
 /**
  * Check if a given object implements the UsersPeriodRequest interface.
@@ -56,7 +54,7 @@ export function UsersPeriodRequestFromJSONTyped(json: any, ignoreDiscriminator: 
         return json;
     }
     return {
-        period: json['period'],
+        period: BalancePeriodRequestPeriodFromJSON(json['period']),
     };
 }
 
@@ -68,6 +66,6 @@ export function UsersPeriodRequestToJSON(value?: UsersPeriodRequest | null): any
         return null;
     }
     return {
-        period: value.period,
+        period: BalancePeriodRequestPeriodToJSON(value.period),
     };
 }
