@@ -1420,13 +1420,7 @@
                 "tags": ["files"],
                 "parameters": [
                     {
-                        "name": "scope",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["global", "activity", "article", "profile"]
-                        }
+                        "$ref": "#/components/parameters/scope"
                     }
                 ],
                 "requestBody": {
@@ -1434,12 +1428,13 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "required": ["id", "filename"],
+                                "required": ["id", "file"],
                                 "properties": {
                                     "id": {
-                                        "$ref": "#/components/schemas/Identifier"
+                                        "$ref": "#/components/schemas/Identifier",
+                                        "description": "identifier of the object in the given scope"
                                     },
-                                    "filename": {
+                                    "file": {
                                         "type": "string",
                                         "format": "binary"
                                     }
@@ -1454,12 +1449,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "link": {
-                                            "type": "string"
-                                        }
-                                    }
+                                    "$ref": "#/components/schemas/UploadResponse"
                                 }
                             }
                         }
@@ -1470,15 +1460,18 @@
                 }
             }
         },
-        "/api/ilp/file/download": {
+        "/api/ilp/file/{scope}/{fileName}": {
             "get": {
-                "operationId": "downloadFile",
+                "operationId": "getFile",
                 "summary": "fetch file from ILP file store",
                 "tags": ["files"],
                 "parameters": [
                     {
-                        "name": "link",
-                        "in": "query",
+                        "$ref": "#/components/parameters/scope"
+                    },
+                    {
+                        "name": "fileName",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1490,7 +1483,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": {
+                            "application/octet-stream": {
                                 "schema": {
                                     "type": "string",
                                     "format": "binary"
@@ -1568,12 +1561,21 @@
                 },
                 "description": "value for search"
             },
+            "scope": {
+                "in": "path",
+                "name": "scope",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "enum": ["activity", "article", "profile"]
+                }
+            },
             "pageSize": {
                 "in": "query",
                 "name": "pageSize",
                 "required": true,
                 "schema": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "description": "requested page size"
             },
@@ -1582,7 +1584,7 @@
                 "name": "page",
                 "required": true,
                 "schema": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "description": "requested page"
             }
@@ -1592,8 +1594,24 @@
                 "type": "object",
                 "properties": {
                     "period": {
-                        "type": "string",
-                        "enum": ["day", "week", "month"]
+                        "type": "object",
+                        "properties": {
+                            "start": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2023-04-21T17:32:28"
+                            },
+                            "end": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2023-04-21T17:32:28"
+                            },
+                            "interval": {
+                                "type": "string",
+                                "enum": ["hour", "day"]
+                            }
+                        },
+                        "required": ["start", "end", "interval"]
                     }
                 },
                 "required": ["period"]
@@ -1633,8 +1651,24 @@
                 "type": "object",
                 "properties": {
                     "period": {
-                        "type": "string",
-                        "enum": ["day", "all"]
+                        "type": "object",
+                        "properties": {
+                            "start": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2023-04-21T17:32:28"
+                            },
+                            "end": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2023-04-21T17:32:28"
+                            },
+                            "interval": {
+                                "type": "string",
+                                "enum": ["hour", "day"]
+                            }
+                        },
+                        "required": ["start", "end", "interval"]
                     }
                 },
                 "required": ["period"]
@@ -2096,7 +2130,6 @@
                     },
                     "phone": {
                         "type": "string",
-                        "format": "email",
                         "maxLength": 20
                     },
                     "roles": {
@@ -2161,6 +2194,10 @@
             "ERole": {
                 "type": "string",
                 "enum": ["USER", "MODERATOR", "ADMIN"]
+            },
+            "EScope": {
+                "type": "string",
+                "enum": ["activity", "article", "profile"]
             },
             "PaginatedProfileResponse": {
                 "allOf": [
@@ -2565,6 +2602,25 @@
                         }
                     }
                 ]
+            },
+            "UploadResponse": {
+                "type": "object",
+                "description": "links to the uploaded files",
+                "required": ["link"],
+                "properties": {
+                    "link": {
+                        "type": "string",
+                        "description": "relative link to the primary uploaded file"
+                    },
+                    "more": {
+                        "type": "array",
+                        "description": "list of relative links to secondary files",
+                        "items": {
+                            "type": "string",
+                            "description": "relative link to secondary file"
+                        }
+                    }
+                }
             }
         },
         "securitySchemes": {
