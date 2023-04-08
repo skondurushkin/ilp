@@ -8,7 +8,7 @@ import { Chips } from '../../components/Chips';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
-import { createPeriod } from '../../utils/dateFormatters';
+import { createPeriod } from '../../utils/period';
 import { twMerge } from 'tailwind-merge';
 
 type BalanceChip = 'day' | 'week' | 'month';
