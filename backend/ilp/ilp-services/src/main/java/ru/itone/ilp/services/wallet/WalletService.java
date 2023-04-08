@@ -112,7 +112,9 @@ public class WalletService {
     public PaginatedWriteOffResponse paginateWriteOffsWithStatus(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest, Collection<OrderStatus> statuses) {
         dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
-        Page<WriteOff> page = dbJpa.getWriteOffRepository().findAllByUserIdAndOrderStatusIsIn(userId, statuses, pageable);
+        Page<WriteOff> page = statuses.isEmpty()
+                ? dbJpa.getWriteOffRepository().findAllByUserId(userId, pageable)
+                : dbJpa.getWriteOffRepository().findAllByUserIdAndOrderStatusIsIn(userId, statuses, pageable);
         List<WriteOffResponse> results = page.getContent().stream().map(WriteOffMapper.INSTANCE::toResponse).toList();
         return new PaginatedWriteOffResponse()
                 .total(page.getTotalPages())
