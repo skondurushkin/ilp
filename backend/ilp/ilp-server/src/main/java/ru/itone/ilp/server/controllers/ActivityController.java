@@ -38,8 +38,7 @@ public class ActivityController implements ActivityApi {
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<ActivityResponse> createActivity(ActivityRequest activityRequest) {
-        return Optional.ofNullable(activityService.createActivity(activityRequest))
-                .map( a -> new ResponseEntity<>(a, HttpStatus.CREATED))
+        return Optional.ofNullable(activityService.createActivity(activityRequest)).map(a -> new ResponseEntity<>(a, HttpStatus.CREATED))
                 .orElseThrow(() -> new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 

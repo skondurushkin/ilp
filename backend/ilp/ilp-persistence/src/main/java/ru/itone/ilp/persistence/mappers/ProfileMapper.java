@@ -24,6 +24,10 @@ public interface ProfileMapper {
     @Mapping(target = "fio", expression= "java(user.toName())")
     @Mapping(target = "roles", qualifiedByName = "responseRoles")
     @Mapping(target = "endDate", conditionExpression = "java(!user.isActive())")
+    @Mapping(target = "jobPosition", constant = "Sr. Java Developer")
+    @Mapping(target = "country", constant = "Россия")
+    @Mapping(target = "city", constant = "Москва")
+    @Mapping(target = "phone", constant = "+7(905)123-45-67")
     ProfileResponse userToProfileResponse(User user);
 
     default ProfileResponseForAdmin userToProfileResponseForAdmin(User user) {

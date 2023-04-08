@@ -21,6 +21,13 @@ public class ApiExceptions {
     }
 
 
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public static class ConflictException extends RuntimeException {
+        public ConflictException(String message) {
+            super(message);
+        }
+    }
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public static class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String message) {
