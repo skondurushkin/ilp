@@ -19,7 +19,7 @@ function App() {
     return (
         <ErrorBoundary FallbackComponent={AppErrorBoundaryFallback}>
             <QueryClientProvider client={queryClient}>
-                <ToastContainer theme={theme === 'dark' ? 'light' : 'dark'} position="bottom-right" />
+                <ToastContainer theme={theme === 'dark' ? 'light' : 'dark'} position="bottom-right" autoClose={3000} />
                 <ConfigProvider>
                     <BrowserRouter>
                         <AppRouter />

@@ -67,6 +67,12 @@ export interface ArticleResponse {
      * @memberof ArticleResponse
      */
     extension?: object | null;
+    /**
+     * the entity is available for actions
+     * @type {boolean}
+     * @memberof ArticleResponse
+     */
+    active?: boolean;
 }
 
 /**
@@ -100,6 +106,7 @@ export function ArticleResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         available: json['available'],
         imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
         extension: !exists(json, 'extension') ? undefined : json['extension'],
+        active: !exists(json, 'active') ? undefined : json['active'],
     };
 }
 
@@ -119,5 +126,6 @@ export function ArticleResponseToJSON(value?: ArticleResponse | null): any {
         available: value.available,
         imageLink: value.imageLink,
         extension: value.extension,
+        active: value.active,
     };
 }

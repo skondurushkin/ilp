@@ -58,7 +58,7 @@ export const ProductsAdminPage = () => {
                 accessorKey: 'actions',
                 header: () => <span>Действия</span>,
                 cell: (info) => {
-                    const { id } = info.row.original;
+                    const { id, active } = info.row.original;
                     const queryClient = useQueryClient();
 
                     const { mutate: deleteArticle, isLoading: deleteIsLoading } = useMutation(
@@ -76,24 +76,28 @@ export const ProductsAdminPage = () => {
                         },
                     );
 
-                    return (
-                        <div className="flex flex-col gap-2">
-                            <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
-                                <button className="flex items-center gap-2">
-                                    <EditSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Изменить</span>
+                    if (active) {
+                        return (
+                            <div className="flex flex-col gap-2">
+                                <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
+                                    <button className="flex items-center gap-2">
+                                        <EditSVG className="stroke-primary h-4 w-4" />
+                                        <span className="text-small text-primary">Изменить</span>
+                                    </button>
+                                </TypedLink>
+                                <button
+                                    className={twMerge('flex items-center gap-2', deleteIsLoading && 'opacity-50')}
+                                    disabled={deleteIsLoading}
+                                    onClick={() => deleteArticle()}
+                                >
+                                    <TrashSVG className="stroke-primary h-4 w-4" />
+                                    <span className="text-small text-primary">Удалить</span>
                                 </button>
-                            </TypedLink>
-                            <button
-                                className={twMerge('flex items-center gap-2', deleteIsLoading && 'opacity-50')}
-                                disabled={deleteIsLoading}
-                                onClick={() => deleteArticle()}
-                            >
-                                <TrashSVG className="stroke-primary h-4 w-4" />
-                                <span className="text-small text-primary">Удалить</span>
-                            </button>
-                        </div>
-                    );
+                            </div>
+                        );
+                    }
+
+                    return <p className="text-error">В архиве</p>;
                 },
             },
         ],

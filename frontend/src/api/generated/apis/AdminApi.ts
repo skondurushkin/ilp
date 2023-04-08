@@ -20,6 +20,7 @@ import type {
     BalanceStatisticResponseInner,
     BrowseStatisticActivitiesRequest,
     BrowseStatisticArticlesRequest,
+    CancelAccrualBody,
     CreateNewAccrualRequest,
     ErrorMessage,
     PageRequest,
@@ -45,6 +46,8 @@ import {
     BrowseStatisticActivitiesRequestToJSON,
     BrowseStatisticArticlesRequestFromJSON,
     BrowseStatisticArticlesRequestToJSON,
+    CancelAccrualBodyFromJSON,
+    CancelAccrualBodyToJSON,
     CreateNewAccrualRequestFromJSON,
     CreateNewAccrualRequestToJSON,
     ErrorMessageFromJSON,
@@ -91,6 +94,16 @@ export interface BrowseStatisticUsersRequest {
 
 export interface BrowseWriteOffsAsAdminRequest {
     pageRequest?: PageRequest;
+}
+
+export interface BrowseWriteOffsForUserIdAsAdminRequest {
+    userId: number;
+    pageRequest?: PageRequest;
+}
+
+export interface CancelAccrualForUserRequest {
+    userId: number;
+    cancelAccrualBody: CancelAccrualBody;
 }
 
 export interface CreateNewAccrualOperationRequest {
@@ -379,6 +392,125 @@ export class AdminApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedWriteOffResponse> {
         const response = await this.browseWriteOffsAsAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * paginated view of write-offs of the user identified by user_id
+     */
+    async browseWriteOffsForUserIdAsAdminRaw(
+        requestParameters: BrowseWriteOffsForUserIdAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedWriteOffResponse>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling browseWriteOffsForUserIdAsAdmin.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/wallet/write-offs/{user_id}`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: PageRequestToJSON(requestParameters.pageRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedWriteOffResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * paginated view of write-offs of the user identified by user_id
+     */
+    async browseWriteOffsForUserIdAsAdmin(
+        requestParameters: BrowseWriteOffsForUserIdAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedWriteOffResponse> {
+        const response = await this.browseWriteOffsForUserIdAsAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * cancel accrual for user identified by user_id
+     */
+    async cancelAccrualForUserRaw(
+        requestParameters: CancelAccrualForUserRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<AccrualResponse>> {
+        if (requestParameters.userId === null || requestParameters.userId === undefined) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter requestParameters.userId was null or undefined when calling cancelAccrualForUser.',
+            );
+        }
+
+        if (requestParameters.cancelAccrualBody === null || requestParameters.cancelAccrualBody === undefined) {
+            throw new runtime.RequiredError(
+                'cancelAccrualBody',
+                'Required parameter requestParameters.cancelAccrualBody was null or undefined when calling cancelAccrualForUser.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/wallet/accrual/{user_id}/cancel`.replace(
+                    `{${'user_id'}}`,
+                    encodeURIComponent(String(requestParameters.userId)),
+                ),
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: CancelAccrualBodyToJSON(requestParameters.cancelAccrualBody),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccrualResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * cancel accrual for user identified by user_id
+     */
+    async cancelAccrualForUser(
+        requestParameters: CancelAccrualForUserRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<AccrualResponse> {
+        const response = await this.cancelAccrualForUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

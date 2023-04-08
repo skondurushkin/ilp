@@ -20,7 +20,7 @@ html {
     }
 
     .input {
-        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
+        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black read-only:cursor-default focus:outline-none focus:ring-0;
     }
 
     .select {
