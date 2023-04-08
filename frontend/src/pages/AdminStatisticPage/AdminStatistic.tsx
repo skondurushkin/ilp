@@ -1,6 +1,5 @@
 import { BalancePeriodRequestPeriod, BalanceStatisticResponseInnerDataInner } from '../../api';
 import React, { useMemo, useState } from 'react';
-import { getDateMinusDays, getDateMinusMonths, toIsoString } from '../../utils/dateFormatters';
 import { useQueryBalanceStatistic, useQueryUsersStatistic } from '../../modules/admin';
 
 import type { AxisOptions } from 'react-charts';
@@ -9,6 +8,7 @@ import { Chips } from '../../components/Chips';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
+import { createPeriod } from '../../utils/dateFormatters';
 import { twMerge } from 'tailwind-merge';
 
 type BalanceChip = 'day' | 'week' | 'month';
@@ -23,42 +23,26 @@ export function AdminStatisticPage() {
     });
 
     const periodBalance: BalancePeriodRequestPeriod = useMemo(() => {
+        const now = new Date();
         switch (balanceChip) {
             case 'day':
-                return {
-                    start: toIsoString(getDateMinusDays(1)),
-                    end: toIsoString(new Date()),
-                    interval: 'hour',
-                };
+                return { ...createPeriod(now, '-day'), interval: 'hour' };
             case 'week':
-                return {
-                    start: toIsoString(getDateMinusDays(7)),
-                    end: toIsoString(new Date()),
-                    interval: 'day',
-                };
+                return { ...createPeriod(now, '-week'), interval: 'day' };
             default:
-                return {
-                    start: toIsoString(getDateMinusMonths(1)),
-                    end: toIsoString(new Date()),
-                    interval: 'day',
-                };
+                return { ...createPeriod(now, '-month'), interval: 'day' };
         }
     }, [balanceChip]);
 
     const periodUsers: BalancePeriodRequestPeriod = useMemo(() => {
-        switch (usersChip) {
+        const now = new Date();
+        switch (balanceChip) {
             case 'day':
-                return {
-                    start: toIsoString(getDateMinusDays(1)),
-                    end: toIsoString(new Date()),
-                    interval: 'hour',
-                };
+                return { ...createPeriod(now, '-day'), interval: 'hour' };
+            case 'week':
+                return { ...createPeriod(now, '-week'), interval: 'day' };
             default:
-                return {
-                    start: toIsoString(getDateMinusMonths(12)),
-                    end: toIsoString(new Date()),
-                    interval: 'day',
-                };
+                return { ...createPeriod(now, '-month'), interval: 'day' };
         }
     }, [usersChip]);
 
