@@ -1948,6 +1948,7 @@ components:
         - date
         - name
         - amount
+        - active
       properties:
         type:
           type: string
@@ -1964,6 +1965,10 @@ components:
         amount:
           $ref: "#/components/schemas/Amount"
           description: operation amount
+        active:
+          type: boolean
+          default: true
+          description: the entity is available for actions
 
     PaginatedOperationResponse:
       allOf:

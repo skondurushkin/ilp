@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import validationRules from '../../utils/validationRules';
 
-export interface CancelAccrualFormData extends Omit<OperationResponse, 'type' | 'date'> {
+export interface CancelAccrualFormData extends Omit<OperationResponse, 'type' | 'date' | 'active'> {
     date: string;
 }
 

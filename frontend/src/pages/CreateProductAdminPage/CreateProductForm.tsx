@@ -50,7 +50,14 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
                 <div className="self-start">
-                    <PhotoInput control={control} name="imageLink" scope="article" />
+                    <PhotoInput
+                        control={control}
+                        name="imageLink"
+                        scope="article"
+                        rules={{
+                            required: validationRules.required,
+                        }}
+                    />
                 </div>
                 <div className="flex flex-col gap-3">
                     <FormInput

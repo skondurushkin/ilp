@@ -34,7 +34,15 @@ export const EditProductForm = (props: EditProductFormProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
                 <div className="self-start">
-                    <PhotoInput control={control} name="imageLink" scope="article" entityId={values.id} />
+                    <PhotoInput
+                        control={control}
+                        name="imageLink"
+                        scope="article"
+                        entityId={values.id}
+                        rules={{
+                            required: validationRules.required,
+                        }}
+                    />
                 </div>
                 <div className="flex flex-col gap-3">
                     <FormInput

@@ -49,6 +49,12 @@ export interface OperationResponse {
      * @memberof OperationResponse
      */
     amount: number;
+    /**
+     * the entity is available for actions
+     * @type {boolean}
+     * @memberof OperationResponse
+     */
+    active: boolean;
 }
 
 /**
@@ -70,6 +76,7 @@ export function instanceOfOperationResponse(value: object): boolean {
     isInstance = isInstance && 'date' in value;
     isInstance = isInstance && 'name' in value;
     isInstance = isInstance && 'amount' in value;
+    isInstance = isInstance && 'active' in value;
 
     return isInstance;
 }
@@ -88,6 +95,7 @@ export function OperationResponseFromJSONTyped(json: any, ignoreDiscriminator: b
         date: new Date(json['date']),
         name: json['name'],
         amount: json['amount'],
+        active: json['active'],
     };
 }
 
@@ -104,5 +112,6 @@ export function OperationResponseToJSON(value?: OperationResponse | null): any {
         date: value.date.toISOString().substr(0, 10),
         name: value.name,
         amount: value.amount,
+        active: value.active,
     };
 }
