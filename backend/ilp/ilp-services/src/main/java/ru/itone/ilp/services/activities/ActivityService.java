@@ -13,6 +13,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.exception.ApiExceptions;
@@ -40,10 +42,10 @@ public class ActivityService {
 
     @Transactional(readOnly = true)
     public PaginatedActivityResponse paginate(PageRequest request) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "amount"));
         String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<Activity> page = StringUtils.isBlank(filter)
-                ? activityRepository.findAll(pageable)
+                ? activityRepository.findAllByIdNot(1L, pageable)
                 : activityRepository.searchByText(filter, pageable);
         return toPaginatedResponse(page);
     }
