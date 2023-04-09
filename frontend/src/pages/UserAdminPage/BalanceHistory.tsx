@@ -79,22 +79,20 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
 
                     if (type === OperationResponseTypeEnum.Accrual) {
                         return (
-                            <div>
-                                <button
-                                    className="flex items-center gap-2"
-                                    onClick={() =>
-                                        setCancelAccrualModalData({
-                                            amount,
-                                            id,
-                                            name,
-                                            date: new Date(date).toLocaleDateString('ru-RU'),
-                                        })
-                                    }
-                                >
-                                    <XSquareVG className="stroke-error h-4 w-4" />
-                                    <span className="text-small text-error">Отменить</span>
-                                </button>
-                            </div>
+                            <button
+                                className="flex items-center gap-2"
+                                onClick={() =>
+                                    setCancelAccrualModalData({
+                                        amount,
+                                        id,
+                                        name,
+                                        date: new Date(date).toLocaleDateString('ru-RU'),
+                                    })
+                                }
+                            >
+                                <XSquareVG className="stroke-error h-4 w-4" />
+                                <span className="text-small text-error">Отменить</span>
+                            </button>
                         );
                     }
 

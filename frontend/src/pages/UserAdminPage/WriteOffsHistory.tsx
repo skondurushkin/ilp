@@ -91,22 +91,20 @@ export const WriteOffsHistory = (props: WriteOffsHistoryProps) => {
                     const { id, date, status, article } = info.row.original;
                     if (status !== WriteOffStatus.Completed && status !== WriteOffStatus.Cancelled) {
                         return (
-                            <div>
-                                <button
-                                    className="flex items-center gap-2"
-                                    onClick={() =>
-                                        setModalData({
-                                            articleName: article.name,
-                                            id,
-                                            status,
-                                            date: new Date(date).toLocaleDateString('ru-RU'),
-                                        })
-                                    }
-                                >
-                                    <EditSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Изменить</span>
-                                </button>
-                            </div>
+                            <button
+                                className="flex items-center gap-2"
+                                onClick={() =>
+                                    setModalData({
+                                        articleName: article.name,
+                                        id,
+                                        status,
+                                        date: new Date(date).toLocaleDateString('ru-RU'),
+                                    })
+                                }
+                            >
+                                <EditSVG className="stroke-primary h-4 w-4" />
+                                <span className="text-small text-primary">Изменить</span>
+                            </button>
                         );
                     }
 

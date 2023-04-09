@@ -79,11 +79,13 @@ export const ProductsAdminPage = () => {
                     if (active) {
                         return (
                             <div className="flex flex-col gap-2">
-                                <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
-                                    <button className="flex items-center gap-2">
-                                        <EditSVG className="stroke-primary h-4 w-4" />
-                                        <span className="text-small text-primary">Изменить</span>
-                                    </button>
+                                <TypedLink
+                                    to="/admin/products/edit/:productId"
+                                    params={{ productId: id.toString() }}
+                                    className="flex items-center gap-2"
+                                >
+                                    <EditSVG className="stroke-primary h-4 w-4" />
+                                    <span className="text-small text-primary">Изменить</span>
                                 </TypedLink>
                                 <button
                                     className={twMerge('flex items-center gap-2', deleteIsLoading && 'opacity-50')}
