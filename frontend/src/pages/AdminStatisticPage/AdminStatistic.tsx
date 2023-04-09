@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import { BalancePeriodRequestPeriod, BalanceStatisticResponseInnerDataInner } from '../../api';
+import React, { useMemo, useState } from 'react';
 import { useQueryBalanceStatistic, useQueryUsersStatistic } from '../../modules/admin';
 
 import type { AxisOptions } from 'react-charts';
-import { BalanceStatisticResponseInnerDataInner } from '../../api';
 import { Chart } from 'react-charts';
 import { Chips } from '../../components/Chips';
+import { DownloadBalanceCsvButton } from './DownloadCSV';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
-import { twMerge } from 'tailwind-merge';
+import { createPeriod } from '../../utils/period';
 
 type BalanceChip = 'day' | 'week' | 'month';
 type UsersChip = 'day' | 'all';
@@ -21,12 +22,36 @@ export function AdminStatisticPage() {
         activeDatumIndex: -1,
     });
 
+    const periodBalance: BalancePeriodRequestPeriod = useMemo(() => {
+        const now = new Date();
+        switch (balanceChip) {
+            case 'day':
+                return { ...createPeriod(now, '-day'), interval: 'hour' };
+            case 'week':
+                return { ...createPeriod(now, '-week'), interval: 'day' };
+            default:
+                return { ...createPeriod(now, '-month'), interval: 'day' };
+        }
+    }, [balanceChip]);
+
+    const periodUsers: BalancePeriodRequestPeriod = useMemo(() => {
+        const now = new Date();
+        switch (balanceChip) {
+            case 'day':
+                return { ...createPeriod(now, '-day'), interval: 'hour' };
+            case 'week':
+                return { ...createPeriod(now, '-week'), interval: 'day' };
+            default:
+                return { ...createPeriod(now, '-month'), interval: 'day' };
+        }
+    }, [usersChip]);
+
     const { data: balanceData, isLoading: isLoadingBalance } = useQueryBalanceStatistic({
-        balancePeriodRequest: { period: balanceChip },
+        balancePeriodRequest: { period: periodBalance },
     });
 
     const { data: usersData, isLoading: isLoadingUsers } = useQueryUsersStatistic({
-        usersPeriodRequest: { period: usersChip },
+        usersPeriodRequest: { period: periodUsers },
     });
 
     const secondaryAxes = React.useMemo<AxisOptions<BalanceStatisticResponseInnerDataInner>[]>(
@@ -40,10 +65,12 @@ export function AdminStatisticPage() {
 
     const primaryAxis = React.useMemo<AxisOptions<BalanceStatisticResponseInnerDataInner>>(
         () => ({
-            getValue: (datum) => datum.date,
+            getValue: (datum) => new Date(datum.date),
         }),
         [],
     );
+
+    const noData = <div className="text-h2 py-10 text-center text-white">Нет данных для отображения</div>;
 
     return (
         <div className="flex flex-col gap-8">
@@ -61,13 +88,12 @@ export function AdminStatisticPage() {
                         value={balanceChip}
                         onChange={setBalanceChip}
                     />
-                    <a href="/" download className="ml-auto">
-                        <button className={twMerge('chip h-6', 'chip-active')}>Скачать XML</button>
-                    </a>
+                    {<DownloadBalanceCsvButton />}
                 </div>
+                <div className="text-h2 pl-2">Движение вольт по балансу пользователей</div>
                 {isLoadingBalance && <Spinner />}
                 <div className="bg-black">
-                    <div className="text-h2 my-4 ml-8 text-white">Движение вольт по балансу пользователей</div>
+                    {!balanceData && noData}
                     {balanceData && (
                         <div className="m-2 h-[40vh]">
                             <Chart
@@ -107,7 +133,7 @@ export function AdminStatisticPage() {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="flex flex-col gap-4">
                 <div className="flex gap-2 p-2">
                     <Chips
                         options={
@@ -120,11 +146,18 @@ export function AdminStatisticPage() {
                         onChange={setUsersChip}
                     />
                 </div>
-                <TopProducts />
-                <TopActivities />
+                <div>
+                    <div className="text-h2 l pl-2 leading-4">Топ товаров</div>
+                    <TopProducts />
+                </div>
+                <div>
+                    <div className="text-h2 pl-2 leading-4">Топ активностей</div>
+                    <TopActivities />
+                </div>
+                <div className="text-h2 pl-2">Статистика входов посетителей</div>
                 <div className="bg-black py-1">
-                    <div className="text-h2 my-4 ml-8 text-white">Статистика входов посетителей</div>
                     {isLoadingUsers && <Spinner />}
+                    {!usersData && noData}
                     {usersData && (
                         <div className="m-2 h-[40vh]">
                             <Chart

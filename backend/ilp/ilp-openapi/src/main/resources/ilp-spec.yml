@@ -939,6 +939,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/BalanceStatisticResponse"
 
+  /api/ilp/admin/statistic/balance/csv:
+    get:
+      description: Выгрузить движение вольт в CSV
+      operationId: downloadBalanceCsv
+      tags:
+        - admin
+      responses:
+        "200":
+          description: returns csv file
+          content:
+            text/csv:
+              schema:
+                type: string
+
   /api/ilp/admin/statistic/users:
     post:
       operationId: browseStatisticUsers
@@ -1150,8 +1164,21 @@ components:
       type: object
       properties:
         period:
-          type: string
-          enum: [day, week, month]
+          type: object
+          properties:
+            start:
+              type: string
+              example: "2023-04-21T17:32:28"
+            end:
+              type: string
+              example: "2023-04-21T17:32:28"
+            interval:
+              type: string
+              enum: [hour, day]
+          required:
+            - start
+            - end
+            - interval
       required:
         - period
 
@@ -1186,8 +1213,21 @@ components:
       type: object
       properties:
         period:
-          type: string
-          enum: [day, all]
+          type: object
+          properties:
+            start:
+              type: string
+              example: "2023-04-21T17:32:28"
+            end:
+              type: string
+              example: "2023-04-21T17:32:28"
+            interval:
+              type: string
+              enum: [hour, day]
+          required:
+            - start
+            - end
+            - interval
       required:
         - period
 
@@ -1992,7 +2032,6 @@ components:
           items:
             type: string
             description: relative link to secondary file
-
 
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme
