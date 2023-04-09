@@ -75,9 +75,9 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                 accessorKey: 'actions',
                 header: () => <span>Действия</span>,
                 cell: (info) => {
-                    const { id, amount, name, type, date } = info.row.original;
+                    const { id, amount, name, type, date, active } = info.row.original;
 
-                    if (type === OperationResponseTypeEnum.Accrual) {
+                    if (active && type === OperationResponseTypeEnum.Accrual) {
                         return (
                             <button
                                 className="flex items-center gap-2"

@@ -2625,7 +2625,7 @@
             },
             "OperationResponse": {
                 "type": "object",
-                "required": ["type", "id", "date", "name", "amount"],
+                "required": ["type", "id", "date", "name", "amount", "active"],
                 "properties": {
                     "type": {
                         "type": "string",
@@ -2646,6 +2646,11 @@
                     "amount": {
                         "$ref": "#/components/schemas/Amount",
                         "description": "operation amount"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "the entity is available for actions"
                     }
                 }
             },
