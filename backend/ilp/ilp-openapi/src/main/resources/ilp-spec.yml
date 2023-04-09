@@ -1826,9 +1826,9 @@ components:
     CancelAccrualBody:
       type: object
       required:
-        - activityId
+        - accrualId
       properties:
-        activityId:
+        accrualId:
           $ref: "#/components/schemas/Identifier"
 
     AccrualResponse:

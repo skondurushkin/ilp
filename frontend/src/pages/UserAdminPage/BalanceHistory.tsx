@@ -54,7 +54,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                             <div>
                                 <p className="text-base text-white">{name}</p>
                             </div>
-                            {type === OperationResponseTypeEnum.Accrual && (
+                            {type === OperationResponseTypeEnum.WriteOff && (
                                 <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
                                     <p className="text-small text-gray underline">Перейти</p>
                                 </TypedLink>

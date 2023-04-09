@@ -24,7 +24,7 @@ export interface CancelAccrualBody {
      * @type {number}
      * @memberof CancelAccrualBody
      */
-    activityId: number;
+    accrualId: number;
 }
 
 /**
@@ -32,7 +32,7 @@ export interface CancelAccrualBody {
  */
 export function instanceOfCancelAccrualBody(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && 'activityId' in value;
+    isInstance = isInstance && 'accrualId' in value;
 
     return isInstance;
 }
@@ -46,7 +46,7 @@ export function CancelAccrualBodyFromJSONTyped(json: any, ignoreDiscriminator: b
         return json;
     }
     return {
-        activityId: json['activityId'],
+        accrualId: json['accrualId'],
     };
 }
 
@@ -58,6 +58,6 @@ export function CancelAccrualBodyToJSON(value?: CancelAccrualBody | null): any {
         return null;
     }
     return {
-        activityId: value.activityId,
+        accrualId: value.accrualId,
     };
 }

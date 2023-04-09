@@ -2370,7 +2370,7 @@
             },
             "ArticleRequest": {
                 "type": "object",
-                "required": ["code", "name", "price", "available", "gallery"],
+                "required": ["code", "name", "price", "available"],
                 "properties": {
                     "code": {
                         "type": "string",
@@ -2394,14 +2394,6 @@
                     },
                     "imageLink": {
                         "type": "string"
-                    },
-                    "gallery": {
-                        "type": "array",
-                        "minItems": 5,
-                        "maxItems": 5,
-                        "items": {
-                            "$ref": "#/components/schemas/ImageLink"
-                        }
                     }
                 }
             },
@@ -2432,7 +2424,7 @@
             },
             "ArticleResponse": {
                 "type": "object",
-                "required": ["id", "code", "name", "price", "available", "active", "gallery"],
+                "required": ["id", "code", "name", "price", "available", "active"],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"
@@ -2465,14 +2457,6 @@
                     "imageLink": {
                         "type": "string"
                     },
-                    "gallery": {
-                        "type": "array",
-                        "minItems": 5,
-                        "maxItems": 5,
-                        "items": {
-                            "$ref": "#/components/schemas/ImageLink"
-                        }
-                    },
                     "extension": {
                         "type": "object",
                         "nullable": true
@@ -2499,9 +2483,9 @@
             },
             "CancelAccrualBody": {
                 "type": "object",
-                "required": ["activityId"],
+                "required": ["accrualId"],
                 "properties": {
-                    "activityId": {
+                    "accrualId": {
                         "$ref": "#/components/schemas/Identifier"
                     }
                 }
