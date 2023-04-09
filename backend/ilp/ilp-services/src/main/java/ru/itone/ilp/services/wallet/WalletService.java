@@ -37,6 +37,7 @@ import ru.itone.ilp.persistence.mappers.AccrualMapper;
 import ru.itone.ilp.persistence.mappers.OperationMapper;
 import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.mappers.WriteOffMapper;
+import ru.itone.ilp.persistence.types.AccrualStatus;
 import ru.itone.ilp.persistence.types.OrderStatus;
 
 @RequiredArgsConstructor
@@ -125,7 +126,6 @@ public class WalletService {
                 .results(results);
     }
 
-
     @Transactional(readOnly = true)
     public PaginatedOperationResponse getWalletHistory(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
@@ -209,6 +209,7 @@ public class WalletService {
                 .map(AccrualMapper.INSTANCE::toResponse)
                 .orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
     }
+
     @Transactional
     public AccrualResponse getAccrualForUser(Long accrualId, Long userId) {
         return dbJpa.getAccrualRepository()
@@ -223,11 +224,19 @@ public class WalletService {
                 .map(WriteOffMapper.INSTANCE::toResponse)
                 .orElseThrow( () -> new ResourceNotFoundException("Запись о списании не найдена"));
     }
+
     @Transactional
     public WriteOffResponse getWriteOffForUser(Long writeOffId, Long userId) {
         return dbJpa.getWriteOffRepository().findById(writeOffId)
                 .filter(a -> a.getUser().getId().equals(userId))
                 .map(WriteOffMapper.INSTANCE::toResponse)
                 .orElseThrow( () -> new ResourceNotFoundException("Запись о списании не найдена"));
+    }
+
+    @Transactional
+    public AccrualResponse cancelAccrual(Long accrualId) {
+        Accrual accrual = dbJpa.getAccrualRepository().findById(accrualId).orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
+        accrual = dbJpa.getAccrualRepository().save(accrual.setStatus(AccrualStatus.cancelled));
+        return AccrualMapper.INSTANCE.toResponse(accrual);
     }
 }

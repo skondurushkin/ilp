@@ -18,6 +18,7 @@ import ru.itone.ilp.openapi.model.BalancePeriodRequest;
 import ru.itone.ilp.openapi.model.BalanceStatisticResponseInner;
 import ru.itone.ilp.openapi.model.BrowseStatisticActivitiesRequest;
 import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.CancelAccrualBody;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
@@ -72,7 +73,17 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsAsAdmin(PageRequest pageRequest) {
-        return ResponseEntity.ok(resolveProfileLinks(walletService.paginateWriteOffs(pageRequest)));
+        return ResponseEntity.ok(resolveWriteOffLinks(walletService.paginateWriteOffs(pageRequest)));
+    }
+
+    @Override
+    public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsForUserIdAsAdmin(Integer userId, PageRequest pageRequest) {
+        return ResponseEntity.ok(resolveWriteOffLinks(walletService.paginateWriteOffs(userId.longValue(), pageRequest)));
+    }
+
+    @Override
+    public ResponseEntity<AccrualResponse> cancelAccrualForUser(Integer userId, CancelAccrualBody cancelAccrualBody) {
+        return ResponseEntity.ok(resolveLink(walletService.cancelAccrual(cancelAccrualBody.getAccrualId().longValue())));
     }
 
     @Override
@@ -85,6 +96,11 @@ public class AdminController extends LinkResolver implements AdminApi {
     public ResponseEntity<AccrualResponse> createNewAccrual(Integer userId, CreateNewAccrualRequest createNewAccrualRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(walletService.createNewAccrual(userId.longValue(), createNewAccrualRequest));
+    }
+
+    @Override
+    public ResponseEntity<String> downloadWriteOffsCsv() {
+        throw new IllegalStateException("Not yet implemented");
     }
 
     @Override
@@ -130,6 +146,11 @@ public class AdminController extends LinkResolver implements AdminApi {
         return article;
     }
 
+    private AccrualResponse resolveLink(AccrualResponse accrual) {
+        accrual.setInfoLink(resolve(accrual.getInfoLink()));
+        return accrual;
+    }
+
 
     private WriteOffResponse resolveLink(WriteOffResponse writeOff) {
         resolveLink(writeOff.getArticle());
@@ -161,7 +182,7 @@ public class AdminController extends LinkResolver implements AdminApi {
         return page;
     }
 
-    private PaginatedWriteOffResponse resolveProfileLinks(PaginatedWriteOffResponse page) {
+    private PaginatedWriteOffResponse resolveWriteOffLinks(PaginatedWriteOffResponse page) {
         resolveWriteOffLinks(page.getResults());
         return page;
     }

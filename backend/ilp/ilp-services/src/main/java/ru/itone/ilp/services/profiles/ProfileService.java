@@ -103,7 +103,7 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public Optional<ProfileResponseForAdmin> getProfileByIdForAdmin(Long userId) {
         return  userRepository.findById(userId)
-                .map(ProfileService::toResponseForAdmin);
+                .map( u -> toResponseForAdmin(u, dbApi.getBalance(userId).path("balance").asInt()));
     }
 
     @Transactional(readOnly = true)
@@ -127,8 +127,8 @@ public class ProfileService {
         return  ProfileMapper.INSTANCE.userToProfileResponse(user);
     }
 
-    public static ProfileResponseForAdmin toResponseForAdmin(User user) {
-        return  ProfileMapper.INSTANCE.userToProfileResponseForAdmin(user);
+    public static ProfileResponseForAdmin toResponseForAdmin(User user, Integer balance) {
+        return  ProfileMapper.INSTANCE.userToProfileResponseForAdmin(user).balance(balance);
     }
 
 

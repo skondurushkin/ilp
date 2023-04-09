@@ -17,10 +17,11 @@ class ArticleControllerTest extends AbstractServerTest {
     @Test
     void test_createArticle() throws Exception {
         JwtResponse jwt = login("skondurushkin@it-one.ru", "test");
+
         ArticleRequest request = new ArticleRequest().name("Test Article")
                 .description("Test Article description")
                 .price(30)
-                .imageLink("article/test-nothing-0001.png")
+                .imageLink("https://loyalty.devtst.ru/api/ilp/file/article/test-nothing-0001.png")
                 .code("test-nothing-0001");
         String content = mockMvc.perform(post("/api/ilp/article")
                         .header("Authorization", "Bearer " + jwt.getToken())

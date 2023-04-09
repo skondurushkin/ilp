@@ -11,4 +11,5 @@ public interface AccrualRepository extends JpaRepository<Accrual, Long> {
     Iterable<Accrual> findAllByUserIdOrderByDateDesc(Long userId);
 
     Page<Accrual> findAllByUserId(Long userId, Pageable pageable);
+
 }

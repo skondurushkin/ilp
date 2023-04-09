@@ -62,12 +62,6 @@ public class WalletController extends LinkResolver implements WalletApi {
     }
 
     @Override
-    @Secured("hasRole('ADMIN')")
-    public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsForUserId(Integer userId, PageRequest pageRequest) {
-        return ResponseEntity.ok(resolveLinks(walletService.paginateWriteOffs(userId.longValue(), pageRequest)));
-    }
-
-    @Override
     public ResponseEntity<AccrualResponse> getAccrual(Integer accrualId) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isAdmin = Helpers.isAdmin(userDetails);

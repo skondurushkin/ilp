@@ -1027,9 +1027,6 @@ paths:
               required:
                 - file
               properties:
-                id:
-                  $ref: "#/components/schemas/Identifier"
-                  description: identifier of the object in the given scope
                 file:
                   type: string
                   format: binary

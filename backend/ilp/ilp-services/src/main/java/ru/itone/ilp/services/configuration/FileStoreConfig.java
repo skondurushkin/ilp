@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import ru.itone.ilp.common.FileCheck;
 import ru.itone.ilp.common.FileStoreApi;
-import ru.itone.ilp.services.filestore.ExtensionService;
 import ru.itone.ilp.services.filestore.FileStore;
 import ru.itone.ilp.services.filestore.FileStoreService;
 
@@ -40,7 +39,7 @@ public class FileStoreConfig {
     }
 
     @Bean
-    public FileStoreService fileStoreService(FileStoreApi fileStore, ExtensionService extensionService) {
-        return new FileStoreService(fileStore, extensionService);
+    public FileStoreService fileStoreService(FileStoreApi fileStore) {
+        return new FileStoreService(fileStore);
     }
 }

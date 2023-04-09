@@ -2,6 +2,8 @@ package ru.itone.ilp.server.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,17 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Slf4j
 @NoArgsConstructor
 abstract class LinkResolver {
+
+    protected String relativize(String link) {
+        if (StringUtils.isBlank(link)) {
+            return null;
+        }
+        URI uri = URI.create(link);
+        if (!uri.isAbsolute()) {
+            return link;
+        }
+        return URLDecoder.decode(getBaseUri().relativize(uri).toString(), StandardCharsets.UTF_8);
+    }
 
     protected String resolve(String link) {
         if (StringUtils.isBlank(link)) {

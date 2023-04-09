@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.detect.ZeroSizeFileDetector;
@@ -44,7 +45,6 @@ public class FileStoreService {
             .collect(Collectors.toSet());
 
     private final FileStoreApi fileStore;
-    private final ExtensionService extensionService;
 
     public TypedResource fetchResource(String link) {
         if (!fileStore.check(link, FileCheck.EXISTS))
@@ -60,17 +60,16 @@ public class FileStoreService {
         }
     }
 
-    public String   storeFile(String scope, Integer id, MultipartFile file) {
+    public String   storeFile(String scope, MultipartFile file) {
         if (file.isEmpty()) {
             return null;
         }
-        String link = makeLink(scope, id, file).replace('\\', '/');
+        String link = makeLink(scope, file).replace('\\', '/');
         try {
             InputStream inputStream = file.getInputStream();
             MediaType mediaType = detectMediaType(inputStream);
             if (validMediaType(mediaType)) {
                 fileStore.writeContentStream(link, file.getInputStream());
-                extensionService.setLink(scope, id, link);
             }
         } catch (IOException ex) {
             throw new FileOperationException(FileOperationError.INVALID_FILE_TYPE);
@@ -78,12 +77,13 @@ public class FileStoreService {
         return link;
     }
 
-    private String makeLink(String scope, Integer id, MultipartFile file) {
+    private String makeLink(String scope, MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         String name = FilenameUtils.getBaseName(originalFilename);
         String ext = FilenameUtils.getExtension(originalFilename);
+        name = StringUtils.replaceChars(name, ' ', '_');
 
-        String targetFileName = String.format("%s_%d_%s.%s", name, id, currentTimeAsString(), ext);
+        String targetFileName = String.format("%s_%s.%s", name, currentTimeAsString(), ext);
         Path path = Paths.get(scope, targetFileName);
         return path.normalize().toString();
     }
