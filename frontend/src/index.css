@@ -60,7 +60,7 @@ html {
     }
 
     .btn-primary {
-        @apply border-primary bg-primary;
+        @apply border-primary bg-primary text-black;
     }
 
     .btn-small {

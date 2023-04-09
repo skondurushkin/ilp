@@ -1153,8 +1153,23 @@ components:
       type: object
       properties:
         period:
-          type: string
-          enum: [day, week, month]
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+              example: "2023-04-21T17:32:28"
+            end:
+              type: string
+              format: date-time
+              example: "2023-04-21T17:32:28"
+            interval:
+              type: string
+              enum: [hour, day]
+          required:
+            - start
+            - end
+            - interval
       required:
         - period
 
@@ -1189,8 +1204,23 @@ components:
       type: object
       properties:
         period:
-          type: string
-          enum: [day, all]
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+              example: "2023-04-21T17:32:28"
+            end:
+              type: string
+              format: date-time
+              example: "2023-04-21T17:32:28"
+            interval:
+              type: string
+              enum: [hour, day]
+          required:
+            - start
+            - end
+            - interval
       required:
         - period
 
