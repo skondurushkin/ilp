@@ -17,6 +17,7 @@ export const CreateActivityAdminPage = () => {
                     amount: 1,
                     name: '',
                     infoLink: '',
+                    description: '',
                 }}
             />
         </div>

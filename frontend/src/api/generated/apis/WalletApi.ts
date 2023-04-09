@@ -59,11 +59,6 @@ export interface BrowseWriteOffsOperationRequest {
     browseWriteOffsRequest?: BrowseWriteOffsRequest;
 }
 
-export interface BrowseWriteOffsForUserIdRequest {
-    userId: number;
-    pageRequest?: PageRequest;
-}
-
 export interface GetAccrualRequest {
     accrualId: number;
 }
@@ -229,62 +224,6 @@ export class WalletApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedWriteOffResponse> {
         const response = await this.browseWriteOffsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * paginated view of write-offs of the user identified by user_id
-     */
-    async browseWriteOffsForUserIdRaw(
-        requestParameters: BrowseWriteOffsForUserIdRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<PaginatedWriteOffResponse>> {
-        if (requestParameters.userId === null || requestParameters.userId === undefined) {
-            throw new runtime.RequiredError(
-                'userId',
-                'Required parameter requestParameters.userId was null or undefined when calling browseWriteOffsForUserId.',
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token('bearerAuth', []);
-
-            if (tokenString) {
-                headerParameters['Authorization'] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request(
-            {
-                path: `/api/ilp/wallet/write-offs/{user_id}`.replace(
-                    `{${'user_id'}}`,
-                    encodeURIComponent(String(requestParameters.userId)),
-                ),
-                method: 'POST',
-                headers: headerParameters,
-                query: queryParameters,
-                body: PageRequestToJSON(requestParameters.pageRequest),
-            },
-            initOverrides,
-        );
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedWriteOffResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * paginated view of write-offs of the user identified by user_id
-     */
-    async browseWriteOffsForUserId(
-        requestParameters: BrowseWriteOffsForUserIdRequest,
-        initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<PaginatedWriteOffResponse> {
-        const response = await this.browseWriteOffsForUserIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

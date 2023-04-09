@@ -699,12 +699,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/PaginatedWriteOffResponse"
 
-  /api/ilp/wallet/write-offs/{user_id}:
+  /api/ilp/admin/wallet/write-offs/{user_id}:
     post:
-      operationId: browseWriteOffsForUserId
+      operationId: browseWriteOffsForUserIdAsAdmin
       summary: paginated view of write-offs of the user identified by user_id
       tags:
-        - wallet
+        - admin
       parameters:
         - $ref: "#/components/parameters/user_id"
       requestBody:
@@ -788,6 +788,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/AccrualResponse"
 
+  /api/ilp/admin/wallet/accrual/{user_id}/cancel:
+    post:
+      operationId: cancelAccrualForUser
+      summary: cancel accrual for user identified by user_id
+      tags:
+        - admin
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelAccrualBody"
+
+      responses:
+        201:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccrualResponse"
+
   /api/ilp/wallet/accrual/{accrual_id}:
     get:
       operationId: getAccrual
@@ -844,6 +867,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/WriteOffResponse"
 
+  /api/ilp/admin/articles:
+    post:
+      operationId: browseArticlesForAdmin
+      summary: paginated articles view
+      tags:
+        - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PageRequest"
+      responses:
+        200:
+          description: page loaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedArticleResponse"
+
   /api/ilp/admin/wallet/write-offs:
     post:
       operationId: browseWriteOffsAsAdmin
@@ -862,6 +905,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedWriteOffResponse"
+
+  /api/ilp/admin/wallet/write-offs/csv:
+    get:
+      description: Выгрузить заказы в CSV
+      operationId: downloadWriteOffsCsv
+      tags:
+        - admin
+      responses:
+        "200":
+          content:
+            text/csv:
+              schema:
+                type: string
+          description: returns csv file
 
   /api/ilp/admin/statistic/balance:
     post:
@@ -961,14 +1018,13 @@ paths:
       tags:
         - files
       parameters:
-        - $ref: '#/components/parameters/scope'
+        - $ref: "#/components/parameters/scope"
       requestBody:
         content:
           multipart/form-data:
             schema:
               type: object
               required:
-                - id
                 - file
               properties:
                 id:
@@ -984,7 +1040,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UploadResponse'
+                $ref: "#/components/schemas/UploadResponse"
         409:
           description: already exists
 
@@ -1665,6 +1721,7 @@ components:
           type: object
         active:
           type: boolean
+          description: the entity is available for actions
 
     PaginatedActivityResponse:
       allOf:
@@ -1701,7 +1758,6 @@ components:
           default: true
         imageLink:
           type: string
-          nullable: true
 
     ArticleUpdateRequest:
       type: object
@@ -1728,6 +1784,7 @@ components:
         - name
         - price
         - available
+        - active
       properties:
         id:
           $ref: "#/components/schemas/Identifier"
@@ -1746,6 +1803,10 @@ components:
         available:
           type: boolean
           default: false
+        active:
+          type: boolean
+          default: true
+          description: the entity is available for actions
         imageLink:
           type: string
         extension:
@@ -1761,6 +1822,14 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ArticleResponse"
+
+    CancelAccrualBody:
+      type: object
+      required:
+        - accrualId
+      properties:
+        accrualId:
+          $ref: "#/components/schemas/Identifier"
 
     AccrualResponse:
       type: object
@@ -1879,6 +1948,7 @@ components:
         - date
         - name
         - amount
+        - active
       properties:
         type:
           type: string
@@ -1895,6 +1965,10 @@ components:
         amount:
           $ref: "#/components/schemas/Amount"
           description: operation amount
+        active:
+          type: boolean
+          default: true
+          description: the entity is available for actions
 
     PaginatedOperationResponse:
       allOf:
@@ -1921,6 +1995,7 @@ components:
           items:
             type: string
             description: relative link to secondary file
+
 
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme

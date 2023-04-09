@@ -17,8 +17,8 @@ export interface ConfigContextProps {
 export function ConfigProvider(props: ConfigContextProps): ReactElement {
     const queries = useQueries([
         createSettingQuery('admin.email'),
-        createSettingQuery('subject.accrual'),
         createSettingQuery('subject.support'),
+        createSettingQuery('subject.accrual'),
     ]);
     const successQueries = queries.filter(isSuccessQuery);
     let config: Config | undefined;

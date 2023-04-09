@@ -52,6 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            request.setAttribute("user", subject);
 
         } catch (InvalidJwtException e) {
             String message = e.getMessage();
@@ -59,8 +60,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 message = e.getErrorDetails().get(0).getErrorMessage();
             }
             log.error("Cannot parse JWT: {}", message);
+            SecurityContextHolder.clearContext();
         } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e.getMessage());
+            SecurityContextHolder.clearContext();
         }
     }
 }

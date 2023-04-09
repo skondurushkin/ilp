@@ -1,6 +1,7 @@
 package ru.itone.ilp.server.jwt.advice;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +11,11 @@ import jakarta.validation.ConstraintViolationException;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,6 +24,8 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.itone.ilp.exception.ApiExceptions.ConflictException;
 import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.exception.ApiExceptions.TokenRefreshException;
 import ru.itone.ilp.exception.FileOperationException;
@@ -28,7 +35,7 @@ import ru.itone.ilp.openapi.model.ErrorMessage.CategoryEnum;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class ApiControllerAdvice {
+public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
 
     private final ObjectMapper objectMapper;
 
@@ -39,15 +46,24 @@ public class ApiControllerAdvice {
         return buildErrorMessage(INTERNAL_SERVER_ERROR, ex, request);
     }
 
+    @ExceptionHandler(value = ConflictException.class)
+    @ResponseStatus(CONFLICT)
+    public ResponseEntity<Object> handleConflictException(ConflictException ex, WebRequest request) {
+        ErrorMessage errorMessage = buildErrorMessage(CONFLICT, ex, request);
+
+        return handleExceptionInternal(ex, errorMessage, new HttpHeaders(), CONFLICT, request);
+    }
+
+
     @ExceptionHandler(value = ResponseStatusException.class)
-    public ErrorMessage handleStatusCodeException(ResponseStatusException ex, WebRequest request) {
-        return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
+    public ResponseEntity<ErrorMessage> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
+        return ResponseEntity.status(ex.getStatusCode()).body(buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request));
     }
 
 
     @ExceptionHandler(value = HttpStatusCodeException.class)
-    public ErrorMessage handleStatusCodeException(HttpStatusCodeException ex, WebRequest request) {
-        return buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request);
+    public ResponseEntity<ErrorMessage>  handleStatusCodeException(HttpStatusCodeException ex, WebRequest request) {
+        return ResponseEntity.status(ex.getStatusCode()).body(buildErrorMessage(HttpStatus.valueOf(ex.getStatusCode().value()), ex, request));
     }
 
     @ExceptionHandler(ServletException.class)
@@ -64,14 +80,17 @@ public class ApiControllerAdvice {
     }
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(BAD_REQUEST)
-    public ErrorMessage handleMethodArgumentValidationException(MethodArgumentNotValidException ex, WebRequest request) {
+    @Nullable
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+
         ObjectNode errors = objectMapper.createObjectNode();
         ex.getAllErrors().forEach(e -> errors.put(e.getObjectName(), e.getDefaultMessage()));
-        return buildValidationErrorMessage("Ошибка в аргументах метода", errors, request);
-    }
+        ErrorMessage errorMessage = buildValidationErrorMessage("Ошибка в аргументах метода", errors, request);
 
+        return handleExceptionInternal(ex, errorMessage, headers, status, request);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(BAD_REQUEST)
@@ -83,7 +102,7 @@ public class ApiControllerAdvice {
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleStatusCodeException(ResourceNotFoundException ex, WebRequest request) {
+    public ErrorMessage handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         return buildErrorMessage(HttpStatus.NOT_FOUND, ex, request);
     }
 

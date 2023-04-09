@@ -1,7 +1,7 @@
 import { ErrorMessage, UpdateWriteOffRequest, WriteOffStatus, api } from '../../api';
-import { FormInput, FormSelect, FormSelectOption } from '../../components/Form';
+import { FormInput, FormSelect, FormSelectOption } from '../Form';
 
-import { WRITE_OFFS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { WriteOffStatusName } from '../../modules/loyalty';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -9,37 +9,38 @@ import { useMemo } from 'react';
 import { useQueryClient } from 'react-query';
 import validationRules from '../../utils/validationRules';
 
-export interface ReadonlyUpdateWriteOffRequest extends UpdateWriteOffRequest {
+export interface ReadonlyEditWriteOffsStatusFormRequest extends UpdateWriteOffRequest {
     id: number;
     date: string;
     articleName: string;
 }
 
-export interface EditStatusFormProps {
-    defaultValues: ReadonlyUpdateWriteOffRequest;
+export interface EditWriteOffsStatusFormProps {
+    queryKey: string;
+    defaultValues: ReadonlyEditWriteOffsStatusFormRequest;
     closeModal: () => void;
 }
 
-export const EditStatusForm = (props: EditStatusFormProps) => {
-    const { defaultValues, closeModal } = props;
+export const EditWriteOffsStatusForm = (props: EditWriteOffsStatusFormProps) => {
+    const { queryKey, defaultValues, closeModal } = props;
     const queryClient = useQueryClient();
 
-    const { control, handleSubmit, formState, reset } = useForm<ReadonlyUpdateWriteOffRequest>({
+    const { control, handleSubmit, formState, reset } = useForm<ReadonlyEditWriteOffsStatusFormRequest>({
         defaultValues,
     });
 
-    const onSubmit = async (data: ReadonlyUpdateWriteOffRequest) => {
+    const onSubmit = async (data: ReadonlyEditWriteOffsStatusFormRequest) => {
         try {
             await api.admin.updateWriteOff({
                 writeoffId: defaultValues.id,
                 updateWriteOffRequest: data,
             });
+            await queryClient.invalidateQueries(queryKey);
             reset();
-            toast('Статус заказа изменен');
+            toast.success('Статус заказа изменен');
             closeModal();
-            queryClient.invalidateQueries(WRITE_OFFS_ADMIN_PAGE_QUERY_KEY);
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 

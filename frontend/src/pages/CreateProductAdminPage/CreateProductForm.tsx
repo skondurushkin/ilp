@@ -1,6 +1,10 @@
 import { ArticleRequest, ErrorMessage, api } from '../../api';
 import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
+import PhotoInput from '../../components/Form/PhotoInput';
+import { TypedLink } from '../../router';
+import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -18,19 +22,43 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
 
     const onSubmit = async (articleRequest: ArticleRequest) => {
         try {
-            await api.article.createArticle({
+            const newProduct = await api.article.createArticle({
                 articleRequest,
             });
             reset();
-            toast('Товар добавлен');
+            toast.success(
+                <div>
+                    <p>Товар добавлен</p>
+                    <TypedLink
+                        to="/admin/products/edit/:productId"
+                        params={{ productId: newProduct.id.toString() }}
+                        className="flex items-center gap-2"
+                    >
+                        <span className="text-primary">Посмотреть</span>
+                    </TypedLink>
+                </div>,
+                {
+                    autoClose: false,
+                },
+            );
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
+                <div className="self-start">
+                    <PhotoInput
+                        control={control}
+                        name="imageLink"
+                        scope="article"
+                        rules={{
+                            required: validationRules.required,
+                        }}
+                    />
+                </div>
                 <div className="flex flex-col gap-3">
                     <FormInput
                         control={control}
@@ -62,6 +90,9 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                             min: validationRules.min(1),
                             max: validationRules.max(9999),
                             required: validationRules.required,
+                        }}
+                        transform={{
+                            input: formatters.numberOnly,
                         }}
                     />
                     <FormTextArea

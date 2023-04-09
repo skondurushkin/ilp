@@ -1,6 +1,11 @@
 package ru.itone.ilp.server.controllers;
 
 import jakarta.validation.Valid;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
@@ -12,30 +17,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.itone.ilp.openapi.api.AuthApi;
 import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.exception.ApiExceptions.TokenRefreshException;
-import ru.itone.ilp.openapi.model.*;
+import ru.itone.ilp.openapi.api.AuthApi;
+import ru.itone.ilp.openapi.model.ERole;
+import ru.itone.ilp.openapi.model.JwtResponse;
+import ru.itone.ilp.openapi.model.LoginRequest;
+import ru.itone.ilp.openapi.model.MessageResponse;
+import ru.itone.ilp.openapi.model.SignupRequest;
+import ru.itone.ilp.openapi.model.TokenRefreshRequest;
+import ru.itone.ilp.openapi.model.TokenRefreshResponse;
 import ru.itone.ilp.persistence.entities.RefreshToken;
-import ru.itone.ilp.persistence.entities.Role;
-import ru.itone.ilp.persistence.entities.User;
-import ru.itone.ilp.persistence.repositories.RoleRepository;
-import ru.itone.ilp.persistence.repositories.UserRepository;
 import ru.itone.ilp.server.configuration.WebSecurityConfig;
 import ru.itone.ilp.server.jwt.JwtHelper;
 import ru.itone.ilp.services.jwt.RefreshTokenService;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import ru.itone.ilp.services.profiles.ProfileService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -44,9 +44,7 @@ import java.util.stream.Collectors;
 public class AuthController implements AuthApi {
     private final AuthenticationManager authenticationManager;
 
-    private final UserRepository userRepository;
-
-    private final RoleRepository roleRepository;
+    private final ProfileService profileService;
 
     private final PasswordEncoder encoder;
 
@@ -69,7 +67,7 @@ public class AuthController implements AuthApi {
                     .map(ApiHelper::toERole)
                     .collect(Collectors.toSet());
             TokenRefreshResponse tokens = createTokens(null, userDetails.getEmail());
-
+            profileService.onLogin(userDetails.getId());
             return ResponseEntity.ok(
                     new JwtResponse().token(tokens.getAcceptToken())
                             .refreshToken(tokens.getRefreshToken())
@@ -83,31 +81,7 @@ public class AuthController implements AuthApi {
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-
-        if (Boolean.TRUE.equals(userRepository.existsByEmail(signUpRequest.getEmail()))) {
-            return ResponseEntity.badRequest().body(new MessageResponse().message("Error: Email is already in use!"));
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<ERole> strRoles = signUpRequest.getRoles();
-
-        if (CollectionUtils.isEmpty(strRoles) || !strRoles.contains(ERole.USER)) {
-            strRoles.add(ERole.USER);
-        }
-
-        Set<Role> roles = new HashSet<>();
-        strRoles.forEach(roleName -> {
-                Role role = roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                roles.add(role);
-            });
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
+        profileService.registerUser(signUpRequest.password(encoder.encode(signUpRequest.getPassword())));
         return ResponseEntity.ok(new MessageResponse().message("User registered successfully!"));
     }
 
@@ -126,6 +100,7 @@ public class AuthController implements AuthApi {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         refreshTokenService.deleteByUserId(userId);
+        profileService.onLogout(userId);
         return ResponseEntity.ok(new MessageResponse().message("Successfully logged out."));
     }
 

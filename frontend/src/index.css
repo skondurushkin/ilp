@@ -20,7 +20,7 @@ html {
     }
 
     .input {
-        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black focus:outline-none focus:ring-0;
+        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black read-only:cursor-default focus:outline-none focus:ring-0;
     }
 
     .select {
@@ -101,5 +101,9 @@ html {
 
     .icon-dark path {
         @apply fill-white;
+    }
+
+    .absolute-center {
+        @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform;
     }
 }

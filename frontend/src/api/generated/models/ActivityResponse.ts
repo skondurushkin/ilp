@@ -68,7 +68,7 @@ export interface ActivityResponse {
      */
     extension?: object;
     /**
-     *
+     * the entity is available for actions
      * @type {boolean}
      * @memberof ActivityResponse
      */

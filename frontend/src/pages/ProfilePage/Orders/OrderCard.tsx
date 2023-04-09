@@ -1,12 +1,12 @@
-import { ImageSkeleton, Skeleton, SkeletonContainer } from '../../components/Skeleton';
-import { WriteOffStatusColor, WriteOffStatusName } from '../../modules/loyalty';
+import { ImageSkeleton, Skeleton, SkeletonContainer } from '../../../components/Skeleton';
+import { WriteOffStatusColor, WriteOffStatusName } from '../../../modules/loyalty';
 
-import { Box } from '../../components/Box';
-import { ImageGallery } from '../../components/ImageGallery';
+import { Box } from '../../../components/Box';
+import { ImageGallery } from '../../../components/ImageGallery';
 import { ReactElement } from 'react';
-import { TypedLink } from '../../router';
-import { VerticalBrackets } from '../../components/VerticalBrackets';
-import { WriteOffResponse } from '../../api';
+import { TypedLink } from '../../../router';
+import { VerticalBrackets } from '../../../components/VerticalBrackets';
+import { WriteOffResponse } from '../../../api';
 
 export interface OrderCardProps extends OrderViewProps {
     className?: string;

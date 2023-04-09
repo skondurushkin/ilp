@@ -1,28 +1,44 @@
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { Button } from '../../components/Button';
 import { DataNotFound } from '../../components/DataNotFound';
-import { ProfileCard } from './ProfileCard';
-import { SearchInput } from './SearchInput';
+import { PageSpinner } from '../../components/Spinner';
+import { SearchInput } from '../../components/SearchInput';
+import { UserProfileCard } from '../../components/UserProfileCard';
 import { useQuerySearchProfileAsAdmin } from '../../modules/admin';
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+export const USERS_ADMIN_PAGE_FILTER_NAME = 'filter';
 
 export const UsersAdminPage = () => {
-    const [searchKey, setSearchKey] = useState('');
+    const [search, setSearch] = useSearchParams();
+    const searchKey = search.get(USERS_ADMIN_PAGE_FILTER_NAME) ?? '';
 
     const { data, fetchNextPage, hasNextPage, isFetching, isError } = useQuerySearchProfileAsAdmin(searchKey);
+    const pages = data?.pages ?? [];
 
     return (
         <div className="flex flex-col gap-6">
             <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Пользователи' }]} />
-            <h1 className="text-h1 mb-2">Пользователи</h1>
+            <h1 className="text-h1">Пользователи</h1>
 
-            <SearchInput value={searchKey} onChange={setSearchKey} />
+            <SearchInput
+                value={searchKey}
+                placeholder="Поиск по ФИО, email"
+                onChange={(value) =>
+                    setSearch(
+                        { [USERS_ADMIN_PAGE_FILTER_NAME]: value },
+                        {
+                            replace: true,
+                        },
+                    )
+                }
+            />
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {(data?.pages ?? []).map((paginated) =>
+                {pages.map((paginated) =>
                     paginated.results?.map((profile) => (
                         <div className="flex flex-1" key={profile.id}>
-                            <ProfileCard
+                            <UserProfileCard
                                 id={profile.id}
                                 avatarLink={profile.avatarLink}
                                 jobPosition={profile.jobPosition}
@@ -36,6 +52,11 @@ export const UsersAdminPage = () => {
                     )),
                 )}
             </div>
+
+            {!isFetching && !!searchKey && (pages[0].results ?? []).length === 0 && (
+                <DataNotFound message="Пользователи не найдены" />
+            )}
+            {isFetching && <PageSpinner />}
 
             {hasNextPage && (
                 <div className="md:self-center">

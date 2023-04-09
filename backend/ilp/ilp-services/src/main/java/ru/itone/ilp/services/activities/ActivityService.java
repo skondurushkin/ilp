@@ -1,15 +1,23 @@
 package ru.itone.ilp.services.activities;
 
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.common.ApiHelper;
+import ru.itone.ilp.exception.ApiExceptions;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.ActivityUpdateRequest;
@@ -22,16 +30,22 @@ import ru.itone.ilp.persistence.mappers.ActivityMapper;
 import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.repositories.ActivityRepository;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ActivityService {
     private final ActivityRepository activityRepository;
 
+    private final ExampleMatcher nameMatcher = ExampleMatcher
+            .matching()
+            .withIgnoreNullValues()
+            .withMatcher("name", ignoreCase());
+
     @Transactional(readOnly = true)
     public PaginatedActivityResponse paginate(PageRequest request) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "price"));
         String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<Activity> page = StringUtils.isBlank(filter)
-                ? activityRepository.findAll(pageable)
+                ? activityRepository.findAllByIdNot(1L, pageable)
                 : activityRepository.searchByText(filter, pageable);
         return toPaginatedResponse(page);
     }
@@ -44,9 +58,16 @@ public class ActivityService {
 
     @Transactional
     public ActivityResponse createActivity(ActivityRequest request) {
-        Activity activity = ActivityMapper.INSTANCE.activityFromRequest(request)
-                .setStartDate(LocalDate.now());
-        activity = activityRepository.save(activity);
+        if (activityRepository.exists(Example.of(new Activity().setName(request.getName()), nameMatcher))) {
+            String message = String.format("Активность '%s' уже существует", request.getName());
+            log.error("Невозможно создать запись: {}", message);
+            throw new ApiExceptions.ConflictException(message);
+        }
+
+        Activity activity = activityRepository.save(
+                ActivityMapper.INSTANCE.activityFromRequest(request)
+                        .setStartDate(LocalDate.now())
+        );
         return toResponse(activity);
     }
 
@@ -56,14 +77,14 @@ public class ActivityService {
                 .orElseThrow(() -> new DbApiException("Запись не найдена"));
         activity = activityRepository.save(activity.setName(request.getName())
                     .setDescription(request.getDescription())
-                    .setAmount(request.getAmount())
+                    .setPrice(request.getAmount())
                     .setInfoLink(request.getInfoLink()));
         return toResponse(activity);
     }
 
     @Transactional
     public void delete(Long activityId) {
-        activityRepository.deleteById(activityId);
+        activityRepository.markAsDeleted(activityId);
     }
 
     @Transactional(readOnly = true)

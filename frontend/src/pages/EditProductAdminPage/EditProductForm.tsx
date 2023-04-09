@@ -1,6 +1,9 @@
 import { ArticleUpdateRequest, ErrorMessage, api } from '../../api';
 import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
+import PhotoInput from '../../components/Form/PhotoInput';
+import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -21,15 +24,26 @@ export const EditProductForm = (props: EditProductFormProps) => {
             await api.article.updateArticle({
                 articleUpdateRequest: data,
             });
-            toast('Товар обновлен');
+            toast.success('Товар обновлен');
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
+                <div className="self-start">
+                    <PhotoInput
+                        control={control}
+                        name="imageLink"
+                        scope="article"
+                        entityId={values.id}
+                        rules={{
+                            required: validationRules.required,
+                        }}
+                    />
+                </div>
                 <div className="flex flex-col gap-3">
                     <FormInput
                         control={control}
@@ -57,6 +71,9 @@ export const EditProductForm = (props: EditProductFormProps) => {
                             min: validationRules.min(1),
                             max: validationRules.max(9999),
                             required: validationRules.required,
+                        }}
+                        transform={{
+                            input: formatters.numberOnly,
                         }}
                     />
                     <FormTextArea control={control} name="description" label="Описание товара" rows={4} cols={50} />

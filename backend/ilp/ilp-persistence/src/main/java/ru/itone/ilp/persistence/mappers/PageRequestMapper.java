@@ -21,6 +21,10 @@ public interface PageRequestMapper {
     PageRequestMapper INSTANCE = Mappers.getMapper(PageRequestMapper.class);
 
     default Pageable toPageable(PageRequest pageRequest) {
+        return toPageable(pageRequest, Sort.unsorted());
+    }
+
+    default Pageable toPageable(PageRequest pageRequest, Sort defaultSort) {
         Sort sort = Sort.unsorted();
         List<PageRequestConfigSortInner> sortConfig = Optional
                 .ofNullable(pageRequest.getConfig())
@@ -38,6 +42,9 @@ public interface PageRequestMapper {
             if (!orders.isEmpty()) {
                 sort = Sort.by(orders);
             }
+        }
+        if (sort.equals(Sort.unsorted())) {
+            sort = defaultSort;
         }
 
         return org.springframework.data.domain.PageRequest.of(pageRequest.getPage(), pageRequest.getPageSize(), sort);

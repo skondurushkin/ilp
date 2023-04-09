@@ -1,9 +1,9 @@
 import { ErrorMessage, PageRequestConfig, api } from '../../api';
 import { useMutation, useQueryClient } from 'react-query';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { FormAsyncSelect } from '../../components/Form/FormAsyncSelect';
 import { FormInput } from '../../components/Form';
-import { GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY_FN } from '../../modules/admin';
 import debounce from 'debounce-promise';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import validationRules from '../../utils/validationRules';
 
 export interface EditBalanceFormProps {
     userId: number;
+    queryKey: string;
     closeModal: () => void;
 }
 
@@ -23,7 +24,7 @@ export interface FormData {
 }
 
 export const EditBalanceForm = (props: EditBalanceFormProps) => {
-    const { userId, closeModal } = props;
+    const { userId, closeModal, queryKey } = props;
     const queryClient = useQueryClient();
 
     const { control, handleSubmit, formState, reset, setValue } = useForm<FormData>();
@@ -36,12 +37,12 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
                     activityId: Number(data.activity.value),
                 },
             });
+            await queryClient.invalidateQueries(queryKey);
             reset();
-            toast('Вольты начислены');
+            toast.success('Вольты начислены');
             closeModal();
-            queryClient.invalidateQueries(GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY_FN(userId));
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
     const { mutateAsync: browseActivities } = useMutation(['activity.browseActivities'], (config: PageRequestConfig) =>
@@ -92,6 +93,7 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
                         control={control}
                         name="activity.amount"
                         label="Сумма в вольтах"
+                        placeholder="Значение из активности"
                         labelClassName="text-white"
                         rules={{
                             required: validationRules.required,

@@ -1027,11 +1027,11 @@
                 }
             }
         },
-        "/api/ilp/wallet/write-offs/{user_id}": {
+        "/api/ilp/admin/wallet/write-offs/{user_id}": {
             "post": {
-                "operationId": "browseWriteOffsForUserId",
+                "operationId": "browseWriteOffsForUserIdAsAdmin",
                 "summary": "paginated view of write-offs of the user identified by user_id",
-                "tags": ["wallet"],
+                "tags": ["admin"],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/user_id"
@@ -1160,6 +1160,40 @@
                 }
             }
         },
+        "/api/ilp/admin/wallet/accrual/{user_id}/cancel": {
+            "post": {
+                "operationId": "cancelAccrualForUser",
+                "summary": "cancel accrual for user identified by user_id",
+                "tags": ["admin"],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/user_id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelAccrualBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccrualResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/ilp/wallet/accrual/{accrual_id}": {
             "get": {
                 "operationId": "getAccrual",
@@ -1245,6 +1279,35 @@
                 }
             }
         },
+        "/api/ilp/admin/articles": {
+            "post": {
+                "operationId": "browseArticlesForAdmin",
+                "summary": "paginated articles view",
+                "tags": ["admin"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "page loaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedArticleResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/ilp/admin/wallet/write-offs": {
             "post": {
                 "operationId": "browseWriteOffsAsAdmin",
@@ -1269,6 +1332,25 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/ilp/admin/wallet/write-offs/csv": {
+            "get": {
+                "description": "Выгрузить заказы в CSV",
+                "operationId": "downloadWriteOffsCsv",
+                "tags": ["admin"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "returns csv file"
                     }
                 }
             }
@@ -1420,13 +1502,7 @@
                 "tags": ["files"],
                 "parameters": [
                     {
-                        "name": "scope",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["global", "activity", "article", "profile"]
-                        }
+                        "$ref": "#/components/parameters/scope"
                     }
                 ],
                 "requestBody": {
@@ -1434,12 +1510,13 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "required": ["id", "filename"],
+                                "required": ["file"],
                                 "properties": {
                                     "id": {
-                                        "$ref": "#/components/schemas/Identifier"
+                                        "$ref": "#/components/schemas/Identifier",
+                                        "description": "identifier of the object in the given scope"
                                     },
-                                    "filename": {
+                                    "file": {
                                         "type": "string",
                                         "format": "binary"
                                     }
@@ -1454,12 +1531,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "link": {
-                                            "type": "string"
-                                        }
-                                    }
+                                    "$ref": "#/components/schemas/UploadResponse"
                                 }
                             }
                         }
@@ -1470,15 +1542,18 @@
                 }
             }
         },
-        "/api/ilp/file/download": {
+        "/api/ilp/file/{scope}/{fileName}": {
             "get": {
-                "operationId": "downloadFile",
+                "operationId": "getFile",
                 "summary": "fetch file from ILP file store",
                 "tags": ["files"],
                 "parameters": [
                     {
-                        "name": "link",
-                        "in": "query",
+                        "$ref": "#/components/parameters/scope"
+                    },
+                    {
+                        "name": "fileName",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1490,7 +1565,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": {
+                            "application/octet-stream": {
                                 "schema": {
                                     "type": "string",
                                     "format": "binary"
@@ -1568,12 +1643,21 @@
                 },
                 "description": "value for search"
             },
+            "scope": {
+                "in": "path",
+                "name": "scope",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "enum": ["activity", "article", "profile"]
+                }
+            },
             "pageSize": {
                 "in": "query",
                 "name": "pageSize",
                 "required": true,
                 "schema": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "description": "requested page size"
             },
@@ -1582,7 +1666,7 @@
                 "name": "page",
                 "required": true,
                 "schema": {
-                    "type": "number"
+                    "type": "integer"
                 },
                 "description": "requested page"
             }
@@ -2096,7 +2180,6 @@
                     },
                     "phone": {
                         "type": "string",
-                        "format": "email",
                         "maxLength": 20
                     },
                     "roles": {
@@ -2161,6 +2244,10 @@
             "ERole": {
                 "type": "string",
                 "enum": ["USER", "MODERATOR", "ADMIN"]
+            },
+            "EScope": {
+                "type": "string",
+                "enum": ["activity", "article", "profile"]
             },
             "PaginatedProfileResponse": {
                 "allOf": [
@@ -2258,7 +2345,8 @@
                         "type": "object"
                     },
                     "active": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "description": "the entity is available for actions"
                     }
                 }
             },
@@ -2305,8 +2393,7 @@
                         "default": true
                     },
                     "imageLink": {
-                        "type": "string",
-                        "nullable": true
+                        "type": "string"
                     }
                 }
             },
@@ -2337,7 +2424,7 @@
             },
             "ArticleResponse": {
                 "type": "object",
-                "required": ["id", "code", "name", "price", "available"],
+                "required": ["id", "code", "name", "price", "available", "active"],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"
@@ -2361,6 +2448,11 @@
                     "available": {
                         "type": "boolean",
                         "default": false
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "the entity is available for actions"
                     },
                     "imageLink": {
                         "type": "string"
@@ -2388,6 +2480,15 @@
                         }
                     }
                 ]
+            },
+            "CancelAccrualBody": {
+                "type": "object",
+                "required": ["accrualId"],
+                "properties": {
+                    "accrualId": {
+                        "$ref": "#/components/schemas/Identifier"
+                    }
+                }
             },
             "AccrualResponse": {
                 "type": "object",
@@ -2524,7 +2625,7 @@
             },
             "OperationResponse": {
                 "type": "object",
-                "required": ["type", "id", "date", "name", "amount"],
+                "required": ["type", "id", "date", "name", "amount", "active"],
                 "properties": {
                     "type": {
                         "type": "string",
@@ -2545,6 +2646,11 @@
                     "amount": {
                         "$ref": "#/components/schemas/Amount",
                         "description": "operation amount"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "the entity is available for actions"
                     }
                 }
             },
@@ -2565,6 +2671,25 @@
                         }
                     }
                 ]
+            },
+            "UploadResponse": {
+                "type": "object",
+                "description": "links to the uploaded files",
+                "required": ["link"],
+                "properties": {
+                    "link": {
+                        "type": "string",
+                        "description": "relative link to the primary uploaded file"
+                    },
+                    "more": {
+                        "type": "array",
+                        "description": "list of relative links to secondary files",
+                        "items": {
+                            "type": "string",
+                            "description": "relative link to secondary file"
+                        }
+                    }
+                }
             }
         },
         "securitySchemes": {

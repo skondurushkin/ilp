@@ -28,7 +28,7 @@ export const Modal = (props: ModalProps) => {
                 onRequestClose={() => closeModal()}
                 overlayClassName="z-modal bg-black-transparent-70% fixed left-0 top-0 flex h-screen w-screen  items-center justify-center"
                 className={twMerge(
-                    'fixed top-0 overflow-hidden',
+                    'fixed left-0 top-0 overflow-hidden',
                     size && [styles[`content-${size}`]],
                     size !== 'full-screen' && [styles.content],
                     className,

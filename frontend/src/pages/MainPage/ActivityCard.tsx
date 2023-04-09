@@ -1,11 +1,11 @@
+import { ActivityResponse, OperationResponseTypeEnum } from '../../api';
 import { ButtonSkeleton, Skeleton, SkeletonContainer } from '../../components/Skeleton';
 
-import { ActivityResponse } from '../../api';
 import { Box } from '../../components/Box';
 import { Link } from 'react-router-dom';
 import { ReactElement } from 'react';
-import { ReactComponent as TokenIcon } from '../../assets/token.svg';
 import { VerticalBrackets } from '../../components/VerticalBrackets';
+import { Zaps } from '../../components/Zaps';
 import { twMerge } from 'tailwind-merge';
 import { useConfig } from '../../modules/config';
 
@@ -41,10 +41,12 @@ function ActivityView(props: ActivityViewProps): ReactElement {
     return (
         <>
             <VerticalBrackets size="2" className="self-center">
-                <div className="flex items-center gap-1 text-2xl md:text-3xl">
-                    +{activity.amount}
-                    <TokenIcon className="h-5 w-5" />
-                </div>
+                <Zaps
+                    className="text-h1 px-0.5 md:px-2"
+                    zapClassName="h-5 w-5"
+                    type={OperationResponseTypeEnum.Accrual}
+                    amount={activity.amount}
+                />
             </VerticalBrackets>
             <div className="mt-2 grow self-center text-center">{activity.name}</div>
             <Link className="btn btn-primary mt-4" to={requestTokensUrl}>
