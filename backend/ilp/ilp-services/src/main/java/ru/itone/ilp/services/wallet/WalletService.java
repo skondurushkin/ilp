@@ -86,8 +86,6 @@ public class WalletService {
     @Transactional(readOnly = true)
     public PaginatedWriteOffResponse paginateWriteOffs(ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
-        Page<WriteOff> page = dbJpa.getWriteOffRepository().findAll(pageable);
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
         String filter = Optional.ofNullable(pageRequest.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<WriteOff> page = StringUtils.isBlank(filter)
             ? dbJpa.getWriteOffRepository().findAll(pageable)
