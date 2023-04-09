@@ -1,10 +1,14 @@
-import { EditStatusForm, ReadonlyUpdateWriteOffRequest } from './EditStatusForm';
+import {
+    EditWriteOffsStatusForm,
+    ReadonlyEditWriteOffsStatusFormRequest,
+} from '../../components/WriteOffs/EditWriteOffsStatusForm';
 import { PageRequest, WriteOffResponse, WriteOffStatus, api } from '../../api';
 import { useCallback, useMemo, useState } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
+import { DownloadWriteOffsCsvButton } from './DownloadWriteOffsCsvButton';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
 import { TypedLink } from '../../router';
@@ -12,7 +16,7 @@ import { WRITE_OFFS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { WriteOffStatusName } from '../../modules/loyalty';
 
 export const WriteOffsAdminPage = () => {
-    const [modalData, setModalData] = useState<ReadonlyUpdateWriteOffRequest | null>(null);
+    const [modalData, setModalData] = useState<ReadonlyEditWriteOffsStatusFormRequest | null>(null);
 
     const queryData = useCallback((pageRequest: PageRequest) => {
         return api.admin.browseWriteOffsAsAdmin({
@@ -41,7 +45,7 @@ export const WriteOffsAdminPage = () => {
             },
             {
                 accessorKey: 'user',
-                header: () => <span>Покупатель</span>,
+                header: () => <span>Пользователь</span>,
                 cell: (info) => {
                     const { user } = info.row.original;
                     return (
@@ -87,9 +91,9 @@ export const WriteOffsAdminPage = () => {
                                     className="flex items-center gap-2"
                                     onClick={() =>
                                         setModalData({
-                                            articleName: article.name,
                                             id,
                                             status,
+                                            articleName: article.name,
                                             date: new Date(date).toLocaleDateString('ru-RU'),
                                         })
                                     }
@@ -111,16 +115,27 @@ export const WriteOffsAdminPage = () => {
     return (
         <div className="flex flex-col gap-6">
             <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Заказы' }]} />
-            <h1 className="text-h1">Заказы</h1>
+            <div className="self-start">
+                <div className="flex flex-col gap-4">
+                    <h1 className="text-h1">Заказы</h1>
+                    <DownloadWriteOffsCsvButton />
+                </div>
+            </div>
             <AdminTable
                 queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Покупателю и Товару"
+                globalFilterPlaceholder="Поиск по Пользователю и Товару"
                 columns={columns}
                 queryData={queryData}
             />
-            <Modal id="EditStatusForm" isOpen={Boolean(modalData)} closeModal={() => setModalData(null)} size="sm">
+            <Modal id="WriteOffsAdminPage" isOpen={Boolean(modalData)} closeModal={() => setModalData(null)} size="sm">
                 <Modal.Body>
-                    {!!modalData && <EditStatusForm defaultValues={modalData} closeModal={() => setModalData(null)} />}
+                    {!!modalData && (
+                        <EditWriteOffsStatusForm
+                            queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
+                            defaultValues={modalData}
+                            closeModal={() => setModalData(null)}
+                        />
+                    )}
                 </Modal.Body>
             </Modal>
         </div>

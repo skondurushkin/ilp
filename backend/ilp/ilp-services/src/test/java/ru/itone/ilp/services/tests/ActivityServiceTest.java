@@ -2,12 +2,13 @@ package ru.itone.ilp.services.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.itone.ilp.exception.ApiExceptions.ConflictException;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.PageRequest;
@@ -30,6 +31,14 @@ class ActivityServiceTest extends ServicesTestConfiguration {
         assertNotNull(activity);
         assertEquals("Выступление с бубном", activity.getName());
     }
+
+    @Test
+    void testActivity_dont_create_duplicates() {
+        ActivityRequest req = new ActivityRequest().name("Добро пожаловать!")
+                .description("Выступления на публичных мероприятиях компании с бубном");
+        assertThrows(ConflictException.class, () -> activityService.createActivity(req));
+    }
+
 
     @Test
     void testActivityPaginate() {

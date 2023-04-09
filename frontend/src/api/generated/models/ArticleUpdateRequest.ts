@@ -54,7 +54,7 @@ export interface ArticleUpdateRequest {
      * @type {string}
      * @memberof ArticleUpdateRequest
      */
-    imageLink?: string | null;
+    imageLink?: string;
     /**
      * generic identifier
      * @type {number}

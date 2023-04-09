@@ -26,14 +26,14 @@ export const FormCheckbox = <TFieldValues extends FieldValues = FieldValues>(
 
     return (
         <div className="flex flex-col gap-4">
-            <label className="inline-flex items-center">
+            <label className="inline-flex cursor-pointer items-center">
                 <input
                     {...field}
                     {...rest}
                     type="checkbox"
                     name={name}
                     defaultChecked={field.value}
-                    className={twMerge('checkbox form-checkbox', className)}
+                    className={twMerge('checkbox form-checkbox cursor-pointer', className)}
                 />
                 <span className="ml-2 text-base text-black dark:text-white">
                     {label}

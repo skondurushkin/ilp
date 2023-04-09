@@ -1,15 +1,18 @@
 import { ComponentType, ReactElement, ReactNode, useMemo } from 'react';
 import { UserRole, hasRole, useAuth, useAuthActions } from '../../modules/auth';
 
+import { ReactComponent as AwardIcon } from '../../assets/award.svg';
+import { ReactComponent as BoxIcon } from '../../assets/box.svg';
 import { ReactComponent as HomeIcon } from '../../assets/home.svg';
 import { Link } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 import { ReactComponent as LogoutIcon } from '../../assets/logout.svg';
 import { ReactComponent as MessageIcon } from '../../assets/message.svg';
+import { ReactComponent as ShoppingCartIcon } from '../../assets/shopping-cart.svg';
 import { ReactComponent as SlidersIcon } from '../../assets/sliders.svg';
 import { ReactComponent as TextFileIcon } from '../../assets/text-file.svg';
 import { TypedNavLink } from '../../router';
 import { ReactComponent as UserIcon } from '../../assets/user.svg';
+import { ReactComponent as UsersIcon } from '../../assets/users.svg';
 import { twMerge } from 'tailwind-merge';
 import { useConfig } from '../../modules/config';
 import { useIsXsScreen } from '../useBreakpoint';
@@ -63,10 +66,10 @@ export function Nav(props: NavProps): ReactElement {
                 label: 'Администрирование',
                 icon: SlidersIcon,
                 children: [
-                    { to: '/admin/products', label: 'Товары', icon: MessageIcon },
-                    { to: '/admin/activities', label: 'Активности', icon: MessageIcon },
-                    { to: '/admin/users', label: 'Пользователи', icon: MessageIcon },
-                    { to: '/admin/write-offs', label: 'Заказы', icon: MessageIcon },
+                    { to: '/admin/products', label: 'Товары', icon: BoxIcon },
+                    { to: '/admin/activities', label: 'Активности', icon: AwardIcon },
+                    { to: '/admin/users', label: 'Пользователи', icon: UsersIcon },
+                    { to: '/admin/write-offs', label: 'Заказы', icon: ShoppingCartIcon },
                 ],
             });
         }

@@ -8,11 +8,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,14 +52,24 @@ public class Article implements Serializable {
 
     @Min(1)
     @Column(name = "price")
-    private Integer amount;
+    private Integer price;
 
     @Column(name="image_link")
     private String imageLink;
 
     private Boolean available;
 
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
     private ObjectNode extension;
+
+    @Transient
+    public boolean isActive(LocalDate at) {
+        return this.getEndDate() == null || at.compareTo(this.getEndDate()) < 0;
+    }
+
+
 }

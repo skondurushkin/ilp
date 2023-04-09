@@ -55,7 +55,7 @@ export const TopProducts = () => {
         <div className="py-4">
             <AdminTable
                 queryKey={ARTICLES_STATISTIC_ADMIN_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Наименованию, Артиклу и Стоимости"
+                globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
                 columns={columns}
                 initialSort={[{ id: 'orders', desc: true }]}
                 queryData={queryData}

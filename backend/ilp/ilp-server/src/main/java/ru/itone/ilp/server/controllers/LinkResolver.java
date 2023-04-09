@@ -1,14 +1,19 @@
 package ru.itone.ilp.server.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.Optional;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+@Slf4j
 @NoArgsConstructor
 abstract class LinkResolver {
-
-    private volatile URI baseUri;
 
     protected String resolve(String link) {
         if (StringUtils.isBlank(link)) {
@@ -21,17 +26,27 @@ abstract class LinkResolver {
     }
 
     protected URI getBaseUri() {
-        URI localUri = baseUri;
-        if (localUri == null) {
-            synchronized(this) {
-                localUri = baseUri;
-                if (localUri == null) {
-                    baseUri = localUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                            .path("/api/ilp/file/").build().toUri();
-                }
+        Optional<HttpServletRequest> optRequest = Optional.ofNullable(getCurrentHttpRequest());
+        URI baseUri = optRequest.map(r -> (URI) r.getAttribute("BASE_URI")).orElse(null);
+        if (baseUri == null) {
+            String uri = optRequest.map(r -> r.getHeader("Referer")).orElse(null);
+            if (uri == null) {
+                uri = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
             }
+            URI newBaseUri = URI.create(uri).resolve("/api/ilp/file/");
+            optRequest.ifPresent(r -> r.setAttribute("BASE_URI", newBaseUri));
+            baseUri = newBaseUri;
         }
-        return localUri;
+        return baseUri;
+    }
+
+    public static HttpServletRequest getCurrentHttpRequest(){
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes attributes) {
+            return attributes.getRequest();
+        }
+        log.debug("Not called in the context of an HTTP request");
+        return null;
     }
 
 }

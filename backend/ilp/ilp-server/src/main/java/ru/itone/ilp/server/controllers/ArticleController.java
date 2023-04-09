@@ -29,7 +29,7 @@ public class ArticleController extends LinkResolver implements ArticleApi {
 
     @Override
     public ResponseEntity<PaginatedArticleResponse> browseArticles(PageRequest pageRequest) {
-        return ResponseEntity.ok(resolveLinks(articleService.paginate(pageRequest)));
+        return ResponseEntity.ok(resolveLinks(articleService.paginateActive(pageRequest)));
     }
 
     @Override

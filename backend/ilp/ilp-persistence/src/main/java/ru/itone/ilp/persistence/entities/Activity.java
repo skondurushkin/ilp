@@ -49,7 +49,7 @@ public class Activity implements Serializable {
 
     @Min(1)
     @Column(name = "price")
-    private Integer amount;
+    private Integer price;
 
     @Column(nullable = false, columnDefinition = "date default '3000-01-01'")
     private LocalDate startDate = virtualDate;

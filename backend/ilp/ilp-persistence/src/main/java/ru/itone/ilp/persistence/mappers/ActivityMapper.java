@@ -19,8 +19,10 @@ public interface ActivityMapper {
     @Mapping(target = "startDate", expression = "java(this.nonVirtual(activity.getStartDate()))")
     @Mapping(target = "endDate", expression = "java(this.nonVirtual(activity.getEndDate()))")
     @Mapping(target = "active", expression = "java(this.isActive(activity))")
+    @Mapping(target = "amount", source = "price")
     ActivityResponse activityToResponse(Activity activity);
 
+    @Mapping(target = "price", source = "amount")
     Activity activityFromRequest(ActivityRequest request);
 
     default boolean isActive(Activity activity) {

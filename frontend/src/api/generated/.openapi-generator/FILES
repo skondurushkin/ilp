@@ -29,8 +29,10 @@ models/BrowseStatisticArticlesRequest.ts
 models/BrowseStatisticArticlesRequestAllOf.ts
 models/BrowseWriteOffsRequest.ts
 models/BrowseWriteOffsRequestAllOf.ts
+models/CancelAccrualBody.ts
 models/CreateNewAccrualRequest.ts
 models/ERole.ts
+models/EScope.ts
 models/ErrorMessage.ts
 models/JwtResponse.ts
 models/LoginRequest.ts
@@ -67,7 +69,7 @@ models/SignupRequest.ts
 models/TokenRefreshRequest.ts
 models/TokenRefreshResponse.ts
 models/UpdateWriteOffRequest.ts
-models/UploadFile200Response.ts
+models/UploadResponse.ts
 models/UserInfo.ts
 models/UsersPeriodRequest.ts
 models/UsersStatisticResponse.ts

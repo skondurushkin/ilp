@@ -1,5 +1,6 @@
 package ru.itone.ilp.services.tests;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,16 @@ class ArticleServiceTest extends ServicesTestConfiguration {
         PaginatedArticleResponse response = articleService.paginate(request);
         log.info("RESPONSE: {}", response);
         assertTrue(response.getHasNext());
+
+    }
+
+    @Test
+    void testArticlePaginateActive() {
+        articleService.delete(1L);
+        PageRequest request = new PageRequest().page(0).pageSize(2).config(new PageRequestConfig());
+        PaginatedArticleResponse response = articleService.paginateActive(request);
+        log.info("RESPONSE: {}", response);
+        assertFalse(response.getHasNext());
 
     }
 }
