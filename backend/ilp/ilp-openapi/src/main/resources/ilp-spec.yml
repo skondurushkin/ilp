@@ -699,12 +699,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/PaginatedWriteOffResponse"
 
-  /api/ilp/wallet/write-offs/{user_id}:
+  /api/ilp/admin/wallet/write-offs/{user_id}:
     post:
-      operationId: browseWriteOffsForUserId
+      operationId: browseWriteOffsForUserIdAsAdmin
       summary: paginated view of write-offs of the user identified by user_id
       tags:
-        - wallet
+        - admin
       parameters:
         - $ref: "#/components/parameters/user_id"
       requestBody:
@@ -780,6 +780,29 @@ paths:
               properties:
                 activityId:
                   $ref: "#/components/schemas/Identifier"
+      responses:
+        201:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccrualResponse"
+
+  /api/ilp/admin/wallet/accrual/{user_id}/cancel:
+    post:
+      operationId: cancelAccrualForUser
+      summary: cancel accrual for user identified by user_id
+      tags:
+        - admin
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: "#/components/schemas/CancelAccrualBody"
+
       responses:
         201:
           description: "OK"
@@ -1685,6 +1708,7 @@ components:
           type: object
         active:
           type: boolean
+          description: the entity is available for actions
 
     PaginatedActivityResponse:
       allOf:
@@ -1770,6 +1794,7 @@ components:
         active:
           type: boolean
           default: true
+          description: the entity is available for actions
         imageLink:
           type: string
         extension:
@@ -1785,6 +1810,14 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ArticleResponse"
+
+    CancelAccrualBody:
+      type: object
+      required:
+        - activityId
+      properties:
+        activityId:
+          $ref: "#/components/schemas/Identifier"
 
     AccrualResponse:
       type: object

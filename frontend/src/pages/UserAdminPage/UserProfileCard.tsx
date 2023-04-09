@@ -2,34 +2,39 @@ import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { Link } from 'react-router-dom';
 import { TypedLink } from '../../router';
 
-interface ProfileCardProps {
+interface UserProfileCardProps {
     id: number;
-    fio: string;
+    fio?: string;
     email: string;
     phone: string;
     avatarLink: string;
     jobPosition: string;
     city: string;
     country: string;
+    showEditLink?: boolean;
 }
 
-export const ProfileCard = (props: ProfileCardProps) => {
-    const { id, fio, avatarLink, jobPosition, country, city, email, phone } = props;
+export const UserProfileCard = (props: UserProfileCardProps) => {
+    const { id, fio, avatarLink, jobPosition, country, city, email, phone, showEditLink = true } = props;
 
     return (
         <div className="flex w-full flex-col justify-between gap-6 bg-black p-6">
-            <div className="flex justify-between">
-                <p className="text-base text-white">{fio}</p>
-                <TypedLink
-                    className="h-4 w-4"
-                    to="/admin/users/:userId"
-                    params={{
-                        userId: id.toString(),
-                    }}
-                >
-                    <EditSVG className="stroke-primary" />
-                </TypedLink>
-            </div>
+            {!!fio && (
+                <div className="flex justify-between">
+                    <p className="text-base text-white">{fio}</p>
+                    {showEditLink && (
+                        <TypedLink
+                            className="h-4 w-4"
+                            to="/admin/users/:userId"
+                            params={{
+                                userId: id.toString(),
+                            }}
+                        >
+                            <EditSVG className="stroke-primary" />
+                        </TypedLink>
+                    )}
+                </div>
+            )}
             <div className="flex gap-4">
                 <TypedLink
                     className="bg-gray flex h-[120px] w-[120px] shrink-0"

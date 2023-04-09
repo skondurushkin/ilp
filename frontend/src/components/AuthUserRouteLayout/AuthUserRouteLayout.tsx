@@ -54,6 +54,7 @@ export function AuthUserRouteLayout(): ReactElement {
                     </button>
                 </div>
             </header>
+            <div className="z-header dark:bg-gray-dark top-header-mobile xl:top-header fixed -mt-0.5 h-0.5 w-full bg-white opacity-20 dark:opacity-100" />
             <div className="app-bg pt-header-mobile xl:pt-header flex grow flex-col">
                 <div className="relative flex w-full grow xl:container xl:mx-auto">
                     <aside

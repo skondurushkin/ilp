@@ -2,7 +2,9 @@ import type { Table as ITable, RowData } from '@tanstack/react-table';
 
 import { CSSProperties } from 'react';
 import { ReactComponent as ChevronLeftSVG } from '../assets/chevron-left.svg';
+import { DataNotFound } from './DataNotFound';
 import { Spinner } from './Spinner';
+import { colors } from '../../colors';
 import { flexRender } from '@tanstack/react-table';
 import { twMerge } from 'tailwind-merge';
 
@@ -20,7 +22,7 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
         <div className="relative overflow-y-hidden">
             {isFetching && (
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
-                    <Spinner />
+                    <Spinner color={colors.white} />
                 </div>
             )}
             <table className={twMerge('w-full', isFetching && 'opacity-50', fixed && 'table-fixed', className)}>
@@ -60,17 +62,25 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
                     ))}
                 </thead>
                 <tbody>
-                    {table.getRowModel().rows.map((row) => (
-                        <tr key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id} className="px-3 py-2 text-left">
-                                    <div className="text-base text-white">
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </div>
-                                </td>
-                            ))}
+                    {table.getPageCount() === 0 ? (
+                        <tr>
+                            <td colSpan={table.getAllColumns().length}>
+                                <DataNotFound />
+                            </td>
                         </tr>
-                    ))}
+                    ) : (
+                        table.getRowModel().rows.map((row) => (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <td key={cell.id} className="px-3 py-2 text-left">
+                                        <div className="text-base text-white">
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </div>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
         </div>

@@ -14,22 +14,18 @@
 
 import * as runtime from '../runtime';
 
-import type { ErrorMessage, UploadFile200Response } from '../models';
-import {
-    ErrorMessageFromJSON,
-    ErrorMessageToJSON,
-    UploadFile200ResponseFromJSON,
-    UploadFile200ResponseToJSON,
-} from '../models';
+import type { ErrorMessage, UploadResponse } from '../models';
+import { ErrorMessageFromJSON, ErrorMessageToJSON, UploadResponseFromJSON, UploadResponseToJSON } from '../models';
 
-export interface DownloadFileRequest {
-    link: string;
+export interface GetFileRequest {
+    scope: GetFileScopeEnum;
+    fileName: string;
 }
 
 export interface UploadFileRequest {
     scope: UploadFileScopeEnum;
     id: number;
-    filename: Blob;
+    file: Blob;
 }
 
 /**
@@ -39,22 +35,25 @@ export class FilesApi extends runtime.BaseAPI {
     /**
      * fetch file from ILP file store
      */
-    async downloadFileRaw(
-        requestParameters: DownloadFileRequest,
+    async getFileRaw(
+        requestParameters: GetFileRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<Blob>> {
-        if (requestParameters.link === null || requestParameters.link === undefined) {
+        if (requestParameters.scope === null || requestParameters.scope === undefined) {
             throw new runtime.RequiredError(
-                'link',
-                'Required parameter requestParameters.link was null or undefined when calling downloadFile.',
+                'scope',
+                'Required parameter requestParameters.scope was null or undefined when calling getFile.',
+            );
+        }
+
+        if (requestParameters.fileName === null || requestParameters.fileName === undefined) {
+            throw new runtime.RequiredError(
+                'fileName',
+                'Required parameter requestParameters.fileName was null or undefined when calling getFile.',
             );
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters.link !== undefined) {
-            queryParameters['link'] = requestParameters.link;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -68,7 +67,9 @@ export class FilesApi extends runtime.BaseAPI {
         }
         const response = await this.request(
             {
-                path: `/api/ilp/file/download`,
+                path: `/api/ilp/file/{scope}/{fileName}`
+                    .replace(`{${'scope'}}`, encodeURIComponent(String(requestParameters.scope)))
+                    .replace(`{${'fileName'}}`, encodeURIComponent(String(requestParameters.fileName))),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
@@ -82,11 +83,11 @@ export class FilesApi extends runtime.BaseAPI {
     /**
      * fetch file from ILP file store
      */
-    async downloadFile(
-        requestParameters: DownloadFileRequest,
+    async getFile(
+        requestParameters: GetFileRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<Blob> {
-        const response = await this.downloadFileRaw(requestParameters, initOverrides);
+        const response = await this.getFileRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -96,7 +97,7 @@ export class FilesApi extends runtime.BaseAPI {
     async uploadFileRaw(
         requestParameters: UploadFileRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<UploadFile200Response>> {
+    ): Promise<runtime.ApiResponse<UploadResponse>> {
         if (requestParameters.scope === null || requestParameters.scope === undefined) {
             throw new runtime.RequiredError(
                 'scope',
@@ -111,10 +112,10 @@ export class FilesApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters.filename === null || requestParameters.filename === undefined) {
+        if (requestParameters.file === null || requestParameters.file === undefined) {
             throw new runtime.RequiredError(
-                'filename',
-                'Required parameter requestParameters.filename was null or undefined when calling uploadFile.',
+                'file',
+                'Required parameter requestParameters.file was null or undefined when calling uploadFile.',
             );
         }
 
@@ -148,8 +149,8 @@ export class FilesApi extends runtime.BaseAPI {
             formParams.append('id', requestParameters.id as any);
         }
 
-        if (requestParameters.filename !== undefined) {
-            formParams.append('filename', requestParameters.filename as any);
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
         }
 
         const response = await this.request(
@@ -166,7 +167,7 @@ export class FilesApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UploadFile200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UploadResponseFromJSON(jsonValue));
     }
 
     /**
@@ -175,7 +176,7 @@ export class FilesApi extends runtime.BaseAPI {
     async uploadFile(
         requestParameters: UploadFileRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<UploadFile200Response> {
+    ): Promise<UploadResponse> {
         const response = await this.uploadFileRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -184,8 +185,16 @@ export class FilesApi extends runtime.BaseAPI {
 /**
  * @export
  */
+export const GetFileScopeEnum = {
+    Activity: 'activity',
+    Article: 'article',
+    Profile: 'profile',
+} as const;
+export type GetFileScopeEnum = (typeof GetFileScopeEnum)[keyof typeof GetFileScopeEnum];
+/**
+ * @export
+ */
 export const UploadFileScopeEnum = {
-    Global: 'global',
     Activity: 'activity',
     Article: 'article',
     Profile: 'profile',

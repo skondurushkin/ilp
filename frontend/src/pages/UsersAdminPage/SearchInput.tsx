@@ -13,7 +13,7 @@ export const SearchInput = (props: SearchInputProps) => {
         <div className="relative text-left">
             <DebouncedInput
                 className="input form-input w-full pl-12"
-                placeholder="Поиск"
+                placeholder="Поиск по ФИО, email"
                 value={value}
                 onChange={(value) => onChange(value.toString())}
             />

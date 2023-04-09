@@ -6,19 +6,25 @@ import { PageRequest, WriteOffResponse, WriteOffStatus, api } from '../../api';
 import { useCallback, useMemo, useState } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
-import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { BROWSE_WRITE_OFFS_FOR_USER_ID_AS_ADMIN_QUERY_KEY } from '../../modules/admin';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
 import { TypedLink } from '../../router';
-import { WRITE_OFFS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { WriteOffStatusName } from '../../modules/loyalty';
 
-export const WriteOffsAdminPage = () => {
+interface WriteOffsHistoryProps {
+    userId: number;
+}
+
+export const WriteOffsHistory = (props: WriteOffsHistoryProps) => {
+    const { userId } = props;
+
     const [modalData, setModalData] = useState<ReadonlyEditWriteOffsStatusFormRequest | null>(null);
 
     const queryData = useCallback((pageRequest: PageRequest) => {
-        return api.admin.browseWriteOffsAsAdmin({
+        return api.admin.browseWriteOffsForUserIdAsAdmin({
+            userId,
             pageRequest,
         });
     }, []);
@@ -85,22 +91,20 @@ export const WriteOffsAdminPage = () => {
                     const { id, date, status, article } = info.row.original;
                     if (status !== WriteOffStatus.Completed && status !== WriteOffStatus.Cancelled) {
                         return (
-                            <div>
-                                <button
-                                    className="flex items-center gap-2"
-                                    onClick={() =>
-                                        setModalData({
-                                            id,
-                                            status,
-                                            articleName: article.name,
-                                            date: new Date(date).toLocaleDateString('ru-RU'),
-                                        })
-                                    }
-                                >
-                                    <EditSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Изменить</span>
-                                </button>
-                            </div>
+                            <button
+                                className="flex items-center gap-2"
+                                onClick={() =>
+                                    setModalData({
+                                        articleName: article.name,
+                                        id,
+                                        status,
+                                        date: new Date(date).toLocaleDateString('ru-RU'),
+                                    })
+                                }
+                            >
+                                <EditSVG className="stroke-primary h-4 w-4" />
+                                <span className="text-small text-primary">Изменить</span>
+                            </button>
                         );
                     }
 
@@ -110,22 +114,23 @@ export const WriteOffsAdminPage = () => {
         ],
         [setModalData],
     );
-
     return (
         <div className="flex flex-col gap-6">
-            <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Заказы' }]} />
-            <h1 className="text-h1">Заказы</h1>
+            <div className="flex flex-col items-start gap-4">
+                <h1 className="text-h1">Заказы</h1>
+            </div>
             <AdminTable
-                queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Покупателю и Товару"
+                showSearch={false}
+                queryKey={BROWSE_WRITE_OFFS_FOR_USER_ID_AS_ADMIN_QUERY_KEY}
+                globalFilterPlaceholder="Поиск по ИД, Названию и Описанию"
                 columns={columns}
                 queryData={queryData}
             />
-            <Modal id="WriteOffsAdminPage" isOpen={Boolean(modalData)} closeModal={() => setModalData(null)} size="sm">
+            <Modal id="EditStatusForm" isOpen={Boolean(modalData)} closeModal={() => setModalData(null)} size="sm">
                 <Modal.Body>
                     {!!modalData && (
                         <EditWriteOffsStatusForm
-                            queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
+                            queryKey={BROWSE_WRITE_OFFS_FOR_USER_ID_AS_ADMIN_QUERY_KEY}
                             defaultValues={modalData}
                             closeModal={() => setModalData(null)}
                         />

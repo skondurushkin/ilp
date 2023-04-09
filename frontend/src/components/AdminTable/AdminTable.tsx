@@ -70,7 +70,7 @@ export const AdminTable = <TData extends RowData>({
     const table = useReactTable({
         columns,
         data: dataQuery.data?.results ?? defaultData,
-        pageCount: dataQuery.data?.total ?? -1,
+        pageCount: dataQuery.data?.total ?? 0,
         state: {
             pagination,
             globalFilter,
@@ -102,7 +102,7 @@ export const AdminTable = <TData extends RowData>({
             )}
             <div className="flex flex-col gap-6 bg-black p-6">
                 <Table table={table} isFetching={dataQuery.isFetching} />
-                {Number(dataQuery.data?.total) > 0 && <TablePagination table={table} />}
+                {table.getPageCount() > 0 && <TablePagination table={table} />}
             </div>
         </div>
     );
