@@ -5,11 +5,11 @@ import { useQueryBalanceStatistic, useQueryUsersStatistic } from '../../modules/
 import type { AxisOptions } from 'react-charts';
 import { Chart } from 'react-charts';
 import { Chips } from '../../components/Chips';
+import { DownloadBalanceCsvButton } from './DowloadCSV';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
 import { createPeriod } from '../../utils/period';
-import { twMerge } from 'tailwind-merge';
 
 type BalanceChip = 'day' | 'week' | 'month';
 type UsersChip = 'day' | 'all';
@@ -88,9 +88,7 @@ export function AdminStatisticPage() {
                         value={balanceChip}
                         onChange={setBalanceChip}
                     />
-                    <a href="/" download className="ml-auto">
-                        <button className={twMerge('chip h-6', 'chip-active')}>Скачать CSV</button>
-                    </a>
+                    {<DownloadBalanceCsvButton />}
                 </div>
                 <div className="text-h2 pl-2">Движение вольт по балансу пользователей</div>
                 {isLoadingBalance && <Spinner />}
