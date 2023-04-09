@@ -1,5 +1,5 @@
 import {
-    BrowseStatisticActivitiesOperationRequest,
+    BrowseStatisticActivitiesRequest,
     BrowseStatisticArticlesOperationRequest,
     BrowseStatisticBalanceRequest,
     BrowseStatisticUsersRequest,
@@ -35,7 +35,7 @@ export const useQueryUsersStatistic = (requestParameters: BrowseStatisticUsersRe
     );
 };
 
-export const useQueryActivitiesStatistic = (requestParameters: BrowseStatisticActivitiesOperationRequest) => {
+export const useQueryActivitiesStatistic = (requestParameters: BrowseStatisticActivitiesRequest) => {
     return useQuery(
         ['api.admin.browseStatisticActivities', requestParameters],
         () => api.admin.browseStatisticActivities(requestParameters),

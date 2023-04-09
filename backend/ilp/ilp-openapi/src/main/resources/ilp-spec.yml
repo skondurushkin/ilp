@@ -989,7 +989,11 @@ paths:
                   properties:
                     period:
                       type: string
-                      enum: ["day", "week", "month"]
+                      enum: ["day", "all"]
+                    sort:
+                      type: string
+                      enum: ["ASC", "DESC"]
+                      description: default "DESC"
       responses:
         200:
           description: page loaded
@@ -1016,6 +1020,10 @@ paths:
                     period:
                       type: string
                       enum: ["day", "all"]
+                    sort:
+                      type: string
+                      enum: ["ASC", "DESC"]
+                      description: default "DESC"
       responses:
         200:
           description: page loaded
@@ -1171,10 +1179,10 @@ components:
           properties:
             start:
               type: string
-              example: "2023-04-21T17:32:28"
+              example: "2023-04-21"
             end:
               type: string
-              example: "2023-04-21T17:32:28"
+              example: "2023-04-21"
             interval:
               type: string
               enum: [hour, day]
@@ -1220,10 +1228,10 @@ components:
           properties:
             start:
               type: string
-              example: "2023-04-21T17:32:28"
+              example: "2023-04-21"
             end:
               type: string
-              example: "2023-04-21T17:32:28"
+              example: "2023-04-21"
             interval:
               type: string
               enum: [hour, day]
@@ -1284,16 +1292,20 @@ components:
         extension:
           type: object
           nullable: true
-        orders:
-          type: number
+        count:
+          type: integer
           minimum: 0
+        active:
+          type: boolean
+          description: the entity is available for actions
       required:
         - id
         - code
         - name
         - price
         - available
-        - orders
+        - count
+        - active
 
     PaginatedArticleStatisticResponse:
       allOf:
@@ -1328,16 +1340,19 @@ components:
           format: date
         extension:
           type: object
-        orders:
-          type: number
+        count:
+          type: integer
           minimum: 0
+        # active:
+        #   type: boolean
+        #   description: the entity is available for actions
       required:
         - id
         - name
-        - active
+        # - active
         - infoLink
         - amount
-        - orders
+        - count
 
     PaginatedActivitiesStatisticResponse:
       allOf:

@@ -24,8 +24,6 @@ models/BalancePeriodRequest.ts
 models/BalancePeriodRequestPeriod.ts
 models/BalanceStatisticResponseInner.ts
 models/BalanceStatisticResponseInnerDataInner.ts
-models/BrowseStatisticActivitiesRequest.ts
-models/BrowseStatisticActivitiesRequestAllOf.ts
 models/BrowseStatisticArticlesRequest.ts
 models/BrowseStatisticArticlesRequestAllOf.ts
 models/BrowseWriteOffsRequest.ts
@@ -73,7 +71,6 @@ models/UpdateWriteOffRequest.ts
 models/UploadResponse.ts
 models/UserInfo.ts
 models/UsersPeriodRequest.ts
-models/UsersPeriodRequestPeriod.ts
 models/UsersStatisticResponse.ts
 models/WalletResponse.ts
 models/WriteOffRequest.ts

@@ -9,6 +9,7 @@ import { DownloadBalanceCsvButton } from './DownloadCSV';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
+import { UsersPeriodRequestPeriod } from '../../api/generated/models/UsersPeriodRequestPeriod';
 import { createPeriod } from '../../utils/period';
 
 type BalanceChip = 'day' | 'week' | 'month';
@@ -34,15 +35,13 @@ export function AdminStatisticPage() {
         }
     }, [balanceChip]);
 
-    const periodUsers: BalancePeriodRequestPeriod = useMemo(() => {
+    const periodUsers: UsersPeriodRequestPeriod = useMemo(() => {
         const now = new Date();
-        switch (balanceChip) {
+        switch (usersChip) {
             case 'day':
                 return { ...createPeriod(now, '-day'), interval: 'hour' };
-            case 'week':
-                return { ...createPeriod(now, '-week'), interval: 'day' };
             default:
-                return { ...createPeriod(now, '-month'), interval: 'day' };
+                return { ...createPeriod(now, '-year'), interval: 'day' };
         }
     }, [usersChip]);
 
@@ -148,11 +147,11 @@ export function AdminStatisticPage() {
                 </div>
                 <div>
                     <div className="text-h2 l pl-2 leading-4">Топ товаров</div>
-                    <TopProducts />
+                    <TopProducts period={usersChip} />
                 </div>
                 <div>
                     <div className="text-h2 pl-2 leading-4">Топ активностей</div>
-                    <TopActivities />
+                    <TopActivities period={usersChip} />
                 </div>
                 <div className="text-h2 pl-2">Статистика входов посетителей</div>
                 <div className="bg-black py-1">

@@ -51,6 +51,12 @@ export interface BrowseStatisticArticlesRequest {
      * @memberof BrowseStatisticArticlesRequest
      */
     period?: BrowseStatisticArticlesRequestPeriodEnum;
+    /**
+     * default "DESC"
+     * @type {string}
+     * @memberof BrowseStatisticArticlesRequest
+     */
+    sort?: BrowseStatisticArticlesRequestSortEnum;
 }
 
 /**
@@ -58,11 +64,20 @@ export interface BrowseStatisticArticlesRequest {
  */
 export const BrowseStatisticArticlesRequestPeriodEnum = {
     Day: 'day',
-    Week: 'week',
-    Month: 'month',
+    All: 'all',
 } as const;
 export type BrowseStatisticArticlesRequestPeriodEnum =
     (typeof BrowseStatisticArticlesRequestPeriodEnum)[keyof typeof BrowseStatisticArticlesRequestPeriodEnum];
+
+/**
+ * @export
+ */
+export const BrowseStatisticArticlesRequestSortEnum = {
+    Asc: 'ASC',
+    Desc: 'DESC',
+} as const;
+export type BrowseStatisticArticlesRequestSortEnum =
+    (typeof BrowseStatisticArticlesRequestSortEnum)[keyof typeof BrowseStatisticArticlesRequestSortEnum];
 
 /**
  * Check if a given object implements the BrowseStatisticArticlesRequest interface.
@@ -91,6 +106,7 @@ export function BrowseStatisticArticlesRequestFromJSONTyped(
         pageSize: json['pageSize'],
         config: !exists(json, 'config') ? undefined : PageRequestConfigFromJSON(json['config']),
         period: !exists(json, 'period') ? undefined : json['period'],
+        sort: !exists(json, 'sort') ? undefined : json['sort'],
     };
 }
 
@@ -106,5 +122,6 @@ export function BrowseStatisticArticlesRequestToJSON(value?: BrowseStatisticArti
         pageSize: value.pageSize,
         config: PageRequestConfigToJSON(value.config),
         period: value.period,
+        sort: value.sort,
     };
 }

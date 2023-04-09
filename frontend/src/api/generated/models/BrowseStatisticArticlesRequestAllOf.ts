@@ -25,6 +25,12 @@ export interface BrowseStatisticArticlesRequestAllOf {
      * @memberof BrowseStatisticArticlesRequestAllOf
      */
     period?: BrowseStatisticArticlesRequestAllOfPeriodEnum;
+    /**
+     * default "DESC"
+     * @type {string}
+     * @memberof BrowseStatisticArticlesRequestAllOf
+     */
+    sort?: BrowseStatisticArticlesRequestAllOfSortEnum;
 }
 
 /**
@@ -32,11 +38,20 @@ export interface BrowseStatisticArticlesRequestAllOf {
  */
 export const BrowseStatisticArticlesRequestAllOfPeriodEnum = {
     Day: 'day',
-    Week: 'week',
-    Month: 'month',
+    All: 'all',
 } as const;
 export type BrowseStatisticArticlesRequestAllOfPeriodEnum =
     (typeof BrowseStatisticArticlesRequestAllOfPeriodEnum)[keyof typeof BrowseStatisticArticlesRequestAllOfPeriodEnum];
+
+/**
+ * @export
+ */
+export const BrowseStatisticArticlesRequestAllOfSortEnum = {
+    Asc: 'ASC',
+    Desc: 'DESC',
+} as const;
+export type BrowseStatisticArticlesRequestAllOfSortEnum =
+    (typeof BrowseStatisticArticlesRequestAllOfSortEnum)[keyof typeof BrowseStatisticArticlesRequestAllOfSortEnum];
 
 /**
  * Check if a given object implements the BrowseStatisticArticlesRequestAllOf interface.
@@ -60,6 +75,7 @@ export function BrowseStatisticArticlesRequestAllOfFromJSONTyped(
     }
     return {
         period: !exists(json, 'period') ? undefined : json['period'],
+        sort: !exists(json, 'sort') ? undefined : json['sort'],
     };
 }
 
@@ -72,5 +88,6 @@ export function BrowseStatisticArticlesRequestAllOfToJSON(value?: BrowseStatisti
     }
     return {
         period: value.period,
+        sort: value.sort,
     };
 }
