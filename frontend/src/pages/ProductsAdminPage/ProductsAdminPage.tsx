@@ -16,7 +16,7 @@ export type Columns<DataType extends object = Record<string, unknown>> = readonl
 
 export const ProductsAdminPage = () => {
     const queryData = useCallback((pageRequest: PageRequest) => {
-        return api.article.browseArticles({
+        return api.admin.browseArticlesForAdmin({
             pageRequest,
         });
     }, []);

@@ -56,6 +56,12 @@ export interface ArticleResponse {
      */
     available: boolean;
     /**
+     * the entity is available for actions
+     * @type {boolean}
+     * @memberof ArticleResponse
+     */
+    active: boolean;
+    /**
      *
      * @type {string}
      * @memberof ArticleResponse
@@ -67,12 +73,6 @@ export interface ArticleResponse {
      * @memberof ArticleResponse
      */
     extension?: object | null;
-    /**
-     * the entity is available for actions
-     * @type {boolean}
-     * @memberof ArticleResponse
-     */
-    active?: boolean;
 }
 
 /**
@@ -85,6 +85,7 @@ export function instanceOfArticleResponse(value: object): boolean {
     isInstance = isInstance && 'name' in value;
     isInstance = isInstance && 'price' in value;
     isInstance = isInstance && 'available' in value;
+    isInstance = isInstance && 'active' in value;
 
     return isInstance;
 }
@@ -104,9 +105,9 @@ export function ArticleResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         description: !exists(json, 'description') ? undefined : json['description'],
         price: json['price'],
         available: json['available'],
+        active: json['active'],
         imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
         extension: !exists(json, 'extension') ? undefined : json['extension'],
-        active: !exists(json, 'active') ? undefined : json['active'],
     };
 }
 
@@ -124,8 +125,8 @@ export function ArticleResponseToJSON(value?: ArticleResponse | null): any {
         description: value.description,
         price: value.price,
         available: value.available,
+        active: value.active,
         imageLink: value.imageLink,
         extension: value.extension,
-        active: value.active,
     };
 }

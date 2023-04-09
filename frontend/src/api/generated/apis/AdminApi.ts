@@ -25,6 +25,7 @@ import type {
     ErrorMessage,
     PageRequest,
     PaginatedActivitiesStatisticResponse,
+    PaginatedArticleResponse,
     PaginatedArticleStatisticResponse,
     PaginatedOperationResponse,
     PaginatedProfileResponse,
@@ -56,6 +57,8 @@ import {
     PageRequestToJSON,
     PaginatedActivitiesStatisticResponseFromJSON,
     PaginatedActivitiesStatisticResponseToJSON,
+    PaginatedArticleResponseFromJSON,
+    PaginatedArticleResponseToJSON,
     PaginatedArticleStatisticResponseFromJSON,
     PaginatedArticleStatisticResponseToJSON,
     PaginatedOperationResponseFromJSON,
@@ -75,6 +78,10 @@ import {
     WriteOffResponseFromJSON,
     WriteOffResponseToJSON,
 } from '../models';
+
+export interface BrowseArticlesForAdminRequest {
+    pageRequest: PageRequest;
+}
 
 export interface BrowseStatisticActivitiesOperationRequest {
     browseStatisticActivitiesRequest: BrowseStatisticActivitiesRequest;
@@ -139,6 +146,59 @@ export interface UpdateWriteOffOperationRequest {
  *
  */
 export class AdminApi extends runtime.BaseAPI {
+    /**
+     * paginated articles view
+     */
+    async browseArticlesForAdminRaw(
+        requestParameters: BrowseArticlesForAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedArticleResponse>> {
+        if (requestParameters.pageRequest === null || requestParameters.pageRequest === undefined) {
+            throw new runtime.RequiredError(
+                'pageRequest',
+                'Required parameter requestParameters.pageRequest was null or undefined when calling browseArticlesForAdmin.',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/articles`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: PageRequestToJSON(requestParameters.pageRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedArticleResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * paginated articles view
+     */
+    async browseArticlesForAdmin(
+        requestParameters: BrowseArticlesForAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedArticleResponse> {
+        const response = await this.browseArticlesForAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
     /**
      * activities statistics for admin
      */

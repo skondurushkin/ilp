@@ -1794,14 +1794,12 @@ components:
         active:
           type: boolean
           default: true
+          description: the entity is available for actions
         imageLink:
           type: string
         extension:
           type: object
           nullable: true
-        active:
-          type: boolean
-          description: the entity is available for actions
 
     PaginatedArticleResponse:
       allOf:
@@ -1938,7 +1936,6 @@ components:
         - date
         - name
         - amount
-        - active
       properties:
         type:
           type: string
