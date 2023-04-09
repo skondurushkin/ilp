@@ -73,8 +73,16 @@ public class ProfileService {
         if (eventLogRepository.firstLogin(userId)) {
             dbApi.logEvent(userId, EventType.LOGIN, "Первый вход в программу лояльности");
             walletService.createNewAccrual(userId, new CreateNewAccrualRequest().activityId(1));
+        } else {
+            dbApi.logEvent(userId, EventType.LOGIN, "Выполнен вход");
         }
     }
+
+    @Transactional
+    public void onLogout(Long userId) {
+        dbApi.logEvent(userId, EventType.LOGOUT, "Выполнен выход из аккаунта");
+    }
+
 
     @Transactional(readOnly = true)
     public PaginatedProfileResponse paginate(PageRequest request) {

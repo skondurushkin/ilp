@@ -89,7 +89,7 @@ public class AdminController extends LinkResolver implements AdminApi {
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<PaginatedOperationResponse> getWalletHistoryForUserId(Integer userId, PageRequest pageRequest) {
-        return ResponseEntity.ok(walletService.getWalletHistory(true, userId.longValue(), pageRequest));
+        return ResponseEntity.ok(walletService.getWalletHistory(userId.longValue(), pageRequest));
     }
 
 

@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.openapi.model.ArticleRequest;
@@ -29,7 +31,7 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public PaginatedArticleResponse paginate(PageRequest request) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "amount"));
         String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<Article> page = StringUtils.isBlank(filter)
             ? articleRepository.findAll(pageable)

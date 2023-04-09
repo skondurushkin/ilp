@@ -81,8 +81,7 @@ public class WalletController extends LinkResolver implements WalletApi {
     @Override
     public ResponseEntity<PaginatedOperationResponse> getWalletHistory(PageRequest pageRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        boolean isAdmin = Helpers.isAdmin(userDetails);
-        return ResponseEntity.ok(walletService.getWalletHistory(isAdmin, userDetails.getId(), pageRequest));
+        return ResponseEntity.ok(walletService.getWalletHistory(userDetails.getId(), pageRequest));
     }
 
     @Override

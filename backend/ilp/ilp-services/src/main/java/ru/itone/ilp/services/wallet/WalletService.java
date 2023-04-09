@@ -45,7 +45,7 @@ public class WalletService {
     private static final String PROFILE_NOT_FOUND = "Профиль не найден";
     private final DbApi dbApi;
     private final DbJpa dbJpa;
-
+    private final Sort  dateDesc = Sort.by(Direction.DESC, "date");
 
     @Transactional(readOnly = true)
     public WalletResponse getWalletOverview(Long userId) {
@@ -67,7 +67,7 @@ public class WalletService {
 
     @Transactional(readOnly = true)
     public PaginatedAccrualResponse paginateAccruals(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
         Page<Accrual> page = dbJpa.getAccrualRepository().findAllByUserId(userId, pageable);
         List<AccrualResponse> results = page.getContent().stream().map(AccrualMapper.INSTANCE::toResponse).toList();
         return new PaginatedAccrualResponse()
@@ -81,7 +81,7 @@ public class WalletService {
 
     @Transactional(readOnly = true)
     public PaginatedWriteOffResponse paginateWriteOffs(ru.itone.ilp.openapi.model.PageRequest pageRequest) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
         Page<WriteOff> page = dbJpa.getWriteOffRepository().findAll(pageable);
         List<WriteOffResponse> results = page.getContent().stream().map(WriteOffMapper.INSTANCE::toResponse).toList();
         return new PaginatedWriteOffResponse()
@@ -96,7 +96,7 @@ public class WalletService {
     @Transactional(readOnly = true)
     public PaginatedWriteOffResponse paginateWriteOffs(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
         Page<WriteOff> page = dbJpa.getWriteOffRepository().findAllByUserId(userId, pageable);
         List<WriteOffResponse> results = page.getContent().stream().map(WriteOffMapper.INSTANCE::toResponse).toList();
         return new PaginatedWriteOffResponse()
@@ -111,7 +111,7 @@ public class WalletService {
     @Transactional(readOnly = true)
     public PaginatedWriteOffResponse paginateWriteOffsWithStatus(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest, Collection<OrderStatus> statuses) {
         dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
         Page<WriteOff> page = statuses.isEmpty()
                 ? dbJpa.getWriteOffRepository().findAllByUserId(userId, pageable)
                 : dbJpa.getWriteOffRepository().findAllByUserIdAndOrderStatusIsIn(userId, statuses, pageable);
@@ -127,9 +127,9 @@ public class WalletService {
 
 
     @Transactional(readOnly = true)
-    public PaginatedOperationResponse getWalletHistory(boolean isAdmin, Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
+    public PaginatedOperationResponse getWalletHistory(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         dbJpa.getUserRepository().findById(userId).orElseThrow(() -> new DbApiException(PROFILE_NOT_FOUND));
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest);
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, Sort.by(Direction.DESC, "instant"));
         Page<Operation> operationPage = dbJpa.getOperationRepository().findAllByUserId(userId, pageable);
         List<OperationResponse> results = operationPage.getContent()
                 .stream()

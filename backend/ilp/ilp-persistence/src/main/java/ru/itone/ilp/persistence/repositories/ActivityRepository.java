@@ -27,4 +27,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     @Query(value = PAGEABLE_SEARCH, nativeQuery = true)
     Page<Activity> searchByText(@Param("text") String text, Pageable pageable);
 
+    Page<Activity> findAllByIdNot(@Param("id")Long id, Pageable pageable);
+
 }

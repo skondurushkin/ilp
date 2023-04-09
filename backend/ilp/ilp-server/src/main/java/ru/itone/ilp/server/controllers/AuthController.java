@@ -100,6 +100,7 @@ public class AuthController implements AuthApi {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
         refreshTokenService.deleteByUserId(userId);
+        profileService.onLogout(userId);
         return ResponseEntity.ok(new MessageResponse().message("Successfully logged out."));
     }
 
