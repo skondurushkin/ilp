@@ -635,7 +635,7 @@ export class AdminApi extends runtime.BaseAPI {
      */
     async downloadWriteOffsCsvRaw(
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
-    ): Promise<runtime.ApiResponse<Blob>> {
+    ): Promise<runtime.ApiResponse<string>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -658,13 +658,13 @@ export class AdminApi extends runtime.BaseAPI {
             initOverrides,
         );
 
-        return new runtime.BlobApiResponse(response);
+        return new runtime.TextApiResponse(response) as any;
     }
 
     /**
      * Выгрузить заказы в CSV
      */
-    async downloadWriteOffsCsv(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Blob> {
+    async downloadWriteOffsCsv(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.downloadWriteOffsCsvRaw(initOverrides);
         return await response.value();
     }

@@ -24,8 +24,8 @@ export interface GetFileRequest {
 
 export interface UploadFileRequest {
     scope: UploadFileScopeEnum;
-    id: number;
     file: Blob;
+    id?: number;
 }
 
 /**
@@ -102,13 +102,6 @@ export class FilesApi extends runtime.BaseAPI {
             throw new runtime.RequiredError(
                 'scope',
                 'Required parameter requestParameters.scope was null or undefined when calling uploadFile.',
-            );
-        }
-
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter requestParameters.id was null or undefined when calling uploadFile.',
             );
         }
 

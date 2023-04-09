@@ -2,6 +2,7 @@ import { ArticleUpdateRequest, ErrorMessage, api } from '../../api';
 import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
+import PhotoInput from '../../components/Form/PhotoInput';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -31,6 +32,13 @@ export const EditProductForm = (props: EditProductFormProps) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
+                <div className="flex flex-wrap gap-8">
+                    <PhotoInput control={control} name={`gallery.${0}`} scope="article" entityId={values.id} />
+                    <PhotoInput control={control} name={`gallery.${1}`} scope="article" entityId={values.id} />
+                    <PhotoInput control={control} name={`gallery.${2}`} scope="article" entityId={values.id} />
+                    <PhotoInput control={control} name={`gallery.${3}`} scope="article" entityId={values.id} />
+                    <PhotoInput control={control} name={`gallery.${4}`} scope="article" entityId={values.id} />
+                </div>
                 <div className="flex flex-col gap-3">
                     <FormInput
                         control={control}

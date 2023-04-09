@@ -8,7 +8,7 @@ export const CreateProductAdminPage = () => {
             <Breadcrumbs
                 items={[
                     { label: 'Администрирование', link: '/admin' },
-                    { label: 'Активности', link: '/admin/products' },
+                    { label: 'Товары', link: '/admin/products' },
                     { label: 'Добавление товара' },
                 ]}
             />
@@ -19,6 +19,7 @@ export const CreateProductAdminPage = () => {
                     description: '',
                     code: '',
                     available: true,
+                    gallery: [],
                 }}
             />
         </div>

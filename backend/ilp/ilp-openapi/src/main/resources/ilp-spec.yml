@@ -801,7 +801,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: "#/components/schemas/CancelAccrualBody"
+              $ref: "#/components/schemas/CancelAccrualBody"
 
       responses:
         201:
@@ -915,9 +915,9 @@ paths:
       responses:
         "200":
           content:
-              text/csv:
-                  schema:
-                      type: string
+            text/csv:
+              schema:
+                type: string
           description: returns csv file
 
   /api/ilp/admin/statistic/balance:
@@ -1018,14 +1018,13 @@ paths:
       tags:
         - files
       parameters:
-        - $ref: '#/components/parameters/scope'
+        - $ref: "#/components/parameters/scope"
       requestBody:
         content:
           multipart/form-data:
             schema:
               type: object
               required:
-                - id
                 - file
               properties:
                 id:
@@ -1041,7 +1040,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UploadResponse'
+                $ref: "#/components/schemas/UploadResponse"
         409:
           description: already exists
 
@@ -1741,6 +1740,7 @@ components:
         - name
         - price
         - available
+        - gallery
       properties:
         code:
           type: string
@@ -1759,7 +1759,12 @@ components:
           default: true
         imageLink:
           type: string
-          nullable: true
+        gallery:
+          type: array
+          minItems: 5
+          maxItems: 5
+          items:
+            $ref: "#/components/schemas/ImageLink"
 
     ArticleUpdateRequest:
       type: object
@@ -1787,6 +1792,7 @@ components:
         - price
         - available
         - active
+        - gallery
       properties:
         id:
           $ref: "#/components/schemas/Identifier"
@@ -1811,6 +1817,12 @@ components:
           description: the entity is available for actions
         imageLink:
           type: string
+        gallery:
+          type: array
+          minItems: 5
+          maxItems: 5
+          items:
+            $ref: "#/components/schemas/ImageLink"
         extension:
           type: object
           nullable: true
@@ -1992,6 +2004,10 @@ components:
           items:
             type: string
             description: relative link to secondary file
+
+    ImageLink:
+      type: string
+      nullable: true
 
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme

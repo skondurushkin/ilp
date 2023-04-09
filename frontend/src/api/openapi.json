@@ -1344,10 +1344,9 @@
                 "responses": {
                     "200": {
                         "content": {
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                            "text/csv": {
                                 "schema": {
-                                    "type": "string",
-                                    "format": "binary"
+                                    "type": "string"
                                 }
                             }
                         },
@@ -1511,7 +1510,7 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "required": ["id", "file"],
+                                "required": ["file"],
                                 "properties": {
                                     "id": {
                                         "$ref": "#/components/schemas/Identifier",
@@ -2371,7 +2370,7 @@
             },
             "ArticleRequest": {
                 "type": "object",
-                "required": ["code", "name", "price", "available"],
+                "required": ["code", "name", "price", "available", "gallery"],
                 "properties": {
                     "code": {
                         "type": "string",
@@ -2394,8 +2393,15 @@
                         "default": true
                     },
                     "imageLink": {
-                        "type": "string",
-                        "nullable": true
+                        "type": "string"
+                    },
+                    "gallery": {
+                        "type": "array",
+                        "minItems": 5,
+                        "maxItems": 5,
+                        "items": {
+                            "$ref": "#/components/schemas/ImageLink"
+                        }
                     }
                 }
             },
@@ -2426,7 +2432,7 @@
             },
             "ArticleResponse": {
                 "type": "object",
-                "required": ["id", "code", "name", "price", "available", "active"],
+                "required": ["id", "code", "name", "price", "available", "active", "gallery"],
                 "properties": {
                     "id": {
                         "$ref": "#/components/schemas/Identifier"
@@ -2458,6 +2464,14 @@
                     },
                     "imageLink": {
                         "type": "string"
+                    },
+                    "gallery": {
+                        "type": "array",
+                        "minItems": 5,
+                        "maxItems": 5,
+                        "items": {
+                            "$ref": "#/components/schemas/ImageLink"
+                        }
                     },
                     "extension": {
                         "type": "object",
@@ -2687,6 +2701,10 @@
                         }
                     }
                 }
+            },
+            "ImageLink": {
+                "type": "string",
+                "nullable": true
             }
         },
         "securitySchemes": {

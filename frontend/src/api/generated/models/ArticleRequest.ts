@@ -54,7 +54,13 @@ export interface ArticleRequest {
      * @type {string}
      * @memberof ArticleRequest
      */
-    imageLink?: string | null;
+    imageLink?: string;
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof ArticleRequest
+     */
+    gallery: Array<string>;
 }
 
 /**
@@ -66,6 +72,7 @@ export function instanceOfArticleRequest(value: object): boolean {
     isInstance = isInstance && 'name' in value;
     isInstance = isInstance && 'price' in value;
     isInstance = isInstance && 'available' in value;
+    isInstance = isInstance && 'gallery' in value;
 
     return isInstance;
 }
@@ -85,6 +92,7 @@ export function ArticleRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
         price: json['price'],
         available: json['available'],
         imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
+        gallery: json['gallery'],
     };
 }
 
@@ -102,5 +110,6 @@ export function ArticleRequestToJSON(value?: ArticleRequest | null): any {
         price: value.price,
         available: value.available,
         imageLink: value.imageLink,
+        gallery: value.gallery,
     };
 }

@@ -69,6 +69,12 @@ export interface ArticleResponse {
     imageLink?: string;
     /**
      *
+     * @type {Array<string>}
+     * @memberof ArticleResponse
+     */
+    gallery: Array<string>;
+    /**
+     *
      * @type {object}
      * @memberof ArticleResponse
      */
@@ -86,6 +92,7 @@ export function instanceOfArticleResponse(value: object): boolean {
     isInstance = isInstance && 'price' in value;
     isInstance = isInstance && 'available' in value;
     isInstance = isInstance && 'active' in value;
+    isInstance = isInstance && 'gallery' in value;
 
     return isInstance;
 }
@@ -107,6 +114,7 @@ export function ArticleResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
         available: json['available'],
         active: json['active'],
         imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
+        gallery: json['gallery'],
         extension: !exists(json, 'extension') ? undefined : json['extension'],
     };
 }
@@ -127,6 +135,7 @@ export function ArticleResponseToJSON(value?: ArticleResponse | null): any {
         available: value.available,
         active: value.active,
         imageLink: value.imageLink,
+        gallery: value.gallery,
         extension: value.extension,
     };
 }

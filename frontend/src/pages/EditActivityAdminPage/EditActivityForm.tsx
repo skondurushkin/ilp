@@ -1,7 +1,7 @@
 import { ActivityUpdateRequest, ErrorMessage, api } from '../../api';
+import { FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
-import { FormInput } from '../../components/Form';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -61,6 +61,17 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                         rules={{
                             validate: validationRules.isUrl,
                             required: validationRules.required,
+                        }}
+                    />
+                    <FormTextArea
+                        control={control}
+                        name="description"
+                        label="Описание активности"
+                        rows={4}
+                        cols={50}
+                        rules={{
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(500),
                         }}
                     />
                 </div>
