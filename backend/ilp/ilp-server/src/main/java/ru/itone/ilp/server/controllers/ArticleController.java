@@ -35,7 +35,7 @@ public class ArticleController extends LinkResolver implements ArticleApi {
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<ArticleResponse> createArticle(ArticleRequest articleRequest) {
-        return Optional.ofNullable(articleService.createArticle(articleRequest)).map(this::resolveLink)
+        return Optional.ofNullable(articleService.createArticle(relativizeLink(articleRequest))).map(this::resolveLink)
                 .map(a -> new ResponseEntity<>(a, HttpStatus.CREATED))
                 .orElseThrow(() -> new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
     }
@@ -63,6 +63,11 @@ public class ArticleController extends LinkResolver implements ArticleApi {
     public ResponseEntity<ArticleResponse> updateArticle(ArticleUpdateRequest articleUpdateRequest) {
         return ResponseEntity.ok(resolveLink(articleService.update(articleUpdateRequest)));
     }
+
+    private ArticleRequest relativizeLink(ArticleRequest articleRequest) {
+        return articleRequest.imageLink(relativize(articleRequest.getImageLink()));
+    }
+
 
     ArticleResponse resolveLink(ArticleResponse response) {
         return response.imageLink(resolve(response.getImageLink()));

@@ -83,8 +83,9 @@ public class ActivityService {
     }
 
     @Transactional
-    public void delete(Long activityId) {
+    public ActivityResponse delete(Long activityId) {
         activityRepository.markAsDeleted(activityId);
+        return activityRepository.findById(activityId).map(ActivityService::toResponse).orElse(null);
     }
 
     @Transactional(readOnly = true)

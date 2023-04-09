@@ -87,12 +87,17 @@ create table articles
     price       integer,
     image_link  text,
     available   boolean default false,
+    end_date    date,
     extension   jsonb,
     primary key (id)
 );
 
 alter table if exists articles
     add constraint UK_articles_code unique (code);
+
+create type accrual_status as enum (
+    'created',
+    'cancelled');
 
 -- Начисления
 create table accruals
@@ -102,6 +107,7 @@ create table accruals
     user_id int     not null,
     activity_id int not null,
     amount   int not null,
+    status  accrual_status not null default 'created',
     primary key (id)
 );
 
@@ -151,6 +157,7 @@ create table operations
     writeoff_id bigint,
     name        varchar(50) not null,
     amount      int         not null,
+    active      boolean default true,
     primary key (id)
 );
 
@@ -196,7 +203,7 @@ BEGIN
     -- Добавление строки в operations, которая отражает операцию начисления;
     --
     IF (TG_OP = 'UPDATE') THEN
-        UPDATE operations SET name = ACT_NAME, amount = NEW.amount
+        UPDATE operations SET name = ACT_NAME, amount = NEW.amount, active = NEW.status <> 'cancelled'::accrual_status
         WHERE accrual_id = new.id;
         CALL public.log_event(new.user_id, 'accrual'::event_type, format('Обновлена операция начисления %s', new.id));
         return NEW;
@@ -265,7 +272,7 @@ declare
     spent  integer;
     _result jsonb;
 begin
-    select coalesce (sum(a.amount), 0) into earned from accruals a where a.user_id = userId;
+    select coalesce (sum(a.amount), 0) into earned from accruals a where a.user_id = userId  and a.status <> 'cancelled'::accrual_status;
     select coalesce (sum(w.amount), 0) into spent from write_offs w where w.user_id = userId and w.status <> 'cancelled'::order_status;
 
     select row_to_json(t) into _result from (
@@ -379,7 +386,6 @@ values
     ('2023-03-25', 3, 3, 10, 'completed'::order_status),
     ('2023-03-25', 2, 1, 5, 'delivering'::order_status)
 ;
-
 
 
 

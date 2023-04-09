@@ -63,6 +63,7 @@ public class Operation implements Serializable {
     @Column
     private Integer amount;
 
-
+    @Column
+    private Boolean active;
 
 }

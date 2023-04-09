@@ -42,10 +42,10 @@ public class FileStoreController implements FilesApi {
 
     @Override
     @Secured("hasRole('ADMIN)")
-    public ResponseEntity<UploadResponse> uploadFile(String scope, Integer id, MultipartFile file) {
+    public ResponseEntity<UploadResponse> uploadFile(String scope, MultipartFile file) {
         ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
 
-        String fileName = fileStoreService.storeFile(scope, id, file);
+        String fileName = fileStoreService.storeFile(scope, file);
 
         String fileDownloadUri = builder
                 .path("/api/ilp/file/" + fileName)

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ru.itone.ilp.openapi.model.OperationResponse;
+import ru.itone.ilp.openapi.model.OperationResponse.TypeEnum;
 import ru.itone.ilp.persistence.entities.Operation;
 
 @Mapper
@@ -24,7 +25,10 @@ public interface OperationMapper {
             case WRITEOFF -> source.getWriteOff().getDate();
         };
 
-        return ret.date(opDate);
+        if (ret.getType() == TypeEnum.ACCRUAL) {
+            ret.active(source.getAccrual().isActive());
+        }
 
+        return ret.date(opDate);
     }
 }
