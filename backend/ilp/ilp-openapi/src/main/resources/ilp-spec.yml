@@ -1991,9 +1991,6 @@ components:
             type: string
             description: relative link to secondary file
 
-    ImageLink:
-      type: string
-      nullable: true
 
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme
