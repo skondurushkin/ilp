@@ -2,8 +2,8 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { Button } from '../../components/Button';
 import { DataNotFound } from '../../components/DataNotFound';
 import { PageSpinner } from '../../components/Spinner';
-import { ProfileCard } from './ProfileCard';
 import { SearchInput } from '../../components/SearchInput';
+import { UserProfileCard } from '../../components/UserProfileCard';
 import { useQuerySearchProfileAsAdmin } from '../../modules/admin';
 import { useSearchParams } from 'react-router-dom';
 
@@ -38,7 +38,7 @@ export const UsersAdminPage = () => {
                 {pages.map((paginated) =>
                     paginated.results?.map((profile) => (
                         <div className="flex flex-1" key={profile.id}>
-                            <ProfileCard
+                            <UserProfileCard
                                 id={profile.id}
                                 avatarLink={profile.avatarLink}
                                 jobPosition={profile.jobPosition}
