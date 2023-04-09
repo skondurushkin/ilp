@@ -1,6 +1,7 @@
 import { ErrorMessage, PageRequestConfig, api } from '../../api';
 import { useMutation, useQueryClient } from 'react-query';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { FormAsyncSelect } from '../../components/Form/FormAsyncSelect';
 import { FormInput } from '../../components/Form';
 import debounce from 'debounce-promise';
@@ -38,10 +39,10 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
             });
             await queryClient.invalidateQueries(queryKey);
             reset();
-            toast('Вольты начислены');
+            toast.success('Вольты начислены');
             closeModal();
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
     const { mutateAsync: browseActivities } = useMutation(['activity.browseActivities'], (config: PageRequestConfig) =>

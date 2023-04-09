@@ -3,7 +3,7 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { DataNotFound } from '../../components/DataNotFound';
 import { PageSpinner } from '../../components/Spinner';
 import { UserBalanceCard } from './UserBalanceCard';
-import { UserProfileCard } from './UserProfileCard';
+import { UserProfileCard } from '../../components/UserProfileCard';
 import { WriteOffsHistory } from './WriteOffsHistory';
 import { useParams } from 'react-router-dom';
 import { useQueryProfileByIdAsAdmin } from '../../modules/admin';

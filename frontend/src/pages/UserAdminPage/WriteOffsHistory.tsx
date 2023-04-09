@@ -50,7 +50,7 @@ export const WriteOffsHistory = (props: WriteOffsHistoryProps) => {
             },
             {
                 accessorKey: 'user',
-                header: () => <span>Покупатель</span>,
+                header: () => <span>Пользователь</span>,
                 cell: (info) => {
                     const { user } = info.row.original;
                     return (
@@ -122,7 +122,7 @@ export const WriteOffsHistory = (props: WriteOffsHistoryProps) => {
             <AdminTable
                 showSearch={false}
                 queryKey={BROWSE_WRITE_OFFS_FOR_USER_ID_AS_ADMIN_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Названию и Описанию"
+                globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}
                 queryData={queryData}
             />

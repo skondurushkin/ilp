@@ -1,6 +1,9 @@
 import { ActivityRequest, ErrorMessage, api } from '../../api';
+import { FormInput, FormTextArea } from '../../components/Form';
 
-import { FormInput } from '../../components/Form';
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
+import { TypedLink } from '../../router';
+import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -18,13 +21,27 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
 
     const onSubmit = async (activityRequest: ActivityRequest) => {
         try {
-            await api.activity.createActivity({
+            const newActivity = await api.activity.createActivity({
                 activityRequest,
             });
             reset();
-            toast('Активность добавлена');
+            toast.success(
+                <div>
+                    <p>Активность добавлена</p>
+                    <TypedLink
+                        to="/admin/activities/edit/:activityId"
+                        params={{ activityId: newActivity.id.toString() }}
+                        className="flex items-center gap-2"
+                    >
+                        <span className="text-primary">Посмотреть</span>
+                    </TypedLink>
+                </div>,
+                {
+                    autoClose: false,
+                },
+            );
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 
@@ -53,6 +70,9 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
                             max: validationRules.max(9999),
                             required: validationRules.required,
                         }}
+                        transform={{
+                            input: formatters.numberOnly,
+                        }}
                     />
                     <FormInput
                         control={control}
@@ -61,6 +81,17 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
                         rules={{
                             validate: validationRules.isUrl,
                             required: validationRules.required,
+                        }}
+                    />
+                    <FormTextArea
+                        control={control}
+                        name="description"
+                        label="Описание активности"
+                        rows={4}
+                        cols={50}
+                        rules={{
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(500),
                         }}
                     />
                 </div>

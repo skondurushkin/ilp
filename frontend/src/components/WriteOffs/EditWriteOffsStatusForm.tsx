@@ -1,6 +1,7 @@
 import { ErrorMessage, UpdateWriteOffRequest, WriteOffStatus, api } from '../../api';
 import { FormInput, FormSelect, FormSelectOption } from '../Form';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { WriteOffStatusName } from '../../modules/loyalty';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -36,10 +37,10 @@ export const EditWriteOffsStatusForm = (props: EditWriteOffsStatusFormProps) => 
             });
             await queryClient.invalidateQueries(queryKey);
             reset();
-            toast('Статус заказа изменен');
+            toast.success('Статус заказа изменен');
             closeModal();
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 

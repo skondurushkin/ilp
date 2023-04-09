@@ -54,7 +54,7 @@ export interface ArticleRequest {
      * @type {string}
      * @memberof ArticleRequest
      */
-    imageLink?: string | null;
+    imageLink?: string;
 }
 
 /**

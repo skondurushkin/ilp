@@ -1336,6 +1336,25 @@
                 }
             }
         },
+        "/api/ilp/admin/wallet/write-offs/csv": {
+            "get": {
+                "description": "Выгрузить заказы в CSV",
+                "operationId": "downloadWriteOffsCsv",
+                "tags": ["admin"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "returns csv file"
+                    }
+                }
+            }
+        },
         "/api/ilp/admin/statistic/balance": {
             "post": {
                 "operationId": "browseStatisticBalance",
@@ -1491,7 +1510,7 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "required": ["id", "file"],
+                                "required": ["file"],
                                 "properties": {
                                     "id": {
                                         "$ref": "#/components/schemas/Identifier",
@@ -2374,8 +2393,7 @@
                         "default": true
                     },
                     "imageLink": {
-                        "type": "string",
-                        "nullable": true
+                        "type": "string"
                     }
                 }
             },
@@ -2465,9 +2483,9 @@
             },
             "CancelAccrualBody": {
                 "type": "object",
-                "required": ["activityId"],
+                "required": ["accrualId"],
                 "properties": {
-                    "activityId": {
+                    "accrualId": {
                         "$ref": "#/components/schemas/Identifier"
                     }
                 }
@@ -2667,6 +2685,10 @@
                         }
                     }
                 }
+            },
+            "ImageLink": {
+                "type": "string",
+                "nullable": true
             }
         },
         "securitySchemes": {

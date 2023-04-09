@@ -114,7 +114,7 @@ export const ActivitiesAdminPage = () => {
                         );
                     }
 
-                    return <p className="text-error">В архиве</p>;
+                    return <p className="text-error text-small pl-6">В архиве</p>;
                 },
             },
         ],
@@ -133,8 +133,10 @@ export const ActivitiesAdminPage = () => {
                 </div>
             </div>
             <AdminTable
+                storage="query"
+                queryStorageName="globalFilter"
                 queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Названию и Описанию"
+                globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}
                 queryData={queryData}
             />

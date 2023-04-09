@@ -72,7 +72,7 @@ export const TopActivities = () => {
         <div className="py-4">
             <AdminTable
                 queryKey={ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Названию и Описанию"
+                globalFilterPlaceholder="Поиск по Названию и Описанию"
                 initialSort={[{ id: 'orders', desc: true }]}
                 columns={columns}
                 queryData={queryData}

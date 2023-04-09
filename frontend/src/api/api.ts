@@ -5,6 +5,7 @@ import {
     AuthApi,
     Configuration,
     ConfigurationParameters,
+    FilesApi,
     Middleware,
     ProfileApi,
     ResponseContext,
@@ -25,6 +26,7 @@ function createInternalApi(config: ConfigurationParameters) {
         wallet: new WalletApi(cnf),
         settings: new SettingsApi(cnf),
         admin: new AdminApi(cnf),
+        files: new FilesApi(cnf),
     };
 }
 
@@ -37,9 +39,8 @@ class ErrorContentMiddleware implements Middleware {
                 .then((j) => j);
 
             if (context.response.status >= 500) {
-                toast(DEFAULT_API_ERROR_MSG, {
+                toast.error(DEFAULT_API_ERROR_MSG, {
                     autoClose: false,
-                    type: 'error',
                 });
             }
 

@@ -1,6 +1,8 @@
 import { ActivityUpdateRequest, ErrorMessage, api } from '../../api';
+import { FormInput, FormTextArea } from '../../components/Form';
 
-import { FormInput } from '../../components/Form';
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
+import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -21,9 +23,9 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
             await api.activity.updateActivity({
                 activityUpdateRequest: data,
             });
-            toast('Активность обновлена');
+            toast.success('Активность обновлена');
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 
@@ -52,6 +54,9 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                             max: validationRules.max(9999),
                             required: validationRules.required,
                         }}
+                        transform={{
+                            input: formatters.numberOnly,
+                        }}
                     />
                     <FormInput
                         control={control}
@@ -60,6 +65,17 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                         rules={{
                             validate: validationRules.isUrl,
                             required: validationRules.required,
+                        }}
+                    />
+                    <FormTextArea
+                        control={control}
+                        name="description"
+                        label="Описание активности"
+                        rows={4}
+                        cols={50}
+                        rules={{
+                            minLength: validationRules.maxLength(1),
+                            maxLength: validationRules.maxLength(500),
                         }}
                     />
                 </div>

@@ -54,7 +54,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                             <div>
                                 <p className="text-base text-white">{name}</p>
                             </div>
-                            {type === OperationResponseTypeEnum.Accrual && (
+                            {type === OperationResponseTypeEnum.WriteOff && (
                                 <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
                                     <p className="text-small text-gray underline">Перейти</p>
                                 </TypedLink>
@@ -90,7 +90,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                                     })
                                 }
                             >
-                                <XSquareVG className="stroke-error h-4 w-4" />
+                                <XSquareVG className="fill-error h-4 w-4" />
                                 <span className="text-small text-error">Отменить</span>
                             </button>
                         );
@@ -114,7 +114,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
             <AdminTable
                 showSearch={false}
                 queryKey={GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Названию и Описанию"
+                globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}
                 queryData={queryData}
             />
