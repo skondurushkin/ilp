@@ -844,6 +844,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/WriteOffResponse"
 
+  /api/ilp/admin/articles:
+    post:
+      operationId: browseArticlesForAdmin
+      summary: paginated articles view
+      tags:
+        - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PageRequest"
+      responses:
+        200:
+          description: page loaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedArticleResponse"
+
   /api/ilp/admin/wallet/write-offs:
     post:
       operationId: browseWriteOffsAsAdmin
@@ -1728,6 +1748,7 @@ components:
         - name
         - price
         - available
+        - active
       properties:
         id:
           $ref: "#/components/schemas/Identifier"
@@ -1746,6 +1767,9 @@ components:
         available:
           type: boolean
           default: false
+        active:
+          type: boolean
+          default: true
         imageLink:
           type: string
         extension:

@@ -42,7 +42,7 @@ public class ActivityService {
 
     @Transactional(readOnly = true)
     public PaginatedActivityResponse paginate(PageRequest request) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "amount"));
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "price"));
         String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<Activity> page = StringUtils.isBlank(filter)
                 ? activityRepository.findAllByIdNot(1L, pageable)
@@ -77,14 +77,14 @@ public class ActivityService {
                 .orElseThrow(() -> new DbApiException("Запись не найдена"));
         activity = activityRepository.save(activity.setName(request.getName())
                     .setDescription(request.getDescription())
-                    .setAmount(request.getAmount())
+                    .setPrice(request.getAmount())
                     .setInfoLink(request.getInfoLink()));
         return toResponse(activity);
     }
 
     @Transactional
     public void delete(Long activityId) {
-        activityRepository.deleteById(activityId);
+        activityRepository.markAsDeleted(activityId);
     }
 
     @Transactional(readOnly = true)
