@@ -1740,7 +1740,6 @@ components:
         - name
         - price
         - available
-        - gallery
       properties:
         code:
           type: string
@@ -1759,12 +1758,6 @@ components:
           default: true
         imageLink:
           type: string
-        gallery:
-          type: array
-          minItems: 5
-          maxItems: 5
-          items:
-            $ref: "#/components/schemas/ImageLink"
 
     ArticleUpdateRequest:
       type: object
@@ -1792,7 +1785,6 @@ components:
         - price
         - available
         - active
-        - gallery
       properties:
         id:
           $ref: "#/components/schemas/Identifier"
@@ -1817,12 +1809,6 @@ components:
           description: the entity is available for actions
         imageLink:
           type: string
-        gallery:
-          type: array
-          minItems: 5
-          maxItems: 5
-          items:
-            $ref: "#/components/schemas/ImageLink"
         extension:
           type: object
           nullable: true

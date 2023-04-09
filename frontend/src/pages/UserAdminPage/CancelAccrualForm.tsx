@@ -31,7 +31,7 @@ export const CancelAccrualForm = (props: CancelAccrualFormProps) => {
             await api.admin.cancelAccrualForUser({
                 userId,
                 cancelAccrualBody: {
-                    activityId: Number(data.id),
+                    accrualId: Number(data.id),
                 },
             });
             await queryClient.invalidateQueries(queryKey);

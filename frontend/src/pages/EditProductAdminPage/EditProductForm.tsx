@@ -33,12 +33,8 @@ export const EditProductForm = (props: EditProductFormProps) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
-                <div className="flex flex-wrap gap-8">
-                    <PhotoInput control={control} name={`gallery.${0}`} scope="article" entityId={values.id} />
-                    <PhotoInput control={control} name={`gallery.${1}`} scope="article" entityId={values.id} />
-                    <PhotoInput control={control} name={`gallery.${2}`} scope="article" entityId={values.id} />
-                    <PhotoInput control={control} name={`gallery.${3}`} scope="article" entityId={values.id} />
-                    <PhotoInput control={control} name={`gallery.${4}`} scope="article" entityId={values.id} />
+                <div className="self-start">
+                    <PhotoInput control={control} name="imageLink" scope="article" entityId={values.id} />
                 </div>
                 <div className="flex flex-col gap-3">
                     <FormInput

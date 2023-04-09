@@ -35,7 +35,6 @@ export const EditProductAdminPage = () => {
                         available: product.available,
                         code: product.code,
                         description: product.description,
-                        gallery: product.gallery,
                     }}
                 />
             </div>

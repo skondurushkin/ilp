@@ -19,7 +19,6 @@ export const CreateProductAdminPage = () => {
                     description: '',
                     code: '',
                     available: true,
-                    gallery: [],
                 }}
             />
         </div>

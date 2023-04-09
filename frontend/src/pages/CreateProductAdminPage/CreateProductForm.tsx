@@ -49,12 +49,8 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
-                <div className="flex flex-wrap gap-8">
-                    <PhotoInput control={control} name={`gallery.${0}`} scope="article" />
-                    <PhotoInput control={control} name={`gallery.${1}`} scope="article" />
-                    <PhotoInput control={control} name={`gallery.${2}`} scope="article" />
-                    <PhotoInput control={control} name={`gallery.${3}`} scope="article" />
-                    <PhotoInput control={control} name={`gallery.${4}`} scope="article" />
+                <div className="self-start">
+                    <PhotoInput control={control} name="imageLink" scope="article" />
                 </div>
                 <div className="flex flex-col gap-3">
                     <FormInput
