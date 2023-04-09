@@ -156,7 +156,7 @@ public class WalletService {
                                 .setUser(user)
                                 .setActivity(activity)
                                 .setDate(LocalDate.now())
-                                .setAmount(activity.getAmount())
+                                .setAmount(activity.getPrice())
                 );
 
         return AccrualMapper.INSTANCE.toResponse(ret);
@@ -197,7 +197,7 @@ public class WalletService {
                                 .setUser(user)
                                 .setArticle(article)
                                 .setDate(LocalDate.now())
-                                .setAmount(article.getAmount())
+                                .setAmount(article.getPrice())
                                 .setOrderStatus(OrderStatus.created)
                 );
         return WriteOffMapper.INSTANCE.toResponse(writeOff);

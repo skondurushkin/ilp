@@ -31,13 +31,24 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public PaginatedArticleResponse paginate(PageRequest request) {
-        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "amount"));
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "price"));
         String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<Article> page = StringUtils.isBlank(filter)
             ? articleRepository.findAll(pageable)
             : articleRepository.searchByText(filter, pageable)   ;
         return toPaginatedResponse(page);
     }
+
+    @Transactional(readOnly = true)
+    public PaginatedArticleResponse paginateActive(PageRequest request) {
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "price"));
+        String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
+        Page<Article> page = StringUtils.isBlank(filter)
+                ? articleRepository.findAllByEndDateIsNull(pageable)
+                : articleRepository.searchByTextActive(filter, pageable)   ;
+        return toPaginatedResponse(page);
+    }
+
 
     @Transactional
     public ArticleResponse createArticle(ArticleRequest request) {
@@ -56,7 +67,7 @@ public class ArticleService {
     public ArticleResponse update(ArticleUpdateRequest request) {
         Article article = articleRepository.findById(request.getId().longValue()).orElseThrow(() -> new DbApiException("Артикул не найден"));
         article = articleRepository.save(
-                article.setAmount(request.getPrice())
+                article.setPrice(request.getPrice())
                         .setCode(request.getCode())
                         .setName(request.getName())
                         .setDescription(request.getDescription())
@@ -67,7 +78,7 @@ public class ArticleService {
 
     @Transactional
     public void delete(Long articleId) {
-        articleRepository.deleteById(articleId);
+        articleRepository.markAsDeleted(articleId);
     }
 
     @Transactional(readOnly = true)

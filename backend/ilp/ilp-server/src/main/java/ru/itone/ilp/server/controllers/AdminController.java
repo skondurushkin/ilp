@@ -22,6 +22,7 @@ import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
+import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
 import ru.itone.ilp.openapi.model.PaginatedProfileResponse;
@@ -32,6 +33,7 @@ import ru.itone.ilp.openapi.model.UpdateWriteOffRequest;
 import ru.itone.ilp.openapi.model.UsersPeriodRequest;
 import ru.itone.ilp.openapi.model.UsersStatisticResponse;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
+import ru.itone.ilp.services.articles.ArticleService;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.profiles.ProfileService;
 import ru.itone.ilp.services.wallet.WalletService;
@@ -44,6 +46,7 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     private final WalletService walletService;
     private final ProfileService profileService;
+    private final ArticleService articleService;
 
     @Override
     public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
@@ -70,6 +73,11 @@ public class AdminController extends LinkResolver implements AdminApi {
     @Override
     public ResponseEntity<PaginatedWriteOffResponse> browseWriteOffsAsAdmin(PageRequest pageRequest) {
         return ResponseEntity.ok(resolveProfileLinks(walletService.paginateWriteOffs(pageRequest)));
+    }
+
+    @Override
+    public ResponseEntity<PaginatedArticleResponse> browseArticlesForAdmin(PageRequest pageRequest) {
+        return ResponseEntity.ok(resolveLinks(articleService.paginate(pageRequest)));
     }
 
     @Override
@@ -155,6 +163,18 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     private PaginatedWriteOffResponse resolveProfileLinks(PaginatedWriteOffResponse page) {
         resolveWriteOffLinks(page.getResults());
+        return page;
+    }
+
+    List<ArticleResponse> resolveLinks(List<ArticleResponse> articles) {
+        if (!CollectionUtils.isEmpty(articles)) {
+            articles.forEach(this::resolveLink);
+        }
+        return articles;
+    }
+
+    PaginatedArticleResponse resolveLinks(PaginatedArticleResponse page) {
+        resolveLinks(page.getResults());
         return page;
     }
 

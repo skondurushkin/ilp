@@ -3,6 +3,7 @@ package ru.itone.ilp.persistence.repositories;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     String PLAIN_SEARCH = SEARCH_ACTIVITY + " LIMIT :limit";
     String PAGEABLE_SEARCH = SEARCH_ACTIVITY + " /*#{#pageable}*/";
+
     @Query(value = PLAIN_SEARCH, nativeQuery = true)
     List<Activity> searchByText(@Param("text") String text, @Param("limit") int limit);
 
@@ -28,5 +30,9 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Page<Activity> searchByText(@Param("text") String text, Pageable pageable);
 
     Page<Activity> findAllByIdNot(@Param("id")Long id, Pageable pageable);
+
+    @Modifying
+    @Query("update Activity ac set ac.endDate = current_date where ac.id = :id")
+    void markAsDeleted(@Param("id") Long id);
 
 }
