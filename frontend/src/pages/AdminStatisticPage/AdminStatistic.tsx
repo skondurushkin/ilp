@@ -5,7 +5,7 @@ import { useQueryBalanceStatistic, useQueryUsersStatistic } from '../../modules/
 import type { AxisOptions } from 'react-charts';
 import { Chart } from 'react-charts';
 import { Chips } from '../../components/Chips';
-import { DownloadBalanceCsvButton } from './DowloadCSV';
+import { DownloadBalanceCsvButton } from './DownloadCSV';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
