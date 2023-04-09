@@ -1115,12 +1115,12 @@ components:
           properties:
             start:
               type: string
-              format: date-time
-              example: "2023-04-21T17:32:28"
+              # format: date-time
+              # example: "2023-04-21T17:32:28"
             end:
               type: string
-              format: date-time
-              example: "2023-04-21T17:32:28"
+              # format: date-time
+              # example: "2023-04-21T17:32:28"
             interval:
               type: string
               enum: [hour, day]
@@ -1166,11 +1166,9 @@ components:
           properties:
             start:
               type: string
-              format: date-time
               example: "2023-04-21T17:32:28"
             end:
               type: string
-              format: date-time
               example: "2023-04-21T17:32:28"
             interval:
               type: string
