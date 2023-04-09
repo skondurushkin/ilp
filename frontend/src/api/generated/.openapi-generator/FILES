@@ -73,7 +73,6 @@ models/UpdateWriteOffRequest.ts
 models/UploadResponse.ts
 models/UserInfo.ts
 models/UsersPeriodRequest.ts
-models/UsersPeriodRequestPeriod.ts
 models/UsersStatisticResponse.ts
 models/WalletResponse.ts
 models/WriteOffRequest.ts

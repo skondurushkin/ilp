@@ -1171,12 +1171,10 @@ components:
           properties:
             start:
               type: string
-              # format: date-time
-              # example: "2023-04-21T17:32:28"
+              example: "2023-04-21T17:32:28"
             end:
               type: string
-              # format: date-time
-              # example: "2023-04-21T17:32:28"
+              example: "2023-04-21T17:32:28"
             interval:
               type: string
               enum: [hour, day]
@@ -2037,7 +2035,6 @@ components:
           items:
             type: string
             description: relative link to secondary file
-
 
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme

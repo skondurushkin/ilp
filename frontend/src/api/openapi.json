@@ -1698,10 +1698,12 @@
                         "type": "object",
                         "properties": {
                             "start": {
-                                "type": "string"
+                                "type": "string",
+                                "example": "2023-04-21T17:32:28"
                             },
                             "end": {
-                                "type": "string"
+                                "type": "string",
+                                "example": "2023-04-21T17:32:28"
                             },
                             "interval": {
                                 "type": "string",
