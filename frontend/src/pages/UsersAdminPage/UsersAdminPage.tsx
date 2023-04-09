@@ -1,6 +1,7 @@
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { Button } from '../../components/Button';
 import { DataNotFound } from '../../components/DataNotFound';
+import { PageSpinner } from '../../components/Spinner';
 import { ProfileCard } from './ProfileCard';
 import { SearchInput } from './SearchInput';
 import { useQuerySearchProfileAsAdmin } from '../../modules/admin';
@@ -10,6 +11,7 @@ export const UsersAdminPage = () => {
     const [searchKey, setSearchKey] = useState('');
 
     const { data, fetchNextPage, hasNextPage, isFetching, isError } = useQuerySearchProfileAsAdmin(searchKey);
+    const pages = data?.pages ?? [];
 
     return (
         <div className="flex flex-col gap-6">
@@ -19,7 +21,7 @@ export const UsersAdminPage = () => {
             <SearchInput value={searchKey} onChange={setSearchKey} />
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {(data?.pages ?? []).map((paginated) =>
+                {pages.map((paginated) =>
                     paginated.results?.map((profile) => (
                         <div className="flex flex-1" key={profile.id}>
                             <ProfileCard
@@ -36,6 +38,11 @@ export const UsersAdminPage = () => {
                     )),
                 )}
             </div>
+
+            {!isFetching && !!searchKey && (pages[0].results ?? []).length === 0 && (
+                <DataNotFound message="Пользователи не найдены" />
+            )}
+            {isFetching && <PageSpinner />}
 
             {hasNextPage && (
                 <div className="md:self-center">
