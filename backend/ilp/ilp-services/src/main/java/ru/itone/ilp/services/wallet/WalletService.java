@@ -1,10 +1,8 @@
 package ru.itone.ilp.services.wallet;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +15,7 @@ import ru.itone.ilp.exception.ApiExceptions.TransitionDeniedException;
 import ru.itone.ilp.openapi.model.AccrualResponse;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.OperationResponse;
+import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedAccrualResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
 import ru.itone.ilp.openapi.model.PaginatedWriteOffResponse;
@@ -39,6 +38,11 @@ import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.mappers.WriteOffMapper;
 import ru.itone.ilp.persistence.types.AccrualStatus;
 import ru.itone.ilp.persistence.types.OrderStatus;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class WalletService {
@@ -83,7 +87,10 @@ public class WalletService {
     @Transactional(readOnly = true)
     public PaginatedWriteOffResponse paginateWriteOffs(ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
-        Page<WriteOff> page = dbJpa.getWriteOffRepository().findAll(pageable);
+        String filter = Optional.ofNullable(pageRequest.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
+        Page<WriteOff> page = StringUtils.isBlank(filter)
+            ? dbJpa.getWriteOffRepository().findAll(pageable)
+            : dbJpa.getWriteOffRepository().searchByText(filter, pageable);
         List<WriteOffResponse> results = page.getContent().stream().map(WriteOffMapper.INSTANCE::toResponse).toList();
         return new PaginatedWriteOffResponse()
                 .total(page.getTotalPages())
