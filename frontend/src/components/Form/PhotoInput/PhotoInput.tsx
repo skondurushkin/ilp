@@ -4,6 +4,7 @@ import { ErrorMessage, UploadFileScopeEnum, api } from '../../../api';
 import { PHOTO_IMAGE_ACCEPT, validatePhotoFile } from './PhotoInput.utils';
 
 import { DEFAULT_API_ERROR_MSG } from '../../../api/constants';
+import { FormErrorMessage } from '../FormErrorMessage';
 import { ReactComponent as PlusSquareSVG } from '../../../assets/plus-square.svg';
 import { Spinner } from '../../Spinner';
 import { ReactComponent as XSquareVG } from '../../../assets/x-square.svg';
@@ -22,7 +23,7 @@ interface PhotoInputProps<TFieldValues extends FieldValues> {
 export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props: PhotoInputProps<TFieldValues>) => {
     const { scope, entityId, control, name, rules } = props;
 
-    const { field } = useController({
+    const { field, fieldState } = useController({
         name,
         control,
         rules,
@@ -59,7 +60,7 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
     );
 
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-start justify-center gap-4">
             <input
                 ref={photoInputRef}
                 type="file"
@@ -84,6 +85,7 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
                     )}
                 </InputButton>
             )}
+            <FormErrorMessage error={fieldState.error} />
         </div>
     );
 };
