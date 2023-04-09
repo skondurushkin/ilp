@@ -14,7 +14,7 @@ type Interval = 'hour' | 'day' | 'week' | 'month' | 'year';
 type DateShift = Interval | `-${Interval}`;
 
 export function createPeriod(date: Date, shift: DateShift, format?: string): Period {
-    const defaultFormat = format || 'YYYY-MM-DDTHH:mm:ss.SSS';
+    const defaultFormat = format || 'yyyy-MM-ddTHH:mm:ss.SSS';
     const first = toFormat(date, defaultFormat) as unknown as Date;
     const second = toFormat(shiftDate(date, shift), defaultFormat) as unknown as Date;
     return shift.startsWith('-') ? { start: second, end: first } : { start: first, end: second };
