@@ -37,25 +37,15 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
     >(
         async (event) => {
             if (event.target.files?.length) {
-                const formData = new FormData();
                 const file = event.target.files[0];
 
                 validatePhotoFile(file);
 
-                formData.append('file', file);
-
-                const uploadedFile = await api.files.uploadFile(
-                    {
-                        scope,
-                        id: entityId,
-                        file: formData as unknown as Blob,
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                );
+                const uploadedFile = await api.files.uploadFile({
+                    scope,
+                    id: entityId,
+                    file,
+                });
 
                 field.onChange(uploadedFile.link);
             }
