@@ -1,6 +1,7 @@
 import { ArticleUpdateRequest, ErrorMessage, api } from '../../api';
 import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -21,9 +22,9 @@ export const EditProductForm = (props: EditProductFormProps) => {
             await api.article.updateArticle({
                 articleUpdateRequest: data,
             });
-            toast('Товар обновлен');
+            toast.success('Товар обновлен');
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 

@@ -8,6 +8,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { AdminTable } from '../../components/AdminTable';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
+import { DownloadWriteOffsCsvButton } from './DownloadWriteOffsCsvButton';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
 import { TypedLink } from '../../router';
@@ -114,7 +115,12 @@ export const WriteOffsAdminPage = () => {
     return (
         <div className="flex flex-col gap-6">
             <Breadcrumbs items={[{ label: 'Администрирование', link: '/admin' }, { label: 'Заказы' }]} />
-            <h1 className="text-h1">Заказы</h1>
+            <div className="self-start">
+                <div className="flex flex-col gap-4">
+                    <h1 className="text-h1">Заказы</h1>
+                    <DownloadWriteOffsCsvButton />
+                </div>
+            </div>
             <AdminTable
                 queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
                 globalFilterPlaceholder="Поиск по ИД, Покупателю и Товару"

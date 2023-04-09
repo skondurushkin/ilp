@@ -1,5 +1,6 @@
 import { ActivityRequest, ErrorMessage, api } from '../../api';
 
+import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { FormInput } from '../../components/Form';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -22,9 +23,9 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
                 activityRequest,
             });
             reset();
-            toast('Активность добавлена');
+            toast.success('Активность добавлена');
         } catch (err) {
-            toast((err as ErrorMessage).message ?? 'Ошибка');
+            toast.error((err as ErrorMessage)?.message ?? DEFAULT_API_ERROR_MSG);
         }
     };
 

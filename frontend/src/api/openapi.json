@@ -1336,6 +1336,26 @@
                 }
             }
         },
+        "/api/ilp/admin/wallet/write-offs/csv": {
+            "get": {
+                "description": "Выгрузить заказы в CSV",
+                "operationId": "downloadWriteOffsCsv",
+                "tags": ["admin"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        },
+                        "description": "returns csv file"
+                    }
+                }
+            }
+        },
         "/api/ilp/admin/statistic/balance": {
             "post": {
                 "operationId": "browseStatisticBalance",

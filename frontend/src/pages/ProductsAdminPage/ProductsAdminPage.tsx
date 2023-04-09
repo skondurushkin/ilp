@@ -99,7 +99,7 @@ export const ProductsAdminPage = () => {
                         );
                     }
 
-                    return <p className="text-error">В архиве</p>;
+                    return <p className="text-error text-small pl-6">В архиве</p>;
                 },
             },
         ],
