@@ -1904,9 +1904,13 @@
                     "count": {
                         "type": "integer",
                         "minimum": 0
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "description": "the entity is available for actions"
                     }
                 },
-                "required": ["id", "name", "infoLink", "amount", "count"]
+                "required": ["id", "name", "active", "infoLink", "amount", "count"]
             },
             "PaginatedActivitiesStatisticResponse": {
                 "allOf": [

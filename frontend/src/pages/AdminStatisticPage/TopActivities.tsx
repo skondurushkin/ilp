@@ -60,11 +60,13 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
                 accessorKey: 'infoLink',
                 header: () => <span>Дата</span>,
                 cell: (info) => {
-                    const { startDate, endDate } = info.row.original;
+                    const { startDate, endDate, active } = info.row.original;
                     return (
                         <div className="flex flex-col gap-2">
                             {startDate && <p>{new Date(startDate).toLocaleDateString('ru-RU')}</p>}
-                            {endDate && <p className="text-gray">{new Date(endDate).toLocaleDateString('ru-RU')}</p>}
+                            {!active && endDate && (
+                                <p className="text-gray">{new Date(endDate).toLocaleDateString('ru-RU')}</p>
+                            )}
                         </div>
                     );
                 },

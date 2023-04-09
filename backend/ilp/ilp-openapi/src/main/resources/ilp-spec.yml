@@ -1343,13 +1343,13 @@ components:
         count:
           type: integer
           minimum: 0
-        # active:
-        #   type: boolean
-        #   description: the entity is available for actions
+        active:
+          type: boolean
+          description: the entity is available for actions
       required:
         - id
         - name
-        # - active
+        - active
         - infoLink
         - amount
         - count
