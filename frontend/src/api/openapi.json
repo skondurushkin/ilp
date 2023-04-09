@@ -1301,6 +1301,25 @@
                 }
             }
         },
+        "/api/ilp/admin/statistic/balance/csv": {
+            "get": {
+                "description": "Выгрузить движение вольт в CSV",
+                "operationId": "downloadBalanceCsv",
+                "tags": ["admin"],
+                "responses": {
+                    "200": {
+                        "description": "returns csv file",
+                        "content": {
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/ilp/admin/statistic/users": {
             "post": {
                 "operationId": "browseStatisticUsers",
