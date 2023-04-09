@@ -3,11 +3,10 @@ import { CreateOrderButton, ProductAvailability } from '../../components/CreateO
 
 import { ArticleResponse } from '../../api';
 import { Box } from '../../components/Box';
-import { ImageGallery } from '../../components/ImageGallery';
+import { ProductImage } from '../../components/ProductImage';
 import { ProductPrice } from '../../components/ProductPrice';
 import { ReactElement } from 'react';
 import { TypedLink } from '../../router';
-import { VerticalBrackets } from '../../components/VerticalBrackets';
 
 export interface ProductCardProps extends ProductViewProps {
     className?: string;
@@ -41,9 +40,7 @@ function ProductView(props: ProductViewProps): ReactElement {
     return (
         <>
             <TypedLink to="/products/:id" params={{ id: `${product.id}` }} className="flex grow flex-col">
-                <VerticalBrackets size="4">
-                    <ImageGallery imgs={[{ src: product.imageLink || '', alt: product.name }]} />
-                </VerticalBrackets>
+                <ProductImage src={product.imageLink || ''} alt={product.name} />
                 <div className="mt-4 self-center text-center">{product.name}</div>
             </TypedLink>
             <ProductPrice className="mt-4" price={product.price || 0} />

@@ -43,9 +43,9 @@ const bottomBracketColor: Record<Color, BottomBracketColor> = {
 };
 
 export function VerticalBrackets(props: VerticalBracketsProps): ReactElement {
-    const { className, size = '1', color = 'gray', children } = props;
+    const { className, size = '1', color = 'white', children } = props;
     const topBracketClasses = twMerge(
-        "before:block before:w-full before:border-t before:border-l before:border-r before:content-['']",
+        "before:absolute before:top-0 before:left-0 before:right-0 before:block before:w-full before:border-t before:border-l before:border-r before:content-['']",
         topBracketColor[color],
         size === '1' && 'before:h-1',
         size === '2' && 'before:h-2',
@@ -53,7 +53,7 @@ export function VerticalBrackets(props: VerticalBracketsProps): ReactElement {
         size === '4' && 'before:h-4',
     );
     const bottomBracketClasses = twMerge(
-        "after:block after:w-full after:border-b after:border-l after:border-r after:content-['']",
+        "after:absolute after:bottom-0 after:left-0 after:right-0 after:block after:w-full after:border-b after:border-l after:border-r after:content-['']",
         bottomBracketColor[color],
         size === '1' && 'after:h-1',
         size === '2' && 'after:h-2',
@@ -61,8 +61,6 @@ export function VerticalBrackets(props: VerticalBracketsProps): ReactElement {
         size === '4' && 'after:h-4',
     );
     return (
-        <div className={twMerge('flex flex-col items-center', topBracketClasses, bottomBracketClasses, className)}>
-            {children}
-        </div>
+        <div className={twMerge('relative p-0.5', topBracketClasses, bottomBracketClasses, className)}>{children}</div>
     );
 }
