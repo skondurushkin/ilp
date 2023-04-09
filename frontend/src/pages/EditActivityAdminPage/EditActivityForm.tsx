@@ -2,6 +2,7 @@ import { ActivityUpdateRequest, ErrorMessage, api } from '../../api';
 import { FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
+import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import validationRules from '../../utils/validationRules';
@@ -52,6 +53,9 @@ export const EditActivityForm = (props: EditActivityFormProps) => {
                             min: validationRules.min(1),
                             max: validationRules.max(9999),
                             required: validationRules.required,
+                        }}
+                        transform={{
+                            input: formatters.numberOnly,
                         }}
                     />
                     <FormInput
