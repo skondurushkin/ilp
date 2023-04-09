@@ -4,8 +4,7 @@ import { FormEvent, useState } from 'react';
 import { Button } from '../../components/Button';
 import { ReactComponent as CrossedEyeSVG } from '../../assets/crossed-eye.svg';
 import { ReactComponent as EyeSVG } from '../../assets/eye.svg';
-import { ReactComponent as LogoDark } from '../../assets/logo-dark.svg';
-import { ReactComponent as LogoLight } from '../../assets/logo-light.svg';
+import { ReactComponent as Logo } from '../../assets/logo.svg';
 import loginImageURL from '../../assets/login-image.jpg';
 import { twMerge } from 'tailwind-merge';
 
@@ -35,8 +34,7 @@ export const SignInPage = () => {
 
     return (
         <div className="relative flex h-screen flex-col-reverse justify-end gap-8 sm:gap-10 md:flex-row">
-            <LogoDark className="absolute left-16 top-6 hidden md:block xl:left-8" />
-            <LogoLight className="absolute left-4 top-6 sm:left-8 md:hidden" />
+            <Logo className="icon-light md:icon-dark absolute left-4 top-6 sm:left-8 md:left-16 md:top-6 md:block xl:left-8" />
             <form
                 className={twMerge(
                     // common

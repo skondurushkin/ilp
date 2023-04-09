@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { ReactComponent as TokenIcon } from '../assets/token.svg';
+import { Zaps } from './Zaps';
 import { twMerge } from 'tailwind-merge';
 
 export interface ProductPriceProps {
@@ -13,13 +13,12 @@ export function ProductPrice(props: ProductPriceProps): ReactElement {
     return (
         <div
             className={twMerge(
-                'flex items-center gap-1 self-center rounded-lg py-1 px-2 text-xl md:text-2xl',
+                'self-center rounded-lg px-2 py-1',
                 themed ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black',
                 className,
             )}
         >
-            {price}
-            <TokenIcon />
+            <Zaps className="text-h2" zapClassName="h-6 w-6" amount={price} />
         </div>
     );
 }

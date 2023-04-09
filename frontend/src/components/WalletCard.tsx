@@ -1,11 +1,10 @@
 import { ReactElement, useMemo } from 'react';
 import { Skeleton, SkeletonContainer } from './Skeleton';
 
-import { ReactComponent as TokenIcon } from '../assets/token.svg';
 import { TypedLink } from '../router';
 import { WalletResponse } from '../api';
+import { Zaps } from './Zaps';
 import loyaltyProgramCardUrl from '../assets/loyalty-program-card.png';
-import { range } from '../utils/range';
 import { twMerge } from 'tailwind-merge';
 
 export interface WalletCardProps extends WalletViewProps {
@@ -84,7 +83,7 @@ function EmptyWalletView(props: WalletViewProps) {
 function WalletView(props: WalletViewProps): ReactElement {
     const { wallet, extended } = props;
 
-    const maxAmountLength = useMemo(
+    const amountLength = useMemo(
         () => Math.max(...wallet.operations.map((op) => op.amount.toString().length)),
         [wallet],
     );
@@ -103,19 +102,17 @@ function WalletView(props: WalletViewProps): ReactElement {
                 <>
                     <div className="text-gray mt-4 text-xs leading-4 sm:hidden">История баланса</div>
                     <ul className="mt-2 space-y-1">
-                        {limit(wallet.operations, 3).map((item) => {
-                            const dir = item.type === 'accrual' ? '+' : '-';
-                            return (
-                                <li key={item.id}>
-                                    <span className="text-sm leading-[110%] text-white md:text-base">
-                                        <span className="font-mono font-bold">
-                                            {normalizeAmount(dir, item.amount, maxAmountLength)}
-                                        </span>{' '}
-                                        <TokenIcon className="inline h-3 w-3" /> {item.name}
-                                    </span>
-                                </li>
-                            );
-                        })}
+                        {limit(wallet.operations, 3).map((item) => (
+                            <li key={item.id} className="text flex items-baseline gap-2 text-white">
+                                <Zaps
+                                    className="items-baseline text-base font-bold leading-[110%]"
+                                    type={item.type}
+                                    amount={item.amount}
+                                    length={amountLength}
+                                />
+                                {item.name}
+                            </li>
+                        ))}
                     </ul>
                     <TypedLink to="/profile" hash="balance-history" className="mt-4 text-white underline md:mt-6">
                         Посмотреть всю историю
@@ -124,13 +121,6 @@ function WalletView(props: WalletViewProps): ReactElement {
             )}
         </>
     );
-}
-
-function normalizeAmount(dir: string, amount: number, length: number): string {
-    const prefix = range(length - amount.toString().length)
-        .map(() => '\u00A0')
-        .join('');
-    return `${prefix}${dir}${amount}`;
 }
 
 interface SkeletonViewProps {

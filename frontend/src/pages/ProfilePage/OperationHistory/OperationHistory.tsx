@@ -71,8 +71,8 @@ export function OperationHistorySkeleton(): ReactElement {
             </div>
             <Box className="mt-4">
                 <TableSkeletonBody />
+                <Skeleton className="mt-4 h-8 w-4/5 self-center" />
             </Box>
-            <Skeleton className="mt-4 h-8 w-4/5 self-center" />
         </SkeletonContainer>
     );
 }
