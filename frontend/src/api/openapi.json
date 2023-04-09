@@ -1616,14 +1616,10 @@
                         "type": "object",
                         "properties": {
                             "start": {
-                                "type": "string",
-                                "format": "date-time",
-                                "example": "2023-04-21T17:32:28"
+                                "type": "string"
                             },
                             "end": {
-                                "type": "string",
-                                "format": "date-time",
-                                "example": "2023-04-21T17:32:28"
+                                "type": "string"
                             },
                             "interval": {
                                 "type": "string",
@@ -1674,12 +1670,10 @@
                         "properties": {
                             "start": {
                                 "type": "string",
-                                "format": "date-time",
                                 "example": "2023-04-21T17:32:28"
                             },
                             "end": {
                                 "type": "string",
-                                "format": "date-time",
                                 "example": "2023-04-21T17:32:28"
                             },
                             "interval": {

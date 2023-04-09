@@ -64,6 +64,7 @@ export * from './UpdateWriteOffRequest';
 export * from './UploadResponse';
 export * from './UserInfo';
 export * from './UsersPeriodRequest';
+export * from './UsersPeriodRequestPeriod';
 export * from './UsersStatisticResponse';
 export * from './WalletResponse';
 export * from './WriteOffRequest';
