@@ -13,13 +13,13 @@
  */
 
 import {
-    BalancePeriodRequestPeriodFromJSON,
-    BalancePeriodRequestPeriodFromJSONTyped,
-    BalancePeriodRequestPeriodToJSON,
-} from './BalancePeriodRequestPeriod';
+    UsersPeriodRequestPeriodFromJSON,
+    UsersPeriodRequestPeriodFromJSONTyped,
+    UsersPeriodRequestPeriodToJSON,
+} from './UsersPeriodRequestPeriod';
 import { exists, mapValues } from '../runtime';
 
-import type { BalancePeriodRequestPeriod } from './BalancePeriodRequestPeriod';
+import type { UsersPeriodRequestPeriod } from './UsersPeriodRequestPeriod';
 
 /**
  *
@@ -29,10 +29,10 @@ import type { BalancePeriodRequestPeriod } from './BalancePeriodRequestPeriod';
 export interface UsersPeriodRequest {
     /**
      *
-     * @type {BalancePeriodRequestPeriod}
+     * @type {UsersPeriodRequestPeriod}
      * @memberof UsersPeriodRequest
      */
-    period: BalancePeriodRequestPeriod;
+    period: UsersPeriodRequestPeriod;
 }
 
 /**
@@ -54,7 +54,7 @@ export function UsersPeriodRequestFromJSONTyped(json: any, ignoreDiscriminator: 
         return json;
     }
     return {
-        period: BalancePeriodRequestPeriodFromJSON(json['period']),
+        period: UsersPeriodRequestPeriodFromJSON(json['period']),
     };
 }
 
@@ -66,6 +66,6 @@ export function UsersPeriodRequestToJSON(value?: UsersPeriodRequest | null): any
         return null;
     }
     return {
-        period: BalancePeriodRequestPeriodToJSON(value.period),
+        period: UsersPeriodRequestPeriodToJSON(value.period),
     };
 }

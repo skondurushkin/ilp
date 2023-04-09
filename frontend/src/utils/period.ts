@@ -4,8 +4,8 @@ import addYears from 'date-fns/addYears';
 import toFormat from 'date-fns/format';
 
 interface Period {
-    start: Date;
-    end: Date;
+    start: string;
+    end: string;
 }
 
 type Interval = 'hour' | 'day' | 'week' | 'month' | 'year';
@@ -14,9 +14,9 @@ type Interval = 'hour' | 'day' | 'week' | 'month' | 'year';
 type DateShift = Interval | `-${Interval}`;
 
 export function createPeriod(date: Date, shift: DateShift, format?: string): Period {
-    const defaultFormat = format || 'yyyy-MM-ddTHH:mm:ss.SSS';
-    const first = toFormat(date, defaultFormat) as unknown as Date;
-    const second = toFormat(shiftDate(date, shift), defaultFormat) as unknown as Date;
+    const defaultFormat = format || 'yyyy-MM-dd HH:mm:ss';
+    const first = toFormat(date, defaultFormat).replace(' ', 'T');
+    const second = toFormat(shiftDate(date, shift), defaultFormat).replace(' ', 'T');
     return shift.startsWith('-') ? { start: second, end: first } : { start: first, end: second };
 }
 

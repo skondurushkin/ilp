@@ -16,43 +16,43 @@ import { exists, mapValues } from '../runtime';
 /**
  *
  * @export
- * @interface BalancePeriodRequestPeriod
+ * @interface UsersPeriodRequestPeriod
  */
-export interface BalancePeriodRequestPeriod {
+export interface UsersPeriodRequestPeriod {
     /**
      *
      * @type {string}
-     * @memberof BalancePeriodRequestPeriod
+     * @memberof UsersPeriodRequestPeriod
      */
     start: string;
     /**
      *
      * @type {string}
-     * @memberof BalancePeriodRequestPeriod
+     * @memberof UsersPeriodRequestPeriod
      */
     end: string;
     /**
      *
      * @type {string}
-     * @memberof BalancePeriodRequestPeriod
+     * @memberof UsersPeriodRequestPeriod
      */
-    interval: BalancePeriodRequestPeriodIntervalEnum;
+    interval: UsersPeriodRequestPeriodIntervalEnum;
 }
 
 /**
  * @export
  */
-export const BalancePeriodRequestPeriodIntervalEnum = {
+export const UsersPeriodRequestPeriodIntervalEnum = {
     Hour: 'hour',
     Day: 'day',
 } as const;
-export type BalancePeriodRequestPeriodIntervalEnum =
-    (typeof BalancePeriodRequestPeriodIntervalEnum)[keyof typeof BalancePeriodRequestPeriodIntervalEnum];
+export type UsersPeriodRequestPeriodIntervalEnum =
+    (typeof UsersPeriodRequestPeriodIntervalEnum)[keyof typeof UsersPeriodRequestPeriodIntervalEnum];
 
 /**
- * Check if a given object implements the BalancePeriodRequestPeriod interface.
+ * Check if a given object implements the UsersPeriodRequestPeriod interface.
  */
-export function instanceOfBalancePeriodRequestPeriod(value: object): boolean {
+export function instanceOfUsersPeriodRequestPeriod(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'start' in value;
     isInstance = isInstance && 'end' in value;
@@ -61,14 +61,14 @@ export function instanceOfBalancePeriodRequestPeriod(value: object): boolean {
     return isInstance;
 }
 
-export function BalancePeriodRequestPeriodFromJSON(json: any): BalancePeriodRequestPeriod {
-    return BalancePeriodRequestPeriodFromJSONTyped(json, false);
+export function UsersPeriodRequestPeriodFromJSON(json: any): UsersPeriodRequestPeriod {
+    return UsersPeriodRequestPeriodFromJSONTyped(json, false);
 }
 
-export function BalancePeriodRequestPeriodFromJSONTyped(
+export function UsersPeriodRequestPeriodFromJSONTyped(
     json: any,
     ignoreDiscriminator: boolean,
-): BalancePeriodRequestPeriod {
+): UsersPeriodRequestPeriod {
     if (json === undefined || json === null) {
         return json;
     }
@@ -79,7 +79,7 @@ export function BalancePeriodRequestPeriodFromJSONTyped(
     };
 }
 
-export function BalancePeriodRequestPeriodToJSON(value?: BalancePeriodRequestPeriod | null): any {
+export function UsersPeriodRequestPeriodToJSON(value?: UsersPeriodRequestPeriod | null): any {
     if (value === undefined) {
         return undefined;
     }
