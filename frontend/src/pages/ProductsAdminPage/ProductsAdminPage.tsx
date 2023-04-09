@@ -118,7 +118,7 @@ export const ProductsAdminPage = () => {
                 </div>
             </div>
             <AdminTable
-                globalFilterPlaceholder="Поиск по ИД, Наименованию и Артиклу"
+                globalFilterPlaceholder="Поиск по Наименованию и Артиклу"
                 columns={columns}
                 queryData={queryData}
                 queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}

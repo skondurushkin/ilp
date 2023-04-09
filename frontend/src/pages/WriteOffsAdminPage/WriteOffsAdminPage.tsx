@@ -45,7 +45,7 @@ export const WriteOffsAdminPage = () => {
             },
             {
                 accessorKey: 'user',
-                header: () => <span>Покупатель</span>,
+                header: () => <span>Пользователь</span>,
                 cell: (info) => {
                     const { user } = info.row.original;
                     return (
@@ -123,7 +123,7 @@ export const WriteOffsAdminPage = () => {
             </div>
             <AdminTable
                 queryKey={WRITE_OFFS_ADMIN_PAGE_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Покупателю и Товару"
+                globalFilterPlaceholder="Поиск по Пользователю и Товару"
                 columns={columns}
                 queryData={queryData}
             />

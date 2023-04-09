@@ -134,7 +134,7 @@ export const ActivitiesAdminPage = () => {
             </div>
             <AdminTable
                 queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
-                globalFilterPlaceholder="Поиск по ИД, Названию и Описанию"
+                globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}
                 queryData={queryData}
             />

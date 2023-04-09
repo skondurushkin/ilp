@@ -43,7 +43,7 @@ export const UserProfileCard = (props: UserProfileCardProps) => {
                         userId: id.toString(),
                     }}
                 >
-                    <img src={avatarLink} alt={fio} className="h-full w-full bg-white" />
+                    <img src={avatarLink} alt={fio} className="h-full w-full bg-white object-contain" />
                 </TypedLink>
                 <div className="flex flex-col justify-between">
                     <div className="flex flex-col gap-1">
