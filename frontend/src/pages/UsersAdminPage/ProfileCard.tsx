@@ -18,7 +18,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
 
     return (
         <div className="flex w-full flex-col justify-between gap-6 bg-black p-6">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-4">
                 <p className="break-words text-base text-white">{fio}</p>
                 <TypedLink
                     className="h-4 w-4"

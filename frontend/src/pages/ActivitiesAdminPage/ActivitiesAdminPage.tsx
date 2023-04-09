@@ -133,6 +133,8 @@ export const ActivitiesAdminPage = () => {
                 </div>
             </div>
             <AdminTable
+                storage="query"
+                queryStorageName="globalFilter"
                 queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
                 globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}

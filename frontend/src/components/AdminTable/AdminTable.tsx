@@ -1,10 +1,10 @@
 import type { ColumnDef, PaginationState, RowData, SortingState, Updater } from '@tanstack/react-table';
 import { PageRequest, PageRequestConfigSortInnerSortTypeEnum, PaginatedResult } from '../../api';
+import { UseAdminTableSearchParams, useAdminTableSearch } from './useAdminTableSearch';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useCallback, useMemo, useState } from 'react';
 
-import { DebouncedInput } from '../DebouncedInput';
-import { ReactComponent as SearchSVG } from '../../assets/search.svg';
+import { SearchInput } from '../SearchInput';
 import { Table } from '../Table';
 import { TablePagination } from '../TablePagination';
 import { useQuery } from 'react-query';
@@ -12,6 +12,8 @@ import { useQuery } from 'react-query';
 const DEFAULT_PAGINATION_STATE = { pageIndex: 0, pageSize: 10 };
 
 export const AdminTable = <TData extends RowData>({
+    queryStorageName,
+    storage = 'state',
     showSearch = true,
     columns,
     queryKey,
@@ -19,7 +21,10 @@ export const AdminTable = <TData extends RowData>({
     queryData,
     globalFilterPlaceholder,
 }: AdminTableProps<TData>) => {
-    const [globalFilter, setGlobalFilter] = useState('');
+    const { globalFilter, setGlobalFilter } = useAdminTableSearch({
+        queryStorageName: queryStorageName ?? queryKey,
+        storage,
+    });
     const [sorting, setSorting] = useState<SortingState>(initialSort);
 
     const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>(DEFAULT_PAGINATION_STATE);
@@ -90,15 +95,11 @@ export const AdminTable = <TData extends RowData>({
     return (
         <div className="flex w-full flex-col gap-6 overflow-y-hidden overflow-x-scroll">
             {showSearch && (
-                <div className="relative mt-2 inline-flex text-left">
-                    <DebouncedInput
-                        value={globalFilter ?? ''}
-                        onChange={(value) => handleGlobalFilter(String(value))}
-                        className="input form-input w-full pl-12"
-                        placeholder={globalFilterPlaceholder ?? 'Поиск по всем колонкам'}
-                    />
-                    <SearchSVG className="stroke-gray absolute bottom-3 left-3" />
-                </div>
+                <SearchInput
+                    value={globalFilter ?? ''}
+                    placeholder={globalFilterPlaceholder ?? 'Поиск по всем колонкам'}
+                    onChange={(value) => handleGlobalFilter(String(value))}
+                />
             )}
             <div className="flex flex-col gap-6 bg-black p-6">
                 <Table table={table} isFetching={dataQuery.isFetching} />
@@ -108,12 +109,12 @@ export const AdminTable = <TData extends RowData>({
     );
 };
 
-interface AdminTableProps<TData extends RowData> {
+interface AdminTableProps<TData extends RowData> extends Partial<UseAdminTableSearchParams> {
     showSearch?: boolean;
     globalFilterPlaceholder?: string;
     initialSort?: SortingState;
     columns: ColumnDef<TData, unknown>[];
-    queryKey: string | string[];
+    queryKey: string;
     queryData: (body: PageRequest) => Promise<
         {
             results: TData[];

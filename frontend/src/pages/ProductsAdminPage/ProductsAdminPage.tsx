@@ -118,6 +118,8 @@ export const ProductsAdminPage = () => {
                 </div>
             </div>
             <AdminTable
+                storage="query"
+                queryStorageName="globalFilter"
                 globalFilterPlaceholder="Поиск по Наименованию и Артиклу"
                 columns={columns}
                 queryData={queryData}
