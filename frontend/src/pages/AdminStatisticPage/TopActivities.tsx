@@ -18,7 +18,7 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
                 },
             });
         },
-        [sort],
+        [sort, period],
     );
 
     const columns = useMemo<ColumnDef<ActivityStatisticResponse>[]>(
@@ -114,7 +114,7 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
     return (
         <div className="py-4">
             <AdminTable
-                queryKey={ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY}
+                queryKey={ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY + sort + period}
                 globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}
                 queryData={queryData}

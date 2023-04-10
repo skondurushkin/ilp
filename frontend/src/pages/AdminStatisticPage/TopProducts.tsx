@@ -14,7 +14,7 @@ export const TopProducts = ({ period }: { period: 'day' | 'all' }) => {
                 browseStatisticArticlesRequest: { ...pageRequest, period, sort },
             });
         },
-        [sort],
+        [sort, period],
     );
 
     const columns = useMemo<ColumnDef<ArticleResponse>[]>(
@@ -93,7 +93,7 @@ export const TopProducts = ({ period }: { period: 'day' | 'all' }) => {
     return (
         <div className="py-4">
             <AdminTable
-                queryKey={ARTICLES_STATISTIC_ADMIN_QUERY_KEY}
+                queryKey={ARTICLES_STATISTIC_ADMIN_QUERY_KEY + sort + period}
                 globalFilterPlaceholder="Поиск по Наименованию, Артиклу и Стоимости"
                 columns={columns}
                 queryData={queryData}
