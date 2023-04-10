@@ -27,21 +27,33 @@ export const WriteOffStatusColor: Record<WriteOffStatus, Color> = {
 
 const WALLET_HISTORY_PAGE_SIZE = 5;
 
-export const useAccrualsHistoryQuery = (page: number): UseQueryResult<PaginatedAccrualResponse> => {
+export interface HistoryQueryParams {
+    enabled?: boolean;
+}
+
+export const useAccrualsHistoryQuery = (
+    page: number,
+    params: HistoryQueryParams = {},
+): UseQueryResult<PaginatedAccrualResponse> => {
     const loaderParams = { pageRequest: { page, pageSize: WALLET_HISTORY_PAGE_SIZE } };
     const loader = () => api.wallet.browseAccruals(loaderParams);
 
     return useQuery(['accruals-history', page], loader, {
         retry: false,
         refetchOnWindowFocus: false,
+        ...params,
     });
 };
 
-export const useWriteOffsHistoryQuery = (page: number): UseQueryResult<PaginatedWriteOffResponse> => {
+export const useWriteOffsHistoryQuery = (
+    page: number,
+    params: HistoryQueryParams = {},
+): UseQueryResult<PaginatedWriteOffResponse> => {
     const loaderParams = { browseWriteOffsRequest: { page, pageSize: WALLET_HISTORY_PAGE_SIZE } };
     const loader = () => api.wallet.browseWriteOffs(loaderParams);
     return useQuery(['write-offs-history', page], loader, {
         retry: false,
         refetchOnWindowFocus: false,
+        ...params,
     });
 };

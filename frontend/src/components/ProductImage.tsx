@@ -22,7 +22,7 @@ export function ProductImage(props: ProductImageProps): ReactElement {
         setIsError(false);
     }, [src]);
 
-    const isPlaceholder = isLoading || isError;
+    const isPlaceholder = isError || isLoading;
 
     return (
         <div className={twMerge('relative w-full bg-black pt-[87%] sm:pt-[100%] md:pt-[81%] xl:pt-[78%]', className)}>
