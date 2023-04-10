@@ -61,7 +61,9 @@ export const SignInPage = () => {
                         id="email"
                         value={email}
                         onChange={({ target }) => setEmail(target.value)}
-                        className={`input mt-2 ${errors?.credentials ? 'input-error' : ''}`}
+                        className={`input mt-2 dark:bg-white dark:text-black ${
+                            errors?.credentials ? 'input-error' : ''
+                        }`}
                     />
                 </div>
 
@@ -75,7 +77,9 @@ export const SignInPage = () => {
                             onChange={({ target }) => setPassword(target.value)}
                             id="password"
                             value={password}
-                            className={`input relative h-[50px] w-full ${errors?.credentials ? 'input-error' : ''}`}
+                            className={`input relative h-[50px] w-full dark:bg-white dark:text-black ${
+                                errors?.credentials ? 'input-error' : ''
+                            }`}
                         />
                         {passwordVisible ? (
                             <CrossedEyeSVG
