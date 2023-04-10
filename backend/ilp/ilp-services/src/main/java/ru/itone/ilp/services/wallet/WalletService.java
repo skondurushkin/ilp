@@ -1,7 +1,20 @@
 package ru.itone.ilp.services.wallet;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,12 +50,8 @@ import ru.itone.ilp.persistence.mappers.OperationMapper;
 import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.mappers.WriteOffMapper;
 import ru.itone.ilp.persistence.types.AccrualStatus;
+import ru.itone.ilp.persistence.types.OperationType;
 import ru.itone.ilp.persistence.types.OrderStatus;
-
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class WalletService {
@@ -245,5 +254,38 @@ public class WalletService {
         Accrual accrual = dbJpa.getAccrualRepository().findById(accrualId).orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
         accrual = dbJpa.getAccrualRepository().save(accrual.setStatus(AccrualStatus.cancelled));
         return AccrualMapper.INSTANCE.toResponse(accrual);
+    }
+
+    @Transactional(readOnly = true)
+    public Path buildBalanceCsv() throws IOException {
+        Path balance_csv = Files.createTempFile("balance_csv", null);
+        Writer sw = new FileWriterWithEncoding(balance_csv.toString(), StandardCharsets.UTF_8);
+        CSVFormat format = CSVFormat.DEFAULT.builder()
+                .setHeader("Время", "email", "Тип операции", "Название", "Код", "Баллы")
+                .build();
+        List<Operation> operations = this.dbJpa.getOperationRepository().findAll(Sort.by(Direction.ASC, "instant"));
+        try (CSVPrinter printer = new CSVPrinter(sw, format)) {
+            List<String> record = new ArrayList<>();
+            for (Operation operation : operations) {
+                record.clear();;
+                record.add(operation.getInstant().toString());
+                record.add(operation.getUser().getEmail());
+                record.add(toOpType(operation.getType()));
+                record.add(operation.getName());
+                record.add(operation.getType() == OperationType.writeOff ? operation.getWriteOff().getArticle().getCode() : StringUtils.EMPTY);
+                record.add(operation.getAmount().toString());
+                printer.printRecord(record);
+            }
+        }
+        return balance_csv;
+    }
+
+    private static String toOpType(OperationType type) {
+        if (type == null)
+            return StringUtils.EMPTY;
+        return switch(type) {
+            case accrual -> "Начисление";
+            case writeOff -> "Списание";
+        };
     }
 }

@@ -21,8 +21,10 @@ import ru.itone.ilp.exception.ApiExceptions;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.ActivityUpdateRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
+import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
 import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.persistence.api.DbApi.DbApiException;
 import ru.itone.ilp.persistence.entities.Activity;
@@ -104,5 +106,14 @@ public class ActivityService {
 
     public static PaginatedActivityResponse toPaginatedResponse(Page<Activity> page) {
         return ActivityMapper.INSTANCE.toPaginatedResponse(page);
+    }
+
+    public PaginatedActivitiesStatisticResponse topActivitiesPaginated(BrowseStatisticArticlesRequest request) {
+        return new PaginatedActivitiesStatisticResponse()
+                .total(0)
+                .pageSize(request.getPageSize())
+                .hasNext(false)
+                .hasPrev(false)
+                .results(Collections.emptyList());
     }
 }

@@ -1,9 +1,14 @@
 package ru.itone.ilp.server.controllers;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,7 +21,6 @@ import ru.itone.ilp.openapi.model.AccrualResponse;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.BalancePeriodRequest;
 import ru.itone.ilp.openapi.model.BalanceStatisticResponseInner;
-import ru.itone.ilp.openapi.model.BrowseStatisticActivitiesRequest;
 import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
 import ru.itone.ilp.openapi.model.CancelAccrualBody;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
@@ -34,6 +38,7 @@ import ru.itone.ilp.openapi.model.UpdateWriteOffRequest;
 import ru.itone.ilp.openapi.model.UsersPeriodRequest;
 import ru.itone.ilp.openapi.model.UsersStatisticResponse;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
+import ru.itone.ilp.services.activities.ActivityService;
 import ru.itone.ilp.services.articles.ArticleService;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.profiles.ProfileService;
@@ -48,26 +53,29 @@ public class AdminController extends LinkResolver implements AdminApi {
     private final WalletService walletService;
     private final ProfileService profileService;
     private final ArticleService articleService;
+    private final ActivityService activityService;
 
     @Override
     public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
-            BrowseStatisticActivitiesRequest browseStatisticActivitiesRequest) {
-        throw new IllegalStateException("Not yet implemented");
+            BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
+        return ResponseEntity.ok(activityService.topActivitiesPaginated(browseStatisticArticlesRequest));
     }
 
     @Override
     public ResponseEntity<PaginatedArticleStatisticResponse> browseStatisticArticles(
             BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
-        throw new IllegalStateException("Not yet implemented");
+        return ResponseEntity.ok(articleService.topArticlesPaginated(browseStatisticArticlesRequest));
     }
 
     @Override
     public ResponseEntity<List<BalanceStatisticResponseInner>> browseStatisticBalance(BalancePeriodRequest balancePeriodRequest) {
+        //return ResponseEntity.ok(Collections.emptyList());
         throw new IllegalStateException("Not yet implemented");
     }
 
     @Override
     public ResponseEntity<UsersStatisticResponse> browseStatisticUsers(UsersPeriodRequest usersPeriodRequest) {
+        //return ResponseEntity.ok(new UsersStatisticResponse().label("not_yet_implemented").data(Collections.emptyList()));
         throw new IllegalStateException("Not yet implemented");
     }
 
@@ -100,7 +108,22 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<String> downloadBalanceCsv() {
-        throw new IllegalStateException("Not yet implemented!");
+        try {
+            Path balance = walletService.buildBalanceCsv();
+            try {
+                FileUtils.forceDeleteOnExit(balance.toFile());
+                return ResponseEntity.ok(Files.readString(balance, StandardCharsets.UTF_8));
+            } finally {
+                try {
+                    Files.deleteIfExists(balance);
+                    log.debug("Deleted {}", balance);
+                } catch (IOException ex) {
+                    log.warn("Could not delete file {}", balance, ex);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Не удалось создать отчет. Ошибка: %s", e.getMessage()), e);
+        }
     }
 
     @Override

@@ -15,9 +15,11 @@ import ru.itone.ilp.common.ApiHelper;
 import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.ArticleUpdateRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
+import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
 import ru.itone.ilp.persistence.api.DbApi.DbApiException;
 import ru.itone.ilp.persistence.entities.Article;
 import ru.itone.ilp.persistence.mappers.ArticleMapper;
@@ -103,5 +105,14 @@ public class ArticleService {
     }
     public static PaginatedArticleResponse toPaginatedResponse(Page<Article> page) {
         return ArticleMapper.INSTANCE.toPaginatedResponse(page);
+    }
+
+    public PaginatedArticleStatisticResponse topArticlesPaginated(BrowseStatisticArticlesRequest request) {
+        return new PaginatedArticleStatisticResponse()
+                .total(0)
+                .pageSize(request.getPageSize())
+                .hasNext(false)
+                .hasPrev(false)
+                .results(Collections.emptyList());
     }
 }
