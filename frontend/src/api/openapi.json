@@ -1909,11 +1909,8 @@
                         "type": "string",
                         "maxLength": 200
                     },
-                    "amount": {
-                        "$ref": "#/components/schemas/Amount"
-                    },
-                    "infoLink": {
-                        "type": "string"
+                    "price": {
+                        "$ref": "#/components/schemas/Price"
                     },
                     "startDate": {
                         "type": "string",
@@ -1935,7 +1932,7 @@
                         "description": "the entity is available for actions"
                     }
                 },
-                "required": ["id", "name", "active", "infoLink", "amount", "count"]
+                "required": ["id", "name", "active", "price", "count"]
             },
             "PaginatedActivitiesStatisticResponse": {
                 "allOf": [

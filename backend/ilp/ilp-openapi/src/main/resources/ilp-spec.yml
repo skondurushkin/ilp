@@ -1345,10 +1345,8 @@ components:
         description:
           type: string
           maxLength: 200
-        amount:
-          $ref: "#/components/schemas/Amount"
-        infoLink:
-          type: string
+        price:
+          $ref: "#/components/schemas/Price"
         startDate:
           type: string
           format: date
@@ -1367,8 +1365,7 @@ components:
         - id
         - name
         - active
-        - infoLink
-        - amount
+        - price
         - count
 
     PaginatedActivitiesStatisticResponse:

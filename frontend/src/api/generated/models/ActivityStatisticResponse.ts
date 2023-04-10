@@ -38,17 +38,11 @@ export interface ActivityStatisticResponse {
      */
     description?: string;
     /**
-     * generic amount
+     *
      * @type {number}
      * @memberof ActivityStatisticResponse
      */
-    amount: number;
-    /**
-     *
-     * @type {string}
-     * @memberof ActivityStatisticResponse
-     */
-    infoLink: string;
+    price: number;
     /**
      *
      * @type {Date}
@@ -88,8 +82,7 @@ export function instanceOfActivityStatisticResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && 'id' in value;
     isInstance = isInstance && 'name' in value;
-    isInstance = isInstance && 'amount' in value;
-    isInstance = isInstance && 'infoLink' in value;
+    isInstance = isInstance && 'price' in value;
     isInstance = isInstance && 'count' in value;
     isInstance = isInstance && 'active' in value;
 
@@ -111,8 +104,7 @@ export function ActivityStatisticResponseFromJSONTyped(
         id: json['id'],
         name: json['name'],
         description: !exists(json, 'description') ? undefined : json['description'],
-        amount: json['amount'],
-        infoLink: json['infoLink'],
+        price: json['price'],
         startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
         endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
         extension: !exists(json, 'extension') ? undefined : json['extension'],
@@ -132,8 +124,7 @@ export function ActivityStatisticResponseToJSON(value?: ActivityStatisticRespons
         id: value.id,
         name: value.name,
         description: value.description,
-        amount: value.amount,
-        infoLink: value.infoLink,
+        price: value.price,
         startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
         endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
         extension: value.extension,
