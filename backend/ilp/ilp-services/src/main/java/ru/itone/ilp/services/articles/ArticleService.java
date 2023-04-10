@@ -1,17 +1,22 @@
 package ru.itone.ilp.services.articles;
 
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.common.ApiHelper;
+import ru.itone.ilp.exception.ApiExceptions;
 import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.ArticleUpdateRequest;
@@ -29,6 +34,12 @@ import ru.itone.ilp.persistence.repositories.ArticleRepository;
 @Slf4j
 @RequiredArgsConstructor
 public class ArticleService {
+
+    private final ExampleMatcher codeMatcher = ExampleMatcher
+            .matching()
+            .withIgnoreNullValues()
+            .withMatcher("code", ignoreCase());
+
     private final ArticleRepository articleRepository;
 
     @Transactional(readOnly = true)
@@ -54,6 +65,12 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponse createArticle(ArticleRequest request) {
+        if (articleRepository.exists(Example.of(new Article().setCode(request.getCode()), codeMatcher))) {
+            String message = String.format("Артикул '%s' уже используется", request.getName());
+            log.error("Невозможно создать запись: {}", message);
+            throw new ApiExceptions.ConflictException(message);
+        }
+
         Article article = ArticleMapper.INSTANCE.articleFromRequest(request);
         article = articleRepository.save(article);
         return toResponse(article);
@@ -74,6 +91,7 @@ public class ArticleService {
                         .setName(request.getName())
                         .setDescription(request.getDescription())
                         .setAvailable(request.getAvailable())
+                        .setImageLink(request.getImageLink())
         );
         return toResponse(article);
     }

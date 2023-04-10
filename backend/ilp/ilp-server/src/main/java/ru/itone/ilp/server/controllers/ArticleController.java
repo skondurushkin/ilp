@@ -61,10 +61,14 @@ public class ArticleController extends LinkResolver implements ArticleApi {
     @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<ArticleResponse> updateArticle(ArticleUpdateRequest articleUpdateRequest) {
-        return ResponseEntity.ok(resolveLink(articleService.update(articleUpdateRequest)));
+        return ResponseEntity.ok(resolveLink(articleService.update(relativizeLink(articleUpdateRequest))));
     }
 
     private ArticleRequest relativizeLink(ArticleRequest articleRequest) {
+        return articleRequest.imageLink(relativize(articleRequest.getImageLink()));
+    }
+
+    private ArticleUpdateRequest relativizeLink(ArticleUpdateRequest articleRequest) {
         return articleRequest.imageLink(relativize(articleRequest.getImageLink()));
     }
 
