@@ -1,8 +1,11 @@
 package ru.itone.ilp.persistence.repositories;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.itone.ilp.persistence.entities.Operation;
 
@@ -10,5 +13,8 @@ import ru.itone.ilp.persistence.entities.Operation;
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     Page<Operation> findAllByUserId(Long userId, Pageable pageable);
+
+    @Query("select op.accrual.id from Operation op where op.id = :operationId and op.type = 'accrual'")
+    Optional<Long> getAccrualId(@Param("operationId") Long operationId);
 
 }

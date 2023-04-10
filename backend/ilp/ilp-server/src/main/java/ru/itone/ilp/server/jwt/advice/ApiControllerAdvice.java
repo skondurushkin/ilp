@@ -40,9 +40,9 @@ public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
     private final ObjectMapper objectMapper;
 
     @ExceptionHandler(value = RuntimeException.class)
-    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ResponseStatus(BAD_REQUEST)
     public ErrorMessage handleRuntimeException(RuntimeException ex, WebRequest request) {
-        return buildErrorMessage(INTERNAL_SERVER_ERROR, ex, request);
+        return buildErrorMessage(BAD_REQUEST, ex, request);
     }
 
     @ExceptionHandler(value = FileOperationException.class)

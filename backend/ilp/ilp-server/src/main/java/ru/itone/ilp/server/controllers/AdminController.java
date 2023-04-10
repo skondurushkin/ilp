@@ -27,6 +27,7 @@ import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
+import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
@@ -92,6 +93,11 @@ public class AdminController extends LinkResolver implements AdminApi {
     @Override
     public ResponseEntity<AccrualResponse> cancelAccrualForUser(Integer userId, CancelAccrualBody cancelAccrualBody) {
         return ResponseEntity.ok(resolveLink(walletService.cancelAccrual(cancelAccrualBody.getAccrualId().longValue())));
+    }
+
+    @Override
+    public ResponseEntity<PaginatedActivityResponse> browseActivitiesAsAdmin(PageRequest pageRequest) {
+        return ResponseEntity.ok(activityService.paginateForAdmin(pageRequest));
     }
 
     @Override

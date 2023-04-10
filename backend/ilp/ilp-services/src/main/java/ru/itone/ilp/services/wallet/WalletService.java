@@ -82,7 +82,7 @@ public class WalletService {
     @Transactional(readOnly = true)
     public PaginatedAccrualResponse paginateAccruals(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
-        Page<Accrual> page = dbJpa.getAccrualRepository().findAllByUserId(userId, pageable);
+        Page<Accrual> page = dbJpa.getAccrualRepository().findAllByUserIdAndStatusEquals(userId, AccrualStatus.created, pageable);
         List<AccrualResponse> results = page.getContent().stream().map(AccrualMapper.INSTANCE::toResponse).toList();
         return new PaginatedAccrualResponse()
                 .total(page.getTotalPages())
@@ -250,8 +250,16 @@ public class WalletService {
     }
 
     @Transactional
-    public AccrualResponse cancelAccrual(Long accrualId) {
-        Accrual accrual = dbJpa.getAccrualRepository().findById(accrualId).orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
+    public AccrualResponse cancelAccrual(Long operationId) {
+        if (!dbJpa.getOperationRepository().existsById(operationId)) {
+              throw new ResourceNotFoundException("Запись об операции не найдена");
+        }
+        Optional<Long> accrualId = dbJpa.getOperationRepository().getAccrualId(operationId);
+        if (accrualId.isEmpty()) {
+            throw new RuntimeException("Операция не является начислением");
+        }
+        Accrual accrual = dbJpa.getAccrualRepository().findById(accrualId.get())
+                .orElseThrow(() -> new ResourceNotFoundException("Запись о начислении не найдена"));
         accrual = dbJpa.getAccrualRepository().save(accrual.setStatus(AccrualStatus.cancelled));
         return AccrualMapper.INSTANCE.toResponse(accrual);
     }

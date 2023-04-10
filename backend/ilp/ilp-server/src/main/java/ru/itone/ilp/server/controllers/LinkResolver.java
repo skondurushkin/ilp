@@ -35,7 +35,7 @@ abstract class LinkResolver {
         URI uri = URI.create(link);
         if (uri.isAbsolute())
             return link;
-        return getBaseUri().resolve(uri).toString();
+        return link;//return getBaseUri().resolve(uri).toString();
     }
 
     protected URI getBaseUri() {
