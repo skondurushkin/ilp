@@ -1,23 +1,33 @@
-import { ActivityResponse, PageRequest, api } from '../../api';
-import { useCallback, useMemo } from 'react';
+import { ActivityStatisticResponse, PageRequest, api } from '../../api';
+import { useCallback, useMemo, useState } from 'react';
 
 import { ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY } from '../../modules/admin';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/table-core';
+import { twMerge } from 'tailwind-merge';
 
-export const TopActivities = () => {
-    const queryData = useCallback((pageRequest: PageRequest) => {
-        return api.activity.browseActivities({
-            pageRequest,
-        });
-    }, []);
+export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
+    const [sort, setSort] = useState<'DESC' | 'ASC'>('DESC');
+    const queryData = useCallback(
+        (pageRequest: PageRequest) => {
+            return api.admin.browseStatisticActivities({
+                browseStatisticArticlesRequest: {
+                    ...pageRequest,
+                    sort,
+                    period,
+                },
+            });
+        },
+        [sort],
+    );
 
-    const columns = useMemo<ColumnDef<ActivityResponse>[]>(
+    const columns = useMemo<ColumnDef<ActivityStatisticResponse>[]>(
         () => [
             {
                 accessorKey: 'id',
                 header: () => <span>ИД</span>,
                 cell: (info) => info.getValue(),
+                enableSorting: false,
             },
             {
                 accessorKey: 'name',
@@ -38,11 +48,13 @@ export const TopActivities = () => {
                         </div>
                     );
                 },
+                enableSorting: false,
             },
             {
                 accessorKey: 'amount',
                 header: () => <span>Стоимость</span>,
                 cell: (info) => info.getValue(),
+                enableSorting: false,
             },
             {
                 accessorKey: 'infoLink',
@@ -58,14 +70,51 @@ export const TopActivities = () => {
                         </div>
                     );
                 },
+                enableSorting: false,
             },
             {
-                header: () => <span>Заказы</span>,
-                accessorKey: 'orders',
+                header: () => (
+                    <button
+                        onClick={() => {
+                            setSort(sort == 'ASC' ? 'DESC' : 'ASC');
+                        }}
+                        className="
+                        cursor-pointer
+                        border-none
+                        bg-none
+                        p-0
+                        outline-none
+"
+                    >
+                        <span className="flex">
+                            Участия
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={twMerge(
+                                    'stroke-primary h-auto w-4 transform',
+                                    sort === 'ASC' ? 'rotate-90' : '-rotate-90',
+                                )}
+                            >
+                                <path
+                                    d="M15 18L9 12L15 6"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                ></path>
+                            </svg>
+                        </span>
+                    </button>
+                ),
+                enableSorting: false,
+                accessorKey: 'count',
                 cell: (info) => info.getValue(),
             },
         ],
-        [],
+        [sort],
     );
 
     return (
@@ -73,7 +122,6 @@ export const TopActivities = () => {
             <AdminTable
                 queryKey={ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY}
                 globalFilterPlaceholder="Поиск по Названию и Описанию"
-                initialSort={[{ id: 'orders', desc: true }]}
                 columns={columns}
                 queryData={queryData}
             />

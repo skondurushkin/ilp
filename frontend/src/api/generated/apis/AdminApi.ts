@@ -18,7 +18,6 @@ import type {
     AccrualResponse,
     BalancePeriodRequest,
     BalanceStatisticResponseInner,
-    BrowseStatisticActivitiesRequest,
     BrowseStatisticArticlesRequest,
     CancelAccrualBody,
     CreateNewAccrualRequest,
@@ -43,8 +42,6 @@ import {
     BalancePeriodRequestToJSON,
     BalanceStatisticResponseInnerFromJSON,
     BalanceStatisticResponseInnerToJSON,
-    BrowseStatisticActivitiesRequestFromJSON,
-    BrowseStatisticActivitiesRequestToJSON,
     BrowseStatisticArticlesRequestFromJSON,
     BrowseStatisticArticlesRequestToJSON,
     CancelAccrualBodyFromJSON,
@@ -83,8 +80,8 @@ export interface BrowseArticlesForAdminRequest {
     pageRequest: PageRequest;
 }
 
-export interface BrowseStatisticActivitiesOperationRequest {
-    browseStatisticActivitiesRequest: BrowseStatisticActivitiesRequest;
+export interface BrowseStatisticActivitiesRequest {
+    browseStatisticArticlesRequest: BrowseStatisticArticlesRequest;
 }
 
 export interface BrowseStatisticArticlesOperationRequest {
@@ -203,16 +200,16 @@ export class AdminApi extends runtime.BaseAPI {
      * activities statistics for admin
      */
     async browseStatisticActivitiesRaw(
-        requestParameters: BrowseStatisticActivitiesOperationRequest,
+        requestParameters: BrowseStatisticActivitiesRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<runtime.ApiResponse<PaginatedActivitiesStatisticResponse>> {
         if (
-            requestParameters.browseStatisticActivitiesRequest === null ||
-            requestParameters.browseStatisticActivitiesRequest === undefined
+            requestParameters.browseStatisticArticlesRequest === null ||
+            requestParameters.browseStatisticArticlesRequest === undefined
         ) {
             throw new runtime.RequiredError(
-                'browseStatisticActivitiesRequest',
-                'Required parameter requestParameters.browseStatisticActivitiesRequest was null or undefined when calling browseStatisticActivities.',
+                'browseStatisticArticlesRequest',
+                'Required parameter requestParameters.browseStatisticArticlesRequest was null or undefined when calling browseStatisticActivities.',
             );
         }
 
@@ -236,7 +233,7 @@ export class AdminApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: BrowseStatisticActivitiesRequestToJSON(requestParameters.browseStatisticActivitiesRequest),
+                body: BrowseStatisticArticlesRequestToJSON(requestParameters.browseStatisticArticlesRequest),
             },
             initOverrides,
         );
@@ -250,7 +247,7 @@ export class AdminApi extends runtime.BaseAPI {
      * activities statistics for admin
      */
     async browseStatisticActivities(
-        requestParameters: BrowseStatisticActivitiesOperationRequest,
+        requestParameters: BrowseStatisticActivitiesRequest,
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<PaginatedActivitiesStatisticResponse> {
         const response = await this.browseStatisticActivitiesRaw(requestParameters, initOverrides);

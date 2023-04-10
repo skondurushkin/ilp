@@ -1449,7 +1449,12 @@
                                         "properties": {
                                             "period": {
                                                 "type": "string",
-                                                "enum": ["day", "week", "month"]
+                                                "enum": ["day", "all"]
+                                            },
+                                            "sort": {
+                                                "type": "string",
+                                                "enum": ["ASC", "DESC"],
+                                                "description": "default \"DESC\""
                                             }
                                         }
                                     }
@@ -1492,6 +1497,11 @@
                                             "period": {
                                                 "type": "string",
                                                 "enum": ["day", "all"]
+                                            },
+                                            "sort": {
+                                                "type": "string",
+                                                "enum": ["ASC", "DESC"],
+                                                "description": "default \"DESC\""
                                             }
                                         }
                                     }
@@ -1699,11 +1709,11 @@
                         "properties": {
                             "start": {
                                 "type": "string",
-                                "example": "2023-04-21T17:32:28"
+                                "example": "2023-04-21"
                             },
                             "end": {
                                 "type": "string",
-                                "example": "2023-04-21T17:32:28"
+                                "example": "2023-04-21"
                             },
                             "interval": {
                                 "type": "string",
@@ -1754,11 +1764,11 @@
                         "properties": {
                             "start": {
                                 "type": "string",
-                                "example": "2023-04-21T17:32:28"
+                                "example": "2023-04-21"
                             },
                             "end": {
                                 "type": "string",
-                                "example": "2023-04-21T17:32:28"
+                                "example": "2023-04-21"
                             },
                             "interval": {
                                 "type": "string",
@@ -1831,12 +1841,16 @@
                         "type": "object",
                         "nullable": true
                     },
-                    "orders": {
-                        "type": "number",
+                    "count": {
+                        "type": "integer",
                         "minimum": 0
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "description": "the entity is available for actions"
                     }
                 },
-                "required": ["id", "code", "name", "price", "available", "orders"]
+                "required": ["id", "code", "name", "price", "available", "count", "active"]
             },
             "PaginatedArticleStatisticResponse": {
                 "allOf": [
@@ -1887,12 +1901,16 @@
                     "extension": {
                         "type": "object"
                     },
-                    "orders": {
-                        "type": "number",
+                    "count": {
+                        "type": "integer",
                         "minimum": 0
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "description": "the entity is available for actions"
                     }
                 },
-                "required": ["id", "name", "active", "infoLink", "amount", "orders"]
+                "required": ["id", "name", "active", "infoLink", "amount", "count"]
             },
             "PaginatedActivitiesStatisticResponse": {
                 "allOf": [

@@ -72,7 +72,13 @@ export interface ArticleStatisticResponse {
      * @type {number}
      * @memberof ArticleStatisticResponse
      */
-    orders: number;
+    count: number;
+    /**
+     * the entity is available for actions
+     * @type {boolean}
+     * @memberof ArticleStatisticResponse
+     */
+    active: boolean;
 }
 
 /**
@@ -85,7 +91,8 @@ export function instanceOfArticleStatisticResponse(value: object): boolean {
     isInstance = isInstance && 'name' in value;
     isInstance = isInstance && 'price' in value;
     isInstance = isInstance && 'available' in value;
-    isInstance = isInstance && 'orders' in value;
+    isInstance = isInstance && 'count' in value;
+    isInstance = isInstance && 'active' in value;
 
     return isInstance;
 }
@@ -110,7 +117,8 @@ export function ArticleStatisticResponseFromJSONTyped(
         available: json['available'],
         imageLink: !exists(json, 'imageLink') ? undefined : json['imageLink'],
         extension: !exists(json, 'extension') ? undefined : json['extension'],
-        orders: json['orders'],
+        count: json['count'],
+        active: json['active'],
     };
 }
 
@@ -130,6 +138,7 @@ export function ArticleStatisticResponseToJSON(value?: ArticleStatisticResponse 
         available: value.available,
         imageLink: value.imageLink,
         extension: value.extension,
-        orders: value.orders,
+        count: value.count,
+        active: value.active,
     };
 }

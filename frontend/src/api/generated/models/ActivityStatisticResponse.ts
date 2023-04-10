@@ -72,7 +72,13 @@ export interface ActivityStatisticResponse {
      * @type {number}
      * @memberof ActivityStatisticResponse
      */
-    orders: number;
+    count: number;
+    /**
+     * the entity is available for actions
+     * @type {boolean}
+     * @memberof ActivityStatisticResponse
+     */
+    active: boolean;
 }
 
 /**
@@ -84,7 +90,8 @@ export function instanceOfActivityStatisticResponse(value: object): boolean {
     isInstance = isInstance && 'name' in value;
     isInstance = isInstance && 'amount' in value;
     isInstance = isInstance && 'infoLink' in value;
-    isInstance = isInstance && 'orders' in value;
+    isInstance = isInstance && 'count' in value;
+    isInstance = isInstance && 'active' in value;
 
     return isInstance;
 }
@@ -109,7 +116,8 @@ export function ActivityStatisticResponseFromJSONTyped(
         startDate: !exists(json, 'startDate') ? undefined : new Date(json['startDate']),
         endDate: !exists(json, 'endDate') ? undefined : new Date(json['endDate']),
         extension: !exists(json, 'extension') ? undefined : json['extension'],
-        orders: json['orders'],
+        count: json['count'],
+        active: json['active'],
     };
 }
 
@@ -129,6 +137,7 @@ export function ActivityStatisticResponseToJSON(value?: ActivityStatisticRespons
         startDate: value.startDate === undefined ? undefined : value.startDate.toISOString().substr(0, 10),
         endDate: value.endDate === undefined ? undefined : value.endDate.toISOString().substr(0, 10),
         extension: value.extension,
-        orders: value.orders,
+        count: value.count,
+        active: value.active,
     };
 }
