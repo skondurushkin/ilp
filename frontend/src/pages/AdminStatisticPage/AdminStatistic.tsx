@@ -67,12 +67,22 @@ export function AdminStatisticPage() {
 
     const primaryAxis = React.useMemo<AxisOptions<BalanceStatisticResponseInnerDataInner>>(
         () => ({
-            getValue: (datum) => new Date(datum.date),
+            getValue: (datum) => datum.date,
         }),
         [],
     );
 
     const noData = <div className="text-h2 py-10 text-center text-white">Нет данных для отображения</div>;
+
+    let showBalanceStatistic = false;
+    if (balanceData && balanceData.length > 0 && balanceData[0].data.length > 0 && balanceData[1].data.length > 0) {
+        showBalanceStatistic = true;
+    }
+
+    let showUsersStatistic = false;
+    if (usersData && usersData.data.length > 0) {
+        showUsersStatistic = true;
+    }
 
     return (
         <div className="flex flex-col gap-8">
@@ -96,7 +106,7 @@ export function AdminStatisticPage() {
                 {isLoadingBalance && <Spinner />}
                 <div className="bg-black">
                     {!balanceData && noData}
-                    {balanceData && (
+                    {balanceData && showBalanceStatistic && (
                         <div className="m-2 h-[40vh]">
                             <Chart
                                 options={{
@@ -126,18 +136,20 @@ export function AdminStatisticPage() {
                             />
                         </div>
                     )}
-                    <div>
-                        <div className="flex-column py-4 pl-6">
-                            <div className="flex items-center gap-3 text-white">
-                                <div className="bg-primary inline-block h-4 w-4 rounded-full" />
-                                начисления
-                            </div>
-                            <div className="flex items-center gap-3 text-white">
-                                <div className="bg-error inline-block h-4 w-4 rounded-full text-white" />
-                                списания
+                    {showBalanceStatistic && (
+                        <div>
+                            <div className="flex-column py-4 pl-6">
+                                <div className="flex items-center gap-3 text-white">
+                                    <div className="bg-primary inline-block h-4 w-4 rounded-full" />
+                                    начисления
+                                </div>
+                                <div className="flex items-center gap-3 text-white">
+                                    <div className="bg-error inline-block h-4 w-4 rounded-full text-white" />
+                                    списания
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
             <div className="flex flex-col gap-4">
@@ -190,7 +202,7 @@ export function AdminStatisticPage() {
                     <div className="bg-black py-1">
                         {isLoadingUsers && <Spinner />}
                         {!usersData && noData}
-                        {usersData && (
+                        {usersData && showUsersStatistic && (
                             <div className="m-2 h-[40vh]">
                                 <Chart
                                     options={{
