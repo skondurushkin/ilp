@@ -33,6 +33,7 @@ export const EditActivityAdminPage = () => {
                         name: activity.name,
                         amount: activity.amount,
                         infoLink: activity.infoLink,
+                        description: activity.description,
                     }}
                 />
             </div>
