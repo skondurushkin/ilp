@@ -137,7 +137,10 @@ function useAccrualColumns() {
                 header: 'сумма действия',
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <AmountCell type={OperationResponseTypeEnum.Accrual} amount={amount} />;
+                    const length = Math.max(
+                        ...info.table.getRowModel().rows.map((row) => row.original.amount.toString().length),
+                    );
+                    return <AmountCell type={OperationResponseTypeEnum.Accrual} amount={amount} length={length} />;
                 },
                 size: 160,
             },
@@ -177,7 +180,10 @@ function useWriteOffColumns() {
                 header: 'сумма действия',
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <AmountCell type={OperationResponseTypeEnum.WriteOff} amount={amount} />;
+                    const length = Math.max(
+                        ...info.table.getRowModel().rows.map((row) => row.original.amount.toString().length),
+                    );
+                    return <AmountCell type={OperationResponseTypeEnum.WriteOff} amount={amount} length={length} />;
                 },
                 size: 160,
             },
@@ -202,13 +208,14 @@ function usePrevSuccessResult(
 interface AmountCellProps {
     type: OperationResponseTypeEnum;
     amount: number;
+    length: number;
 }
 
 function AmountCell(props: AmountCellProps): ReactElement {
-    const { type, amount } = props;
+    const { type, amount, length } = props;
     return (
-        <div className="justify-end sm:flex sm:pr-2">
-            <Zaps className="items-baseline font-bold" type={type} amount={amount} length={5} />
+        <div className="justify-center sm:flex">
+            <Zaps className="items-baseline font-bold" type={type} amount={amount} length={length} />
         </div>
     );
 }
