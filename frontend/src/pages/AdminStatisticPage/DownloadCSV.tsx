@@ -14,7 +14,7 @@ export const DownloadBalanceCsvButton = () => {
         {
             onSuccess: (data) => {
                 saveAs(
-                    new Blob([data], { type: 'text/csv;charset=utf-8' }),
+                    new Blob([data], { type: 'text/csv;charset=windows-1251' }),
                     `Выгрузка по движению балансов от ${new Date().toLocaleDateString('ru-RU')}.csv`,
                     {
                         autoBom: true,
