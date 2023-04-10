@@ -68,7 +68,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                     if (active && type === OperationResponseTypeEnum.Accrual) {
                         return (
                             <button
-                                className="flex items-center gap-2"
+                                className="text-error group flex items-center gap-2 text-base transition-colors duration-300 hover:text-white"
                                 onClick={() =>
                                     setCancelAccrualModalData({
                                         amount,
@@ -78,8 +78,8 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                                     })
                                 }
                             >
-                                <XSquareVG className="fill-error h-4 w-4" />
-                                <span className="text-small text-error">Отменить</span>
+                                <XSquareVG className="fill-error h-4 w-4 transition-colors duration-300 group-hover:fill-white" />
+                                <p>Отменить</p>
                             </button>
                         );
                     }

@@ -20,11 +20,11 @@ html {
     }
 
     .input {
-        @apply read-only:text-gray focus:border-success dark:read-only:text-gray h-[50px] border-2 bg-white px-3 text-black read-only:cursor-default focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
+        @apply read-only:text-gray focus:border-success dark:read-only:text-gray h-[50px] border-2 bg-white px-3 text-black transition-colors duration-300 read-only:cursor-default focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
     }
 
     .select {
-        @apply focus:border-success h-[50px] border-2 bg-white text-black focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
+        @apply focus:border-success h-[50px] border-2 bg-white text-black transition-colors duration-300 focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
     }
 
     .input-error {
@@ -32,11 +32,11 @@ html {
     }
 
     .checkbox {
-        @apply h-6 w-6 border-2 bg-white text-black focus:outline-none focus:ring-0 dark:bg-black;
+        @apply h-6 w-6 border-2 bg-white text-black transition-colors duration-300 focus:outline-none focus:ring-0 dark:bg-black;
     }
 
     .textarea {
-        @apply focus:border-success border-2 bg-white px-3 text-black focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
+        @apply focus:border-success border-2 bg-white px-3 text-black transition-colors duration-300 focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
     }
 
     .chip {
@@ -52,7 +52,19 @@ html {
     }
 
     .btn {
-        @apply border-gray disabled:text-gray border bg-white p-4 text-center text-sm leading-[110%] text-black shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none md:text-base;
+        @apply disabled:text-gray  bg-white p-4 text-center text-sm leading-[110%] text-black transition-shadow duration-300 hover:shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none dark:hover:shadow-[0_4px_4px_rgba(170,230,50,0.25)] md:text-base;
+    }
+
+    .btn-secondary {
+        @apply border-transparent-0% hover:border-primary border-2;
+    }
+
+    .btn-table-text {
+        @apply text-primary text-base transition-colors duration-300 hover:text-white;
+    }
+
+    .btn-table-text-icon {
+        @apply stroke-primary transition-colors duration-300 group-hover:stroke-white;
     }
 
     .btn-black {
@@ -64,7 +76,7 @@ html {
     }
 
     .btn-small {
-        @apply px-2 py-1 text-xs leading-[110%];
+        @apply px-2 py-1 text-base leading-[110%];
     }
 
     .link {
