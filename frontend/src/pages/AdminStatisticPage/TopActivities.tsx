@@ -1,24 +1,22 @@
 import { ActivityStatisticResponse, PageRequest, api } from '../../api';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY } from '../../modules/admin';
 import { AdminTable } from '../../components/AdminTable';
 import type { ColumnDef } from '@tanstack/table-core';
-import { twMerge } from 'tailwind-merge';
 
 export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
-    const [sort, setSort] = useState<'DESC' | 'ASC'>('DESC');
     const queryData = useCallback(
         (pageRequest: PageRequest) => {
             return api.admin.browseStatisticActivities({
                 browseStatisticArticlesRequest: {
                     ...pageRequest,
-                    sort,
+                    sort: 'DESC',
                     period,
                 },
             });
         },
-        [sort, period],
+        [period],
     );
 
     const columns = useMemo<ColumnDef<ActivityStatisticResponse>[]>(
@@ -27,7 +25,6 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
                 accessorKey: 'id',
                 header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
-                enableSorting: false,
             },
             {
                 accessorKey: 'name',
@@ -48,13 +45,11 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
                         </div>
                     );
                 },
-                enableSorting: false,
             },
             {
                 accessorKey: 'amount',
                 header: () => <span>стоимость</span>,
                 cell: (info) => info.getValue(),
-                enableSorting: false,
             },
             {
                 accessorKey: 'infoLink',
@@ -70,51 +65,20 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
                         </div>
                     );
                 },
-                enableSorting: false,
             },
             {
-                header: () => (
-                    <button
-                        onClick={() => {
-                            setSort(sort == 'ASC' ? 'DESC' : 'ASC');
-                        }}
-                        className="cursor-pointer border-none bg-none p-0 outline-none"
-                    >
-                        <span className="flex">
-                            Участия
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                className={twMerge(
-                                    'stroke-primary h-auto w-4 transform',
-                                    sort === 'ASC' ? 'rotate-90' : '-rotate-90',
-                                )}
-                            >
-                                <path
-                                    d="M15 18L9 12L15 6"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                ></path>
-                            </svg>
-                        </span>
-                    </button>
-                ),
-                enableSorting: false,
+                header: () => <span className="flex">Участия</span>,
                 accessorKey: 'count',
                 cell: (info) => info.getValue(),
             },
         ],
-        [sort],
+        [],
     );
 
     return (
         <div className="py-4">
             <AdminTable
-                queryKey={ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY + sort + period}
+                queryKey={ACTIVITIES_STATISTIC_ADMIN_QUERY_KEY + period}
                 globalFilterPlaceholder="Поиск по Названию и Описанию"
                 columns={columns}
                 queryData={queryData}
