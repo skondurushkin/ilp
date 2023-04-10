@@ -25,7 +25,6 @@ export interface GetFileRequest {
 export interface UploadFileRequest {
     scope: UploadFileScopeEnum;
     file: Blob;
-    id?: number;
 }
 
 /**
@@ -136,10 +135,6 @@ export class FilesApi extends runtime.BaseAPI {
             formParams = new FormData();
         } else {
             formParams = new URLSearchParams();
-        }
-
-        if (requestParameters.id !== undefined) {
-            formParams.append('id', requestParameters.id as any);
         }
 
         if (requestParameters.file !== undefined) {

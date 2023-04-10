@@ -1,18 +1,20 @@
 import { ActivityResponse, PageRequest, api } from '../../api';
-import { useCallback, useMemo } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { DeleteActivityData, DeleteActivityForm } from './DeleteActivityForm';
+import { useCallback, useMemo, useState } from 'react';
 
 import { ACTIVITIES_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { AdminTable } from '../../components/AdminTable';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
-import { PriceTableCell } from '../../components/PriceTableCell';
+import Modal from '../../components/Modal';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
-import { twMerge } from 'tailwind-merge';
+import { Zaps } from '../../components/Zaps';
 
 export const ActivitiesAdminPage = () => {
+    const [removeActivityModalData, setRemoveActivityModalData] = useState<DeleteActivityData | null>(null);
+
     const queryData = useCallback((pageRequest: PageRequest) => {
         return api.activity.browseActivities({
             pageRequest,
@@ -23,12 +25,12 @@ export const ActivitiesAdminPage = () => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Название</span>,
+                header: () => <span>название</span>,
                 cell: (info) => {
                     const { infoLink, name } = info.row.original;
                     return (
@@ -48,15 +50,15 @@ export const ActivitiesAdminPage = () => {
             },
             {
                 accessorKey: 'amount',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <PriceTableCell price={amount} />;
+                    return <Zaps length={5} amount={amount} />;
                 },
             },
             {
                 accessorKey: 'startDate',
-                header: () => <span>Дата</span>,
+                header: () => <span>дата</span>,
                 cell: (info) => {
                     const { startDate, endDate, active } = info.row.original;
                     return (
@@ -71,25 +73,9 @@ export const ActivitiesAdminPage = () => {
             },
             {
                 accessorKey: 'actions',
-                header: () => <span>Действия</span>,
+                header: () => <span>действия</span>,
                 cell: (info) => {
-                    const { id, active } = info.row.original;
-                    const queryClient = useQueryClient();
-
-                    const { mutate: deleteActivity, isLoading: deleteIsLoading } = useMutation(
-                        () => {
-                            return api.activity.deleteActivity({
-                                activityDeleteRequest: {
-                                    id,
-                                },
-                            });
-                        },
-                        {
-                            onSuccess: () => {
-                                queryClient.invalidateQueries(ACTIVITIES_ADMIN_PAGE_QUERY_KEY);
-                            },
-                        },
-                    );
+                    const { id, name, active } = info.row.original;
 
                     if (active) {
                         return (
@@ -103,12 +89,16 @@ export const ActivitiesAdminPage = () => {
                                     <span className="text-small text-primary">Изменить</span>
                                 </TypedLink>
                                 <button
-                                    className={twMerge('flex items-center gap-2', deleteIsLoading && 'opacity-50')}
-                                    disabled={deleteIsLoading}
-                                    onClick={() => deleteActivity()}
+                                    className="flex items-center gap-2"
+                                    onClick={() =>
+                                        setRemoveActivityModalData({
+                                            id,
+                                            name,
+                                        })
+                                    }
                                 >
                                     <TrashSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Удалить</span>
+                                    <span className="text-small text-primary">Архивировать</span>
                                 </button>
                             </div>
                         );
@@ -140,6 +130,22 @@ export const ActivitiesAdminPage = () => {
                 columns={columns}
                 queryData={queryData}
             />
+            <Modal
+                id="RemoveActivityForm"
+                size="sm"
+                isOpen={!!removeActivityModalData}
+                closeModal={() => setRemoveActivityModalData(null)}
+            >
+                <Modal.Body>
+                    {!!removeActivityModalData && (
+                        <DeleteActivityForm
+                            defaultValues={removeActivityModalData}
+                            queryKey={ACTIVITIES_ADMIN_PAGE_QUERY_KEY}
+                            closeModal={() => setRemoveActivityModalData(null)}
+                        />
+                    )}
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };

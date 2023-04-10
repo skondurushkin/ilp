@@ -8,9 +8,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { EditBalanceForm } from './EditBalanceForm';
 import { GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY } from '../../modules/admin';
 import Modal from '../../components/Modal';
-import { PriceTableCell } from '../../components/PriceTableCell';
-import { TypedLink } from '../../router';
 import { ReactComponent as XSquareVG } from '../../assets/x-square.svg';
+import { Zaps } from '../../components/Zaps';
 
 interface BalanceHistoryProps {
     userId: number;
@@ -32,12 +31,12 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'date',
-                header: () => <span>Дата</span>,
+                header: () => <span>дата</span>,
                 cell: (info) => {
                     const { date } = info.row.original;
                     return date ? <p>{new Date(date).toLocaleDateString('ru-RU')}</p> : null;
@@ -45,35 +44,24 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Действие</span>,
+                header: () => <span>действие</span>,
                 cell: (info) => {
-                    const { id, name, type } = info.row.original;
+                    const { name } = info.row.original;
 
-                    return (
-                        <div className="flex flex-col items-start gap-2">
-                            <div>
-                                <p className="text-base text-white">{name}</p>
-                            </div>
-                            {type === OperationResponseTypeEnum.WriteOff && (
-                                <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
-                                    <p className="text-small text-gray underline">Перейти</p>
-                                </TypedLink>
-                            )}
-                        </div>
-                    );
+                    return <p className="text-base text-white">{name}</p>;
                 },
             },
             {
                 accessorKey: 'amount',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => {
                     const { amount, type } = info.row.original;
-                    return <PriceTableCell price={amount} type={type} />;
+                    return <Zaps length={5} amount={amount} type={type} />;
                 },
             },
             {
                 accessorKey: 'actions',
-                header: () => <span>Действия</span>,
+                header: () => <span>действия</span>,
                 cell: (info) => {
                     const { id, amount, name, type, date, active } = info.row.original;
 

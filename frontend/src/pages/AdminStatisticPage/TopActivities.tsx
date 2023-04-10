@@ -25,13 +25,13 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
                 enableSorting: false,
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Название</span>,
+                header: () => <span>название</span>,
                 cell: (info) => {
                     const { infoLink, name } = info.row.original;
                     return (
@@ -52,13 +52,13 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
             },
             {
                 accessorKey: 'amount',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => info.getValue(),
                 enableSorting: false,
             },
             {
                 accessorKey: 'infoLink',
-                header: () => <span>Дата</span>,
+                header: () => <span>дата</span>,
                 cell: (info) => {
                     const { startDate, endDate, active } = info.row.original;
                     return (

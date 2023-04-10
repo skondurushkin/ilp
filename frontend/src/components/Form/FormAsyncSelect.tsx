@@ -5,6 +5,7 @@ import { ComponentProps } from 'react';
 import { FormErrorMessage } from './FormErrorMessage';
 import { colors } from '../../../colors';
 import { twMerge } from 'tailwind-merge';
+import { useTheme } from '../../theme';
 
 export interface FormAsyncSelectOption {
     label: string;
@@ -25,6 +26,8 @@ export const FormAsyncSelect = <TFieldValues extends FieldValues = FieldValues>(
     props: FormAsyncSelectProps<TFieldValues>,
 ) => {
     const { control, name, rules, label, labelClassName, loadOptions } = props;
+    const theme = useTheme();
+    const isDarkTheme = theme === 'dark';
 
     const { field, fieldState } = useController({
         name,
@@ -47,24 +50,50 @@ export const FormAsyncSelect = <TFieldValues extends FieldValues = FieldValues>(
                 placeholder="Введите название"
                 noOptionsMessage={() => 'Нет результатов, уточните запрос'}
                 loadingMessage={() => 'Загрузка ...'}
-                className="text-black"
+                className="bg-white text-black dark:bg-black dark:text-white"
                 styles={{
+                    singleValue: (base) => ({
+                        ...base,
+                        color: isDarkTheme ? colors.white : colors.black,
+                        borderRadius: 0,
+                    }),
+                    input: (base) => ({
+                        ...base,
+                        color: isDarkTheme ? colors.white : colors.black,
+                        borderRadius: 0,
+                    }),
                     menu: (base) => ({
                         ...base,
+                        color: isDarkTheme ? colors.white : colors.black,
+                        background: isDarkTheme ? colors.black : colors.white,
                         borderRadius: 0,
+                        border: `2px solid ${colors.gray}`,
                     }),
                     option: (base, state) => ({
                         ...base,
-                        background: state.isFocused ? colors.primary : colors.white,
-                        color: colors.black,
+                        color: isDarkTheme ? colors.white : colors.black,
+                        background: state.isFocused
+                            ? isDarkTheme
+                                ? colors['gray-dark']
+                                : colors.primary
+                            : isDarkTheme
+                            ? colors.black
+                            : colors.white,
                         '&:hover': {
-                            background: state.isFocused ? colors.primary : colors.white,
+                            background: state.isFocused
+                                ? isDarkTheme
+                                    ? colors['gray-dark']
+                                    : colors.primary
+                                : isDarkTheme
+                                ? colors.black
+                                : colors.white,
                         },
                     }),
                     control: (base, state) => ({
                         ...base,
-                        borderRadius: 0,
+                        background: isDarkTheme ? colors.black : colors.white,
                         height: 50,
+                        borderRadius: 0,
                         border: fieldState.invalid
                             ? `2px solid ${colors.error}`
                             : state.isFocused

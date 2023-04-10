@@ -28,12 +28,12 @@ export const WriteOffsAdminPage = () => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'date',
-                header: () => <span>Дата</span>,
+                header: () => <span>дата</span>,
                 cell: (info) => {
                     const { date } = info.row.original;
                     return (
@@ -45,7 +45,7 @@ export const WriteOffsAdminPage = () => {
             },
             {
                 accessorKey: 'user',
-                header: () => <span>Пользователь</span>,
+                header: () => <span>пользователь</span>,
                 cell: (info) => {
                     const { user } = info.row.original;
                     return (
@@ -65,7 +65,7 @@ export const WriteOffsAdminPage = () => {
             },
             {
                 accessorKey: 'articleId',
-                header: () => <span>Товар</span>,
+                header: () => <span>товар</span>,
                 cell: (info) => {
                     const { article } = info.row.original;
                     return <p className="text-base text-white">{article.name}</p>;
@@ -73,7 +73,7 @@ export const WriteOffsAdminPage = () => {
             },
             {
                 accessorKey: 'status',
-                header: () => <span>Статус заказа</span>,
+                header: () => <span>статус заказа</span>,
                 cell: (info) => {
                     const { status } = info.row.original;
                     return <p>{WriteOffStatusName[status]}</p>;
@@ -81,7 +81,7 @@ export const WriteOffsAdminPage = () => {
             },
             {
                 accessorKey: 'actions',
-                header: () => <span>Действия</span>,
+                header: () => <span>действия</span>,
                 cell: (info) => {
                     const { id, date, status, article } = info.row.original;
                     if (status !== WriteOffStatus.Completed && status !== WriteOffStatus.Cancelled) {

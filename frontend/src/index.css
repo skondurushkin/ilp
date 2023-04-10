@@ -20,11 +20,11 @@ html {
     }
 
     .input {
-        @apply read-only:text-gray focus:border-success h-[50px] border-2 px-3 text-black read-only:cursor-default focus:outline-none focus:ring-0;
+        @apply read-only:text-gray focus:border-success dark:read-only:text-gray h-[50px] border-2 bg-white px-3 text-black read-only:cursor-default focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
     }
 
     .select {
-        @apply focus:border-success h-[50px] border-2 text-black focus:outline-none focus:ring-0;
+        @apply focus:border-success h-[50px] border-2 bg-white text-black focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
     }
 
     .input-error {
@@ -32,11 +32,11 @@ html {
     }
 
     .checkbox {
-        @apply focus:border-success dark:text-primary h-6 w-6 border-2 text-black focus:outline-none focus:ring-0;
+        @apply h-6 w-6 border-2 bg-white text-black focus:outline-none focus:ring-0 dark:bg-black;
     }
 
     .textarea {
-        @apply focus:border-success border-2 px-3 text-black focus:outline-none focus:ring-0;
+        @apply focus:border-success border-2 bg-white px-3 text-black focus:outline-none focus:ring-0 dark:bg-black dark:text-white;
     }
 
     .chip {
