@@ -69,5 +69,5 @@ export const TablePagination = <TData extends RowData>({ table }: TablePaginatio
 };
 
 const PagingButton = (props: ButtonProps) => {
-    return <Button black className="border-gray flex items-center px-3 py-2" {...props} />;
+    return <Button black className="border-gray disabled:bg-gray-dark flex items-center px-3 py-2" {...props} />;
 };
