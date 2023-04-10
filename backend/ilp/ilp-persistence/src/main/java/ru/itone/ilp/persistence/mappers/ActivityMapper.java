@@ -65,12 +65,11 @@ public interface ActivityMapper {
         return new ActivityStatisticResponse()
                 .active(activity.isActive(LocalDate.now()))
                 .id(activity.getId().intValue())
-                .amount(activity.getPrice())
+                .price(activity.getPrice())
                 .description(activity.getDescription())
                 .name(activity.getName())
                 .endDate(activity.getEndDate())
                 .startDate(activity.getStartDate())
-                .infoLink(activity.getInfoLink())
                 .extension(activity.getExtension())
                 .count(top.getCount())
                 ;
