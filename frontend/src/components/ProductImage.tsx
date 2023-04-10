@@ -30,7 +30,10 @@ export function ProductImage(props: ProductImageProps): ReactElement {
                 <div className={twMerge('h-full w-full', imageClassName)}>
                     {isPlaceholder && <ImageSkeleton className="h-full w-full rounded-none" />}
                     <img
-                        className={twMerge('h-full w-full object-contain', isPlaceholder && 'opacity-0')}
+                        className={twMerge(
+                            'h-full w-full object-contain',
+                            isPlaceholder && 'absolute left-0 top-0 opacity-0',
+                        )}
                         src={src}
                         alt={alt}
                         onError={() => {

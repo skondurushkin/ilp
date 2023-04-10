@@ -7,7 +7,6 @@ import { Box } from '../../../components/Box';
 import { Chips } from '../../../components/Chips';
 import type { ColumnDef } from '@tanstack/table-core';
 import { NoRows } from '../../../components/NoRows';
-import { Spinner } from '../../../components/Spinner';
 import { TypedLink } from '../../../router';
 import { UseQueryResult } from 'react-query';
 import { Zaps } from '../../../components/Zaps';
@@ -69,14 +68,7 @@ export function OperationHistory(props: OperationHistoryProps): ReactElement {
         if (prevResult == undefined || !prevResult.query.isSuccess) {
             dataElement = <HistoryTableSkeleton />;
         } else {
-            dataElement = (
-                <div className="relative">
-                    <div className="absolute bottom-0 left-0 right-0 top-0 top-0 flex items-center justify-center">
-                        <Spinner />
-                    </div>
-                    <HistoryView history={prevResult} onChangePage={setPage} />
-                </div>
-            );
+            dataElement = <HistoryView history={prevResult} isFetching onChangePage={setPage} />;
         }
     } else {
         dataElement = <HistoryView history={result} onChangePage={setPage} />;
@@ -101,11 +93,12 @@ export function OperationHistory(props: OperationHistoryProps): ReactElement {
 
 export interface HistoryViewProps<T extends OperationResponseTypeEnum> {
     history: HistoryData<T>;
+    isFetching?: boolean;
     onChangePage: (page: number) => void;
 }
 
 export function HistoryView<T extends OperationResponseTypeEnum>(props: HistoryViewProps<T>): ReactElement {
-    const { history, onChangePage } = props;
+    const { history, isFetching, onChangePage } = props;
     const accrualColumns = useAccrualColumns();
     const writeOffColumns = useWriteOffColumns();
 
@@ -114,13 +107,27 @@ export function HistoryView<T extends OperationResponseTypeEnum>(props: HistoryV
         if (!hst.query.data || hst.query.data.results.length === 0) {
             return <NoRows>Нет пополнений</NoRows>;
         }
-        return <HistoryTable columns={accrualColumns} data={hst.query.data} onChangePage={onChangePage} />;
+        return (
+            <HistoryTable
+                columns={accrualColumns}
+                data={hst.query.data}
+                isFetching={isFetching}
+                onChangePage={onChangePage}
+            />
+        );
     } else {
         const hst = history as HistoryData<'writeOff'>;
         if (!hst.query.data || hst.query.data.results.length === 0) {
             return <NoRows>Нет списаний</NoRows>;
         }
-        return <HistoryTable columns={writeOffColumns} data={hst.query.data} onChangePage={onChangePage} />;
+        return (
+            <HistoryTable
+                columns={writeOffColumns}
+                data={hst.query.data}
+                isFetching={isFetching}
+                onChangePage={onChangePage}
+            />
+        );
     }
 }
 
