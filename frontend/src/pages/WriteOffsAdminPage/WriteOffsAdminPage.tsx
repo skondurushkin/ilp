@@ -88,7 +88,7 @@ export const WriteOffsAdminPage = () => {
                         return (
                             <div>
                                 <button
-                                    className="flex items-center gap-2"
+                                    className="btn-table-text group flex items-center gap-2"
                                     onClick={() =>
                                         setModalData({
                                             id,
@@ -98,8 +98,8 @@ export const WriteOffsAdminPage = () => {
                                         })
                                     }
                                 >
-                                    <EditSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Изменить</span>
+                                    <EditSVG className="btn-table-text-icon h-4 w-4" />
+                                    <p>Изменить</p>
                                 </button>
                             </div>
                         );

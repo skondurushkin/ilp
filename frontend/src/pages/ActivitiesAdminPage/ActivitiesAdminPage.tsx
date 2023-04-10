@@ -79,17 +79,17 @@ export const ActivitiesAdminPage = () => {
 
                     if (active) {
                         return (
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-col gap-1">
                                 <TypedLink
-                                    className="flex items-center gap-2"
+                                    className="btn-table-text group flex items-center gap-2"
                                     to="/admin/activities/edit/:activityId"
                                     params={{ activityId: id.toString() }}
                                 >
-                                    <EditSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Изменить</span>
+                                    <EditSVG className="btn-table-text-icon h-4 w-4" />
+                                    <p>Изменить</p>
                                 </TypedLink>
                                 <button
-                                    className="flex items-center gap-2"
+                                    className="btn-table-text group flex items-center gap-2"
                                     onClick={() =>
                                         setRemoveActivityModalData({
                                             id,
@@ -97,14 +97,14 @@ export const ActivitiesAdminPage = () => {
                                         })
                                     }
                                 >
-                                    <TrashSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Архивировать</span>
+                                    <TrashSVG className="btn-table-text-icon h-4 w-4" />
+                                    <p>Архивировать</p>
                                 </button>
                             </div>
                         );
                     }
 
-                    return <p className="text-error text-small pl-6">В архиве</p>;
+                    return <p className="text-error text-base">В архиве</p>;
                 },
             },
         ],
