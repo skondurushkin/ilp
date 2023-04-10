@@ -25,7 +25,7 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>УН</span>,
                 cell: (info) => info.getValue(),
                 enableSorting: false,
             },

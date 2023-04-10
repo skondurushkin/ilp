@@ -31,7 +31,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>УН</span>,
                 cell: (info) => info.getValue(),
             },
             {

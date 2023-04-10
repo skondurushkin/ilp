@@ -33,7 +33,7 @@ export const WriteOffsHistory = (props: WriteOffsHistoryProps) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>ИД</span>,
+                header: () => <span>УН</span>,
                 cell: (info) => info.getValue(),
             },
             {
