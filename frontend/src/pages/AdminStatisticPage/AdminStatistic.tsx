@@ -128,11 +128,13 @@ export function AdminStatisticPage() {
                     )}
                     <div>
                         <div className="flex-column py-4 pl-6">
-                            <div className="text-white">
-                                <div className="bg-primary inline-block h-4 w-4 rounded-full" /> - Начисления
+                            <div className="flex items-center gap-3 text-white">
+                                <div className="bg-primary inline-block h-4 w-4 rounded-full" />
+                                начисления
                             </div>
-                            <div className="text-white">
-                                <div className="bg-error inline-block h-4 w-4 rounded-full text-white" /> - Списания
+                            <div className="flex items-center gap-3 text-white">
+                                <div className="bg-error inline-block h-4 w-4 rounded-full text-white" />
+                                списания
                             </div>
                         </div>
                     </div>
