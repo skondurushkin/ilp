@@ -38,6 +38,7 @@ import ru.itone.ilp.openapi.model.UpdateWriteOffRequest;
 import ru.itone.ilp.openapi.model.UsersPeriodRequest;
 import ru.itone.ilp.openapi.model.UsersStatisticResponse;
 import ru.itone.ilp.openapi.model.WriteOffResponse;
+import ru.itone.ilp.services.activities.ActivityService;
 import ru.itone.ilp.services.articles.ArticleService;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.profiles.ProfileService;
@@ -52,20 +53,29 @@ public class AdminController extends LinkResolver implements AdminApi {
     private final WalletService walletService;
     private final ProfileService profileService;
     private final ArticleService articleService;
+    private final ActivityService activityService;
+
+    @Override
+    public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
+            BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
+        return ResponseEntity.ok(activityService.topActivitiesPaginated(browseStatisticArticlesRequest));
+    }
 
     @Override
     public ResponseEntity<PaginatedArticleStatisticResponse> browseStatisticArticles(
             BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
-        throw new IllegalStateException("Not yet implemented");
+        return ResponseEntity.ok(articleService.topArticlesPaginated(browseStatisticArticlesRequest));
     }
 
     @Override
     public ResponseEntity<List<BalanceStatisticResponseInner>> browseStatisticBalance(BalancePeriodRequest balancePeriodRequest) {
+        //return ResponseEntity.ok(Collections.emptyList());
         throw new IllegalStateException("Not yet implemented");
     }
 
     @Override
     public ResponseEntity<UsersStatisticResponse> browseStatisticUsers(UsersPeriodRequest usersPeriodRequest) {
+        //return ResponseEntity.ok(new UsersStatisticResponse().label("not_yet_implemented").data(Collections.emptyList()));
         throw new IllegalStateException("Not yet implemented");
     }
 
@@ -87,12 +97,6 @@ public class AdminController extends LinkResolver implements AdminApi {
     @Override
     public ResponseEntity<PaginatedArticleResponse> browseArticlesForAdmin(PageRequest pageRequest) {
         return ResponseEntity.ok(resolveLinks(articleService.paginate(pageRequest)));
-    }
-
-    @Override
-    public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
-            BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
-        throw new IllegalStateException("Not yet implemented!");
     }
 
     @Override
