@@ -7,9 +7,9 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import { PRODUCTS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
-import { PriceTableCell } from '../../components/PriceTableCell';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
+import { Zaps } from '../../components/Zaps';
 import { twMerge } from 'tailwind-merge';
 
 export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
@@ -51,7 +51,7 @@ export const ProductsAdminPage = () => {
                 header: () => <span>Стоимость</span>,
                 cell: (info) => {
                     const { price } = info.row.original;
-                    return <PriceTableCell price={price} />;
+                    return <Zaps length={5} amount={price} />;
                 },
             },
             {

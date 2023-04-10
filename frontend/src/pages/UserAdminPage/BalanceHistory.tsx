@@ -8,8 +8,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { EditBalanceForm } from './EditBalanceForm';
 import { GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY } from '../../modules/admin';
 import Modal from '../../components/Modal';
-import { PriceTableCell } from '../../components/PriceTableCell';
 import { ReactComponent as XSquareVG } from '../../assets/x-square.svg';
+import { Zaps } from '../../components/Zaps';
 
 interface BalanceHistoryProps {
     userId: number;
@@ -56,7 +56,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                 header: () => <span>Стоимость</span>,
                 cell: (info) => {
                     const { amount, type } = info.row.original;
-                    return <PriceTableCell price={amount} type={type} />;
+                    return <Zaps length={5} amount={amount} type={type} />;
                 },
             },
             {

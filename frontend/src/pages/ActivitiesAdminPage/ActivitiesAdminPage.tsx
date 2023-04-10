@@ -7,9 +7,9 @@ import { AdminTable } from '../../components/AdminTable';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
-import { PriceTableCell } from '../../components/PriceTableCell';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
+import { Zaps } from '../../components/Zaps';
 import { twMerge } from 'tailwind-merge';
 
 export const ActivitiesAdminPage = () => {
@@ -51,7 +51,7 @@ export const ActivitiesAdminPage = () => {
                 header: () => <span>Стоимость</span>,
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <PriceTableCell price={amount} />;
+                    return <Zaps length={5} amount={amount} />;
                 },
             },
             {
