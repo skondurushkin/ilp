@@ -75,7 +75,9 @@ public class ActivityService {
 
     @Transactional
     public ActivityResponse createActivity(ActivityRequest request) {
-        if (activityRepository.exists(Example.of(new Activity().setName(request.getName()), nameMatcher))) {
+        if (activityRepository.exists(Example.of(new Activity().setName(request.getName())
+                .setStartDate(null)
+                .setEndDate(null), nameMatcher))) {
             String message = String.format("Активность '%s' уже существует", request.getName());
             log.error("Невозможно создать запись: {}", message);
             throw new ApiExceptions.ConflictException(message);
