@@ -275,7 +275,7 @@ public class WalletService {
         try (CSVPrinter printer = new CSVPrinter(sw, format)) {
             List<String> record = new ArrayList<>();
             for (Operation operation : operations) {
-                record.clear();;
+                record.clear();
                 record.add(operation.getInstant().toString());
                 record.add(operation.getUser().getEmail());
                 record.add(toOpType(operation.getType()));
@@ -293,7 +293,7 @@ public class WalletService {
         Path balance_csv = Files.createTempFile("writeOff_csv", null);
         Writer sw = new FileWriterWithEncoding(balance_csv.toString(), StandardCharsets.UTF_8);
         CSVFormat format = CSVFormat.DEFAULT.builder()
-                .setHeader("Время", "email", "Название", "Код", "Баллы")
+                .setHeader("Время", "email", "Фамилия", "Имя", "Отчество", "УН Заказа", "Статус",  "Название", "Код", "Баллы")
                 .build();
         List<Operation> operations = this.dbJpa.getOperationRepository()
                 .selectWriteOffs(Sort.by(Direction.ASC, "instant"));
@@ -304,6 +304,11 @@ public class WalletService {
 
                 record.add(operation.getInstant().toString());
                 record.add(operation.getUser().getEmail());
+                record.add(operation.getUser().getLastName());
+                record.add(operation.getUser().getFirstName());
+                record.add(operation.getUser().getMiddleName());
+                record.add(operation.getWriteOff().getId().toString());
+                record.add(operation.getWriteOff().getOrderStatus().getLocalizedName());
                 record.add(operation.getName());
                 record.add(operation.getWriteOff().getArticle().getCode());
                 record.add(operation.getAmount().toString());

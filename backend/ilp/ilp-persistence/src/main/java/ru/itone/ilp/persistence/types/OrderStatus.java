@@ -1,14 +1,19 @@
 package ru.itone.ilp.persistence.types;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public enum OrderStatus {
-    created,
-    processing,
-    delivering,
-    completed,
-    cancelled;
+    created("создан"),
+    processing("формируется"),
+    delivering("ожидает выдачи"),
+    completed("выдан"),
+    cancelled("отменен");
 
+    @Getter
+    private final String localizedName;
     @Override
     public String toString() {
         return name().toLowerCase();
