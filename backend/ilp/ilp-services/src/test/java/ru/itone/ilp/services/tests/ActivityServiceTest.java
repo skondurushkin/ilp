@@ -12,6 +12,7 @@ import ru.itone.ilp.exception.ApiExceptions.ConflictException;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest.PeriodEnum;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
@@ -51,7 +52,10 @@ class ActivityServiceTest extends ServicesTestConfiguration {
 
     @Test
     void testTopActivityPaginate() {
-        BrowseStatisticArticlesRequest request = new BrowseStatisticArticlesRequest().page(0).pageSize(4).config(new PageRequestConfig());
+        BrowseStatisticArticlesRequest request = new BrowseStatisticArticlesRequest()
+                .page(0).pageSize(4)
+                .config(new PageRequestConfig())
+                .period(PeriodEnum.ALL);
         PaginatedActivitiesStatisticResponse response = activityService.topActivitiesPaginated(request);
         log.info("RESPONSE: {}", response);
     }

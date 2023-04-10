@@ -6,9 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest.PeriodEnum;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
+import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
 import ru.itone.ilp.services.articles.ArticleService;
 import ru.itone.ilp.services.configuration.ServicesTestConfiguration;
 
@@ -35,5 +38,15 @@ class ArticleServiceTest extends ServicesTestConfiguration {
         log.info("RESPONSE: {}", response);
         assertFalse(response.getHasNext());
 
+    }
+
+    @Test
+    void testTopArticlesPaginate() {
+        BrowseStatisticArticlesRequest request = new BrowseStatisticArticlesRequest()
+                .page(0).pageSize(4)
+                .config(new PageRequestConfig())
+                .period(PeriodEnum.ALL);
+        PaginatedArticleStatisticResponse response = articleService.topArticlesPaginated(request);
+        log.info("RESPONSE: {}", response);
     }
 }
