@@ -1,9 +1,14 @@
 package ru.itone.ilp.server.controllers;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,7 +21,6 @@ import ru.itone.ilp.openapi.model.AccrualResponse;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.BalancePeriodRequest;
 import ru.itone.ilp.openapi.model.BalanceStatisticResponseInner;
-import ru.itone.ilp.openapi.model.BrowseStatisticActivitiesRequest;
 import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
 import ru.itone.ilp.openapi.model.CancelAccrualBody;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
@@ -48,12 +52,6 @@ public class AdminController extends LinkResolver implements AdminApi {
     private final WalletService walletService;
     private final ProfileService profileService;
     private final ArticleService articleService;
-
-    @Override
-    public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
-            BrowseStatisticActivitiesRequest browseStatisticActivitiesRequest) {
-        throw new IllegalStateException("Not yet implemented");
-    }
 
     @Override
     public ResponseEntity<PaginatedArticleStatisticResponse> browseStatisticArticles(
@@ -92,6 +90,12 @@ public class AdminController extends LinkResolver implements AdminApi {
     }
 
     @Override
+    public ResponseEntity<PaginatedActivitiesStatisticResponse> browseStatisticActivities(
+            BrowseStatisticArticlesRequest browseStatisticArticlesRequest) {
+        throw new IllegalStateException("Not yet implemented!");
+    }
+
+    @Override
     @Secured("hasRole('ADMIN')")
     public ResponseEntity<AccrualResponse> createNewAccrual(Integer userId, CreateNewAccrualRequest createNewAccrualRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -100,7 +104,22 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<String> downloadBalanceCsv() {
-        throw new IllegalStateException("Not yet implemented!");
+        try {
+            Path balance = walletService.buildBalanceCsv();
+            try {
+                FileUtils.forceDeleteOnExit(balance.toFile());
+                return ResponseEntity.ok(Files.readString(balance, StandardCharsets.UTF_8));
+            } finally {
+                try {
+                    Files.deleteIfExists(balance);
+                    log.debug("Deleted {}", balance);
+                } catch (IOException ex) {
+                    log.warn("Could not delete file {}", balance, ex);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Не удалось создать отчет. Ошибка: %s", e.getMessage()), e);
+        }
     }
 
     @Override
