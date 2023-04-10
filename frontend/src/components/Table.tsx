@@ -8,24 +8,25 @@ import { colors } from '../../colors';
 import { flexRender } from '@tanstack/react-table';
 import { twMerge } from 'tailwind-merge';
 
-interface TableProps<TData extends RowData> {
+export interface TableProps<TData extends RowData> {
     table: ITable<TData>;
     isFetching?: boolean;
     className?: string;
     fixed?: boolean;
+    noDataMessage?: string;
 }
 
 export const Table = <TData extends RowData>(props: TableProps<TData>) => {
-    const { table, isFetching, className, fixed } = props;
+    const { className, isFetching, fixed, table, noDataMessage } = props;
 
     return (
-        <div className="relative overflow-y-hidden">
+        <div className={twMerge('relative overflow-y-hidden', className)}>
             {isFetching && (
                 <div className="absolute-center">
                     <Spinner color={colors.white} />
                 </div>
             )}
-            <table className={twMerge('w-full', isFetching && 'opacity-50', fixed && 'table-fixed', className)}>
+            <table className={twMerge('w-full', isFetching && 'opacity-50', fixed && 'table-fixed')}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
@@ -65,7 +66,7 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
                     {table.getPageCount() === 0 ? (
                         <tr>
                             <td colSpan={table.getAllColumns().length}>
-                                <DataNotFound />
+                                <DataNotFound message={noDataMessage} />
                             </td>
                         </tr>
                     ) : (
