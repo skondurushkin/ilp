@@ -9,7 +9,6 @@ import { EditBalanceForm } from './EditBalanceForm';
 import { GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY } from '../../modules/admin';
 import Modal from '../../components/Modal';
 import { PriceTableCell } from '../../components/PriceTableCell';
-import { TypedLink } from '../../router';
 import { ReactComponent as XSquareVG } from '../../assets/x-square.svg';
 
 interface BalanceHistoryProps {
@@ -47,20 +46,9 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                 accessorKey: 'name',
                 header: () => <span>Действие</span>,
                 cell: (info) => {
-                    const { id, name, type } = info.row.original;
+                    const { name } = info.row.original;
 
-                    return (
-                        <div className="flex flex-col items-start gap-2">
-                            <div>
-                                <p className="text-base text-white">{name}</p>
-                            </div>
-                            {type === OperationResponseTypeEnum.WriteOff && (
-                                <TypedLink to="/admin/products/edit/:productId" params={{ productId: id.toString() }}>
-                                    <p className="text-small text-gray underline">Перейти</p>
-                                </TypedLink>
-                            )}
-                        </div>
-                    );
+                    return <p className="text-base text-white">{name}</p>;
                 },
             },
             {
