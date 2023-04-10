@@ -3,7 +3,7 @@ import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import PhotoInput from '../../components/Form/PhotoInput';
-import { PhotoRequirements } from '../../components/Form/PhotoInput/PhotoRest';
+import { PhotoRequirements } from '../../components/Form/PhotoInput/PhotoRequirements';
 import { TypedLink } from '../../router';
 import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
