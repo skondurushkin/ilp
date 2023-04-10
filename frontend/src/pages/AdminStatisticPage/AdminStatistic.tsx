@@ -10,6 +10,7 @@ import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
 import { TopProducts } from './TopProducts';
 import { UsersPeriodRequestPeriod } from '../../api/generated/models/UsersPeriodRequestPeriod';
+import { colors } from '../../../colors';
 import { createPeriod } from '../../utils/period';
 
 type BalanceChip = 'day' | 'week' | 'month';
@@ -105,7 +106,10 @@ export function AdminStatisticPage() {
                                     secondaryAxes,
                                     dark: true,
                                     getSeriesStyle: (series) => ({
-                                        color: series.originalSeries.label === 'Начисления' ? '#AAE632' : '#F84E4E',
+                                        color:
+                                            series.originalSeries.label === 'Начисления'
+                                                ? colors.primary
+                                                : colors.error,
                                         opacity:
                                             focused.activeSeriesIndex > -1
                                                 ? series.index === focused.activeSeriesIndex
@@ -194,7 +198,7 @@ export function AdminStatisticPage() {
                                         dark: true,
                                         tooltip: false,
                                         getSeriesStyle: () => ({
-                                            color: '#AAE632',
+                                            color: colors.primary,
                                         }),
                                     }}
                                 />
