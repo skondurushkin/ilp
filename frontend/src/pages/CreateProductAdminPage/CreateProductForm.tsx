@@ -3,6 +3,7 @@ import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import PhotoInput from '../../components/Form/PhotoInput';
+import { PhotoRequirements } from '../../components/Form/PhotoInput/PhotoRest';
 import { TypedLink } from '../../router';
 import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
@@ -34,7 +35,7 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                         params={{ productId: newProduct.id.toString() }}
                         className="flex items-center gap-2"
                     >
-                        <span className="text-primary">Посмотреть</span>
+                        <p className="text-gray font-bold">Посмотреть</p>
                     </TypedLink>
                 </div>,
                 {
@@ -58,6 +59,7 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
                             required: validationRules.required,
                         }}
                     />
+                    <PhotoRequirements />
                 </div>
                 <div className="flex flex-col gap-3">
                     <FormInput

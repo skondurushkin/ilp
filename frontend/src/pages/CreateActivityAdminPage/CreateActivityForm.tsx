@@ -33,7 +33,7 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
                         params={{ activityId: newActivity.id.toString() }}
                         className="flex items-center gap-2"
                     >
-                        <span className="text-primary">Посмотреть</span>
+                        <p className="text-gray font-bold">Посмотреть</p>
                     </TypedLink>
                 </div>,
                 {

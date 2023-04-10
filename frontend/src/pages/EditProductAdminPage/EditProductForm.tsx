@@ -3,6 +3,7 @@ import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import PhotoInput from '../../components/Form/PhotoInput';
+import { PhotoRequirements } from '../../components/Form/PhotoInput/PhotoRest';
 import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -38,12 +39,13 @@ export const EditProductForm = (props: EditProductFormProps) => {
                         control={control}
                         name="imageLink"
                         scope="article"
-                        entityId={values.id}
                         rules={{
                             required: validationRules.required,
                         }}
                     />
+                    <PhotoRequirements />
                 </div>
+
                 <div className="flex flex-col gap-3">
                     <FormInput
                         control={control}

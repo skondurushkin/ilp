@@ -14,14 +14,13 @@ import { useMutation } from 'react-query';
 interface PhotoInputProps<TFieldValues extends FieldValues> {
     scope: UploadFileScopeEnum;
     name: FieldPath<TFieldValues>;
-    entityId?: number;
     rules?: RegisterOptions;
     className?: string;
     control: Control<TFieldValues>;
 }
 
 export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props: PhotoInputProps<TFieldValues>) => {
-    const { scope, entityId, control, name, rules } = props;
+    const { scope, control, name, rules } = props;
 
     const { field, fieldState } = useController({
         name,
@@ -44,7 +43,6 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
 
                 const uploadedFile = await api.files.uploadFile({
                     scope,
-                    id: entityId,
                     file,
                 });
 
