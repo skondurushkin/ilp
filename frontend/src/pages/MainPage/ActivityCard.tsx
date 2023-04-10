@@ -42,7 +42,7 @@ function ActivityView(props: ActivityViewProps): ReactElement {
         <>
             <VerticalBrackets size="2" className="self-center">
                 <Zaps
-                    className="text-h1 px-0.5 md:px-2"
+                    className="text-h1 px-0.5 py-2 md:px-2"
                     zapClassName="h-5 w-5"
                     type={OperationResponseTypeEnum.Accrual}
                     amount={activity.amount}

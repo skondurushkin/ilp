@@ -2,7 +2,7 @@ import { ImageSkeleton, Skeleton, SkeletonContainer } from '../../../components/
 import { WriteOffStatusColor, WriteOffStatusName } from '../../../modules/loyalty';
 
 import { Box } from '../../../components/Box';
-import { ImageGallery } from '../../../components/ImageGallery';
+import { ProductImage } from '../../../components/ProductImage';
 import { ReactElement } from 'react';
 import { TypedLink } from '../../../router';
 import { VerticalBrackets } from '../../../components/VerticalBrackets';
@@ -43,13 +43,11 @@ function OrderView(props: OrderViewProps): ReactElement {
                 params={{ id: `${order.article.id}` }}
                 className="flex grow flex-col items-center text-center"
             >
-                <VerticalBrackets size="4" className="w-full">
-                    <ImageGallery imgs={[{ src: order.article.imageLink || '', alt: order.article.name }]} />
-                </VerticalBrackets>
+                <ProductImage src={order.article.imageLink || ''} alt={order.article.name} />
                 <div className="text-gray mt-4">{new Date(order.date).toLocaleDateString('ru-RU')}</div>
                 <div className="mt-4 font-bold">{order.article.name}</div>
             </TypedLink>
-            <VerticalBrackets size="1" className="mt-4 self-center" color={WriteOffStatusColor[order.status]}>
+            <VerticalBrackets size="1" className="mt-4 self-center py-1" color={WriteOffStatusColor[order.status]}>
                 <span className="px-1">{WriteOffStatusName[order.status]}</span>
             </VerticalBrackets>
         </div>

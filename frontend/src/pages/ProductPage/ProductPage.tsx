@@ -4,9 +4,9 @@ import { useProductQuery, useWalletQuery } from '../../modules/loyalty';
 
 import { ArticleResponse } from '../../api';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { ProductImage } from '../../components/ProductImage';
 import { ProductPrice } from '../../components/ProductPrice';
 import { ReactElement } from 'react';
-import { VerticalBrackets } from '../../components/VerticalBrackets';
 import { useParams } from 'react-router';
 
 interface ProductPageParams {
@@ -57,17 +57,24 @@ function ProductView(props: ProductViewProps): ReactElement {
 
     return (
         <>
-            <div>
-                <Breadcrumbs items={[{ label: 'Главная страница', link: '/' }, { label: product.name }]} />
-                <VerticalBrackets className="mt-6" size="4">
-                    <img src={product.imageLink} alt={product.name} />
-                </VerticalBrackets>
-                <h1 className="text-h1 mt-8">{product.name}</h1>
-                <ProductPrice className="mt-4 w-min" price={product.price || 0} themed />
-                {product.description && <p className="mt-4">{product.description}</p>}
-            </div>
-            <div className="app-bg sticky bottom-0 pb-10 pt-6 sm:pb-8">
-                <CreateOrderButton product={product} availability={availability} />
+            <Breadcrumbs items={[{ label: 'Главная страница', link: '/' }, { label: product.name }]} />
+            <div className="md:flex md:gap-8">
+                <div className="mt-6 bg-black p-4 md:w-1/2">
+                    <ProductImage
+                        className="pt-[133%] sm:pt-[54%] md:pt-[100%] xl:pt-[100%]"
+                        imageClassName="py-9"
+                        src={product.imageLink || ''}
+                        alt={product.name}
+                    />
+                </div>
+                <div className="mt-8 md:w-1/2">
+                    <h1 className="text-h1">{product.name}</h1>
+                    <ProductPrice className="mt-4 w-min" price={product.price || 0} themed />
+                    {product.description && <p className="mt-4 md:mt-5">{product.description}</p>}
+                    <div className="app-bg sticky bottom-0 pb-10 pt-6 sm:pb-8">
+                        <CreateOrderButton product={product} availability={availability} />
+                    </div>
+                </div>
             </div>
         </>
     );
