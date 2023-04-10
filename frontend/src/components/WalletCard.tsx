@@ -37,7 +37,7 @@ export function WalletCard(props: WalletCardProps | WalletCardSkeletonProps): Re
             <div className="flex flex-col sm:w-1/2 sm:items-start">{view}</div>
             <div className="relative sm:w-1/2">
                 <img
-                    className="w-full rounded-lg shadow-[0_4px_160px_-10px_rgba(170,230,50,0.8)] sm:absolute sm:left-0 sm:top-0 sm:w-[initial] sm:translate-x-[20%]"
+                    className="w-full rounded-lg shadow-[0_4px_160px_-10px_rgba(170,230,50,0.8)] sm:absolute sm:left-0 sm:top-0 sm:w-[initial] sm:translate-x-[10%]"
                     src={loyaltyProgramCardUrl}
                     alt="Карта лояльности"
                 />
