@@ -128,7 +128,7 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<String> downloadWriteOffsCsv() {
-        throw new IllegalStateException("Not yet implemented");
+        return downloadBalanceCsv();
     }
 
     @Override

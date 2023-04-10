@@ -40,8 +40,8 @@ spring:
     multipart:
       enabled: true
       file-size-threshold: 64KB
-      max-file-size: 1MB
-      max-request-size: 10MB
+      max-file-size: 5MB
+      max-request-size: 50MB
 
 logging:
   file:
