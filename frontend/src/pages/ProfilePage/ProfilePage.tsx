@@ -1,4 +1,4 @@
-import { EmptyOperationHistory, OperationHistory, OperationHistorySkeleton } from './OperationHistory';
+import { EmptyOperationHistory, OperationHistory } from './OperationHistory';
 import { OrderType, Orders } from './Orders';
 
 import { OperationResponseTypeEnum } from '../../api';
@@ -58,13 +58,14 @@ export const ProfilePage = () => {
                 {walletQuery.status !== 'success' && <WalletCard skeleton />}
                 {walletQuery.status === 'success' && <WalletCard wallet={walletQuery.data} />}
             </PageSection>
-            <PageSection id="balance-history" className="mt-6 md:mt-10" caption="История баланса">
-                {!walletQuery.isSuccess && <OperationHistorySkeleton />}
-                {walletQuery.isSuccess && walletQuery.data.operations.length === 0 && <EmptyOperationHistory />}
-                {walletQuery.isSuccess && walletQuery.data.operations.length > 0 && (
-                    <OperationHistory operationType={operationType} onChangeOperationType={changeOperationType} />
-                )}
-            </PageSection>
+            {walletQuery.isSuccess && (
+                <PageSection id="balance-history" className="mt-6 md:mt-10" caption="История баланса">
+                    {walletQuery.isSuccess && walletQuery.data.operations.length === 0 && <EmptyOperationHistory />}
+                    {walletQuery.isSuccess && walletQuery.data.operations.length > 0 && (
+                        <OperationHistory operationType={operationType} onChangeOperationType={changeOperationType} />
+                    )}
+                </PageSection>
+            )}
             {walletQuery.isSuccess && walletQuery.data.operations.length > 0 && (
                 <PageSection id="orders" className="mt-6 md:mt-10" caption="Мои заказы">
                     <Orders orderType={orderType} onChangeOrderType={changeOrderType} />
