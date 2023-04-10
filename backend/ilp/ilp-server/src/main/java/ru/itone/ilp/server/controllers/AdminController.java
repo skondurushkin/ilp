@@ -115,18 +115,7 @@ public class AdminController extends LinkResolver implements AdminApi {
     @Override
     public ResponseEntity<String> downloadBalanceCsv() {
         try {
-            Path balance = walletService.buildBalanceCsv();
-            try {
-                FileUtils.forceDeleteOnExit(balance.toFile());
-                return ResponseEntity.ok(Files.readString(balance, StandardCharsets.UTF_8));
-            } finally {
-                try {
-                    Files.deleteIfExists(balance);
-                    log.debug("Deleted {}", balance);
-                } catch (IOException ex) {
-                    log.warn("Could not delete file {}", balance, ex);
-                }
-            }
+            return makeResponse(walletService.buildBalanceCsv());
         } catch (IOException e) {
             throw new RuntimeException(String.format("Не удалось создать отчет. Ошибка: %s", e.getMessage()), e);
         }
@@ -134,8 +123,27 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<String> downloadWriteOffsCsv() {
-        return downloadBalanceCsv();
+        try {
+            return makeResponse(walletService.buildWriteOffCsv());
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Не удалось создать отчет. Ошибка: %s", e.getMessage()), e);
+        }
     }
+
+    private ResponseEntity<String> makeResponse(Path report) throws IOException {
+        try {
+            FileUtils.forceDeleteOnExit(report.toFile());
+            return ResponseEntity.ok(Files.readString(report, StandardCharsets.UTF_8));
+        } finally {
+            try {
+                Files.deleteIfExists(report);
+                log.debug("Deleted {}", report);
+            } catch (IOException ex) {
+                log.warn("Could not delete file {}", report, ex);
+            }
+        }
+    }
+
 
     @Override
     public ResponseEntity<ProfileResponseForAdmin> getProfileByIdAsAdmin(Integer userId) {

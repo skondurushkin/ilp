@@ -288,6 +288,31 @@ public class WalletService {
         return balance_csv;
     }
 
+    @Transactional(readOnly = true)
+    public Path buildWriteOffCsv() throws IOException {
+        Path balance_csv = Files.createTempFile("writeOff_csv", null);
+        Writer sw = new FileWriterWithEncoding(balance_csv.toString(), StandardCharsets.UTF_8);
+        CSVFormat format = CSVFormat.DEFAULT.builder()
+                .setHeader("Время", "email", "Название", "Код", "Баллы")
+                .build();
+        List<Operation> operations = this.dbJpa.getOperationRepository()
+                .selectWriteOffs(Sort.by(Direction.ASC, "instant"));
+        try (CSVPrinter printer = new CSVPrinter(sw, format)) {
+            List<String> record = new ArrayList<>();
+            for (Operation operation : operations) {
+                record.clear();
+
+                record.add(operation.getInstant().toString());
+                record.add(operation.getUser().getEmail());
+                record.add(operation.getName());
+                record.add(operation.getWriteOff().getArticle().getCode());
+                record.add(operation.getAmount().toString());
+                printer.printRecord(record);
+            }
+        }
+        return balance_csv;
+    }
+
     private static String toOpType(OperationType type) {
         if (type == null)
             return StringUtils.EMPTY;
