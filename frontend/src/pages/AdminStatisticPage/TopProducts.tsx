@@ -59,13 +59,7 @@ export const TopProducts = ({ period }: { period: 'day' | 'all' }) => {
                         onClick={() => {
                             setSort(sort == 'ASC' ? 'DESC' : 'ASC');
                         }}
-                        className="
-                    cursor-pointer
-                    border-none
-                    bg-none
-                    p-0
-                    outline-none
-"
+                        className="cursor-pointer border-none bg-none p-0 outline-none"
                     >
                         <span className="flex">
                             Заказы

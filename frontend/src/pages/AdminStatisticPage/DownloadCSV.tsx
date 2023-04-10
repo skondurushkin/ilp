@@ -13,9 +13,13 @@ export const DownloadBalanceCsvButton = () => {
         },
         {
             onSuccess: (data) => {
-                saveAs(data, `Выгрузка по движению балансов от ${new Date().toLocaleDateString('ru-RU')}.csv`, {
-                    autoBom: true,
-                });
+                saveAs(
+                    new Blob([data], { type: 'text/csv;charset=utf-8' }),
+                    `Выгрузка по движению балансов от ${new Date().toLocaleDateString('ru-RU')}.csv`,
+                    {
+                        autoBom: true,
+                    },
+                );
             },
             onError: (err: ErrorMessage) => {
                 toast.error(err?.message ?? 'Ошибка');
