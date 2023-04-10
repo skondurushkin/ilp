@@ -2,6 +2,8 @@ package ru.itone.ilp.services.articles;
 
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,15 +23,20 @@ import ru.itone.ilp.openapi.model.ArticleRequest;
 import ru.itone.ilp.openapi.model.ArticleResponse;
 import ru.itone.ilp.openapi.model.ArticleUpdateRequest;
 import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest.PeriodEnum;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
+import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
 import ru.itone.ilp.persistence.api.DbApi.DbApiException;
 import ru.itone.ilp.persistence.entities.Article;
+import ru.itone.ilp.persistence.mappers.ActivityMapper;
 import ru.itone.ilp.persistence.mappers.ArticleMapper;
 import ru.itone.ilp.persistence.mappers.PageRequestMapper;
+import ru.itone.ilp.persistence.repositories.ActivityRepository.TopActivity;
 import ru.itone.ilp.persistence.repositories.ArticleRepository;
+import ru.itone.ilp.persistence.repositories.ArticleRepository.TopArticle;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -121,16 +128,27 @@ public class ArticleService {
     public static ArticleResponse toResponse(Article article) {
         return ArticleMapper.INSTANCE.articleToResponse(article);
     }
+
     public static PaginatedArticleResponse toPaginatedResponse(Page<Article> page) {
         return ArticleMapper.INSTANCE.toPaginatedResponse(page);
     }
 
+    public static PaginatedArticleStatisticResponse toPaginatedStatisticResponse(Page<TopArticle> page) {
+        return ArticleMapper.INSTANCE.toPaginatedStatisticResponse(page);
+    }
+
     public PaginatedArticleStatisticResponse topArticlesPaginated(BrowseStatisticArticlesRequest request) {
-        return new PaginatedArticleStatisticResponse()
-                .total(0)
-                .pageSize(request.getPageSize())
-                .hasNext(false)
-                .hasPrev(false)
-                .results(Collections.emptyList());
+        Sort defaultSort = Sort.by(Direction.DESC, "count");
+        PageRequest pageRequest = new PageRequest().page(request.getPage()).pageSize(request.getPageSize()).config(request.getConfig());
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, defaultSort);
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+        LocalDateTime end = LocalDateTime.of(3000, 1, 1, 0, 0, 0);
+        if (request.getPeriod() == PeriodEnum.DAY) {
+            start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+            end = start.plus(1, ChronoUnit.DAYS);
+        }
+        Page<TopArticle> page = articleRepository.findTop(start, end, pageable);
+
+        return toPaginatedStatisticResponse(page);
     }
 }
