@@ -17,6 +17,8 @@ type UsersChip = 'day' | 'all';
 
 export function AdminStatisticPage() {
     const [balanceChip, setBalanceChip] = useState<BalanceChip>('day');
+    const [productsChip, setProductsChip] = useState<UsersChip>('day');
+    const [activitiesChip, setActivitiesChip] = useState<UsersChip>('day');
     const [usersChip, setUsersChip] = useState<UsersChip>('day');
     const [focused, setFocused] = useState({
         activeSeriesIndex: -1,
@@ -75,6 +77,7 @@ export function AdminStatisticPage() {
         <div className="flex flex-col gap-8">
             <div className="text-h1">Статистика</div>
             <div className="flex flex-col gap-4">
+                <div className="text-h2 pl-2">Движение вольт по балансу пользователей</div>
                 <div className="flex gap-2 pl-2 ">
                     <Chips
                         options={
@@ -89,7 +92,6 @@ export function AdminStatisticPage() {
                     />
                     {<DownloadBalanceCsvButton />}
                 </div>
-                <div className="text-h2 pl-2">Движение вольт по балансу пользователей</div>
                 {isLoadingBalance && <Spinner />}
                 <div className="bg-black">
                     {!balanceData && noData}
@@ -120,7 +122,7 @@ export function AdminStatisticPage() {
                             />
                         </div>
                     )}
-                    <div className="">
+                    <div>
                         <div className="flex-column py-4 pl-6">
                             <div className="text-white">
                                 <div className="bg-primary inline-block h-4 w-4 rounded-full" /> - Начисления
@@ -133,46 +135,72 @@ export function AdminStatisticPage() {
                 </div>
             </div>
             <div className="flex flex-col gap-4">
-                <div className="flex gap-2 p-2">
-                    <Chips
-                        options={
-                            [
-                                { value: 'day', label: 'день' },
-                                { value: 'all', label: 'всё время' },
-                            ] as const
-                        }
-                        value={usersChip}
-                        onChange={setUsersChip}
-                    />
+                <div>
+                    <div className="text-h2 l pl-2">Топ товаров</div>
+                    <div className="flex gap-2 p-2">
+                        <Chips
+                            options={
+                                [
+                                    { value: 'day', label: 'день' },
+                                    { value: 'all', label: 'всё время' },
+                                ] as const
+                            }
+                            value={productsChip}
+                            onChange={setProductsChip}
+                        />
+                    </div>
+                    <TopProducts period={productsChip} />
                 </div>
                 <div>
-                    <div className="text-h2 l pl-2 leading-4">Топ товаров</div>
-                    <TopProducts period={usersChip} />
+                    <div className="text-h2 pl-2">Топ активностей</div>
+                    <div className="flex gap-2 p-2">
+                        <Chips
+                            options={
+                                [
+                                    { value: 'day', label: 'день' },
+                                    { value: 'all', label: 'всё время' },
+                                ] as const
+                            }
+                            value={activitiesChip}
+                            onChange={setActivitiesChip}
+                        />
+                    </div>
+                    <TopActivities period={activitiesChip} />
                 </div>
-                <div>
-                    <div className="text-h2 pl-2 leading-4">Топ активностей</div>
-                    <TopActivities period={usersChip} />
-                </div>
-                <div className="text-h2 pl-2">Статистика входов посетителей</div>
-                <div className="bg-black py-1">
-                    {isLoadingUsers && <Spinner />}
-                    {!usersData && noData}
-                    {usersData && (
-                        <div className="m-2 h-[40vh]">
-                            <Chart
-                                options={{
-                                    data: [usersData],
-                                    primaryAxis,
-                                    secondaryAxes,
-                                    dark: true,
-                                    tooltip: false,
-                                    getSeriesStyle: () => ({
-                                        color: '#AAE632',
-                                    }),
-                                }}
-                            />
-                        </div>
-                    )}
+                <div className="flex flex-col gap-2">
+                    <div className="text-h2 pl-2">Статистика входов посетителей</div>
+                    <div className="flex gap-2 p-2">
+                        <Chips
+                            options={
+                                [
+                                    { value: 'day', label: 'день' },
+                                    { value: 'all', label: 'всё время' },
+                                ] as const
+                            }
+                            value={usersChip}
+                            onChange={setUsersChip}
+                        />
+                    </div>
+                    <div className="bg-black py-1">
+                        {isLoadingUsers && <Spinner />}
+                        {!usersData && noData}
+                        {usersData && (
+                            <div className="m-2 h-[40vh]">
+                                <Chart
+                                    options={{
+                                        data: [usersData],
+                                        primaryAxis,
+                                        secondaryAxes,
+                                        dark: true,
+                                        tooltip: false,
+                                        getSeriesStyle: () => ({
+                                            color: '#AAE632',
+                                        }),
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
