@@ -32,7 +32,7 @@ export function CreateOrderButton(props: CreateOrderButtonProps): ReactElement {
     }
 
     if (availability === 'no-tokens') {
-        return <Button disabled>Недостаточно баллов</Button>;
+        return <Button disabled>Недостаточно вольт</Button>;
     }
 
     return (
