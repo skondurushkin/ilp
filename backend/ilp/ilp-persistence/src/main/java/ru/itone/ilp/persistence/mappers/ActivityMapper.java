@@ -59,6 +59,7 @@ public interface ActivityMapper {
                 .setInfoLink(top.getInfo_link())
                 .setExtension(top.getExtension());
     }
+
     default ActivityStatisticResponse activityToStatisticResponse(TopActivity top) {
         Activity activity = topToActivity(top);
         return new ActivityStatisticResponse()
