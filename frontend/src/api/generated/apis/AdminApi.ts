@@ -24,6 +24,7 @@ import type {
     ErrorMessage,
     PageRequest,
     PaginatedActivitiesStatisticResponse,
+    PaginatedActivityResponse,
     PaginatedArticleResponse,
     PaginatedArticleStatisticResponse,
     PaginatedOperationResponse,
@@ -54,6 +55,8 @@ import {
     PageRequestToJSON,
     PaginatedActivitiesStatisticResponseFromJSON,
     PaginatedActivitiesStatisticResponseToJSON,
+    PaginatedActivityResponseFromJSON,
+    PaginatedActivityResponseToJSON,
     PaginatedArticleResponseFromJSON,
     PaginatedArticleResponseToJSON,
     PaginatedArticleStatisticResponseFromJSON,
@@ -75,6 +78,10 @@ import {
     WriteOffResponseFromJSON,
     WriteOffResponseToJSON,
 } from '../models';
+
+export interface BrowseActivitiesAsAdminRequest {
+    pageRequest?: PageRequest;
+}
 
 export interface BrowseArticlesForAdminRequest {
     pageRequest: PageRequest;
@@ -143,6 +150,52 @@ export interface UpdateWriteOffOperationRequest {
  *
  */
 export class AdminApi extends runtime.BaseAPI {
+    /**
+     * paginated activities view
+     */
+    async browseActivitiesAsAdminRaw(
+        requestParameters: BrowseActivitiesAsAdminRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedActivityResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token('bearerAuth', []);
+
+            if (tokenString) {
+                headerParameters['Authorization'] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request(
+            {
+                path: `/api/ilp/admin/activities`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: PageRequestToJSON(requestParameters.pageRequest),
+            },
+            initOverrides,
+        );
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedActivityResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * paginated activities view
+     */
+    async browseActivitiesAsAdmin(
+        requestParameters: BrowseActivitiesAsAdminRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedActivityResponse> {
+        const response = await this.browseActivitiesAsAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
     /**
      * paginated articles view
      */

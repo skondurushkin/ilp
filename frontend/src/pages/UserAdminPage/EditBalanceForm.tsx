@@ -47,7 +47,7 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
         }
     };
     const { mutateAsync: browseActivities } = useMutation(['activity.browseActivities'], (config: PageRequestConfig) =>
-        api.activity.browseActivities({
+        api.admin.browseActivitiesAsAdmin({
             pageRequest: {
                 page: 0,
                 pageSize: 20,
