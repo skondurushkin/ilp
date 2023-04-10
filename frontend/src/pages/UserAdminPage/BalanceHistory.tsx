@@ -1,4 +1,5 @@
 import { CancelAccrualForm, CancelAccrualFormData } from './CancelAccrualForm';
+import { GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY, PROFILE_BY_ID_AS_ADMIN_QUERY_KEY } from '../../modules/admin';
 import { OperationResponse, OperationResponseTypeEnum, PageRequest, api } from '../../api';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -6,7 +7,6 @@ import { AdminTable } from '../../components/AdminTable';
 import { Button } from '../../components/Button';
 import type { ColumnDef } from '@tanstack/react-table';
 import { EditBalanceForm } from './EditBalanceForm';
-import { GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY } from '../../modules/admin';
 import Modal from '../../components/Modal';
 import { ReactComponent as XSquareVG } from '../../assets/x-square.svg';
 import { Zaps } from '../../components/Zaps';
@@ -115,7 +115,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                 <Modal.Body>
                     {!!cancelAccrualModalData && (
                         <CancelAccrualForm
-                            queryKey={GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY}
+                            queryKey={[GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY, PROFILE_BY_ID_AS_ADMIN_QUERY_KEY]}
                             values={cancelAccrualModalData}
                             userId={userId}
                             closeModal={() => setCancelAccrualModalData(null)}
@@ -133,7 +133,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                     {!!editBalanceModalIsVisible && (
                         <EditBalanceForm
                             userId={userId}
-                            queryKey={GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY}
+                            queryKey={[GET_WALLET_HISTORY_FOR_USER_ID_QUERY_KEY, PROFILE_BY_ID_AS_ADMIN_QUERY_KEY]}
                             closeModal={() => setEditBalanceModalIsVisible(false)}
                         />
                     )}

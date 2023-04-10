@@ -1,5 +1,4 @@
 import { ErrorMessage, PageRequestConfig, api } from '../../api';
-import { useMutation, useQueryClient } from 'react-query';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { FormAsyncSelect } from '../../components/Form/FormAsyncSelect';
@@ -7,11 +6,13 @@ import { FormInput } from '../../components/Form';
 import debounce from 'debounce-promise';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { useInvalidateQueriesArray } from '../../components/useInvalidateQueriesArray';
+import { useMutation } from 'react-query';
 import validationRules from '../../utils/validationRules';
 
 export interface EditBalanceFormProps {
     userId: number;
-    queryKey: string;
+    queryKey: string | string[];
     closeModal: () => void;
 }
 
@@ -25,7 +26,7 @@ export interface FormData {
 
 export const EditBalanceForm = (props: EditBalanceFormProps) => {
     const { userId, closeModal, queryKey } = props;
-    const queryClient = useQueryClient();
+    const { invalidateQueries } = useInvalidateQueriesArray();
 
     const { control, handleSubmit, formState, reset, setValue } = useForm<FormData>();
 
@@ -37,7 +38,7 @@ export const EditBalanceForm = (props: EditBalanceFormProps) => {
                     activityId: Number(data.activity.value),
                 },
             });
-            await queryClient.invalidateQueries(queryKey);
+            await invalidateQueries(queryKey);
             reset();
             toast.success('Вольты начислены');
             closeModal();

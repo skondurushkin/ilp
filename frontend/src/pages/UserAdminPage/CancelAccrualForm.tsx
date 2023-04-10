@@ -4,7 +4,7 @@ import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import { FormInput } from '../../components/Form';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
+import { useInvalidateQueriesArray } from '../../components/useInvalidateQueriesArray';
 import validationRules from '../../utils/validationRules';
 
 export interface CancelAccrualFormData extends Omit<OperationResponse, 'type' | 'date' | 'active'> {
@@ -13,14 +13,14 @@ export interface CancelAccrualFormData extends Omit<OperationResponse, 'type' | 
 
 export interface CancelAccrualFormProps {
     userId: number;
-    queryKey: string;
+    queryKey: string | string[];
     closeModal: () => void;
     values: CancelAccrualFormData;
 }
 
 export const CancelAccrualForm = (props: CancelAccrualFormProps) => {
     const { userId, values, closeModal, queryKey } = props;
-    const queryClient = useQueryClient();
+    const { invalidateQueries } = useInvalidateQueriesArray();
 
     const { control, handleSubmit, formState, reset } = useForm<CancelAccrualFormData>({
         values,
@@ -34,7 +34,7 @@ export const CancelAccrualForm = (props: CancelAccrualFormProps) => {
                     accrualId: Number(data.id),
                 },
             });
-            await queryClient.invalidateQueries(queryKey);
+            await invalidateQueries(queryKey);
             reset();
             toast.success('Начисление отменено');
             closeModal();
