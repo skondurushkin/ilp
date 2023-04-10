@@ -1,6 +1,7 @@
 import { ReactElement, useState } from 'react';
 
 import { ImageSkeleton } from './Skeleton';
+import { Img } from './Img';
 import { VerticalBrackets } from './VerticalBrackets';
 import { twMerge } from 'tailwind-merge';
 import useUpdateEffect from 'react-use/lib/useUpdateEffect';
@@ -29,7 +30,7 @@ export function ProductImage(props: ProductImageProps): ReactElement {
             <VerticalBrackets size="4" className="absolute left-0 top-0 h-full w-full">
                 <div className={twMerge('h-full w-full', imageClassName)}>
                     {isPlaceholder && <ImageSkeleton className="h-full w-full rounded-none" />}
-                    <img
+                    <Img
                         className={twMerge(
                             'h-full w-full object-contain',
                             isPlaceholder && 'absolute left-0 top-0 opacity-0',

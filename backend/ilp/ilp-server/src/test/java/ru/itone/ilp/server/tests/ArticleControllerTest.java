@@ -31,7 +31,9 @@ class ArticleControllerTest extends AbstractServerTest {
                 )
                 .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
         log.info("RESPONSE: {}", content);
-        assertEquals("https://loyalty.devtst.ru/api/ilp/file/article/test-nothing-0001.png",
+//        assertEquals("https://loyalty.devtst.ru/api/ilp/file/article/test-nothing-0001.png",
+//                objectMapper.readValue(content, ArticleResponse.class).getImageLink());
+        assertEquals("article/test-nothing-0001.png",
                 objectMapper.readValue(content, ArticleResponse.class).getImageLink());
     }
 }

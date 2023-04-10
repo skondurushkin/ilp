@@ -16,7 +16,7 @@ export const ActivitiesAdminPage = () => {
     const [removeActivityModalData, setRemoveActivityModalData] = useState<DeleteActivityData | null>(null);
 
     const queryData = useCallback((pageRequest: PageRequest) => {
-        return api.activity.browseActivities({
+        return api.admin.browseActivitiesAsAdmin({
             pageRequest,
         });
     }, []);

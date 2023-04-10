@@ -23,9 +23,11 @@ export const useQuerySearchProfileAsAdmin = (searchKey: SearchProfileAsAdminRequ
     });
 };
 
+export const PROFILE_BY_ID_AS_ADMIN_QUERY_KEY = 'admin.getProfileByIdAsAdmin';
+
 export const useQueryProfileByIdAsAdmin = (requestParameters: GetProfileByIdAsAdminRequest) => {
     return useQuery(
-        ['api.admin.getProfileByIdAsAdmin', requestParameters],
+        [PROFILE_BY_ID_AS_ADMIN_QUERY_KEY, requestParameters],
         () => api.admin.getProfileByIdAsAdmin(requestParameters),
         {
             retry: false,

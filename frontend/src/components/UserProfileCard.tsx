@@ -1,4 +1,5 @@
 import { ReactComponent as EditSVG } from '../assets/edit.svg';
+import { Img } from './Img';
 import { Link } from 'react-router-dom';
 import { TypedLink } from '../router';
 
@@ -43,7 +44,7 @@ export const UserProfileCard = (props: UserProfileCardProps) => {
                         userId: id.toString(),
                     }}
                 >
-                    <img src={avatarLink} alt={fio} className="h-full w-full bg-black object-contain" />
+                    <Img src={avatarLink} alt={fio ?? 'Аватар'} className="h-full w-full bg-black object-contain" />
                 </TypedLink>
                 <div className="flex flex-col justify-between">
                     <div className="flex flex-col gap-1">
