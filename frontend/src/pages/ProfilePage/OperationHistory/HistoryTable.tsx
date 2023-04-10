@@ -12,11 +12,12 @@ import useUpdateEffect from 'react-use/lib/useUpdateEffect';
 export interface HistoryTableProps<T> {
     columns: ColumnDef<T>[];
     data: TypedPaginatedResult<T>;
+    isFetching?: boolean;
     onChangePage: (page: number) => void;
 }
 
 export function HistoryTable<T>(props: HistoryTableProps<T>): ReactElement {
-    const { data, columns, onChangePage } = props;
+    const { data, columns, isFetching, onChangePage } = props;
 
     const { results: history, page: currentPage, total: pageCount, pageSize } = data;
     const [pagination, setPagination] = useState({ pageIndex: currentPage, pageSize });
@@ -35,7 +36,7 @@ export function HistoryTable<T>(props: HistoryTableProps<T>): ReactElement {
         onPaginationChange: setPagination,
     });
 
-    return <Table fixed table={table} />;
+    return <Table fixed table={table} isFetching={isFetching} />;
 }
 
 export function HistoryTableSkeleton(): ReactElement {
