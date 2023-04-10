@@ -1,8 +1,10 @@
 package ru.itone.ilp.persistence.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,5 +18,8 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     @Query("select op.accrual.id from Operation op where op.id = :operationId and op.type = 'accrual'")
     Optional<Long> getAccrualId(@Param("operationId") Long operationId);
+
+    @Query("select op from Operation op where op.type = 'writeOff'")
+    List<Operation> selectWriteOffs(Sort sort);
 
 }
