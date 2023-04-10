@@ -27,12 +27,12 @@ export const ProductsAdminPage = () => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>УН</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Наименование</span>,
+                header: () => <span>наименование</span>,
                 cell: (info) => {
                     const { description, name } = info.row.original;
                     return (
@@ -45,12 +45,12 @@ export const ProductsAdminPage = () => {
             },
             {
                 accessorKey: 'code',
-                header: () => <span>Артикул</span>,
+                header: () => <span>артикул</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'price',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => {
                     const { price } = info.row.original;
                     return <Zaps length={5} amount={price} />;
@@ -58,7 +58,7 @@ export const ProductsAdminPage = () => {
             },
             {
                 accessorKey: 'actions',
-                header: () => <span>Действия</span>,
+                header: () => <span>действия</span>,
                 cell: (info) => {
                     const { id, name, active } = info.row.original;
 

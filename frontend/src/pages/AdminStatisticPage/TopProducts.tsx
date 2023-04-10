@@ -21,13 +21,13 @@ export const TopProducts = ({ period }: { period: 'day' | 'all' }) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>УН</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
                 enableSorting: false,
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Наименование</span>,
+                header: () => <span>наименование</span>,
                 cell: (info) => {
                     const { description, name } = info.row.original;
                     return (
@@ -41,13 +41,13 @@ export const TopProducts = ({ period }: { period: 'day' | 'all' }) => {
             },
             {
                 accessorKey: 'code',
-                header: () => <span>Артикул</span>,
+                header: () => <span>артикул</span>,
                 cell: (info) => info.getValue(),
                 enableSorting: false,
             },
             {
                 accessorKey: 'price',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => info.getValue(),
                 enableSorting: false,
             },

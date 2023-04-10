@@ -31,12 +31,12 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>УН</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'date',
-                header: () => <span>Дата</span>,
+                header: () => <span>дата</span>,
                 cell: (info) => {
                     const { date } = info.row.original;
                     return date ? <p>{new Date(date).toLocaleDateString('ru-RU')}</p> : null;
@@ -44,7 +44,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Действие</span>,
+                header: () => <span>действие</span>,
                 cell: (info) => {
                     const { name } = info.row.original;
 
@@ -53,7 +53,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
             },
             {
                 accessorKey: 'amount',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => {
                     const { amount, type } = info.row.original;
                     return <Zaps length={5} amount={amount} type={type} />;
@@ -61,7 +61,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
             },
             {
                 accessorKey: 'actions',
-                header: () => <span>Действия</span>,
+                header: () => <span>действия</span>,
                 cell: (info) => {
                     const { id, amount, name, type, date, active } = info.row.original;
 

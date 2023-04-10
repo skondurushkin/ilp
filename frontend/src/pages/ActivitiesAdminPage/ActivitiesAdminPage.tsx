@@ -25,12 +25,12 @@ export const ActivitiesAdminPage = () => {
         () => [
             {
                 accessorKey: 'id',
-                header: () => <span>УН</span>,
+                header: () => <span>ун</span>,
                 cell: (info) => info.getValue(),
             },
             {
                 accessorKey: 'name',
-                header: () => <span>Название</span>,
+                header: () => <span>название</span>,
                 cell: (info) => {
                     const { infoLink, name } = info.row.original;
                     return (
@@ -50,7 +50,7 @@ export const ActivitiesAdminPage = () => {
             },
             {
                 accessorKey: 'amount',
-                header: () => <span>Стоимость</span>,
+                header: () => <span>стоимость</span>,
                 cell: (info) => {
                     const { amount } = info.row.original;
                     return <Zaps length={5} amount={amount} />;
@@ -58,7 +58,7 @@ export const ActivitiesAdminPage = () => {
             },
             {
                 accessorKey: 'startDate',
-                header: () => <span>Дата</span>,
+                header: () => <span>дата</span>,
                 cell: (info) => {
                     const { startDate, endDate, active } = info.row.original;
                     return (
@@ -73,7 +73,7 @@ export const ActivitiesAdminPage = () => {
             },
             {
                 accessorKey: 'actions',
-                header: () => <span>Действия</span>,
+                header: () => <span>действия</span>,
                 cell: (info) => {
                     const { id, name, active } = info.row.original;
 
