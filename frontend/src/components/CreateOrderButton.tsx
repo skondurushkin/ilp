@@ -4,6 +4,7 @@ import { ReactElement, useState } from 'react';
 import { ArticleResponse } from '../api';
 import { Button } from './Button';
 import Modal from './Modal';
+import { plural } from '../utils/plural';
 import { useCreateOrderMutation } from '../modules/loyalty';
 
 export interface CreateOrderButtonProps {
@@ -69,7 +70,10 @@ function OrderConfirmation(props: OrderConfirmationProps): ReactElement {
     return (
         <div className="flex flex-col sm:items-center sm:text-center">
             <div className="text-h2">Подтверждаете приобретение?</div>
-            <div className="text mt-6 md:mt-8">С вашего баланса будет списано {product.price} вольт.</div>
+            <div className="text mt-6 md:mt-8">
+                С вашего баланса будет {plural(product.price, ['списан', 'списано', 'списано'])} {product.price}{' '}
+                {plural(product.price, ['вольт', 'вольта', 'вольт'])}.
+            </div>
             <div className="mt-6 flex flex-col gap-4 sm:w-1/2 sm:flex-row md:mt-8 md:w-full md:gap-6 md:px-12">
                 <Button className="sm:grow" primary onClick={onConfirm}>
                     Да, заказать
