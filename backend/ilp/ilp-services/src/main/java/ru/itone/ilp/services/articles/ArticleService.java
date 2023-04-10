@@ -66,7 +66,7 @@ public class ArticleService {
     @Transactional
     public ArticleResponse createArticle(ArticleRequest request) {
         if (articleRepository.exists(Example.of(new Article().setCode(request.getCode()), codeMatcher))) {
-            String message = String.format("Артикул '%s' уже используется", request.getName());
+            String message = String.format("Артикул '%s' уже используется", request.getCode());
             log.error("Невозможно создать запись: {}", message);
             throw new ApiExceptions.ConflictException(message);
         }
