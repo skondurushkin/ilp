@@ -55,10 +55,6 @@ html {
         @apply disabled:text-gray  bg-white p-4 text-center text-sm leading-[110%] text-black transition-shadow duration-300 hover:shadow-[0_4px_4px_rgba(0,0,0,0.25)] focus:outline-none active:shadow-none dark:hover:shadow-[0_4px_4px_rgba(170,230,50,0.25)] md:text-base;
     }
 
-    .btn-secondary {
-        @apply border-transparent-0% hover:border-primary border-2;
-    }
-
     .btn-table-text {
         @apply text-primary text-base transition-colors duration-300 hover:text-white;
     }
