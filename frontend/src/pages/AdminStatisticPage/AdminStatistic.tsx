@@ -78,8 +78,8 @@ export function AdminStatisticPage() {
         <div className="flex flex-col gap-8">
             <div className="text-h1">Статистика</div>
             <div className="flex flex-col gap-4">
-                <div className="text-h2 pl-2">Движение вольт по балансу пользователей</div>
-                <div className="flex gap-2 pl-2 ">
+                <div className="text-h2">Движение вольт по балансу пользователей</div>
+                <div className="flex gap-2">
                     <Chips
                         options={
                             [
@@ -140,8 +140,8 @@ export function AdminStatisticPage() {
             </div>
             <div className="flex flex-col gap-4">
                 <div>
-                    <div className="text-h2 l pl-2">Топ товаров</div>
-                    <div className="flex gap-2 p-2">
+                    <div className="text-h2">Топ товаров</div>
+                    <div className="flex gap-2 p-2 pl-0">
                         <Chips
                             options={
                                 [
@@ -156,8 +156,8 @@ export function AdminStatisticPage() {
                     <TopProducts period={productsChip} />
                 </div>
                 <div>
-                    <div className="text-h2 pl-2">Топ активностей</div>
-                    <div className="flex gap-2 p-2">
+                    <div className="text-h2">Топ активностей</div>
+                    <div className="flex gap-2 p-2 pl-0">
                         <Chips
                             options={
                                 [
@@ -172,8 +172,8 @@ export function AdminStatisticPage() {
                     <TopActivities period={activitiesChip} />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <div className="text-h2 pl-2">Статистика входов посетителей</div>
-                    <div className="flex gap-2 p-2">
+                    <div className="text-h2">Статистика входов посетителей</div>
+                    <div className="flex gap-2 p-2 pl-0">
                         <Chips
                             options={
                                 [
