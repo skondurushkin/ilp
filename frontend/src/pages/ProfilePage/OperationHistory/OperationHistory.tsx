@@ -31,12 +31,8 @@ export function OperationHistory(props: OperationHistoryProps): ReactElement {
 
     // подготавливаем параметры
     const [params, setParams] = useState({ operationType, page: 0 });
-    useUpdateEffect(() => {
-        setParams({ operationType, page: 0 });
-    }, [operationType]);
-    const changePage = (p: number) => {
-        setParams({ operationType, page: p });
-    };
+    useUpdateEffect(() => setParams({ operationType, page: 0 }), [operationType]);
+    const changePage = (p: number) => setParams({ operationType, page: p });
 
     // подготавливаем query, но пока не запускаем их
     const accrualHistoryQuery = useAccrualsHistoryQuery(params.operationType === 'accrual' ? params.page : 0, {
@@ -57,7 +53,9 @@ export function OperationHistory(props: OperationHistoryProps): ReactElement {
     // запоминаем предыдущий успешный query. он нам нужен, чтобы его рендерить, пока актуальный грузится
     const prevSuccessResult = usePrevSuccessResult(result);
 
-    // запуск актуального query происходит только тут
+    // запуск актуального query происходит только тут.
+    // почему-то хук вызывается два раза, до того как юзер начинает взаимодействовать с компонентом.
+    // я не понял почему
     useEffect(() => {
         result.query.refetch();
     }, [params]);
@@ -70,14 +68,7 @@ export function OperationHistory(props: OperationHistoryProps): ReactElement {
             dataElement = <HistoryView history={prevSuccessResult} isFetching />;
         }
     } else {
-        dataElement = (
-            <HistoryView
-                history={result}
-                onChangePage={(p) => {
-                    changePage(p);
-                }}
-            />
-        );
+        dataElement = <HistoryView history={result} onChangePage={changePage} />;
     }
 
     return (
@@ -146,7 +137,7 @@ function useAccrualColumns() {
                 header: 'сумма действия',
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <AmountCell amount={amount} />;
+                    return <AmountCell type={OperationResponseTypeEnum.Accrual} amount={amount} />;
                 },
                 size: 160,
             },
@@ -186,7 +177,7 @@ function useWriteOffColumns() {
                 header: 'сумма действия',
                 cell: (info) => {
                     const { amount } = info.row.original;
-                    return <AmountCell amount={amount} />;
+                    return <AmountCell type={OperationResponseTypeEnum.WriteOff} amount={amount} />;
                 },
                 size: 160,
             },
@@ -209,19 +200,15 @@ function usePrevSuccessResult(
 }
 
 interface AmountCellProps {
+    type: OperationResponseTypeEnum;
     amount: number;
 }
 
 function AmountCell(props: AmountCellProps): ReactElement {
-    const { amount } = props;
+    const { type, amount } = props;
     return (
         <div className="justify-end sm:flex sm:pr-2">
-            <Zaps
-                className="items-baseline font-bold"
-                type={OperationResponseTypeEnum.Accrual}
-                amount={amount}
-                length={5}
-            />
+            <Zaps className="items-baseline font-bold" type={type} amount={amount} length={5} />
         </div>
     );
 }

@@ -1,9 +1,10 @@
 import type { ColumnDef, HeaderContext, RowData } from '@tanstack/table-core';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { Skeleton, SkeletonContainer } from '../../../components/Skeleton';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Table, TableProps } from '../../../components/Table';
 import { flexRender, useReactTable } from '@tanstack/react-table';
+import { functionalUpdate, getCoreRowModel } from '@tanstack/table-core';
 
 import { Box } from '../../../components/Box';
 import { DataNotFound } from '../../../components/DataNotFound';
@@ -11,9 +12,7 @@ import { SimpleTablePagination } from '../../../components/TablePagination';
 import { Spinner } from '../../../components/Spinner';
 import { TypedPaginatedResult } from '../../../api';
 import { colors } from '../../../../colors';
-import { getCoreRowModel } from '@tanstack/table-core';
 import { useIsXsScreen } from '../../../components/useBreakpoint';
-import useUpdateEffect from 'react-use/lib/useUpdateEffect';
 
 export interface HistoryTableProps<T> {
     columns: ColumnDef<T>[];
@@ -33,11 +32,7 @@ export function HistoryTable<T>(props: HistoryTableProps<T>): ReactElement {
     const pageCount = data ? data.total : 0;
     const pageSize = data ? data.pageSize : 0;
 
-    const [pagination, setPagination] = useState({ pageIndex: currentPage, pageSize });
-
-    useUpdateEffect(() => {
-        onChangePage && onChangePage(pagination.pageIndex);
-    }, [pagination, onChangePage]);
+    const pagination = useMemo(() => ({ pageIndex: currentPage, pageSize }), [currentPage, pageSize]);
 
     const table = useReactTable({
         columns,
@@ -46,7 +41,13 @@ export function HistoryTable<T>(props: HistoryTableProps<T>): ReactElement {
         state: { pagination },
         manualPagination: true,
         getCoreRowModel: getCoreRowModel(),
-        onPaginationChange: setPagination,
+        onPaginationChange: (updater) => {
+            if (onChangePage == undefined) {
+                return;
+            }
+            const newPagination = functionalUpdate(updater, pagination);
+            onChangePage(newPagination.pageIndex);
+        },
     });
 
     let tableEl: ReactElement;
