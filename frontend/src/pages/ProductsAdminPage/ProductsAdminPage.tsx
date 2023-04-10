@@ -1,20 +1,22 @@
 import { ArticleResponse, PageRequest, api } from '../../api';
-import { useCallback, useMemo } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { DeleteProductData, DeleteProductForm } from './DeleteProductForm';
+import { useCallback, useMemo, useState } from 'react';
 
 import { AdminTable } from '../../components/AdminTable';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
+import Modal from '../../components/Modal';
 import { PRODUCTS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
 import { TypedLink } from '../../router';
 import { Zaps } from '../../components/Zaps';
-import { twMerge } from 'tailwind-merge';
 
 export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
 
 export const ProductsAdminPage = () => {
+    const [removeProductModalData, setRemoveProductModalData] = useState<DeleteProductData | null>(null);
+
     const queryData = useCallback((pageRequest: PageRequest) => {
         return api.admin.browseArticlesForAdmin({
             pageRequest,
@@ -58,23 +60,7 @@ export const ProductsAdminPage = () => {
                 accessorKey: 'actions',
                 header: () => <span>Действия</span>,
                 cell: (info) => {
-                    const { id, active } = info.row.original;
-                    const queryClient = useQueryClient();
-
-                    const { mutate: deleteArticle, isLoading: deleteIsLoading } = useMutation(
-                        () => {
-                            return api.article.deleteArticle({
-                                articleDeleteRequest: {
-                                    id,
-                                },
-                            });
-                        },
-                        {
-                            onSuccess: () => {
-                                queryClient.invalidateQueries(PRODUCTS_ADMIN_PAGE_QUERY_KEY);
-                            },
-                        },
-                    );
+                    const { id, name, active } = info.row.original;
 
                     if (active) {
                         return (
@@ -88,12 +74,16 @@ export const ProductsAdminPage = () => {
                                     <span className="text-small text-primary">Изменить</span>
                                 </TypedLink>
                                 <button
-                                    className={twMerge('flex items-center gap-2', deleteIsLoading && 'opacity-50')}
-                                    disabled={deleteIsLoading}
-                                    onClick={() => deleteArticle()}
+                                    className="flex items-center gap-2"
+                                    onClick={() =>
+                                        setRemoveProductModalData({
+                                            id,
+                                            name,
+                                        })
+                                    }
                                 >
                                     <TrashSVG className="stroke-primary h-4 w-4" />
-                                    <span className="text-small text-primary">Удалить</span>
+                                    <span className="text-small text-primary">Архивировать</span>
                                 </button>
                             </div>
                         );
@@ -125,6 +115,22 @@ export const ProductsAdminPage = () => {
                 queryData={queryData}
                 queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}
             />
+            <Modal
+                id="DeleteProductForm"
+                size="sm"
+                isOpen={!!removeProductModalData}
+                closeModal={() => setRemoveProductModalData(null)}
+            >
+                <Modal.Body>
+                    {!!removeProductModalData && (
+                        <DeleteProductForm
+                            defaultValues={removeProductModalData}
+                            queryKey={PRODUCTS_ADMIN_PAGE_QUERY_KEY}
+                            closeModal={() => setRemoveProductModalData(null)}
+                        />
+                    )}
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };

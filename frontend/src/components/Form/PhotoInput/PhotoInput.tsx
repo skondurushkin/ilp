@@ -71,7 +71,7 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
             />
             {field.value ? (
                 <InputButton onClick={() => field.onChange(null)}>
-                    <img alt="Продукт" src={field.value} className="h-full w-full object-contain" />
+                    <img alt="Товар" src={field.value} className="h-full w-full object-contain" />
                     <XSquareVG className="fill-error absolute-center h-6 w-6" />
                 </InputButton>
             ) : (
