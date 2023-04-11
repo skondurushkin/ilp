@@ -5,6 +5,7 @@ import { useQueryBalanceStatistic, useQueryUsersStatistic } from '../../modules/
 import type { AxisOptions } from 'react-charts';
 import { Chart } from 'react-charts';
 import { Chips } from '../../components/Chips';
+import { DataNotFound } from '../../components/DataNotFound';
 import { DownloadBalanceCsvButton } from './DownloadCSV';
 import { Spinner } from '../../components/Spinner';
 import { TopActivities } from './TopActivities';
@@ -72,8 +73,6 @@ export function AdminStatisticPage() {
         [],
     );
 
-    const noData = <div className="text-h2 py-10 text-center text-white">Нет данных для отображения</div>;
-
     let showBalanceStatistic = false;
     if (balanceData && balanceData.length > 0 && balanceData[0].data.length > 0 && balanceData[1].data.length > 0) {
         showBalanceStatistic = true;
@@ -105,7 +104,11 @@ export function AdminStatisticPage() {
                 </div>
                 {isLoadingBalance && <Spinner />}
                 <div className="bg-black">
-                    {!balanceData && noData}
+                    {!balanceData && (
+                        <div className="mb-6">
+                            <DataNotFound />
+                        </div>
+                    )}
                     {balanceData && showBalanceStatistic && (
                         <div className="m-2 h-[40vh]">
                             <Chart
@@ -201,7 +204,11 @@ export function AdminStatisticPage() {
                     </div>
                     <div className="bg-black py-1">
                         {isLoadingUsers && <Spinner />}
-                        {!usersData && noData}
+                        {!usersData && (
+                            <div className="mb-6">
+                                <DataNotFound />
+                            </div>
+                        )}
                         {usersData && showUsersStatistic && (
                             <div className="m-2 h-[40vh]">
                                 <Chart
