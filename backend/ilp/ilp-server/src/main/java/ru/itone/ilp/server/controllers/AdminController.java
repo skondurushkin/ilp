@@ -70,8 +70,7 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<List<BalanceStatisticResponseInner>> browseStatisticBalance(BalancePeriodRequest balancePeriodRequest) {
-        //return ResponseEntity.ok(Collections.emptyList());
-        throw new IllegalStateException("Not yet implemented");
+        return ResponseEntity.ok(walletService.getTimeSeries(balancePeriodRequest));
     }
 
     @Override

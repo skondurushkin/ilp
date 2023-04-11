@@ -1,12 +1,18 @@
 package ru.itone.ilp.misc;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Synchronized;
 
-public class Helpers {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public abstract class Helpers {
     public static <T> Stream<T> asStream(Iterable<T> it) {
         return StreamSupport.stream(it.spliterator(), false);
     }
@@ -19,7 +25,34 @@ public class Helpers {
         return asList(it, Function.identity());
     }
     public static <T,R> List<R> asList(Iterable<T> it, Function<T,R> mapper) {
-        return asStream(it).map(mapper).collect(Collectors.toList());
+        return asStream(it).map(mapper).toList();
     }
+
+
+    /**
+     * Кэшируем смещение TimeZone (lazy singleton)
+     */
+    private static volatile ZoneOffset systemZoneOffset = null;
+
+    /**
+     * Lazy инициализация systemZoneOffset
+     */
+    @Synchronized
+    private static void initZoneOffset() {
+        if (systemZoneOffset == null) {
+            systemZoneOffset = OffsetDateTime.now(ZoneId.systemDefault()).getOffset();
+        }
+    }
+
+    /**
+     * @return ZoneOffset системной TimeZone
+     */
+    public static ZoneOffset getSystemZoneOffset() {
+        if (systemZoneOffset == null) {
+            initZoneOffset();
+        }
+        return systemZoneOffset;
+    }
+
 
 }
