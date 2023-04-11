@@ -353,8 +353,8 @@ public class WalletService {
     }
 
     TSParam makeParam(BalancePeriodRequestPeriod period) {
-        LocalDateTime start = LocalDate.parse(period.getStart()).atStartOfDay();
-        LocalDateTime end = LocalDate.parse(period.getEnd()).atStartOfDay();
+        LocalDateTime start = LocalDate.parse(period.getStart()).atStartOfDay().plus(1, ChronoUnit.DAYS);
+        LocalDateTime end = LocalDate.parse(period.getEnd()).atStartOfDay().plus(1, ChronoUnit.DAYS);
         ChronoUnit unit = switch(period.getInterval()) {
             case HOUR -> ChronoUnit.HOURS;
             case DAY -> ChronoUnit.DAYS;
