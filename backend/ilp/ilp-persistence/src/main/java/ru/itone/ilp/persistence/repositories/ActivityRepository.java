@@ -18,12 +18,16 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     String SEARCH_ACTIVITY = """
             SELECT DISTINCT a.* FROM activities a WHERE
-            a.name ILIKE %:text% OR
-            a.description ILIKE %:text%
+            (a.name ILIKE %:text% OR
+            a.description ILIKE %:text%)
+        """;
+    String SEARCH_ACTIVE_ACTIVITY = SEARCH_ACTIVITY + """
+            AND (:now < a.end_date))
         """;
 
     String PLAIN_SEARCH = SEARCH_ACTIVITY + " LIMIT :limit";
     String PAGEABLE_SEARCH = SEARCH_ACTIVITY + " /*#{#pageable}*/";
+    String PAGEABLE_ACTIVE_SEARCH = SEARCH_ACTIVE_ACTIVITY + " /*#{#pageable}*/";
 
     @Query(value = PLAIN_SEARCH, nativeQuery = true)
     List<Activity> searchByText(@Param("text") String text, @Param("limit") int limit);
@@ -31,7 +35,14 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     @Query(value = PAGEABLE_SEARCH, nativeQuery = true)
     Page<Activity> searchByText(@Param("text") String text, Pageable pageable);
 
-    Page<Activity> findAllByIdNot(@Param("id")Long id, Pageable pageable);
+    @Query(value = PAGEABLE_ACTIVE_SEARCH, nativeQuery = true)
+    Page<Activity> searchByTextActive(@Param("text") String text,
+            @Param("now") LocalDate now,
+            Pageable pageable);
+
+
+    @Query("select a from Activity a where (:now < a.endDate)")
+    Page<Activity> findAllActive(@Param("now")LocalDate now, Pageable pageable);
 
     @Modifying
     @Query("update Activity ac set ac.endDate = current_date where ac.id = :id")
@@ -58,15 +69,15 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     @Query(nativeQuery = true,
             value =
             """
-                SELECT a.*, o.count AS count FROM activities a 
+                SELECT a.*, o.count AS count FROM activities a
                 inner join (
                     select a2.activity_id AS accid, count(1) AS count from operations ops
                     inner join accruals a2 on (ops.accrual_id = a2.id and a2.status = 'created')
-                    where ops.type = 'accrual' 
+                    where ops.type = 'accrual'
                     and (ops.instant BETWEEN :start and :end)
                     group by a2.activity_id
                 ) o on o.accid = a.id
-                /*#{pageable}*/ 
+                /*#{pageable}*/
             """
     )
     Page<TopActivity> findTop(
