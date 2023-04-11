@@ -87,7 +87,7 @@ export function AdminStatisticPage() {
         <div className="flex flex-col gap-8">
             <div className="text-h1">Статистика</div>
             <div className="flex flex-col gap-4">
-                <div className="text-h2">Движение вольт по балансу пользователей</div>
+                <div className="text-h2">Активность пользователей</div>
                 <div className="flex gap-2">
                     <Chips
                         options={
