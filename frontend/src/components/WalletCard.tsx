@@ -5,6 +5,7 @@ import { TypedLink } from '../router';
 import { WalletResponse } from '../api';
 import { Zaps } from './Zaps';
 import loyaltyProgramCardUrl from '../assets/loyalty-program-card.png';
+import { pluralVolt } from '../utils/plural';
 import { twMerge } from 'tailwind-merge';
 
 export interface WalletCardProps extends WalletViewProps {
@@ -99,7 +100,7 @@ function WalletView(props: WalletViewProps): ReactElement {
             <div className="text-xs leading-4">Мой баланс</div>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
                 <span className="text-primary text-7xl">{wallet.balance}</span>
-                <span className="text-3xl text-white">вольт</span>
+                <span className="text-3xl text-white">{pluralVolt(wallet.balance)}</span>
             </div>
             <div className="text-gray mt-3 text-sm leading-[110%] md:text-base">
                 Получай их за активности и выбирай призы
