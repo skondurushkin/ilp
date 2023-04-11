@@ -67,7 +67,7 @@ export function AdminStatisticPage() {
 
     const primaryAxis = React.useMemo<AxisOptions<BalanceStatisticResponseInnerDataInner>>(
         () => ({
-            getValue: (datum) => datum.date,
+            getValue: (datum) => new Date(datum.date),
         }),
         [],
     );
