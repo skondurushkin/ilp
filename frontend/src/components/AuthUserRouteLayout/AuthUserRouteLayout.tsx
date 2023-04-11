@@ -1,11 +1,10 @@
-import { ReactElement, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
 
 import { ReactComponent as BurgerIcon } from '../../assets/burger.svg';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import { Logo } from '../Logo';
 import { Nav } from './Nav';
 import { Outlet } from 'react-router-dom';
-import { PageSpinner } from '../Spinner';
 import { Profile } from './Profile';
 import { RouteLink } from '../../components/RouteLink';
 import { ThemeToggle } from '../../theme';
@@ -88,9 +87,7 @@ export function AuthUserRouteLayout(): ReactElement {
                     </aside>
                     <main className="xl:pl-sidebar flex w-full grow flex-col xl:container">
                         <div className="pt-app-content-v-padding sm:py-app-content-v-padding-md grow px-4 pb-10 sm:px-8 md:px-14 md:pb-10 xl:px-8">
-                            <Suspense fallback={<PageSpinner />}>
-                                <Outlet />
-                            </Suspense>
+                            <Outlet />
                         </div>
                     </main>
                 </div>

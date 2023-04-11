@@ -1,16 +1,14 @@
+import ActivitiesAdminPage from '../pages/ActivitiesAdminPage';
+import AdminStatisticPage from '../pages/AdminStatisticPage';
 import { AuthUserRouteLayout } from '../components/AuthUserRouteLayout';
-import React from 'react';
-
-const ActivitiesAdminPage = React.lazy(() => import('../pages/ActivitiesAdminPage'));
-const CreateActivityAdminPage = React.lazy(() => import('../pages/CreateActivityAdminPage'));
-const CreateProductAdminPage = React.lazy(() => import('../pages/CreateProductAdminPage'));
-const EditActivityAdminPage = React.lazy(() => import('../pages/EditActivityAdminPage'));
-const EditProductAdminPage = React.lazy(() => import('../pages/EditProductAdminPage'));
-const ProductsAdminPage = React.lazy(() => import('../pages/ProductsAdminPage'));
-const WriteOffsAdminPage = React.lazy(() => import('../pages/WriteOffsAdminPage'));
-const AdminStatisticPage = React.lazy(() => import('../pages/AdminStatisticPage'));
-const UsersAdminPage = React.lazy(() => import('../pages/UsersAdminPage'));
-const UserAdminPage = React.lazy(() => import('../pages/UserAdminPage'));
+import CreateActivityAdminPage from '../pages/CreateActivityAdminPage';
+import CreateProductAdminPage from '../pages/CreateProductAdminPage';
+import EditActivityAdminPage from '../pages/EditActivityAdminPage';
+import EditProductAdminPage from '../pages/EditProductAdminPage';
+import ProductsAdminPage from '../pages/ProductsAdminPage';
+import UserAdminPage from '../pages/UserAdminPage';
+import UsersAdminPage from '../pages/UsersAdminPage';
+import WriteOffsAdminPage from '../pages/WriteOffsAdminPage';
 
 export const authAdminRoutes = [
     {
