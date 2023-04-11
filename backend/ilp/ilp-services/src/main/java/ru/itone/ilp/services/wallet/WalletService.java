@@ -79,7 +79,7 @@ public class WalletService {
     @Transactional(readOnly = true)
     public WalletResponse getWalletOverview(Long userId) {
         PageRequest pageable = PageRequest.of(0, 3, Sort.by(Direction.DESC, "instant"));
-        Page<Operation> operationPage = dbJpa.getOperationRepository().findAllByUserId(userId, pageable);
+        Page<Operation> operationPage = dbJpa.getOperationRepository().findAllByUserIdAndActiveTrue(userId, pageable);
         JsonNode balance = dbApi.getBalance(userId);
 
         List<OperationResponse> lastOperations = operationPage.getContent()

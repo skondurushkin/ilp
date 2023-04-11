@@ -16,6 +16,7 @@ import ru.itone.ilp.persistence.entities.Operation;
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     Page<Operation> findAllByUserId(Long userId, Pageable pageable);
+    Page<Operation> findAllByUserIdAndActiveTrue(Long userId, Pageable pageable);
 
     @Query("select op from Operation op where op.instant >= :start and op.instant < :end ORDER BY op.instant asc")
     List<Operation> findAllInTimeRange(
