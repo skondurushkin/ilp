@@ -51,8 +51,8 @@ public class ActivityService {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "price"));
         String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
         Page<Activity> page = StringUtils.isBlank(filter)
-                ? activityRepository.findAllByIdNot(1L, pageable)
-                : activityRepository.searchByText(filter, pageable);
+                ? activityRepository.findAllActive(LocalDate.now(), pageable)
+                : activityRepository.searchByTextActive(filter, LocalDate.now(), pageable);
         return toPaginatedResponse(page);
     }
 
