@@ -13,7 +13,11 @@ export const DownloadWriteOffsCsvButton = () => {
         },
         {
             onSuccess: (data) => {
-                saveAs(data, `Выгрузка по заказам от ${new Date().toLocaleDateString('ru-RU')}.csv`, { autoBom: true });
+                saveAs(
+                    new Blob([data], { type: 'text/csv;charset=windows-1251' }),
+                    `Выгрузка по заказам от ${new Date().toLocaleDateString('ru-RU')}.csv`,
+                    { autoBom: true },
+                );
             },
             onError: (err: ErrorMessage) => {
                 toast.error(err?.message ?? 'Ошибка');

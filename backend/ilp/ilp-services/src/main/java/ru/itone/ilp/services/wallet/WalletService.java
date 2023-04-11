@@ -3,14 +3,24 @@ package ru.itone.ilp.services.wallet;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -25,7 +35,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.itone.ilp.exception.ApiExceptions.PermissionDeniedException;
 import ru.itone.ilp.exception.ApiExceptions.ResourceNotFoundException;
 import ru.itone.ilp.exception.ApiExceptions.TransitionDeniedException;
+import ru.itone.ilp.misc.Helpers;
 import ru.itone.ilp.openapi.model.AccrualResponse;
+import ru.itone.ilp.openapi.model.BalancePeriodRequest;
+import ru.itone.ilp.openapi.model.BalancePeriodRequestPeriod;
+import ru.itone.ilp.openapi.model.BalanceStatisticResponseInner;
+import ru.itone.ilp.openapi.model.BalanceStatisticResponseInnerDataInner;
 import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.OperationResponse;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
@@ -82,7 +97,7 @@ public class WalletService {
     @Transactional(readOnly = true)
     public PaginatedAccrualResponse paginateAccruals(Long userId, ru.itone.ilp.openapi.model.PageRequest pageRequest) {
         Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, dateDesc);
-        Page<Accrual> page = dbJpa.getAccrualRepository().findAllByUserId(userId, pageable);
+        Page<Accrual> page = dbJpa.getAccrualRepository().findAllByUserIdAndStatusEquals(userId, AccrualStatus.created, pageable);
         List<AccrualResponse> results = page.getContent().stream().map(AccrualMapper.INSTANCE::toResponse).toList();
         return new PaginatedAccrualResponse()
                 .total(page.getTotalPages())
@@ -250,8 +265,16 @@ public class WalletService {
     }
 
     @Transactional
-    public AccrualResponse cancelAccrual(Long accrualId) {
-        Accrual accrual = dbJpa.getAccrualRepository().findById(accrualId).orElseThrow( () -> new ResourceNotFoundException("Запись о начислении не найдена"));
+    public AccrualResponse cancelAccrual(Long operationId) {
+        if (!dbJpa.getOperationRepository().existsById(operationId)) {
+              throw new ResourceNotFoundException("Запись об операции не найдена");
+        }
+        Optional<Long> accrualId = dbJpa.getOperationRepository().getAccrualId(operationId);
+        if (accrualId.isEmpty()) {
+            throw new RuntimeException("Операция не является начислением");
+        }
+        Accrual accrual = dbJpa.getAccrualRepository().findById(accrualId.get())
+                .orElseThrow(() -> new ResourceNotFoundException("Запись о начислении не найдена"));
         accrual = dbJpa.getAccrualRepository().save(accrual.setStatus(AccrualStatus.cancelled));
         return AccrualMapper.INSTANCE.toResponse(accrual);
     }
@@ -265,16 +288,46 @@ public class WalletService {
                 .build();
         List<Operation> operations = this.dbJpa.getOperationRepository().findAll(Sort.by(Direction.ASC, "instant"));
         try (CSVPrinter printer = new CSVPrinter(sw, format)) {
-            List<String> record = new ArrayList<>();
+            List<String> rec = new ArrayList<>();
             for (Operation operation : operations) {
-                record.clear();;
-                record.add(operation.getInstant().toString());
-                record.add(operation.getUser().getEmail());
-                record.add(toOpType(operation.getType()));
-                record.add(operation.getName());
-                record.add(operation.getType() == OperationType.writeOff ? operation.getWriteOff().getArticle().getCode() : StringUtils.EMPTY);
-                record.add(operation.getAmount().toString());
-                printer.printRecord(record);
+                rec.clear();
+                rec.add(operation.getInstant().toString());
+                rec.add(operation.getUser().getEmail());
+                rec.add(toOpType(operation.getType()));
+                rec.add(operation.getName());
+                rec.add(operation.getType() == OperationType.writeOff ? operation.getWriteOff().getArticle().getCode() : StringUtils.EMPTY);
+                rec.add(operation.getAmount().toString());
+                printer.printRecord(rec);
+            }
+        }
+        return balance_csv;
+    }
+
+    @Transactional(readOnly = true)
+    public Path buildWriteOffCsv() throws IOException {
+        Path balance_csv = Files.createTempFile("writeOff_csv", null);
+        Writer sw = new FileWriterWithEncoding(balance_csv.toString(), StandardCharsets.UTF_8);
+        CSVFormat format = CSVFormat.DEFAULT.builder()
+                .setHeader("Время", "email", "Фамилия", "Имя", "Отчество", "УН Заказа", "Статус",  "Название", "Код", "Баллы")
+                .build();
+        List<Operation> operations = this.dbJpa.getOperationRepository()
+                .selectWriteOffs(Sort.by(Direction.ASC, "instant"));
+        try (CSVPrinter printer = new CSVPrinter(sw, format)) {
+            List<String> rec = new ArrayList<>();
+            for (Operation operation : operations) {
+                rec.clear();
+
+                rec.add(operation.getInstant().toString());
+                rec.add(operation.getUser().getEmail());
+                rec.add(operation.getUser().getLastName());
+                rec.add(operation.getUser().getFirstName());
+                rec.add(operation.getUser().getMiddleName());
+                rec.add(operation.getWriteOff().getId().toString());
+                rec.add(operation.getWriteOff().getOrderStatus().getLocalizedName());
+                rec.add(operation.getName());
+                rec.add(operation.getWriteOff().getArticle().getCode());
+                rec.add(operation.getAmount().toString());
+                printer.printRecord(rec);
             }
         }
         return balance_csv;
@@ -287,5 +340,76 @@ public class WalletService {
             case accrual -> "Начисление";
             case writeOff -> "Списание";
         };
+    }
+
+    record TSParam(Instant start, Instant end, ChronoUnit unit) {
+        Instant getKey(Instant value) {
+            if (unit == ChronoUnit.DAYS) {
+                return LocalDate.ofInstant(value, ZoneId.systemDefault()).plus(1, ChronoUnit.DAYS).atStartOfDay().toInstant(Helpers.getSystemZoneOffset());
+            } else {
+                return LocalDateTime.ofInstant(value, ZoneId.systemDefault()).plus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.HOURS).toInstant(Helpers.getSystemZoneOffset());
+            }
+        }
+    }
+
+    TSParam makeParam(BalancePeriodRequestPeriod period) {
+        LocalDateTime start = LocalDate.parse(period.getStart()).atStartOfDay();
+        LocalDateTime end = LocalDate.parse(period.getEnd()).atStartOfDay();
+        ChronoUnit unit = switch(period.getInterval()) {
+            case HOUR -> ChronoUnit.HOURS;
+            case DAY -> ChronoUnit.DAYS;
+        };
+
+        return new TSParam(
+                start.toInstant(Helpers.getSystemZoneOffset()),
+                end.toInstant(Helpers.getSystemZoneOffset()),
+                unit
+        );
+    }
+    @Transactional(readOnly = true)
+    public List<BalanceStatisticResponseInner> getTimeSeries(BalancePeriodRequest request) {
+        TSParam param = makeParam(request.getPeriod());
+        List<Operation> timeSerie = dbJpa.getOperationRepository().findAllInTimeRange(param.start(), param.end());
+        List<Operation> accruals = new ArrayList<>();
+        List<Operation> writeOffs = new ArrayList<>();
+        for (Operation operation : timeSerie) {
+            switch(operation.getType()) {
+                case accrual -> accruals.add(operation);
+                case writeOff -> writeOffs.add(operation);
+            }
+        }
+        List<BalanceStatisticResponseInnerDataInner> groupedAccruals = groupByUnit(accruals, param);
+        List<BalanceStatisticResponseInnerDataInner> groupedWriteOffs = groupByUnit(writeOffs, param);
+
+        return List.of(
+                new BalanceStatisticResponseInner()
+                        .label("Начисления")
+                        .data(groupedAccruals)
+                ,
+                new BalanceStatisticResponseInner()
+                        .label("Списания")
+                        .data(groupedWriteOffs)
+                );
+    }
+
+    private List<BalanceStatisticResponseInnerDataInner> groupByUnit(List<Operation> serie, TSParam param) {
+
+        Map<Instant, Long> slots = new LinkedHashMap<>();
+        for(Instant next = param.start(); next.compareTo(param.end) <= 0; next = param.getKey(next.plus(1, ChronoUnit.MINUTES))) {
+            slots.put(next, 0L);
+        }
+        LinkedHashMap<Instant, Long> values = serie.stream().map(e -> param.getKey(e.getInstant()))
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+        slots.putAll(values);
+
+        return slots.entrySet().stream()
+                .map( e -> toDataEntry(e.getKey(), e.getValue()))
+                .toList();
+    }
+
+    static BalanceStatisticResponseInnerDataInner toDataEntry(Instant instant, Long count) {
+        return new BalanceStatisticResponseInnerDataInner()
+                .date(OffsetDateTime.ofInstant(instant, ZoneId.systemDefault()))
+                .count(BigDecimal.valueOf(count));
     }
 }

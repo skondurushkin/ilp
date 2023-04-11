@@ -27,6 +27,7 @@ import ru.itone.ilp.openapi.model.CreateNewAccrualRequest;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
+import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleResponse;
 import ru.itone.ilp.openapi.model.PaginatedArticleStatisticResponse;
 import ru.itone.ilp.openapi.model.PaginatedOperationResponse;
@@ -69,8 +70,7 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<List<BalanceStatisticResponseInner>> browseStatisticBalance(BalancePeriodRequest balancePeriodRequest) {
-        //return ResponseEntity.ok(Collections.emptyList());
-        throw new IllegalStateException("Not yet implemented");
+        return ResponseEntity.ok(walletService.getTimeSeries(balancePeriodRequest));
     }
 
     @Override
@@ -95,6 +95,11 @@ public class AdminController extends LinkResolver implements AdminApi {
     }
 
     @Override
+    public ResponseEntity<PaginatedActivityResponse> browseActivitiesAsAdmin(PageRequest pageRequest) {
+        return ResponseEntity.ok(activityService.paginateForAdmin(pageRequest));
+    }
+
+    @Override
     public ResponseEntity<PaginatedArticleResponse> browseArticlesForAdmin(PageRequest pageRequest) {
         return ResponseEntity.ok(resolveLinks(articleService.paginate(pageRequest)));
     }
@@ -109,18 +114,7 @@ public class AdminController extends LinkResolver implements AdminApi {
     @Override
     public ResponseEntity<String> downloadBalanceCsv() {
         try {
-            Path balance = walletService.buildBalanceCsv();
-            try {
-                FileUtils.forceDeleteOnExit(balance.toFile());
-                return ResponseEntity.ok(Files.readString(balance, StandardCharsets.UTF_8));
-            } finally {
-                try {
-                    Files.deleteIfExists(balance);
-                    log.debug("Deleted {}", balance);
-                } catch (IOException ex) {
-                    log.warn("Could not delete file {}", balance, ex);
-                }
-            }
+            return makeResponse(walletService.buildBalanceCsv());
         } catch (IOException e) {
             throw new RuntimeException(String.format("Не удалось создать отчет. Ошибка: %s", e.getMessage()), e);
         }
@@ -128,8 +122,27 @@ public class AdminController extends LinkResolver implements AdminApi {
 
     @Override
     public ResponseEntity<String> downloadWriteOffsCsv() {
-        return downloadBalanceCsv();
+        try {
+            return makeResponse(walletService.buildWriteOffCsv());
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Не удалось создать отчет. Ошибка: %s", e.getMessage()), e);
+        }
     }
+
+    private ResponseEntity<String> makeResponse(Path report) throws IOException {
+        try {
+            FileUtils.forceDeleteOnExit(report.toFile());
+            return ResponseEntity.ok(Files.readString(report, StandardCharsets.UTF_8));
+        } finally {
+            try {
+                Files.deleteIfExists(report);
+                log.debug("Deleted {}", report);
+            } catch (IOException ex) {
+                log.warn("Could not delete file {}", report, ex);
+            }
+        }
+    }
+
 
     @Override
     public ResponseEntity<ProfileResponseForAdmin> getProfileByIdAsAdmin(Integer userId) {

@@ -3,6 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 import Unfonts from 'unplugin-fonts';
 import react from '@vitejs/plugin-react';
 import svgLoader from 'vite-plugin-svgr';
+import vitePluginFaviconsInject from 'vite-plugin-favicons-inject';
 
 export default ({ mode }) => {
     const env = loadEnv(mode, process.cwd());
@@ -28,6 +29,7 @@ export default ({ mode }) => {
                     injectTo: 'head-prepend',
                 },
             }),
+            vitePluginFaviconsInject('./src/assets/favicon.svg'),
         ],
         define: {
             // Some libraries use the global object, even though it doesn't exist in the browser.

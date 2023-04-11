@@ -32,7 +32,7 @@ export function Breadcrumbs(props: BreadcrumbsProps): ReactElement {
                     <li
                         key={item.label}
                         className={twMerge(
-                            "flex items-center gap-3 whitespace-nowrap after:block after:h-2 after:w-2 after:rounded-full after:bg-[#D9D9D9] after:content-[''] last:after:hidden",
+                            "flex items-center gap-3 whitespace-nowrap transition-colors duration-300 after:block after:h-2 after:w-2 after:rounded-full after:bg-[#D9D9D9] after:content-[''] last:after:hidden hover:text-black dark:hover:text-white",
                             isLast ? 'text-black dark:text-white' : 'text-gray',
                         )}
                     >

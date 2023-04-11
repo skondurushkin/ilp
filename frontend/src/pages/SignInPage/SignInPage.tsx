@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import { Button } from '../../components/Button';
 import { ReactComponent as CrossedEyeSVG } from '../../assets/crossed-eye.svg';
 import { ReactComponent as EyeSVG } from '../../assets/eye.svg';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { Logo } from '../../components/Logo';
 import loginImageURL from '../../assets/login-image.jpg';
 import { twMerge } from 'tailwind-merge';
 
@@ -34,7 +34,10 @@ export const SignInPage = () => {
 
     return (
         <div className="relative flex h-screen flex-col-reverse justify-end gap-8 sm:gap-10 md:flex-row">
-            <Logo className="icon-light md:icon-dark absolute left-4 top-6 sm:left-8 md:left-16 md:top-6 md:block xl:left-8" />
+            <Logo
+                className="icon-dark md:icon-light absolute left-4 top-6 z-20 sm:left-8 md:left-16 md:top-6 md:block xl:left-8"
+                hideProgramLogo
+            />
             <form
                 className={twMerge(
                     // common
@@ -61,7 +64,9 @@ export const SignInPage = () => {
                         id="email"
                         value={email}
                         onChange={({ target }) => setEmail(target.value)}
-                        className={`input mt-2 ${errors?.credentials ? 'input-error' : ''}`}
+                        className={`input mt-2 dark:bg-white dark:text-black ${
+                            errors?.credentials ? 'input-error' : ''
+                        }`}
                     />
                 </div>
 
@@ -75,7 +80,9 @@ export const SignInPage = () => {
                             onChange={({ target }) => setPassword(target.value)}
                             id="password"
                             value={password}
-                            className={`input relative h-[50px] w-full ${errors?.credentials ? 'input-error' : ''}`}
+                            className={`input relative h-[50px] w-full dark:bg-white dark:text-black ${
+                                errors?.credentials ? 'input-error' : ''
+                            }`}
                         />
                         {passwordVisible ? (
                             <CrossedEyeSVG
@@ -96,7 +103,7 @@ export const SignInPage = () => {
                 </Button>
             </form>
             <div className="relative w-full pt-[57%] md:w-1/3 md:pt-0 xl:w-1/2">
-                <div className="absolute left-0 top-0 h-full w-full md:py-3 md:pr-3">
+                <div className="absolute left-0 top-0 z-10 h-full w-full md:py-3 md:pr-3">
                     <img className="h-full w-full md:w-auto" src={loginImageURL} alt="IT_One" />
                 </div>
             </div>

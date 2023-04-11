@@ -93,7 +93,7 @@ export const AdminTable = <TData extends RowData>({
     });
 
     return (
-        <div className="flex w-full flex-col gap-6 overflow-y-hidden overflow-x-scroll">
+        <div className="flex w-full flex-col gap-6 overflow-x-auto overflow-y-hidden">
             {showSearch && (
                 <SearchInput
                     value={globalFilter ?? ''}

@@ -103,6 +103,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    @Transient
     public Name toName() {
         return new Name()
                 .firstName(firstName)

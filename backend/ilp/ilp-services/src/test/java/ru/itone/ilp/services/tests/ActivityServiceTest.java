@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.itone.ilp.exception.ApiExceptions.ConflictException;
 import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest.PeriodEnum;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
+import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
 import ru.itone.ilp.openapi.model.PaginatedActivityResponse;
 import ru.itone.ilp.services.activities.ActivityService;
 import ru.itone.ilp.services.configuration.ServicesTestConfiguration;
@@ -39,12 +42,21 @@ class ActivityServiceTest extends ServicesTestConfiguration {
         assertThrows(ConflictException.class, () -> activityService.createActivity(req));
     }
 
-
     @Test
     void testActivityPaginate() {
         PageRequest request = new PageRequest().page(0).pageSize(4).config(new PageRequestConfig());
         PaginatedActivityResponse response = activityService.paginate(request);
         log.info("RESPONSE: {}", response);
         assertTrue(response.getHasNext());
+    }
+
+    @Test
+    void testTopActivityPaginate() {
+        BrowseStatisticArticlesRequest request = new BrowseStatisticArticlesRequest()
+                .page(0).pageSize(4)
+                .config(new PageRequestConfig())
+                .period(PeriodEnum.ALL);
+        PaginatedActivitiesStatisticResponse response = activityService.topActivitiesPaginated(request);
+        log.info("RESPONSE: {}", response);
     }
 }

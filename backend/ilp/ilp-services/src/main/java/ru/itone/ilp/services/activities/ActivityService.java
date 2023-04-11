@@ -3,6 +3,8 @@ package ru.itone.ilp.services.activities;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ import ru.itone.ilp.openapi.model.ActivityRequest;
 import ru.itone.ilp.openapi.model.ActivityResponse;
 import ru.itone.ilp.openapi.model.ActivityUpdateRequest;
 import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest;
+import ru.itone.ilp.openapi.model.BrowseStatisticArticlesRequest.PeriodEnum;
 import ru.itone.ilp.openapi.model.PageRequest;
 import ru.itone.ilp.openapi.model.PageRequestConfig;
 import ru.itone.ilp.openapi.model.PaginatedActivitiesStatisticResponse;
@@ -31,6 +34,7 @@ import ru.itone.ilp.persistence.entities.Activity;
 import ru.itone.ilp.persistence.mappers.ActivityMapper;
 import ru.itone.ilp.persistence.mappers.PageRequestMapper;
 import ru.itone.ilp.persistence.repositories.ActivityRepository;
+import ru.itone.ilp.persistence.repositories.ActivityRepository.TopActivity;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -53,6 +57,17 @@ public class ActivityService {
     }
 
     @Transactional(readOnly = true)
+    public PaginatedActivityResponse paginateForAdmin(PageRequest request) {
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(request, Sort.by(Direction.ASC, "price"));
+        String filter = Optional.ofNullable(request.getConfig()).map(PageRequestConfig::getGlobalFilter).orElse(StringUtils.EMPTY);
+        Page<Activity> page = StringUtils.isBlank(filter)
+                ? activityRepository.findAll(pageable)
+                : activityRepository.searchByText(filter, pageable);
+        return toPaginatedResponse(page);
+    }
+
+
+    @Transactional(readOnly = true)
     public Optional<ActivityResponse> getActivityById(Integer id) {
         return activityRepository.findById(id.longValue())
                 .map(ActivityService::toResponse);
@@ -60,7 +75,9 @@ public class ActivityService {
 
     @Transactional
     public ActivityResponse createActivity(ActivityRequest request) {
-        if (activityRepository.exists(Example.of(new Activity().setName(request.getName()), nameMatcher))) {
+        if (activityRepository.exists(Example.of(new Activity().setName(request.getName())
+                .setStartDate(null)
+                .setEndDate(null), nameMatcher))) {
             String message = String.format("Активность '%s' уже существует", request.getName());
             log.error("Невозможно создать запись: {}", message);
             throw new ApiExceptions.ConflictException(message);
@@ -108,12 +125,21 @@ public class ActivityService {
         return ActivityMapper.INSTANCE.toPaginatedResponse(page);
     }
 
+    public static PaginatedActivitiesStatisticResponse toPaginatedStatisticResponse(Page<TopActivity> page) {
+        return ActivityMapper.INSTANCE.toPaginatedStatisticResponse(page);
+    }
+
     public PaginatedActivitiesStatisticResponse topActivitiesPaginated(BrowseStatisticArticlesRequest request) {
-        return new PaginatedActivitiesStatisticResponse()
-                .total(0)
-                .pageSize(request.getPageSize())
-                .hasNext(false)
-                .hasPrev(false)
-                .results(Collections.emptyList());
+        Sort defaultSort = Sort.by(Direction.DESC, "count");
+        PageRequest pageRequest = new PageRequest().page(request.getPage()).pageSize(request.getPageSize()).config(request.getConfig());
+        Pageable pageable = PageRequestMapper.INSTANCE.toPageable(pageRequest, defaultSort);
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+        LocalDateTime end = LocalDateTime.of(3000, 1, 1, 0, 0, 0);
+        if (request.getPeriod() == PeriodEnum.DAY) {
+            start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+            end = start.plus(1, ChronoUnit.DAYS);
+        }
+        Page<TopActivity> page = activityRepository.findTop(start, end, pageable);
+        return toPaginatedStatisticResponse(page);
     }
 }

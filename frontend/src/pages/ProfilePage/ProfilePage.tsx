@@ -60,8 +60,8 @@ export const ProfilePage = () => {
             </PageSection>
             {walletQuery.isSuccess && (
                 <PageSection id="balance-history" className="mt-6 md:mt-10" caption="История баланса">
-                    {walletQuery.isSuccess && walletQuery.data.operations.length === 0 && <EmptyOperationHistory />}
-                    {walletQuery.isSuccess && walletQuery.data.operations.length > 0 && (
+                    {walletQuery.data.operations.length === 0 && <EmptyOperationHistory />}
+                    {walletQuery.data.operations.length > 0 && (
                         <OperationHistory operationType={operationType} onChangeOperationType={changeOperationType} />
                     )}
                 </PageSection>

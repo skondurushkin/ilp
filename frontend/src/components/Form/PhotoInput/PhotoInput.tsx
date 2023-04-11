@@ -7,6 +7,7 @@ import { Button } from '../../Button';
 import { DEFAULT_API_ERROR_MSG } from '../../../api/constants';
 import { ReactComponent as EditSVG } from '../../../assets/edit.svg';
 import { FormErrorMessage } from '../FormErrorMessage';
+import { Img } from '../../Img';
 import Modal from '../../Modal';
 import { ReactComponent as PlusSquareSVG } from '../../../assets/plus-square.svg';
 import { Spinner } from '../../Spinner';
@@ -74,7 +75,7 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
             {field.value ? (
                 <InputContainer>
                     <button type="button" className="h-full w-full" onClick={() => setPreviewModalIsVisible(true)}>
-                        <img alt="Товар" src={field.value} className="h-full w-full object-contain" />
+                        <Img alt="Товар" src={field.value} className="h-full w-full object-contain" />
                     </button>
                     <button
                         type="button"
@@ -107,7 +108,7 @@ export const PhotoInput = <TFieldValues extends FieldValues = FieldValues>(props
                 <Modal.Body>
                     {previewModalIsVisible && (
                         <div className="flex flex-col gap-6">
-                            <img alt="Товар" src={field.value} className="h-[500px] w-full object-contain" />
+                            <Img alt="Товар" src={field.value} className="h-[500px] w-full object-contain" />
                             <div className="flex gap-4">
                                 <Button type="button" onClick={() => setPreviewModalIsVisible(false)}>
                                     Закрыть

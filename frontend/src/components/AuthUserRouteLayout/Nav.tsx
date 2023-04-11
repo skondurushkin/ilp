@@ -202,13 +202,14 @@ interface NavItemContentProps {
 function NavItemContent(props: NavItemContentProps): ReactElement {
     const { children, icon: Icon, active } = props;
     return (
-        <div className="flex items-center gap-4 whitespace-nowrap px-4 py-2 text-left leading-[18px]">
+        <div className="border-transparent-0% hover:border-primary group flex items-center gap-4 whitespace-nowrap border-l-4 px-4 py-2 text-left leading-[18px] transition-colors duration-300">
             <Icon
-                className={
+                className={twMerge(
+                    'shrink-0',
                     active
                         ? 'outlined-icon-light'
-                        : 'outlined-icon-dark xl:outlined-icon-light dark:xl:outlined-icon-dark'
-                }
+                        : 'outlined-icon-dark xl:outlined-icon-light dark:xl:outlined-icon-dark',
+                )}
             />
             {children}
         </div>

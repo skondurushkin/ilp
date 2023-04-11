@@ -5,6 +5,7 @@ import { ERR_UNAUTHORIZED } from './auth-errors';
 import { api } from '../../api';
 import useLocalStorageState from 'use-local-storage-state';
 import { useMemo } from 'react';
+import { useQueryClient } from 'react-query';
 
 interface StoredUser extends User {
     token: string;
@@ -23,6 +24,8 @@ export function restoreAuthFromLocalStorage(): void {
 }
 
 export const useHttpAuthBackend = (): AuthBackend => {
+    const queryClient = useQueryClient();
+
     const [storedUser, setStoredUser, { removeItem }] = useLocalStorageState<StoredUser | undefined>(STORAGE_KEY, {
         storageSync: true,
     });
@@ -62,6 +65,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                     .then(() => {
                         api.setAuthToken(undefined);
                         removeItem();
+                        queryClient.removeQueries();
                     })
                     .catch((err) => {
                         console.error('failed to logout user', err);

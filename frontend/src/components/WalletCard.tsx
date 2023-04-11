@@ -30,14 +30,14 @@ export function WalletCard(props: WalletCardProps | WalletCardSkeletonProps): Re
     return (
         <div
             className={twMerge(
-                'text-gray flex flex-col-reverse justify-between gap-3 overflow-hidden bg-black p-3 sm:flex-row sm:gap-0 sm:p-6',
+                'text-gray flex flex-col-reverse justify-between gap-3 overflow-hidden bg-black p-4 sm:flex-row sm:gap-0 sm:p-6',
                 className,
             )}
         >
             <div className="flex flex-col sm:w-1/2 sm:items-start">{view}</div>
-            <div className="relative sm:w-1/2">
+            <div className="relative sm:w-1/2 sm:py-6 md:py-0">
                 <img
-                    className="w-full rounded-lg shadow-[0_4px_160px_-10px_rgba(170,230,50,0.8)] sm:absolute sm:left-0 sm:top-0 sm:w-[initial] sm:translate-x-[20%]"
+                    className="relative w-full rounded-lg shadow-[0_4px_160px_-10px_rgba(170,230,50,0.8)] sm:-right-[10%] sm:h-full sm:w-auto md:-right-[15%] 2xl:-right-[20%]"
                     src={loyaltyProgramCardUrl}
                     alt="Карта лояльности"
                 />

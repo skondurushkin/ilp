@@ -34,3 +34,9 @@ ehthumbs.db
 Thumbs.db
 .history
 /frontend.iml
+
+
+######################
+# Environment #
+######################
+.env

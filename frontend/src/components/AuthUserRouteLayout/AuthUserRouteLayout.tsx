@@ -2,12 +2,11 @@ import { ReactElement, ReactNode, Suspense, useEffect, useRef, useState } from '
 
 import { ReactComponent as BurgerIcon } from '../../assets/burger.svg';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { Logo } from '../Logo';
 import { Nav } from './Nav';
 import { Outlet } from 'react-router-dom';
 import { PageSpinner } from '../Spinner';
 import { Profile } from './Profile';
-import { ReactComponent as ProgramLogo } from '../../assets/program-logo.svg';
 import { ThemeToggle } from '../../theme';
 import { TypedLink } from '../../router';
 import { createPortal } from 'react-dom';
@@ -27,8 +26,7 @@ export function AuthUserRouteLayout(): ReactElement {
                 <div className="flex grow justify-between px-4 py-3 xl:container sm:px-8 md:px-14 md:py-4 xl:mx-auto xl:pl-0 xl:pr-8">
                     <div className="xl:w-sidebar flex items-center xl:pl-8">
                         <TypedLink className="flex flex-col justify-between" to="/">
-                            <Logo className="icon-dark md:h-[39px] md:w-[113px]" />
-                            <ProgramLogo className="md:h-[18px] md:w-[149px]" />
+                            <Logo />
                         </TypedLink>
                     </div>
                     <div className="hidden grow pl-8 md:flex">

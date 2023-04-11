@@ -1,8 +1,10 @@
 package ru.itone.ilp.persistence.repositories;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,4 +44,42 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("update Article ar set ar.endDate = current_date where ar.id = :id")
     void markAsDeleted(@Param("id") Long id);
 
+    interface TopArticle {
+        Long getId();
+
+        String getCode();
+
+        String getName();
+
+        String getDescription();
+
+        Integer getPrice();
+
+        String getImage_link();
+
+        Boolean getAvailable();
+
+        LocalDate getEnd_date();
+
+        ObjectNode getExtension();
+
+        Integer getCount();
+    }
+
+    @Query(nativeQuery = true,
+            value =
+                    """
+                        SELECT a.*, o.count AS count FROM articles a
+                        inner join (
+                            select wo.article_id AS accid, count(1) AS count from operations ops
+                            inner join write_offs wo on (ops.writeoff_id = wo.id and wo.status <> 'cancelled')
+                            where ops.type = 'writeOff'
+                            and (ops.instant BETWEEN :start and :end)
+                            group by wo.article_id
+                        ) o on o.accid = a.id
+                        /*#{pageable}*/
+                    """
+    )
+
+    Page<TopArticle> findTop(LocalDateTime start, LocalDateTime end, Pageable pageable);
 }
