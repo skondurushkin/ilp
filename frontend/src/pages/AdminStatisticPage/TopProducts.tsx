@@ -47,7 +47,7 @@ export const TopProducts = ({ period }: { period: 'day' | 'all' }) => {
             },
             {
                 accessorKey: 'count',
-                header: () => <span className="flex">Заказы</span>,
+                header: () => <span className="flex">заказы</span>,
                 cell: (info) => info.getValue(),
             },
         ],

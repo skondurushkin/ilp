@@ -40,7 +40,7 @@ export const TopActivities = ({ period }: { period: 'day' | 'all' }) => {
                 cell: (info) => info.getValue(),
             },
             {
-                header: () => <span className="flex">Участия</span>,
+                header: () => <span className="flex">участия</span>,
                 accessorKey: 'count',
                 cell: (info) => info.getValue(),
             },
