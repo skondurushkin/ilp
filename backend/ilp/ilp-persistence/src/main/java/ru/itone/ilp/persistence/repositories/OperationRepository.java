@@ -1,5 +1,6 @@
 package ru.itone.ilp.persistence.repositories;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,11 @@ import ru.itone.ilp.persistence.entities.Operation;
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     Page<Operation> findAllByUserId(Long userId, Pageable pageable);
+
+    @Query("select op from Operation op where op.instant >= :start and op.instant < :end ORDER BY op.instant asc")
+    List<Operation> findAllInTimeRange(
+            @Param("start") Instant start,
+            @Param("end") Instant end);
 
     @Query("select op.accrual.id from Operation op where op.id = :operationId and op.type = 'accrual'")
     Optional<Long> getAccrualId(@Param("operationId") Long operationId);
