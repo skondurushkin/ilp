@@ -8,42 +8,36 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Properties;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class EmailService {
-
-    public void sendSimpleMessage(String to, String subject, String text) {
-        try {
-            sendEmail();
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private static final String IMAP_AUTH_EMAIL = "easytender@yandex.ru";
     private static final String IMAP_AUTH_PWD = "ingOneiT";
     private static final String SMTP_SERVER = "smtp.yandex.ru";
-    private static final String IMAP_PORT = "993";
     private static final String SMTP_PORT = "465";
 
-    private void sendEmail() throws MessagingException {
+    public void send(String userName, String article, String articleName, LocalDate date) {
         MimeMessage msg = new MimeMessage(connectToMail());
-        msg.setFrom(new InternetAddress("easytender@yandex.ru"));
-        InternetAddress[] address = {new InternetAddress("easytender@yandex.ru")};
-        msg.setRecipients(Message.RecipientType.TO, address);
-        msg.setSubject("Jakarta Mail APIs Test");
-        msg.addHeader("x-cloudmta-class", "standard");
-        msg.addHeader("x-cloudmta-tags", "demo, example");
-        msg.setText("Test Message Content");
+        try {
+            msg.setFrom(new InternetAddress("easytender@yandex.ru"));
+            InternetAddress[] address = {new InternetAddress("easytender@yandex.ru")};
+            msg.setRecipients(Message.RecipientType.TO, address);
+            msg.setSubject("Новый заказ от пользователя " + userName);
+            msg.setText("Пользователь " + userName + " сделал заказ. \n" +
+                "Артикул: " + article + " наименование: " + articleName + "\n" +
+                "Дата создания заказа: " + date.toString());
 
-        Transport.send(msg);
+            Transport.send(msg);
+        } catch (MessagingException e) {
+            log.error("Не удалось отправить уведомление администратору ", e);
+        }
 
         log.info("Message Sent.");
     }
@@ -71,17 +65,9 @@ public class EmailService {
     private Session connectToMail() {
         Properties properties = new Properties();
         properties.put("mail.debug", "false");
-        properties.put("mail.store.protocol", "imaps");
-        properties.put("mail.imap.ssl.enable", "true");
-        properties.put("mail.imap.port", IMAP_PORT);
         properties.put("mail.mime.charset", "UTF-8");
         properties.put("mail.smtp.timeout", "3000");
         properties.put("mail.smtp.connectiontimeout", "3000");
-        properties.put("mail.imaps.partialfetch", "false");
-        properties.put("mail.imaps.fetchsize", "1048576");
-        properties.put("mail.imaps.timeout", "30000");
-        properties.put("mail.imaps.connectiontimeout", "30000");
-        properties.put("mail.imaps.writetimeout", "30000");
         properties.put("mail.smtp.host", SMTP_SERVER);
         properties.put("mail.smtp.port", SMTP_PORT);
         properties.put("mail.smtp.auth", "true");

@@ -30,6 +30,7 @@ import ru.itone.ilp.openapi.model.WriteOffResponse;
 import ru.itone.ilp.openapi.model.WriteOffStatus;
 import ru.itone.ilp.persistence.types.OrderStatus;
 import ru.itone.ilp.server.misc.Helpers;
+import ru.itone.ilp.services.email.EmailService;
 import ru.itone.ilp.services.jwt.UserDetailsImpl;
 import ru.itone.ilp.services.wallet.WalletService;
 
@@ -39,6 +40,7 @@ import ru.itone.ilp.services.wallet.WalletService;
 public class WalletController extends LinkResolver implements WalletApi {
 
     private final WalletService walletService;
+    private final EmailService emailService;
 
     @Override
     public ResponseEntity<PaginatedAccrualResponse> browseAccruals(PageRequest pageRequest) {
@@ -106,6 +108,7 @@ public class WalletController extends LinkResolver implements WalletApi {
         WriteOffResponse response = resolveLink(walletService.writeOff(userDetails.getId(), writeOffRequest));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
         log.info("CREATED: {}", uri);
+        emailService.send(userDetails.getUsername(), response.getArticle().getCode(), response.getArticle().getName(), response.getDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
