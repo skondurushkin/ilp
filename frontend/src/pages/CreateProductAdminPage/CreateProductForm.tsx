@@ -4,7 +4,7 @@ import { FormCheckbox, FormInput, FormTextArea } from '../../components/Form';
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
 import PhotoInput from '../../components/Form/PhotoInput';
 import { PhotoRequirements } from '../../components/Form/PhotoInput/PhotoRequirements';
-import { RouterLink } from '../../components/RouterLink';
+import { RouteLink } from '../../components/RouteLink';
 import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -30,13 +30,13 @@ export const CreateProductForm = (props: CreateProductFormProps) => {
             toast.success(
                 <div>
                     <p>Товар добавлен</p>
-                    <RouterLink
+                    <RouteLink
                         to="/admin/products/edit/:productId"
                         params={{ productId: newProduct.id.toString() }}
                         className="flex items-center gap-2"
                     >
                         <p className="text-gray font-bold">Посмотреть</p>
-                    </RouterLink>
+                    </RouteLink>
                 </div>,
                 {
                     autoClose: false,

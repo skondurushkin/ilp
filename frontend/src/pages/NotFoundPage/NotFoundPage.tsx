@@ -1,4 +1,4 @@
-import { RouterLink } from '../../components/RouterLink';
+import { RouteLink } from '../../components/RouteLink';
 import obivanKenobiUrl from './obi-van-kenobi.jpg';
 
 export const NotFoundPage = () => {
@@ -6,9 +6,9 @@ export const NotFoundPage = () => {
         <div className="flex min-h-full w-full flex-col items-center justify-center">
             <img src={obivanKenobiUrl} alt="Оби-Ван Кеноби" />
             <h1 className="text mt-6">Это не та страница, которую вы ищете</h1>
-            <RouterLink className="mt-5" to="/" presentation="button" primary>
+            <RouteLink className="mt-5" to="/" presentation="button" primary>
                 Вернуться на главную страницу
-            </RouterLink>
+            </RouteLink>
         </div>
     );
 };

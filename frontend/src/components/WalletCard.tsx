@@ -1,7 +1,7 @@
 import { ReactElement, useMemo } from 'react';
 import { Skeleton, SkeletonContainer } from './Skeleton';
 
-import { RouterLink } from './RouterLink';
+import { RouteLink } from './RouteLink';
 import { WalletResponse } from '../api';
 import { Zaps } from './Zaps';
 import loyaltyProgramCardUrl from '../assets/loyalty-program-card.png';
@@ -77,9 +77,9 @@ function EmptyWalletView(props: WalletViewProps) {
                         <a className="btn btn-primary w-full sm:w-auto" href="/#activities">
                             Начать добычу вольт
                         </a>
-                        <RouterLink className="w-full sm:w-auto" presentation="button" to="/rules">
+                        <RouteLink className="w-full sm:w-auto" presentation="button" to="/rules">
                             Ознакомиться с правилами
-                        </RouterLink>
+                        </RouteLink>
                     </div>
                 </>
             )}
@@ -121,9 +121,9 @@ function WalletView(props: WalletViewProps): ReactElement {
                             </li>
                         ))}
                     </ul>
-                    <RouterLink to="/profile" hash="balance-history" className="mt-4 text-white underline md:mt-6">
+                    <RouteLink to="/profile" hash="balance-history" className="mt-4 text-white underline md:mt-6">
                         Посмотреть всю историю
-                    </RouterLink>
+                    </RouteLink>
                 </>
             )}
         </>

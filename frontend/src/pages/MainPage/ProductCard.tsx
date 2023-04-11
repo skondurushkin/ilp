@@ -6,7 +6,7 @@ import { Box } from '../../components/Box';
 import { ProductImage } from '../../components/ProductImage';
 import { ProductPrice } from '../../components/ProductPrice';
 import { ReactElement } from 'react';
-import { RouterLink } from '../../components/RouterLink';
+import { RouteLink } from '../../components/RouteLink';
 
 export interface ProductCardProps extends ProductViewProps {
     className?: string;
@@ -39,10 +39,10 @@ function ProductView(props: ProductViewProps): ReactElement {
 
     return (
         <>
-            <RouterLink to="/products/:id" params={{ id: `${product.id}` }} className="flex grow flex-col">
+            <RouteLink to="/products/:id" params={{ id: `${product.id}` }} className="flex grow flex-col">
                 <ProductImage src={product.imageLink || ''} alt={product.name} />
                 <div className="mt-4 self-center text-center">{product.name}</div>
-            </RouterLink>
+            </RouteLink>
             <ProductPrice className="mt-4" price={product.price || 0} />
             <div className="mt-4 flex flex-col">
                 <CreateOrderButton product={product} availability={availability} />

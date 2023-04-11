@@ -4,7 +4,7 @@ import { WriteOffStatusColor, WriteOffStatusName } from '../../../modules/loyalt
 import { Box } from '../../../components/Box';
 import { ProductImage } from '../../../components/ProductImage';
 import { ReactElement } from 'react';
-import { RouterLink } from '../../../components/RouterLink';
+import { RouteLink } from '../../../components/RouteLink';
 import { VerticalBrackets } from '../../../components/VerticalBrackets';
 import { WriteOffResponse } from '../../../api';
 
@@ -38,7 +38,7 @@ function OrderView(props: OrderViewProps): ReactElement {
 
     return (
         <div className="flex flex-col">
-            <RouterLink
+            <RouteLink
                 to="/products/:id"
                 params={{ id: `${order.article.id}` }}
                 className="flex grow flex-col items-center text-center"
@@ -46,7 +46,7 @@ function OrderView(props: OrderViewProps): ReactElement {
                 <ProductImage src={order.article.imageLink || ''} alt={order.article.name} />
                 <div className="text-gray mt-4">{new Date(order.date).toLocaleDateString('ru-RU')}</div>
                 <div className="mt-4 font-bold">{order.article.name}</div>
-            </RouterLink>
+            </RouteLink>
             <VerticalBrackets size="1" className="mt-4 self-center py-1" color={WriteOffStatusColor[order.status]}>
                 <span className="px-1">{WriteOffStatusName[order.status]}</span>
             </VerticalBrackets>

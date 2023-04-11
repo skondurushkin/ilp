@@ -3,7 +3,7 @@ import type { LinkProps, URLSearchParamsInit } from 'react-router-dom';
 
 import { twMerge } from 'tailwind-merge';
 
-export interface RouterLinkProps extends LinkProps {
+export interface RouteLinkProps extends LinkProps {
     to: string;
     params?: Record<string, string>;
     search?: URLSearchParamsInit | string;
@@ -12,7 +12,7 @@ export interface RouterLinkProps extends LinkProps {
     primary?: boolean;
 }
 
-export const RouterLink = (props: RouterLinkProps) => {
+export const RouteLink = (props: RouteLinkProps) => {
     const { to, params, search, hash, presentation = 'link', primary, className, ...rest } = props;
 
     let searchStr: string | undefined;
