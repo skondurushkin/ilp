@@ -14,7 +14,7 @@ export const DownloadWriteOffsCsvButton = () => {
         {
             onSuccess: (data) => {
                 saveAs(
-                    new Blob([data], { type: 'text/csv;charset=windows-1251' }),
+                    new Blob([data], { type: 'text/csv;charset=utf-8' }),
                     `Выгрузка по заказам от ${new Date().toLocaleDateString('ru-RU')}.csv`,
                     { autoBom: true },
                 );
