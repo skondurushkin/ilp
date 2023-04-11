@@ -1,10 +1,10 @@
 import { ButtonSkeleton, SkeletonContainer } from './Skeleton';
 import { ReactElement, useState } from 'react';
+import { plural, pluralVolt } from '../utils/plural';
 
 import { ArticleResponse } from '../api';
 import { Button } from './Button';
 import Modal from './Modal';
-import { plural } from '../utils/plural';
 import { useCreateOrderMutation } from '../modules/loyalty';
 
 export interface CreateOrderButtonProps {
@@ -72,7 +72,7 @@ function OrderConfirmation(props: OrderConfirmationProps): ReactElement {
             <div className="text-h2">Подтверждаете приобретение?</div>
             <div className="text mt-6 md:mt-8">
                 С вашего баланса будет {plural(product.price, ['списан', 'списано', 'списано'])} {product.price}{' '}
-                {plural(product.price, ['вольт', 'вольта', 'вольт'])}.
+                {pluralVolt(product.price)}.
             </div>
             <div className="mt-6 flex flex-col gap-4 sm:w-1/2 sm:flex-row md:mt-8 md:w-full md:gap-6 md:px-12">
                 <Button className="sm:grow" primary onClick={onConfirm}>
