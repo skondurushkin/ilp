@@ -10,8 +10,11 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.itone.ilp.openapi.model.SettingResponse;
+import ru.itone.ilp.services.settings.SettingsService;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Properties;
 
 @Slf4j
@@ -23,11 +26,19 @@ public class EmailService {
     private static final String SMTP_SERVER = "smtp.yandex.ru";
     private static final String SMTP_PORT = "465";
 
+    private final SettingsService service;
+
+    public EmailService(SettingsService service) {
+        this.service = service;
+    }
+
     public void send(String userName, String article, String articleName, LocalDate date) {
         MimeMessage msg = new MimeMessage(connectToMail());
+        Optional<SettingResponse> setting = service.getSetting("admin.email");
+        String to = setting.isPresent() ? setting.get().getValue() : "easytender@yandex.ru";
         try {
             msg.setFrom(new InternetAddress("easytender@yandex.ru"));
-            InternetAddress[] address = {new InternetAddress("easytender@yandex.ru")};
+            InternetAddress[] address = {new InternetAddress(to)};
             msg.setRecipients(Message.RecipientType.TO, address);
             msg.setSubject("Новый заказ от пользователя " + userName);
             msg.setText("Пользователь " + userName + " сделал заказ. \n" +
