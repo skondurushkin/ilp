@@ -144,7 +144,7 @@ public class ArticleService {
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
         LocalDateTime end = LocalDateTime.of(3000, 1, 1, 0, 0, 0);
         if (request.getPeriod() == PeriodEnum.DAY) {
-            start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+            start = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
             end = start.plus(1, ChronoUnit.DAYS);
         }
         Page<TopArticle> page = articleRepository.findTop(start, end, pageable);
