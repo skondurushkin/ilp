@@ -10,7 +10,7 @@ import { BROWSE_WRITE_OFFS_FOR_USER_ID_AS_ADMIN_QUERY_KEY } from '../../modules/
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
-import { TypedLink } from '../../router';
+import { RouterLink } from '../../components/RouterLink';
 import { WriteOffStatusName } from '../../modules/loyalty';
 
 interface WriteOffsHistoryProps {
@@ -61,9 +61,9 @@ export const WriteOffsHistory = (props: WriteOffsHistoryProps) => {
                                     {user.name.firstName} {user.name.middleName}
                                 </p>
                             </div>
-                            <TypedLink to="/admin/users/:userId" params={{ userId: user.id.toString() }}>
+                            <RouterLink to="/admin/users/:userId" params={{ userId: user.id.toString() }}>
                                 <p className="text-small text-gray underline">Перейти</p>
-                            </TypedLink>
+                            </RouterLink>
                         </div>
                     );
                 },

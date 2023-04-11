@@ -2,7 +2,7 @@ import { Box } from '../../../components/Box';
 import { ReactComponent as FrownIcon } from '../../../assets/frown.svg';
 import { Link } from 'react-router-dom';
 import { ReactElement } from 'react';
-import { TypedLink } from '../../../router';
+import { RouterLink } from '../../../components/RouterLink';
 
 export function EmptyOperationHistory(): ReactElement {
     return (
@@ -18,9 +18,9 @@ export function EmptyOperationHistory(): ReactElement {
                     <Link className="btn btn-primary w-full sm:w-auto sm:grow" to="/#activities">
                         Начать добычу вольт
                     </Link>
-                    <TypedLink className="w-full sm:w-auto sm:grow" presentation="button" to="/rules">
+                    <RouterLink className="w-full sm:w-auto sm:grow" presentation="button" to="/rules">
                         Ознакомиться с правилами
-                    </TypedLink>
+                    </RouterLink>
                 </div>
             </div>
         </Box>

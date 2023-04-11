@@ -1,15 +1,18 @@
 import { Link, createSearchParams } from 'react-router-dom';
-import { LinkWithParamProps, buildUrl } from '../url-builder';
+import type { LinkProps, URLSearchParamsInit } from 'react-router-dom';
 
-import type { LinkProps } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-export interface PresentationProps extends LinkProps {
+export interface RouterLinkProps extends LinkProps {
+    to: string;
+    params?: Record<string, string>;
+    search?: URLSearchParamsInit | string;
+    hash?: string;
     presentation?: 'link' | 'button';
     primary?: boolean;
 }
 
-export const TypedLink = (props: LinkWithParamProps & PresentationProps) => {
+export const RouterLink = (props: RouterLinkProps) => {
     const { to, params, search, hash, presentation = 'link', primary, className, ...rest } = props;
 
     let searchStr: string | undefined;
@@ -25,4 +28,17 @@ export const TypedLink = (props: LinkWithParamProps & PresentationProps) => {
     );
 
     return <Link {...rest} to={{ pathname: buildUrl(to, params), search: searchStr, hash }} className={classes} />;
+};
+
+const buildUrl = (path: string, params?: Record<string, string>): string => {
+    let url = `${path}`;
+
+    if (params) {
+        const paramObj: { [i: string]: string } = params;
+        for (const key of Object.keys(paramObj)) {
+            url = url.replace(`:${key}`, paramObj[key]);
+        }
+    }
+
+    return url;
 };

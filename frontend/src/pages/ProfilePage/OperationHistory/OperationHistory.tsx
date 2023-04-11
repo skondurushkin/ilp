@@ -6,7 +6,7 @@ import { useAccrualsHistoryQuery, useWriteOffsHistoryQuery } from '../../../modu
 import { Box } from '../../../components/Box';
 import { Chips } from '../../../components/Chips';
 import type { ColumnDef } from '@tanstack/table-core';
-import { TypedLink } from '../../../router';
+import { RouterLink } from '../../../components/RouterLink';
 import { UseQueryResult } from 'react-query';
 import { Zaps } from '../../../components/Zaps';
 import useUpdateEffect from 'react-use/lib/useUpdateEffect';
@@ -167,9 +167,9 @@ function useWriteOffColumns() {
                 cell: (info) => {
                     const { article } = info.row.original;
                     return (
-                        <TypedLink to="/products/:id" params={{ id: article.id.toString() }}>
+                        <RouterLink to="/products/:id" params={{ id: article.id.toString() }}>
                             {article.name}
-                        </TypedLink>
+                        </RouterLink>
                     );
                 },
                 minSize: 0,
