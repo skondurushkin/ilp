@@ -1,12 +1,10 @@
 import { AuthUserRouteLayout } from '../components/AuthUserRouteLayout';
+import MainPage from '../pages/MainPage';
 import { Navigate } from 'react-router-dom';
-import React from 'react';
-
-const MainPage = React.lazy(() => import('../pages/MainPage'));
-const ProfilePage = React.lazy(() => import('../pages/ProfilePage'));
-const ProductPage = React.lazy(() => import('../pages/ProductPage'));
-const RulesPage = React.lazy(() => import('../pages/RulesPage'));
-const NotFoundPage = React.lazy(() => import('../pages/NotFoundPage'));
+import NotFoundPage from '../pages/NotFoundPage';
+import ProductPage from '../pages/ProductPage';
+import ProfilePage from '../pages/ProfilePage';
+import RulesPage from '../pages/RulesPage';
 
 export const authUserRoutes = [
     { path: '/sign-in', element: <Navigate to="/" /> },
