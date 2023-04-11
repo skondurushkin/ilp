@@ -44,7 +44,7 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
             },
             {
                 accessorKey: 'name',
-                header: () => <span>действие</span>,
+                header: () => <span>основание</span>,
                 cell: (info) => {
                     const { name } = info.row.original;
 
@@ -82,6 +82,10 @@ export const BalanceHistory = (props: BalanceHistoryProps) => {
                                 <p>Отменить</p>
                             </button>
                         );
+                    }
+
+                    if (!active) {
+                        return <p className="text-error text-base opacity-50">Отменено</p>;
                     }
 
                     return null;
