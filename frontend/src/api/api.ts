@@ -14,6 +14,7 @@ import {
 } from './generated';
 
 import { DEFAULT_API_ERROR_MSG } from './constants';
+import { removeAuthFromLocalStorage } from '../modules/auth';
 import { toast } from 'react-toastify';
 
 function createInternalApi(config: ConfigurationParameters) {
@@ -42,6 +43,11 @@ class ErrorContentMiddleware implements Middleware {
                 toast.error(DEFAULT_API_ERROR_MSG, {
                     autoClose: false,
                 });
+            }
+
+            if (context.response.status === 401) {
+                removeAuthFromLocalStorage();
+                setTimeout(() => location.reload(), 0);
             }
 
             return Promise.reject({
