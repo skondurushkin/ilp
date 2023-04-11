@@ -8,8 +8,8 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
+import { RouteLink } from '../../components/RouteLink';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
-import { TypedLink } from '../../router';
 import { Zaps } from '../../components/Zaps';
 
 export const ActivitiesAdminPage = () => {
@@ -80,14 +80,14 @@ export const ActivitiesAdminPage = () => {
                     if (active) {
                         return (
                             <div className="flex flex-col gap-1">
-                                <TypedLink
+                                <RouteLink
                                     className="btn-table-text group flex items-center gap-2"
                                     to="/admin/activities/edit/:activityId"
                                     params={{ activityId: id.toString() }}
                                 >
                                     <EditSVG className="btn-table-text-icon h-4 w-4" />
                                     <p>Изменить</p>
-                                </TypedLink>
+                                </RouteLink>
                                 <button
                                     className="btn-table-text group flex items-center gap-2"
                                     onClick={() =>
@@ -117,9 +117,9 @@ export const ActivitiesAdminPage = () => {
             <div className="self-start">
                 <div className="flex flex-col gap-4">
                     <h1 className="text-h1">Активности</h1>
-                    <TypedLink to="/admin/activities/create" className="btn btn-primary">
+                    <RouteLink to="/admin/activities/create" className="btn btn-primary">
                         Добавить активность
-                    </TypedLink>
+                    </RouteLink>
                 </div>
             </div>
             <AdminTable

@@ -11,7 +11,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { DownloadWriteOffsCsvButton } from './DownloadWriteOffsCsvButton';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
-import { TypedLink } from '../../router';
+import { RouteLink } from '../../components/RouteLink';
 import { WRITE_OFFS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
 import { WriteOffStatusName } from '../../modules/loyalty';
 
@@ -56,9 +56,9 @@ export const WriteOffsAdminPage = () => {
                                     {user.name.firstName} {user.name.middleName}
                                 </p>
                             </div>
-                            <TypedLink to="/admin/users/:userId" params={{ userId: user.id.toString() }}>
+                            <RouteLink to="/admin/users/:userId" params={{ userId: user.id.toString() }}>
                                 <p className="text-small text-gray underline">Перейти</p>
-                            </TypedLink>
+                            </RouteLink>
                         </div>
                     );
                 },

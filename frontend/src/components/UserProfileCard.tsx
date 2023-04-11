@@ -1,7 +1,7 @@
 import { ReactComponent as EditSVG } from '../assets/edit.svg';
 import { Img } from './Img';
 import { Link } from 'react-router-dom';
-import { TypedLink } from '../router';
+import { RouteLink } from '../components/RouteLink';
 
 interface UserProfileCardProps {
     id: number;
@@ -24,7 +24,7 @@ export const UserProfileCard = (props: UserProfileCardProps) => {
                 <div className="flex justify-between">
                     <p className="text-base text-white">{fio}</p>
                     {showEditLink && (
-                        <TypedLink
+                        <RouteLink
                             className="h-4 w-4"
                             to="/admin/users/:userId"
                             params={{
@@ -32,12 +32,12 @@ export const UserProfileCard = (props: UserProfileCardProps) => {
                             }}
                         >
                             <EditSVG className="stroke-primary" />
-                        </TypedLink>
+                        </RouteLink>
                     )}
                 </div>
             )}
             <div className="flex gap-4">
-                <TypedLink
+                <RouteLink
                     className="bg-gray flex h-[120px] w-[120px] shrink-0"
                     to="/admin/users/:userId"
                     params={{
@@ -45,7 +45,7 @@ export const UserProfileCard = (props: UserProfileCardProps) => {
                     }}
                 >
                     <Img src={avatarLink} alt={fio ?? 'Аватар'} className="h-full w-full bg-black object-contain" />
-                </TypedLink>
+                </RouteLink>
                 <div className="flex flex-col justify-between">
                     <div className="flex flex-col gap-1">
                         <p className="text-white">{jobPosition}</p>

@@ -7,8 +7,8 @@ import { Nav } from './Nav';
 import { Outlet } from 'react-router-dom';
 import { PageSpinner } from '../Spinner';
 import { Profile } from './Profile';
+import { RouteLink } from '../../components/RouteLink';
 import { ThemeToggle } from '../../theme';
-import { TypedLink } from '../../router';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 import useClickAway from 'react-use/lib/useClickAway';
@@ -25,9 +25,9 @@ export function AuthUserRouteLayout(): ReactElement {
             <header className="z-header h-header md:h-header-md fixed top-0 flex w-full bg-black text-white">
                 <div className="flex grow justify-between px-4 py-3 xl:container sm:px-8 md:px-14 md:py-4 xl:mx-auto xl:pl-0 xl:pr-8">
                     <div className="xl:w-sidebar flex items-center xl:pl-8">
-                        <TypedLink className="flex flex-col justify-between" to="/">
+                        <RouteLink className="flex flex-col justify-between" to="/">
                             <Logo />
-                        </TypedLink>
+                        </RouteLink>
                     </div>
                     <div className="hidden grow pl-8 md:flex">
                         <nav id={PAGE_NAV_NODE_ID} className="flex grow justify-center xl:justify-start" />

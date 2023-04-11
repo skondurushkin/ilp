@@ -2,7 +2,7 @@ import { ActivityRequest, ErrorMessage, api } from '../../api';
 import { FormInput, FormTextArea } from '../../components/Form';
 
 import { DEFAULT_API_ERROR_MSG } from '../../api/constants';
-import { TypedLink } from '../../router';
+import { RouteLink } from '../../components/RouteLink';
 import formatters from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -28,13 +28,13 @@ export const CreateActivityForm = (props: CreateActivityFormProps) => {
             toast.success(
                 <div>
                     <p>Активность добавлена</p>
-                    <TypedLink
+                    <RouteLink
                         to="/admin/activities/edit/:activityId"
                         params={{ activityId: newActivity.id.toString() }}
                         className="flex items-center gap-2"
                     >
                         <p className="text-gray font-bold">Посмотреть</p>
-                    </TypedLink>
+                    </RouteLink>
                 </div>,
                 {
                     autoClose: false,

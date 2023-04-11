@@ -8,8 +8,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { ReactComponent as EditSVG } from '../../assets/edit.svg';
 import Modal from '../../components/Modal';
 import { PRODUCTS_ADMIN_PAGE_QUERY_KEY } from '../../modules/admin';
+import { RouteLink } from '../../components/RouteLink';
 import { ReactComponent as TrashSVG } from '../../assets/trash.svg';
-import { TypedLink } from '../../router';
 import { Zaps } from '../../components/Zaps';
 
 export type Columns<DataType extends object = Record<string, unknown>> = readonly ColumnDef<DataType>[];
@@ -65,14 +65,14 @@ export const ProductsAdminPage = () => {
                     if (active) {
                         return (
                             <div className="flex flex-col gap-1">
-                                <TypedLink
+                                <RouteLink
                                     to="/admin/products/edit/:productId"
                                     params={{ productId: id.toString() }}
                                     className="btn-table-text group flex items-center gap-2"
                                 >
                                     <EditSVG className="btn-table-text-icon h-4 w-4" />
                                     <p>Изменить</p>
-                                </TypedLink>
+                                </RouteLink>
                                 <button
                                     className="btn-table-text group flex items-center gap-2"
                                     onClick={() =>
@@ -102,9 +102,9 @@ export const ProductsAdminPage = () => {
             <div className="self-start">
                 <div className="flex flex-col gap-4">
                     <h1 className="text-h1">Товары</h1>
-                    <TypedLink to="/admin/products/create" className="btn btn-primary">
+                    <RouteLink to="/admin/products/create" className="btn btn-primary">
                         Добавить товар
-                    </TypedLink>
+                    </RouteLink>
                 </div>
             </div>
             <AdminTable
