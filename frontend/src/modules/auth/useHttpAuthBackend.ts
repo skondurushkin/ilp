@@ -14,6 +14,10 @@ interface StoredUser extends User {
 
 const STORAGE_KEY = 'auth-state';
 
+export function removeAuthFromLocalStorage(): void {
+    localStorage.removeItem(STORAGE_KEY);
+}
+
 export function restoreAuthFromLocalStorage(): void {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw == undefined) {
@@ -65,7 +69,7 @@ export const useHttpAuthBackend = (): AuthBackend => {
                     .then(() => {
                         api.setAuthToken(undefined);
                         removeItem();
-                        queryClient.removeQueries();
+                        queryClient.clear();
                     })
                     .catch((err) => {
                         console.error('failed to logout user', err);

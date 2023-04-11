@@ -71,7 +71,7 @@ export const Table = <TData extends RowData>(props: TableProps<TData>) => {
                         </tr>
                     ) : (
                         table.getRowModel().rows.map((row) => (
-                            <tr key={row.id}>
+                            <tr key={row.id} className="hover:bg-white-transparent-10%">
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className="px-3 py-2 text-left">
                                         <div className="text-base text-white">
