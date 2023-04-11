@@ -121,6 +121,7 @@ function useAccrualColumns() {
                     return <div>{new Date(date).toLocaleDateString('ru-RU')}</div>;
                 },
                 size: 120,
+                enableSorting: false,
             },
             {
                 accessorKey: 'name',
@@ -131,6 +132,7 @@ function useAccrualColumns() {
                 },
                 minSize: 0,
                 size: 0,
+                enableSorting: false,
             },
             {
                 accessorKey: 'amount',
@@ -143,6 +145,7 @@ function useAccrualColumns() {
                     return <AmountCell type={OperationResponseTypeEnum.Accrual} amount={amount} length={length} />;
                 },
                 size: 160,
+                enableSorting: false,
             },
         ],
         [],
@@ -160,6 +163,7 @@ function useWriteOffColumns() {
                     return <div>{new Date(date).toLocaleDateString('ru-RU')}</div>;
                 },
                 size: 120,
+                enableSorting: false,
             },
             {
                 accessorKey: 'name',
@@ -174,6 +178,7 @@ function useWriteOffColumns() {
                 },
                 minSize: 0,
                 size: 0,
+                enableSorting: false,
             },
             {
                 accessorKey: 'amount',
@@ -186,6 +191,7 @@ function useWriteOffColumns() {
                     return <AmountCell type={OperationResponseTypeEnum.WriteOff} amount={amount} length={length} />;
                 },
                 size: 160,
+                enableSorting: false,
             },
         ],
         [],
