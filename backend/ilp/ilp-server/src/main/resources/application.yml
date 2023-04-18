@@ -45,8 +45,8 @@ spring:
   mail:
     host: 'smtp.yandex.ru'
     port: 465
-    username: 'easytender@yandex.ru'
-    password: ingOneiT
+    username: '***@yandex.ru'
+    password: '***'
     default-encoding: UTF-8
     protocol: 'smtp'
     properties:
