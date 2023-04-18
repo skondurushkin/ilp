@@ -42,6 +42,24 @@ spring:
       file-size-threshold: 64KB
       max-file-size: 5MB
       max-request-size: 50MB
+  mail:
+    host: 'smtp.yandex.ru'
+    port: 465
+    username: 'easytender@yandex.ru'
+    password: ingOneiT
+    default-encoding: UTF-8
+    protocol: 'smtp'
+    properties:
+      mail:
+        debug: false
+        mime:
+          charset: UTF8
+        smtp:
+          timeout: '3000'
+          connectiontimeout: '3000'
+          auth: true
+          ssl:
+            enable: true
 
 logging:
   file:
